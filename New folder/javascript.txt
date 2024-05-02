@@ -1,0 +1,91 @@
+alert("test");
+echo '<script >alert("test'.$post_data['phone'].'");</script>';
+
+
+////////////////////////////////////////////////////////////////
+
+TRUNCATE TABLE agent;
+TRUNCATE TABLE bank;
+TRUNCATE TABLE contact;
+TRUNCATE TABLE customer;
+TRUNCATE TABLE insurance_info;
+TRUNCATE TABLE rela_agent_to_insurance;
+TRUNCATE TABLE rela_company_to_contact;
+TRUNCATE TABLE rela_customer_to_insurance;
+TRUNCATE TABLE rela_partner_to_contact;
+TRUNCATE TABLE rela_partner_to_product;
+TRUNCATE TABLE report_history_policy;
+TRUNCATE TABLE under;
+เคลียข้อมูลPartners List    
+
+
+ 
+////////////////////////////////////////////////////////////////
+1.	pannal company
+2.	cue เล็ก 2
+3.	comm. type:
+
+4. title name	/	tax id
+5. customer ที่อยู่สีเท่าให้เมหือน
+6. phpup แก้ icon แล้วมีคำพูด
+7. short name partner
+
+การบ้าน
+-	ที่หาได้ทั้ง eng และ thai
+
+
+////////////////////////////////////////////////////////////////
+
+label_left
+label_right
+
+$('.corporate').show();
+$('.personal').hide();
+////////////////////////////////////////////////////////////////
+Commission Type
+
+tax id
+
+Tue Apr 23 2024 00:00:00 GMT+0700 (เวลาอินโดจีน)
+Fri Oct 23 2026 00:00:00 GMT+0700 (เวลาอินโดจีน)
+
+////////////////////////////////////////////////
+
+$('.corporate').hide();
+				$('#customer_type').change(function(){
+				
+					var val = $(this).val();
+					//alert (val)
+					if (val == 'Personal') {
+						$('.corporate').hide();
+						$('.personal').show();
+                        document.getElementById('company_c_input').removeAttribute('required');
+                        document.getElementById('title_name').setAttribute("required","required");
+                        document.getElementById('first_name').setAttribute("required","required");
+                        document.getElementById('last_name').setAttribute("required","required");
+                        
+					}
+					if (val == 'Corporate') {
+						$('.corporate').show();
+						$('.personal').hide();
+                        document.getElementById('company_c_input').setAttribute("required","required");
+                        document.getElementById('title_name').removeAttribute('required');
+                        document.getElementById('first_name').removeAttribute('required');
+                        document.getElementById('last_name').removeAttribute('required');
+                        
+					}
+				});
+
+////////////////////////////////////////////////
+
+<input  id="period_day"  type="number" >
+<input id="start_date" type="text" format="23-04-2024" >
+<input id="end_date" type="text"  > 
+เมื่อใส่ข้อมูลที่ period_day หรือ start_date ใหันำ period_day  บวกเพิ่มวัน start_date  แล้วไปรวมที่ end_date โดยใช้ JavaScript 
+
+<input  id="period_month"  type="number" >
+<input id="start_date" type="text" format="23-04-2024" >
+<input id="end_date" type="text"  > 
+เมื่อใส่ข้อมูลที่ period หรือ start_date ใหันำ period_day  บวกเพิ่มเดือน start_date  แล้วไปรวมที่ end_date โดยใช้ JavaScript 
+
+
