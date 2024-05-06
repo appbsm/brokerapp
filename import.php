@@ -1,7 +1,7 @@
 <?php
 
 //import.php
-
+/*
 if(!empty($_FILES['csv_file']['name']))
 {
  $file_data = fopen($_FILES['csv_file']['name'], 'r');
@@ -22,6 +22,29 @@ if(!empty($_FILES['csv_file']['name']))
         );
     }
  echo json_encode($data);
+}
+*/
+?>
+
+<?php
+
+// import.php
+
+if (!empty($_FILES['csv_file']['tmp_name'])) {
+    $file_data = fopen($_FILES['csv_file']['tmp_name'], 'r');
+    fgetcsv($file_data); // Skip header row
+
+    $data = array();
+
+    while ($row = fgetcsv($file_data)) {
+        $data[] = array(
+            'student_id'    => $row[0],
+            'student_name'  => $row[1],
+            'student_phone' => $row[2]
+        );
+    }
+
+    echo json_encode($data);
 }
 
 ?>

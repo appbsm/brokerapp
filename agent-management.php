@@ -146,7 +146,8 @@
                                 <table class="table table-bordered" id="example" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                            <!--<th>#</th>-->
+											<th>Agent ID</th>
                                             <th>Agent Name</th>
                                             <th>Nickname</th>	                                                          
                                             <th >Email</th>
@@ -159,7 +160,8 @@
                                     <tbody style="font-size: 13px;">
                                     <?php $cnt=1; foreach ($agents as $agent) { ?>
                                         <tr>
-                                            <td class="text-center"><?php echo $cnt;?></td>
+                                            <!--<td class="text-center"><?php echo $cnt;?></td>-->
+											<td class="text-center"><?php echo $agent['agent_id']?></td>
                                             <td><?php echo $agent['first_name'].' '.$agent['last_name'];?></td>
                                             <td class="text-center"><?php echo $agent['nick_name'];?></td>
                                             <td><?php echo $agent['email']?></td>

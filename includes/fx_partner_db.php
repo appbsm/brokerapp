@@ -5,14 +5,13 @@ include_once('fx_crud_db.php');
 if ($_GET['action'] == 'del') {
 
 	$insurance_list = check_insurance($conn,$_GET['id']);
+
 	if(count($insurance_list)==0){
-
-	$data['id'] = $_GET['id'];
-	$data['table'] = 'insurance_partner';	
-	// delete_table ($conn, $data);
-	echo '<script>alert("Deleted Success.")</script>';
-	echo "<script>window.location.href ='../insurance-partner.php'</script>";
-
+		$data['id'] = $_GET['id'];
+		$data['table'] = 'insurance_partner';	
+		delete_table ($conn, $data);
+		echo '<script>alert("Deleted Success.")</script>';
+		echo "<script>window.location.href ='../insurance-partner.php'</script>";
 	}else{
         echo '<script>alert("This data cannot be deleted due to its usage history in the system, but it can only be marked as inactive.")</script>';
         echo "<script>window.location.href ='../insurance-partner.php'</script>";
@@ -173,7 +172,7 @@ function get_partner_ctr($conn) {
 function generate_partner_id($conn) {
 	$result = '';
 	$last_partner = get_partner_ctr($conn);
-	$partner_id = 'P-'. str_pad($last_partner + 1, 8, '0', STR_PAD_LEFT);
+	$partner_id = 'P-'. str_pad($last_partner + 1, 6, '0', STR_PAD_LEFT);
 	
 	return $partner_id;
 }
@@ -194,7 +193,7 @@ function get_partner_bank($conn, $id) {
         return $result;
 }
 
-function save_partner ($conn, $post_data) {
+function save_partner($conn, $post_data) {
     $id_partner = '';
 	$data['table'] = 'insurance_partner';
 	$data['columns'] = array(

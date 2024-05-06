@@ -484,14 +484,19 @@
 						console.log(subdistrict);
 						$("#district option").remove();
 						$("#sub_district option").remove();
+
+                        var options_s = $("#sub_district");
+                        options_s.append($("<option />").val("").text("Select Subdistrict"));
+
 						var options = $("#district");
-						//don't forget error handling!
+                        options.append($("<option />").val("").text("Select District"));
 						$.each(obj, function(item) {
 							//console.log(item);
 							
 							options.append($("<option />").val(obj[item].code).text(obj[item].name_en));
 						});
-                        $("#district").selectpicker('refresh');				
+                        $("#district").selectpicker('refresh');		
+                        $("#sub_district").selectpicker('refresh');
 					}				  
 					});
 				});
@@ -510,7 +515,7 @@
 						var obj = eval("(" + result + ")");
 						$("#sub_district option").remove();
 						var options = $("#sub_district");
-						//don't forget error handling!
+                        options.append($("<option />").val("").text("Select Subdistrict"));
 						 var zipcodes_tmp = [];
 						$.each(obj, function(item) {
 						  

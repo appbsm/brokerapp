@@ -102,7 +102,7 @@ function get_agent_ctr($conn) {
 function generate_agent_id($conn) {
 	$result = '';
 	$last_agent = get_agent_ctr($conn);
-	$agent_id = 'A-'. str_pad($last_agent + 1, 8, '0', STR_PAD_LEFT);
+	$agent_id = 'A-'. str_pad($last_agent + 1, 6, '0', STR_PAD_LEFT);
 	
 	return $agent_id;
 }

@@ -405,18 +405,23 @@
 						
 						var obj = eval("(" + result + ")");
 						subdistrict = obj;
-						console.log(subdistrict);
+						// console.log(subdistrict);
 						$("#district option").remove();
 						$("#sub_district option").remove();
-						var options = $("#district");
-						//don't forget error handling!
 
+						var options_s = $("#sub_district");
+                        options_s.append($("<option />").val("").text("Select Subdistrict"));
+
+						var options = $("#district");
+                        options.append($("<option />").val("").text("Select District"));
+                        $('#post_code').val("");
 						$.each(obj, function(item) {
 							//console.log(item);
 							
 							options.append($("<option />").val(obj[item].code).text(obj[item].name_en));
 						});	
                         $("#district").selectpicker('refresh');
+                        $("#sub_district").selectpicker('refresh');
 					}				  
 					});
 				});
@@ -435,6 +440,7 @@
 						var obj = eval("(" + result + ")");
 						$("#sub_district option").remove();
 						var options = $("#sub_district");
+						options.append($("<option />").val("").text("Select Subdistrict"));
 						//don't forget error handling!
 						 var zipcodes_tmp = [];
 
@@ -445,6 +451,7 @@
 						});	
 						zipcodes = zipcodes_tmp;			
 						// console.log(zipcodes);
+                        $("#district").selectpicker('refresh');		
                         $("#sub_district").selectpicker('refresh');
 					}				  
 					});

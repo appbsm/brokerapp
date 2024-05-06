@@ -122,7 +122,8 @@ $partners = get_partners($conn);
                                 <table class="table table-bordered" id="example" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                            <!--<th>#</th>-->
+											<th>Partner ID</th>
 											<th width="250px">Partner Name</th>
 											<th>Short Name</th>
 											<th>Contact Person</th>       
@@ -140,7 +141,8 @@ $partners = get_partners($conn);
 										    $contact = get_partner_contact ($conn, $p['id']);
 										?>
 										<tr>
-                                            <td class="text-center"><?php echo $ctr;?></td>
+                                            <!--<td class="text-center"><?php echo $ctr;?></td>-->
+											<td class="text-center"><?php echo $p['insurance_id'];?></td>
                                             <td><?php echo $p['insurance_company'];?></td>
                                             <td class="text-center"><?php echo $p['short_name_partner'];?></td>
                                             <td> <?php echo $contact[0]['first_name'].' '.$contact[0]['last_name'];?></td>

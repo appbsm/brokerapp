@@ -4,8 +4,8 @@ function insert_table ($conn, $data) {
 	$last_insert = '';
 	// print_r($conn);
 	//$table = 'customer';
-	$columns = implode(",",$data['columns']);
-	$values  = implode(',', array_fill_keys($data['columns'], '?'));
+	$columns = implode("   ,   ",$data['columns']);
+	$values  = implode('   ,   ', array_fill_keys($data['columns'], '?'));
 	/* Set up the parameterized query. */  
 	$tsql = 'SET NOCOUNT ON; ';
 	$tsql .= "INSERT INTO ".$data['table']." (".$columns.") "
@@ -15,14 +15,14 @@ function insert_table ($conn, $data) {
 	 // echo "<br>".$tsql;
 	/* Set parameter values. */  
 	$params_ = $data['values'];
-	$params = implode(",",$params_); 
+	$params = implode("   ,   ",$params_); 
 	// echo "<br>COLUMNS:<br>";
 	// print_r($data['columns']);	
 	// echo "<br>";
 	// echo "<br>PARAMS:<br>";
 	// print_r(explode(',', $params) );
 	/* Prepare and execute the query. */  
-	$stmt = sqlsrv_query( $conn, $tsql, explode(',',$params) );	
+	$stmt = sqlsrv_query( $conn, $tsql, explode('   ,   ',$params) );	
 	if ( $stmt ) {  
 	    //$last_insert = $conn->insert_id;
 	    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {	        
@@ -41,24 +41,26 @@ function insert_table ($conn, $data) {
 } 
 
 function update_table ($conn, $data) {
+	// echo '<script>alert("start")</script>'; 
 	foreach ($data['columns'] as $col) {
 		$str = $col.' = ?';
 		$field_update[] = $str;
 	}
-	$fields = implode(",", $field_update);
+	$fields = implode("   ,   ", $field_update);
 	$tsql = "UPDATE ".$data['table']." SET "
 		. $fields
 		. ' where id = ? ';	
 	$params_ = $data['values'];
 	$params_[] = $data['id'];
-	$params = implode(",",$params_);
-
+	$params = implode("   ,   ",$params_);
+	// alert('222');
 	// echo $tsql;
 	// print_r($params);
 	// echo "ID".$data['id'];
 	// $sql_test = "UPDATE ".$data['table']." SET ". $params_. ' where id =  '.$data['id'];	
 	// echo '<script>alert("tsql: '.$sql_test.'")</script>'; 
-	$stmt = sqlsrv_query( $conn, $tsql, explode(',', $params) );
+	$stmt = sqlsrv_query( $conn, $tsql, explode('   ,   ', $params) );
+	// alert('333');
 	if( $stmt ) {
 		//echo "Worked";
 		sqlsrv_commit( $conn );
