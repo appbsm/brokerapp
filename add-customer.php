@@ -102,9 +102,68 @@
         </div>
     </div>
 
-
-<form method="post" action="add-customer.php" enctype="multipart/form-data" onSubmit="return valid();" >
+<!-- onsubmit="return validateForm()" -->
+<!-- onSubmit="return valid();" -->
+<form method="post" action="add-customer.php" enctype="multipart/form-data" onSubmit="return validateForm();" >
 <br>
+
+<script>
+var tax_id_check = "true";
+var mobile_check = "true";
+
+$(function(){
+    var tax_id_object = $('#tax_id');
+    tax_id_object.on('change', function(){
+        var tax_id_value = $(this).val();
+            $.get('get_customer_tax.php?tax_id=' + tax_id_value, function(data){
+                var result = JSON.parse(data);
+                tax_id_check = "true";
+                $.each(result, function(index,item){
+                    if(item.id!=""){
+                        alert("This customer already exist.");
+                        // tax_id_check="false";
+                    }
+                });
+            });
+    });
+
+    var mobile_object = $('#mobile');
+    mobile_object.on('change', function(){
+        var mobile_value = $(this).val();
+            $.get('get_customer_mobile.php?mobile=' + mobile_value, function(data){
+                var result = JSON.parse(data);
+                mobile_check = "true";
+                $.each(result, function(index,item){
+                    if(item.id!=""){
+                        alert("This customer already exist.");
+                        // mobile_check="false";
+                    }
+                });
+            });
+    });
+});
+
+function validateForm() {
+    // var deferred = $.Deferred();
+    // var tax_id_value = document.getElementById("tax_id").value;
+    // var mobile_value = document.getElementById("mobile").value;
+    // $.get('get_customer_tax.php?tax_id=' + tax_id_value, function(data){
+    //     alert("value:"+tax_id_value);
+    //     var result = JSON.parse(data);
+    //     var tax_id_check = true;
+    //     $.each(result, function(index, item){
+    //         tax_id_check ="false";
+    //     });
+    // });
+    if (tax_id_check=="true" && mobile_check == "true") {
+        document.getElementById("loading-overlay").style.display = "flex";
+        return true;
+    }else{
+        alert("This customer already exist.");
+        return false;
+    }
+}
+</script>
 
 <div class="container-fluid">
     <div class="row">
@@ -225,13 +284,13 @@
                         <label style="color: #102958;" ><small><font color="red">*</font></small>First name:</label>
                     </div>
                     <div  class="col-4 personal">
-                        <input id="first_name" name="first_name" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  required>
+                        <input id="first_name" name="first_name" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  required>
                     </div>
 					<div class="col-2  label_left personal"  >
                         <label  style="color: #102958;" >Last name:</label>
                     </div>
                     <div class="col-4 personal">
-                        <input id="last_name" name="last_name" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  >
+                        <input id="last_name" name="last_name" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  >
                     </div>
                 </div>
 				
@@ -240,7 +299,7 @@
                         <label style="color: #102958;"  >Nickname:</label>
                     </div>
                     <div class="col-4 personal ">
-                        <input id="nick_name" name="nick_name"  minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
+                        <input id="nick_name" name="nick_name"  minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
                     </div>
 				</div>
 				
@@ -249,7 +308,7 @@
                         <label style="color: #102958;" >Tax ID / Passport ID:</label>
                     </div>
                     <div class="col-4 ">
-                        <input minlength="1" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" name="tax_id" class="form-control" > 
+                        <input id="tax_id" name="tax_id"  minlength="1" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" > 
 					</div>
                     <div class="col-sm-2 label_left" >
                         <label style="color: #102958;" >Email:</label>
@@ -280,6 +339,12 @@
                     </div>
                 </div>
 
+                <script type="text/javascript">
+                    var tax_id_object = $('#tax_id');
+                    var mobile_object = $('#mobile');
+
+                </script>
+
                 <div class="panel-heading">
                     <div class="form-group row col-md-10 col-md-offset-1">
                         <div class="panel-title" style="color: #102958;" >
@@ -287,6 +352,7 @@
                         </div>
                     </div>
                 </div>
+				<!--
                 <div class="form-group row col-md-10 col-md-offset-1" >
                     <div class="col-sm-2  label_left"  >
                         <label style="color: #102958;" ><small><font color="red">*</font></small>Address No:</label>
@@ -298,7 +364,7 @@
                         <label style="color: #102958;" >Building Name:</label>
                     </div>
                     <div class="col-4 ">
-                        <input name="building_name" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
+                        <input name="building_name" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
                     </div>
                 </div>
                 <div class="form-group row col-md-10 col-md-offset-1" >
@@ -315,6 +381,35 @@
                         <input name="road" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
                     </div>
                 </div>
+				-->
+				<div class="form-group row col-md-10 col-md-offset-1">
+					<div class="col-sm-2 label_left">
+						<label style="color: #102958;"><small><font color="red">*</font></small>Address No:</label>
+					</div>
+					<div class="col-2">
+						<input name="address_number" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" required>
+					</div>
+				<div class="col-sm-1 label_left">
+						<label style="color: #102958;">Soi:</label>
+					</div>
+					<div class="col pl-0">
+						<input name="soi" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control">
+					</div>
+					<div class="col-sm-1 label_left">
+						<label style="color: #102958;">Road:</label>
+					</div>
+					<div class="col pl-0">
+						<input name="road" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control">
+					</div>
+				</div>
+				<div class="form-group row col-md-10 col-md-offset-1">
+					<div class="col-sm-2 label_left">
+						<label style="color: #102958;">Building Name:</label>
+					</div>
+					<div class="col">
+						<input name="building_name" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control">
+					</div>
+				</div>
 
                 <div class="form-group row col-md-10 col-md-offset-1" >
                     <div class="col-sm-2  label_left"  >

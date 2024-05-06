@@ -123,8 +123,8 @@ $partners = get_partners($conn);
                                     <thead>
                                         <tr>
                                             <th>#</th>
-											<th>Partner Name</th>
-											<th>Short Partner Name</th>
+											<th width="250px">Partner Name</th>
+											<th>Short Name</th>
 											<th>Contact Person</th>       
                                             <th>Contact Email</th>
                                             <!-- <th>Tel</th> -->
@@ -142,7 +142,7 @@ $partners = get_partners($conn);
 										<tr>
                                             <td class="text-center"><?php echo $ctr;?></td>
                                             <td><?php echo $p['insurance_company'];?></td>
-                                            <td><?php echo $p['short_name_partner'];?></td>
+                                            <td class="text-center"><?php echo $p['short_name_partner'];?></td>
                                             <td> <?php echo $contact[0]['first_name'].' '.$contact[0]['last_name'];?></td>
 
                                             <td><?php echo $p['email'];?></td>

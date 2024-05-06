@@ -123,10 +123,62 @@
         </div>
     </div>
 
-<form method="post" action="edit-customer.php" enctype="multipart/form-data" onSubmit="return valid();" >
-<input type="hidden" name="id" value="<?php echo $_GET['id'];?>">
+<form method="post" action="edit-customer.php" enctype="multipart/form-data" onSubmit="return validateForm();" >
+<input type="hidden" id="id" name="id" value="<?php echo $_GET['id'];?>">
 <br>
 <!-- <section class="section"> -->
+
+<script>
+var tax_id_check = "true";
+var mobile_check = "true";
+
+$(function(){
+    var tax_id_object = $('#tax_id');
+
+    var id = document.getElementById("id").value;
+
+    tax_id_object.on('change', function(){
+        var tax_id_value = $(this).val();
+            $.get('get_customer_tax.php?tax_id=' + tax_id_value + '&id=' + id, function(data){
+                var result = JSON.parse(data);
+                tax_id_check = "true";
+                $.each(result, function(index,item){
+                    if(item.id!=""){
+                        alert("This customer already exist.");
+                        // tax_id_check="false";
+                    }
+                });
+            });
+    });
+
+    var mobile_object = $('#mobile');
+    mobile_object.on('change', function(){
+        var mobile_value = $(this).val();
+            // alert('get_customer_mobile.php?mobile=' + mobile_value + '&id=' + id);
+            $.get('get_customer_mobile.php?mobile=' + mobile_value + '&id=' + id, function(data){
+                var result = JSON.parse(data);
+                mobile_check = "true";
+                $.each(result, function(index,item){
+                    if(item.id!=""){
+                        alert("This customer already exist.");
+                        // mobile_check="false";
+                    }
+                });
+            });
+    });
+
+});
+
+function validateForm() {
+    if (tax_id_check=="true" && mobile_check == "true") {
+        document.getElementById("loading-overlay").style.display = "flex";
+        return true;
+    }else{
+        alert("This customer already exist.");
+        return false;
+    }
+}
+</script>
 
 <div class="container-fluid">
         <div class="row">
@@ -243,13 +295,13 @@
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>First name:</label>
                 </div>
                 <div class="col-4 personal">
-                    <input id="first_name" name="first_name" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" value="<?php echo $customer_value['first_name'];?>" required>
+                    <input id="first_name" name="first_name" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" value="<?php echo $customer_value['first_name'];?>" required>
                 </div>
 				<div class="col-sm-2   personal"  >
                     <label id="label_lname" style="color: #102958;" >Last name:</label>
                 </div>
                 <div id="col_lname" class="col-4 personal">
-                    <input id="last_name" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="last_name" class="form-control" value="<?php echo $customer_value['last_name'];?>" >
+                    <input id="last_name" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text" name="last_name" class="form-control" value="<?php echo $customer_value['last_name'];?>" >
                 </div>
             </div>
 			
@@ -258,7 +310,7 @@
                     <label style="color: #102958;" >Nickname:</label>
                 </div>
                 <div class="col-4 personal">
-                    <input name="nick_name" id="nick_name" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $customer_value['nick_name'];?>">
+                    <input name="nick_name" id="nick_name" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $customer_value['nick_name'];?>">
                 </div>
 			</div>
 			
@@ -266,7 +318,7 @@
 				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tax ID / Passport ID:</label>
                 <div class="col-4">
                     <!--<input minlength="13" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" name="tax_id" class="form-control" id="success" value="<?php echo $customer_value['tax_id'];?>" required pattern="\d{13}" >-->
-					<input minlength="1" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" name="tax_id" class="form-control" id="success" value="<?php echo $customer_value['tax_id'];?>" >               
+					<input id="tax_id" name="tax_id" minlength="1" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" id="success" value="<?php echo $customer_value['tax_id'];?>" >               
                 </div>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
                 <div class="col-4">
@@ -291,7 +343,7 @@
                
                 </div>
             </div>
-
+			
             <div class="form-group row col-md-10 col-md-offset-1">
                 <div class="col">
                     <div class="panel-title" style="color: #102958;" >
@@ -299,7 +351,8 @@
                     </div>
                 </div>
             </div>
-            
+			
+            <!--
              <div class="form-group row col-md-10 col-md-offset-1">
                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Address No:</label>
                 <div class="col-4">
@@ -321,6 +374,32 @@
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Road:</label>
                 <div class="col-4">
                     <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="road" class="form-control"  value="<?php echo $customer_value['road'];?>">
+                </div>
+            </div>
+			-->
+			            
+             <div class="form-group row col-md-10 col-md-offset-1">
+               <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Address No:</label>
+                <div class="col-2">
+                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="address_number"  class="form-control"  value="<?php echo $customer_value['address_number'];?>" required>
+               
+                </div>
+                
+				 <label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Soi:</label>
+                <div class="col-3">
+                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="soi"  class="form-control"  value="<?php echo $customer_value['soi'];?>">
+               
+                </div>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Road:</label>
+                <div class="col-3">
+                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="road" class="form-control"  value="<?php echo $customer_value['road'];?>">
+                </div>
+            </div>
+
+            <div class="form-group row col-md-10 col-md-offset-1">
+               <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Building Name:</label>
+                <div class="col">
+                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="building_name"  class="form-control"  value="<?php echo $customer_value['building_name'];?>">
                 </div>
             </div>
 

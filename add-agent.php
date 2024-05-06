@@ -194,7 +194,8 @@
 									</div>
 							</div>
 						</div>
-
+						
+						<!--
 						<div class="form-group row col-md-10 col-md-offset-1">
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Address No:</label>
 							<div class="col-4">
@@ -215,6 +216,30 @@
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Road:</label>
 							<div class="col-4">
 								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="road"  class="form-control" id="road" value="" >
+							</div>
+						</div>
+						-->
+						
+						<div class="form-group row col-md-10 col-md-offset-1">
+							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Address No:</label>
+							<div class="col-2">
+								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="" >
+							</div>
+							<label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Soi:</label>
+							<div class="col">
+								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="soi" class="form-control" id="soi" value="" >
+						   
+							</div>
+							<label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Road:</label>
+							<div class="col">
+								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="road"  class="form-control" id="road" value="" >
+							</div>
+						</div>
+
+						<div class="form-group row col-md-10 col-md-offset-1">
+							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Building Name:</label>
+							<div class="col-4">
+								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="building_name"  class="form-control" id="building_name" value="" >
 							</div>
 						</div>
 

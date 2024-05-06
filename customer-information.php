@@ -116,12 +116,13 @@ if(strlen($_SESSION['alogin'])=="") {
                                         <tr>
                                             <th>#</th>
                                             <th>Cust. Name</th>
+											<th>Cust. Level</th>
                                             <!--<th>Nickname</th>-->
                                             <th>Contact Name</th>
                                             <th>Cust. Type</th>
-                                            <th>Email</th>
-                                            <!-- <th>Tel</th> -->
-                                            <th>Mobile</th>
+                                            <!-- <th>Email</th> -->
+                                            <th>Tel</th>
+                                            <!-- <th>Mobile</th> -->
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -135,11 +136,13 @@ if(strlen($_SESSION['alogin'])=="") {
 										<tr>
                                             <td class="text-center"><?php echo $ctr;?></td>
                                             <td><?php echo $c['full_name'];?></td>
+											<td class="text-center"><?php echo $c['level_name'];?></td>
                                             <!--<td><?php echo $c['nick_name'];?></td>-->
                                             <td> <?php echo $contact[0]['first_name'].' '.$contact[0]['last_name'];?></td>
                                             <td class="text-center"><?php echo $c['customer_type'];?></td>
-                                            <td><?php echo $c['email'];?></td>
-                                            <td class="text-center"><?php echo $c['mobile'];?></td>
+                                            <!-- <td><?php //echo $c['email'];?></td> -->
+                                            <td class="text-center"><?php echo $c['tel'];?></td>
+                                            <!-- <td class="text-center"><?php echo $c['mobile'];?></td> -->
                                             <td class="text-center"><?php echo ($c['status'] == 1) ? 'Active' : 'Inactive';?></td>
                                             <td class="text-center">
                                             <a href="edit-customer.php?id=<?php echo $c['id'];?>"><i class="fa " title="Edit Record"></i>

@@ -139,10 +139,14 @@ $currency = get_currency($conn);
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Partner Name:</label>
-                <div class="col-sm-4">
+                <div class="col-sm-10">
                     <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="insurance_company"  class="form-control" id="insurance_company" required>
                 </div>
 
+               
+            </div>
+
+            <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Short Partner Name:</label>
                 <div class="col-sm-4">
                     <input id="short_name_partner" name="short_name_partner" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
@@ -192,7 +196,7 @@ $currency = get_currency($conn);
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tel:</label>
                 <div class="col-sm-4">
-                    <input id="tel" name="tel" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  pattern="\d{2}-\d{3}-\d{4}">
+                    <input id="tel" name="tel" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  >
                 </div>
         </div>
 
@@ -225,7 +229,8 @@ $currency = get_currency($conn);
                     </div>
                 </div>
             </div> 
-
+			
+			<!--
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Address No:</label>
                 <div class="col-sm-4">
@@ -248,6 +253,30 @@ $currency = get_currency($conn);
                     <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="road" class="form-control" id="road" value="" >
                 </div>
             </div>
+			-->
+			
+			<div class="form-group row col-md-10 col-md-offset-1">
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Address No:</label>
+                <div class="col-2">
+                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="" required>
+                </div>
+				<label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Soi:</label>
+                <div class="col pl-0">
+                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="soi" class="form-control" id="soi" value="" >
+               
+                </div>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Road:</label>
+                <div class="col pl-0">
+                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="road" class="form-control" id="road" value="" >
+                </div>
+            </div>
+
+            <div class="form-group row col-md-10 col-md-offset-1">
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Building Name:</label>
+                <div class="col">
+                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="building_name"  class="form-control" id="building_name" value="" >
+                </div>
+            </div>
 
 			
             <div class="form-group row col-md-10 col-md-offset-1">
@@ -266,9 +295,9 @@ $currency = get_currency($conn);
                 <div class="col-sm-4">
                      <select style="color: #4590B8;border-color:#102958;" name="district" class="form-control selectpicker" id="district" data-live-search="true" required>
                                 <option value="" selected>Select District</option>
-								<?php foreach ($districts as $district) { ?>
-						<option value="<?php echo $district['code']?>"><?php echo $district['name_en'];?></option>
-						<?php } ?>
+								<?php //foreach ($districts as $district) { ?>
+						<!-- <option value="<?php //echo $district['code']?>"><?php //echo $district['name_en'];?></option> -->
+						<?php //} ?>
                         </select>
                 </div>
             </div>
@@ -279,7 +308,7 @@ $currency = get_currency($conn);
                     <!-- <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="name" class="form-control" id="success" value" > -->
 
                     <select style="color: #4590B8;border-color:#102958;" name="sub_district" class="form-control selectpicker" id="sub_district" data-live-search="true" required>
-                                <option value="" selected>Select Subdistrict</option>
+                                <option value="" selected>Select Sub-district</option>
 								<?php foreach ($subdistricts as $sub) { ?>
 						<option value="<?php echo $sub['code']?>"><?php echo $sub['name_en'];?></option>
 						<?php } ?>	
@@ -559,9 +588,9 @@ $currency = get_currency($conn);
         <div class="panel-body">
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Title:</label>
-                <div class="col-sm-2">
+                <div class="col-2">
                      <select id="contact_title_name" name="contact_title_name[]" style="color: #102958; border-color:#102958;" class="form-control" >
-						<option value="" selected>Select Title Name</option>
+						<option value="" selected>Select Title</option>
 						<option value="Mr." <?php echo (trim($customer['title_name'])=="Mr.") ? 'selected' : '';?>>Mr.</option>
 						<option value="Ms." <?php echo (trim($customer['title_name'])=="Ms.") ? 'selected' : '';?>>Ms.</option>
 						<option value="Mrs." <?php echo (trim($customer['title_name'])=="Mrs.") ? 'selected' : '';?>>Mrs.</option>       
@@ -574,24 +603,28 @@ $currency = get_currency($conn);
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1" >
-
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>First name:</label>
-                <div class="col-sm-4">
+                <div class="col-4">
                     <input id="contact_first_name" name="contact_first_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" required>
                 </div>
 
-                <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Last name:</label>
-                <div class="col-sm-4">
-                    <input id="contact_last_name" name="contact_last_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" required>
-               
+                <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Last name:</label>
+                <div class="col-4">
+                    <input id="contact_last_name" name="contact_last_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" >
                 </div>
-
+            </div>
+			
+			<div class="form-group row col-md-10 col-md-offset-1" >
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Nickname:</label>
+                <div class="col-4">
+                    <input id="contact_nick_name" name="contact_nick_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
+                </div>               
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1" >
                 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Mobile:</label>
-                <div class="col-sm-4">
+                <div class="col-4">
                     <!--<input id="contact_mobile" name="contact_mobile[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >-->
                     <input style="color: #0C1830;border-color:#102958;" type="text" name="contact_mobile[]" class="form-control" id="contact_mobile"  pattern="\d{3}-\d{3}-\d{4}">
                 </div>
@@ -604,45 +637,34 @@ $currency = get_currency($conn);
                 </script>
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tel:</label>
-                <div class="col-sm-4">
+                <div class="col-4">
                     <input id="contact_tel" name="contact_tel[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
-                </div>
-            </div>
-
-            <div class="form-group row col-md-10 col-md-offset-1" >
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Nickname:</label>
-                <div class="col-sm-4">
-                    <input id="contact_nick_name" name="contact_nick_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
-                </div>
-
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
-                <div class="col-sm-4">
-                    <input id="contact_email" name="contact_email[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
                 </div>
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1" >
                 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Line ID:</label>
-                <div class="col-sm-4">
+                <div class="col-4">
                     <input id="contact_line_id" name="contact_line_id[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
                 </div>
-                <div class="col-sm-2 label_left" >
-                </div>
-                <div class="col" class="form-control" >
+				
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
+                <div class="col-4">
+                    <input id="contact_email" name="contact_email[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
                 </div>
             </div>
 
         <div class="form-group row col-md-10 col-md-offset-1" >
 
             <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Position:</label>
-            <div class="col-sm-4">
+            <div class="col-4">
                 <input id="contact_position" name="contact_position[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
                
             </div>
 
 			<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Department:</label>
-			<div class="col-sm-4">
+			<div class="col-4">
                 <input id="department" name="department[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
             </div> 
                
@@ -650,7 +672,7 @@ $currency = get_currency($conn);
 
         <div class="form-group row col-md-10 col-md-offset-1" >
             <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Remark:</label>
-            <div class="col-sm-10">
+            <div class="col-10">
                 <textarea id="contact_remark" name="contact_remark[]" minlength="1" maxlength="255" rows="2" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" ></textarea>
                
             </div>
@@ -659,7 +681,7 @@ $currency = get_currency($conn);
         <div class="form-group row col-md-10 col-md-offset-1" >
             <div class="col-sm-2">
             </div>  
-            <div class="col-sm-4">
+            <div class="col-4">
                 <div class="form-check" style="top:5px">
                 <input hidden="true" id="hid_default1" name="hid_default[]" type="text" value="1" >
                 <input id="id_default1" name="default_contact[]" class="form-check-input" type="radio" value="1" checked>
@@ -755,6 +777,7 @@ $currency = get_currency($conn);
 				
 				$('#province').change(function(){
 					//alert($(this).val())
+
 					$.ajax({
 					type:"post", 
 					url: "includes/fx_address.php", 
@@ -763,13 +786,14 @@ $currency = get_currency($conn);
 						id_province: $(this).val()
 					},
 					success: function(result) {
-						
 						var obj = eval("(" + result + ")");
 						subdistrict = obj;
 						console.log(subdistrict);
 						$("#district option").remove();
 						$("#sub_district option").remove();
-						var options = $("#district");
+                        $('#post_code').val("");
+                        var options = $("#district");
+                        options.append($("<option />").val("").text("Select District"));
 						$.each(obj, function(item) {
 							//console.log(item);
 							options.append($("<option />").val(obj[item].code).text(obj[item].name_en));
@@ -792,8 +816,10 @@ $currency = get_currency($conn);
 						
 						var obj = eval("(" + result + ")");
 						$("#sub_district option").remove();
+                        $('#post_code').val("");
+
 						var options = $("#sub_district");
-						//don't forget error handling!
+                        options.append($("<option />").val("").text("Select Sub-district"));
 						 var zipcodes_tmp = [];
 						$.each(obj, function(item) {
 						  
