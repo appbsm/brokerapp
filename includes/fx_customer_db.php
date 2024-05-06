@@ -36,10 +36,12 @@ function check_policy($conn,$id) {
 function get_customers($conn) {
 	$result = array();
 	$tsql = "SELECT CASE WHEN customer_type = 'Personal'
-      THEN CONCAT(title_name,' ',first_name,' ',last_name)
+      THEN CONCAT(first_name,' ',last_name)
       ELSE company_name
       END as full_name
-	,* FROM customer order by LTRIM(first_name) asc";
+	,customer.*,cl.level_name FROM customer 
+	LEFT JOIN customer_level cl ON cl.id = customer.customer_level
+	order by LTRIM(first_name) asc";
 	
 	$stmt = sqlsrv_query( $conn, $tsql);  
 	if( $stmt === false) {
@@ -68,7 +70,7 @@ function get_customers_search_start($conn) {
 	$sql = "SELECT pr.name_th AS name_th_province,di.name_th AS name_th_district,su.name_th AS name_th_sub
 	,con.email AS con_email,con.mobile AS con_mobile
 	,CASE WHEN ct.customer_type = 'Personal'
-      THEN CONCAT(ct.title_name,' ',ct.first_name,' ',ct.last_name)
+      THEN CONCAT(ct.first_name,' ',ct.last_name)
       ELSE ct.company_name
       END as full_name
 	,con.position,cl.level_name,ct.* FROM customer ct 
@@ -100,7 +102,7 @@ function get_customers_search($conn,$post_data) {
 	$sql = "SELECT pr.name_th AS name_th_province,di.name_th AS name_th_district,su.name_th AS name_th_sub
 	,con.email AS con_email,con.mobile AS con_mobile
 	,CASE WHEN ct.customer_type = 'Personal'
-      THEN CONCAT(ct.title_name,' ',ct.first_name,' ',ct.last_name)
+      THEN CONCAT(ct.first_name,' ',ct.last_name)
       ELSE ct.company_name
       END as full_name
 	,con.position,cl.level_name,ct.* FROM customer ct 
@@ -174,7 +176,7 @@ function generate_customer_id($conn) {
 	$result = '';
 	$last_customer = get_customer_ctr($conn);
 	//echo $last_customer;
-	$customer_id = 'C-'. str_pad($last_customer + 1, 8, '0', STR_PAD_LEFT);
+	$customer_id = 'C-'. str_pad($last_customer + 1, 6, '0', STR_PAD_LEFT);
 	
 	return $customer_id;
 }

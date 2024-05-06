@@ -190,7 +190,7 @@ function validateForm() {
                     </div>
                     <div class="col-3 ">
                         <select name="customer_type" style="border-color:#102958;" id="customer_type" onchange="" class="form-control" required>
-							<option value="">Select Customer Type</option>
+							<option value="">Select Cust. Type</option>
 							<option value="Personal" >Personal</option>
 							<option value="Corporate" >Corporate</option>
                     </select>

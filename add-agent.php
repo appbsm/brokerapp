@@ -99,7 +99,7 @@
 					<div class="panel-body">
 						<div class="form-group row col-md-10 col-md-offset-1">
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Agent ID:</label>
-							<div class="col-3 label_left">
+							<div class="col-2 label_left">
 								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="agent_id" required="required" class="form-control" id="success" value="<?php echo $agent_id;?>" readOnly>               
 							</div>
 							
@@ -117,9 +117,9 @@
 
 						<div class="form-group row col-md-10 col-md-offset-1">
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Title:</label>
-							<div id="col_title" class="col-3 label_left">
+							<div id="col_title" class="col-2 label_left">
 								<select id="input_title" style="border-color:#102958;" name="title_name" class="form-control" id="default" >
-									<option value="" selected>Select Title Name</option>
+									<option value="" selected>Select Title </option>
 									<option value="Mr." <?php echo (trim($customer['title_name'])=="Mr.") ? 'selected' : '';?>>Mr.</option>
 									<option value="Ms." <?php echo (trim($customer['title_name'])=="Ms.") ? 'selected' : '';?>>Ms.</option>
 									<option value="Mrs." <?php echo (trim($customer['title_name'])=="Mrs.") ? 'selected' : '';?>>Mrs.</option>       
@@ -141,11 +141,11 @@
 						<div class="form-group row col-md-10 col-md-offset-1">               
 							<label style="color: #102958;" for="first_name" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>First name:</label>
 							<div class="col-4">
-								<input id="input_fname" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="first_name" class="form-control" id="first_name"  required>
+								<input id="input_fname" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text" name="first_name" class="form-control" id="first_name"  required>
 							</div>
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Last name:</label>
 							<div class="col-4 ">
-								<input id="input_lname" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="last_name" class="form-control" required>
+								<input id="input_lname" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text" name="last_name" class="form-control" required>
 							</div>
 							
 						</div>
@@ -153,7 +153,7 @@
 						<div class="form-group row col-md-10 col-md-offset-1">
 							<label style="color: #102958;" for="nick_name" class="col-sm-2 col-form-label">Nickname:</label>
 							<div class="col-4 ">
-								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="nick_name" class="form-control" >
+								<input minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text" name="nick_name" class="form-control" >
 							</div>
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tax ID / Passport ID:</label>
 							<div class="col-4">
@@ -238,7 +238,7 @@
 
 						<div class="form-group row col-md-10 col-md-offset-1">
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Building Name:</label>
-							<div class="col-4">
+							<div class="col">
 								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="building_name"  class="form-control" id="building_name" value="" >
 							</div>
 						</div>
@@ -247,22 +247,22 @@
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Province:</label>
 							<div class="col-4">
 								 <select style="color: #4590B8;border-color:#102958;" name="province" class="form-control selectpicker" data-live-search="true" id="province" >
-											<option value="" selected>Select Province</option>
-											<?php foreach ($provinces as $province) { ?>
+									<option value="" selected>Select Province</option>
+									<?php foreach ($provinces as $province) { ?>
 									<option value="<?php echo $province['code']?>"><?php echo $province['name_en'];?></option>
-											<?php }?>
-									</select>
+									<?php }?>
+								</select>
 						   
 							</div>
 							
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">District:</label>
 							<div class="col-4">
-								 <select style="color: #4590B8;border-color:#102958;" name="district" class="form-control selectpicker" data-live-search="true" id="district" >
+								<select style="color: #4590B8;border-color:#102958;" name="district" class="form-control selectpicker" data-live-search="true" id="district" >
 											<option value="" selected>Select District</option>
 											<?php foreach ($districts as $district) { ?>
 									<option value="<?php echo $district['code']?>"><?php echo $district['name_en'];?></option>
 									<?php } ?>
-									</select>
+								</select>
 							</div>
 						</div>
 

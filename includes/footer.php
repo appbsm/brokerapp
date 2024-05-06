@@ -4,7 +4,7 @@
 		<footer class="sticky-footer " >
 				<div class="container my-auto">
 					<div class="copyright text-center my-auto">
-							<span>©2024 <b>Broker Install Direct</b> Limited All Rights Reserved.</span>
+							<span>©2024 <b>Broker by InstallDirect</b> Limited All Rights Reserved.</span>
 					 </div>
 				</div>
 		</footer>

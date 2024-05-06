@@ -114,7 +114,8 @@ if(strlen($_SESSION['alogin'])=="") {
                                 <table class="table table-bordered" id="example" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                            <!--<th>#</th>-->
+											<th>Cust. ID</th>
                                             <th>Cust. Name</th>
 											<th>Cust. Level</th>
                                             <!--<th>Nickname</th>-->
@@ -134,7 +135,8 @@ if(strlen($_SESSION['alogin'])=="") {
 										$contact = get_customer_contact ($conn, $c['id']);
 										    ?>
 										<tr>
-                                            <td class="text-center"><?php echo $ctr;?></td>
+                                            <!--<td class="text-center"><?php echo $ctr;?></td>-->
+											<td class="text-center"><?php echo $c['customer_id'];?></td>
                                             <td><?php echo $c['full_name'];?></td>
 											<td class="text-center"><?php echo $c['level_name'];?></td>
                                             <!--<td><?php echo $c['nick_name'];?></td>-->

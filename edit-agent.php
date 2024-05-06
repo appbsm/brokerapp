@@ -122,7 +122,7 @@
 
              <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Agent ID:</label>
-                <div class="col-3 label_left">
+                <div class="col-2 label_left">
                     <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="agent_id" required="required" class="form-control" id="success" value="<?php echo $agent_id;?>" readOnly>
                
                 </div>
@@ -140,7 +140,7 @@
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Title:</label>
-                <div id="col_title" class="col-3 label_left ">
+                <div id="col_title" class="col-2 label_left ">
                      <select id="input_title" style="border-color:#102958;" name="title_name" class="form-control" id="default" >
                             <option value="Mr." <?php echo (trim($agent['title_name'])=="Mr.") ? 'selected' : '';?>>Mr.</option>
 							<option value="Ms." <?php echo (trim($agent['title_name'])=="Ms.") ? 'selected' : '';?>>Ms.</option>
@@ -215,7 +215,8 @@
                             </div>
                     </div>
             </div>
-
+			
+			<!--
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Address No:</label>
                 <div class="col-4">
@@ -236,6 +237,30 @@
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Road:</label>
                 <div class="col-4">
                     <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="road" class="form-control" id="road" value="<?php echo $agent['road'];?>" >
+                </div>
+            </div>
+			-->
+			
+			<div class="form-group row col-md-10 col-md-offset-1">
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Address No:</label>
+                <div class="col-2">
+                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="<?php echo $agent['address_number'];?>" >
+                </div>
+				
+				<label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Soi:</label>
+                <div class="col">
+                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="soi" class="form-control" id="soi" value="<?php echo $agent['soi'];?>" >
+                </div>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Road:</label>
+                <div class="col">
+                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="road" class="form-control" id="road" value="<?php echo $agent['road'];?>" >
+                </div>
+            </div>
+
+            <div class="form-group row col-md-10 col-md-offset-1">
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Building Name:</label>
+                <div class="col">
+                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="building_name"  class="form-control" id="building_name" value="<?php echo $agent['building_name'];?>" >
                 </div>
             </div>
 
