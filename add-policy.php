@@ -4,9 +4,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 
 <?php
+	include('includes/config.php');
 	session_start();
 	error_reporting(0);
-	include('includes/config.php');
 	include('includes/config_path.php');
 	if(strlen($_SESSION['alogin'])==""){
 		header("Location: index.php"); 
@@ -724,8 +724,13 @@ return validateForm();
                 </div> 
                 <div class="col-2">
                     <input id="end_date" name="end_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control" 
-                    value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" required>
+                    value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" disabled required>
                 </div>
+				<div class="col ">
+					<label style="color: red; font-size: 12px;" >
+						<I>Upon selecting the period, the system will automatically compute the end date.</I>
+					</label>
+				</div>
             </div>
 
 			<script>
