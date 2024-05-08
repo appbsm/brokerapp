@@ -20,6 +20,7 @@ function get_customer_insurance ($conn, $id_customer = '') {
              }
              $tsql .= "order by c.last_name, c.first_name ";
     //echo $tslq;
+     // print_r($tslq);
      $stmt = sqlsrv_query( $conn, $tsql);
      if( $stmt === false) {
          die( print_r( sqlsrv_errors(), true) );
@@ -490,6 +491,7 @@ function get_conversion($conn,$currency, $today) {
     . "and cc.id_currency_list = ".$currency;
     ;
     // echo $tsql;
+    // echo '<script>alert("get_conversion: '.$tsql.'")</script>'; 
     $stmt = sqlsrv_query( $conn, $tsql);
     if( $stmt === false) {
         die( print_r( sqlsrv_errors(), true) );
@@ -507,7 +509,12 @@ function get_commission_report ($conn, $data, $agent) {
     $result = array();
     $where = '';
     $tsql = "select "
-            . "CONCAT(a.title_name, ' ', a.first_name, ' ', a.last_name) as agent_name, "
+            . "ip.insurance_company, "
+            . "CASE WHEN c.customer_type = 'Personal'
+      THEN CONCAT(c.first_name,' ',c.last_name)
+      ELSE c.company_name
+      END as customer_name, "
+            . "CONCAT(a.first_name, ' ', a.last_name) as agent_name, "
             . "p.product_name, "
             . "ii.policy_no, "
             . "ii.premium_rate, "
@@ -531,7 +538,7 @@ function get_commission_report ($conn, $data, $agent) {
         . "right join insurance_partner ip on (ip.id = rpp.id_partner and ip.id = ii.insurance_company_id) "
         . "where ii.agent_id IS NOT NULL "
         . "and ii.agent_id = ".$agent;
-        //echo $tsql;
+        // echo $tsql;
         if (isset($data) && count($data) > 0) {
             if (isset($data['date_from']) && $data['date_from'] != '') {
                 $where .= " and start_date >= '".date("Y-m-d", strtotime($data['date_from']))."' ";
@@ -552,6 +559,12 @@ function get_commission_report ($conn, $data, $agent) {
             }
             if (isset($data['product']) && $data['product'] != '') {
                 $where .= " and ii.product_id = ".$data['product'];
+            }
+
+            // echo '<script>alert("lastInsertId: '.$data['partner'].'")</script>'; 
+
+            if (isset($data['partner']) && $data['partner'] != '') {
+                $where .= " and ip.id = ".$data['partner'];
             }
         }
         $tsql .= $where;

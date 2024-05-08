@@ -141,6 +141,8 @@ if(strlen($_SESSION['alogin'])=="")
                                             <th width="90px" style="color: #102958;">Start Date</th>
                                             <th width="90px" style="color: #102958;">End Date</th>
                                             <th width="100px" style="color: #102958;">Amount of premium</th>
+                                            <th width="100px" style="color: #102958;">Convert Value</th>
+                                            <th width="50px" style="color: #102958;">Symbol</th>
                                             <th width="200px" style="color: #102958;">Partner company</th>
                                             <th width="200px" style="color: #102958;" >Agent/Customer</th>
                                             <th width="70px" style="color: #102958;">Status</th>
@@ -169,6 +171,17 @@ if(strlen($_SESSION['alogin'])=="")
         <td class="text-center"><?php echo $start_date;?></td>
         <td class="text-center"><?php echo $end_date;?></td>
         <td class="text-right" ><?php echo number_format($result['premium_rate'], 2);?></td>
+
+        <td class="text-right" >
+            <?php   if($result['currency'] !="฿THB" && $result['currency'] !="THB"){
+                        echo number_format((float)$result['convertion_value'], 2, '.', ',');
+                    }else{
+                        echo "0.00";
+                    }
+            ?>
+        </td>
+        <td class="text-center"><?php echo $result['currency'];?></td>
+
         <td><?php echo $result['insurance_company'];?></td>
         <td><?php echo trim($result['agent_name']);?></td>
         

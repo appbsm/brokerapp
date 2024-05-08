@@ -238,7 +238,7 @@
                     <label style="color: #102958;" >Prod.ID:</label>
                 </div>
                 <div class="col ">
-                    <input id="product_id" name="product_id" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $product_id; ?>" readonly>
+                    <input id="product_id" name="product_id" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $product_id; ?>" readonly>
                 </div>
                 
                 <div class="col-sm-2 label_left ">
@@ -261,7 +261,7 @@
                     <label style="color: #102958;" ><small><font color="red">*</font></small>Prod. Categories:</label>
                 </div>
                 <div class="col ">
-                    <select id="id_product_cat" name="id_product_cat" style="color: #0C1830;border-color:#102958;"class="form-control" id="default" required  >
+                    <select id="id_product_cat" name="id_product_cat" style="color: #000;border-color:#102958;"class="form-control" id="default" required  >
                         <?php  foreach($results_categories as $result){ ?>
                             <option value="<?php echo $result->id; ?>"
                             <?php if ($result->id==$id_product_cat) { echo ' selected="selected"'; } ?>
@@ -274,7 +274,7 @@
                     <label style="color: #102958;" ><small><font color="red">*</font></small>Prod. Sub Categories:</label>
                 </div>
                 <div class="col">
-                    <select id="id_product_sub" name="id_product_sub" style="color: #0C1830;border-color:#102958;"class="form-control" id="default"  value="" required>
+                    <select id="id_product_sub" name="id_product_sub" style="color: #000;border-color:#102958;"class="form-control" id="default"  value="" required>
                          <?php  foreach($results_sub as $result){ ?>
                             <option value="<?php echo $result->id; ?>"
                             <?php if ($result->id==$id_product_sub) { echo ' selected="selected"'; } ?>
@@ -291,7 +291,7 @@
                     <label style="color: #102958;" ><small><font color="red">*</font></small>Prod. Name:</label>
                 </div>
                 <div class="col ">
-                    <input  name="product_name" minlength="1" maxlength="255" style="color: #0C1830;border-color:#102958;" type="text" required="required" class="form-control" value="<?php echo $product_name; ?>" required>
+                    <input  name="product_name" minlength="1" maxlength="255" style="color: #000;border-color:#102958;" type="text" required="required" class="form-control" value="<?php echo $product_name; ?>" required>
                 </div>
 			</div>
             <div class="form-group row col-md-10 col-md-offset-1" >
@@ -300,7 +300,7 @@
                 </div>
                 <div class="col ">
                     <!-- <input name="product_note"  minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $product_note; ?>" required> -->
-                     <textarea name="product_note" class="form-control" style="color: #0C1830;border-color:#102958;" id="product_name" rows="3" ><?php echo $product_note; ?></textarea>
+                     <textarea name="product_note" class="form-control" style="color: #000;border-color:#102958;" id="product_name" rows="3" ><?php echo $product_note; ?></textarea>
                 </div>
 
                 <!-- <div class="col-sm-2 label_right" >
@@ -319,7 +319,7 @@
                         </button>
                         &nbsp;&nbsp;
                     <a href="product-management.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
-                        <span class="text">Clear</span>
+                        <span class="text">Cancel</span>
                     </a>
                 </div>
             </div></div>

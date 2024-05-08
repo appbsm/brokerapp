@@ -119,12 +119,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label style="color: #102958;"  class="col-sm-2 label_left">From Date:</label>
 
                        <div class="col-sm-2">                                             
-                        <input  style="color: #0C1830;border-color:#102958;" type="text" name="date_from" class="form-control" id="date_from" value="<?php echo ($_POST['date_from'] != '') ? date('d-m-Y', strtotime($_POST['date_from'])) : '';?>" placeholder="dd-mm-yyyy">
+                        <input  style="color: #000;border-color:#102958; text-align: center;" type="text" name="date_from" class="form-control" id="date_from" value="<?php echo ($_POST['date_from'] != '') ? date('d-m-Y', strtotime($_POST['date_from'])) : '';?>" placeholder="dd-mm-yyyy">
                         </div>
 
                          <label style="color: #102958;" for="staticEmail" class="col-sm-2 label_right">To Date:</label>
                         <div class="col-sm-2">
-                        <input  style="color: #0C1830;border-color:#102958;" type="text" name="date_to" class="form-control" id="date_to" value="<?php echo  ($_POST['date_to'] != '') ? date('d-m-Y', strtotime($_POST['date_to'])) : '';?>" placeholder="dd-mm-yyyy" >
+                        <input  style="color: #000;border-color:#102958; text-align: center;" type="text" name="date_to" class="form-control" id="date_to" value="<?php echo  ($_POST['date_to'] != '') ? date('d-m-Y', strtotime($_POST['date_to'])) : '';?>" placeholder="dd-mm-yyyy" >
                         </div>
                     </div>
 
@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-group row col-md-12 ">
                     	<label style="color: #102958;" for="policy_no" class="col-sm-2 label_left">Policy no:</label>
                         <div class="col-sm-2">
-                        	<select name="policy_no" style="border-color:#102958;" id="policy_no" class="form-control selectpicker" data-live-search="true" >
+                        	<select name="policy_no" style="border-color:#102958; color: #000;" id="policy_no" class="form-control selectpicker" data-live-search="true" >
                                 <option value="all">Select Policy</option>
                                 <?php foreach ($insurance_policy as $p) { ?>
                                 <option value="<?php echo $p['policy_no'];?>" <?php echo  ($_POST['policy_no'] == $p['policy_no']) ? 'selected' : '';?>><?php echo $p['policy_no'];?></option>
@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <label style="color: #102958;" for="partner" class="col-sm-2 label_left">Partners:</label>
                         <div class="col-sm-2">
-                            <select name="partner" style="border-color:#102958;" id="partner" class="form-control selectpicker" data-live-search="true">
+                            <select name="partner" style="border-color:#102958; color: #000;" id="partner" class="form-control selectpicker" data-live-search="true">
                                 <option value="all">Select Policy</option>
                                 <?php foreach ($partners as $p) { ?>
                                 <option value="<?php echo $p['id'];?>" <?php echo  ($_POST['partner'] == $p['id']) ? 'selected' : '';?>><?php echo $p['insurance_company'];?></option>
@@ -164,10 +164,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             
                         </div>
                         
-                        <label style="color: #102958;" for="customer_name" class="col-sm-2 label_right">Customer name:</label>
+                        <label style="color: #102958;" for="customer_name" class="col-sm-2 label_right">Cust. name:</label>
                         <div class="col-sm-2">
-                            <select name="customer" style="border-color:#102958;" id="customer" class="form-control selectpicker" data-live-search="true">
-                                <option value="all">Select Customer</option>
+                            <select name="customer" style="border-color:#102958; color: #000;" id="customer" class="form-control selectpicker" data-live-search="true">
+                                <option value="all">Select Cust.</option>
                                 <?php foreach ($customers as $c) { ?>
                                 <option value="<?php echo $c['id'];?>" <?php echo  ($_POST['customer'] == $c['id']) ? 'selected' : '';?>><?php echo $c['customer_name'];?></option>
                                 <?php } ?>
@@ -178,9 +178,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     
                     <div class="form-group row col-md-12 ">
-                    	<label style="color: #102958;" for="category" class="col-sm-2 label_left">Product Category:</label>                    
+                    	<label style="color: #102958;" for="category" class="col-sm-2 label_left">Prod. Category:</label>                    
                         <div class="col-sm-2">                		
-                    		<select name="category" style="border-color:#102958;" id="category"class="form-control selectpicker" data-live-search="true">
+                    		<select name="category" style="border-color:#102958; color: #000;" id="category"class="form-control selectpicker" data-live-search="true">
                                 <option value="all" >Select Category</option>
                                 <?php foreach ($categories as $p) { ?>
                                 <option value="<?php echo $p['id'];?>" <?php echo  ($_POST['category'] == $p['id']) ? 'selected' : '';?>><?php echo $p['categorie'];?></option>
@@ -190,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         
                         <label style="color: #102958;" for="product" class="col-sm-2 label_right">Subcategory:</label>                    
                         <div class="col-sm-2">                		
-                    		<select name="subcategory" style="border-color:#102958;" id="subcategory" class="form-control selectpicker" data-live-search="true">
+                    		<select name="subcategory" style="border-color:#102958; color: #000;" id="subcategory" class="form-control selectpicker" data-live-search="true">
                                 <option value="all" >Select Subcategory</option>
                                 <?php foreach ($subcategories as $p) { ?>
                                 <option value="<?php echo $p['id'];?>" <?php echo  ($_POST['subcategory'] == $p['id']) ? 'selected' : '';?> ><?php echo $p['subcategorie'];?></option>
@@ -200,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         
                         <label style="color: #102958;" for="status" class="col-sm-2 label_left">Status:</label>
                         <div class="col-sm-2">   
-                         <select id="status_i_input" name="status" onchange="" style="border-color:#102958;" class="form-control" >
+                         <select id="status_i_input" name="status" onchange="" style="border-color:#102958; color: #000;" class="form-control" >
                             <option value="all" <?php echo  ($_POST['status'] == "all") ? 'selected' : '';?> >Select status</option>
                             <option value="New" <?php echo  ($_POST['status'] == "New") ? 'selected' : '';?>>New</option>
                             <option value="Follow up" <?php echo  ($_POST['status'] == "Follow up") ? 'selected' : '';?>>Follow up</option>
@@ -219,7 +219,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             //echo (isset($_POST['currency_conversion'])) ? 'checked="checked"' : '';?> /> 
                         </div>                    
                     </div>
-                    
+
 					<div class="row pull-right">
 						
 							<button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-primary">Search</button>
@@ -247,15 +247,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th width="250px">Product</th>
+                                            <th width="250px">Prod.</th>
                                             <th width="100px">Policy No.</th>
-                                            <th width="200px">Customer Name</th>
+                                            <th width="200px">Cust. Name</th>
                                             <th width="90px">Start Date</th>
                                             <th width="90px">End Date</th>
                                             <th width="100px">Premium Amount</th>
                                             <?php if($_POST['currency_conversion']=="true"){ ?>
                                             <th class="converted" width="100px">Converted Value</th>
-                                            <th class="converted" width="100px">Convert Unit</th>
+                                            <th class="converted" width="100px">Symbol</th>
                                             <?php }?>
                                             <th width="300px">Partner Company</th>
                                             <th width="200px">Agent</th>
@@ -276,12 +276,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     $grand_total_subagent_premium_rate = 0;
                                     
                                     $prev_count = $ctr;
-                                        $total_converted_value = 0;
-                                        $total_primary_premium_rate = 0;
-                                        $total_subagent_premium_rate = 0;
+                                    $total_converted_value = 0;
+                                    $total_primary_premium_rate = 0;
+                                    $total_subagent_premium_rate = 0;
 
-                                        $premium_rate_convert =0;
-                                        $total_premium_rate_convert=0;
+                                    $premium_rate_convert =0;
+                                    $total_premium_rate_convert=0;
+
                                     ?>                                                                     
                                     <?php 
                                     
@@ -294,14 +295,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         ?>
                                         <?php if($id_product!=$s['product_name']){ ?>
                                         <?php if($start=="false"){  ?>
-                                            <tr style="font-weight: bold;">                                            
+                                            <tr style="font-weight: bold;">
                                              <td></td>
                                              <td>TOTAL</td>
                                             <td></td>
                                             <td></td>     
                                             <td></td>  
                                             <td></td>   
-                                             <td class="converted text-right"><?php echo number_format($total_primary_premium_rate, 2)?></td>     
+                                             <td class="converted text-right"><?php echo number_format($total_primary_premium_rate, 2)?></td>
                                              <?php if($_POST['currency_conversion']=="true"){ ?>
                                              <td class="converted text-right"><?php echo number_format($total_converted_value, 2)?></td>       
                                              <td ></td> 
@@ -341,18 +342,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <td><?php echo $s['customer_name']; ?></td>
                                             <td class="text-center"><?php echo $s['in_start_date']; ?></td> 
                                             <td class="text-center"><?php echo $s['in_end_date']; ?></td>
-                                            <td class="text-right"><?php echo ($s['agent_type']!= 'Sub-agent') ? number_format( $s['premium_rate'], 2) : '';?></td> 
-                                             <?php if($_POST['currency_conversion']=="true"){ ?>
+                                            <td class="text-right"><?php echo ($s['agent_type']!= 'Sub-agent') ? number_format( $s['premium_rate'], 2) : '';?></td>
+                                            <?php if($_POST['currency_conversion']=="true"){ ?>
                                         
-                                            <td class="converted text-right"><?php if($s['premium_rate']!=""){ 
-                                            $convert_f = number_format((float)($s['premium_rate']/$s['currency_value_convert']), 2, '.', ',');
-                                            $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert_f));
-                                            // $total_premium_rate_convert+=$convert_f;
-                                                echo $convert_f; 
-                                                }else{ echo "0.00"; }; 
+                                            <td class="converted text-right"><?php 
+                                            if($s['premium_rate']!="" && $s['currency'] !="฿THB"  ){
+                                                if($s['currency_value']<$s['currency_value_convert']){
+                                                    $convert_f = number_format((float)($s['premium_rate']/$s['currency_value_convert']), 2, '.', ',');
+                                                    $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert_f));
+                                                    // $total_premium_rate_convert+=$convert_f;
+                                                    echo $convert_f;
+                                                }else{
+                                                    $convert_f = number_format((float)($s['premium_rate']*$s['currency_value']), 2, '.', ',');
+                                                    $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert_f));
+                                                    // $total_premium_rate_convert+=$convert_f;
+                                                    echo $convert_f;
+                                                }
+                                            }else{ echo "0.00"; $convert_f=0; }; 
                                              ?></td>
                                             <td class="converted text-center"><?php echo $s['currency'];?></td>
-                                            <?php }?>
+                                            <?php } ?>
                                             <td><?php echo $s['insurance_company'];?></td>
                                             <td><?php echo $s['agent_name']; ?></td>
                                             <td class="text-right"><?php echo ($s['agent_type']=='Sub-agent') ? number_format( $s['premium_rate'], 2) : '';?></td>
@@ -504,6 +513,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		
 		.caret {
 			right: 10px !important;
+		}
+		
+		.btn-group>.btn:first-child {
+			border-color: #102958;
 		}
     </style> 
 

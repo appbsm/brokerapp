@@ -90,6 +90,10 @@ if(strlen($_SESSION['alogin'])=="")
     .converted {
        /*width: 5%;*/
     }
+	
+	.btn-group>.btn:first-child {
+		border-color: #102958;
+	}
 </style>
 
 </head>

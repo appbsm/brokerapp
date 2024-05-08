@@ -186,6 +186,9 @@
                     <label style="color: #102958;" for="staticEmail" >Status:</label>
                 </div>
                 <div class="col-2">
+                <input id="payment_status" name="payment_status[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $result['status']; ?>" readOnly>
+                </div>
+                <!-- <div class="col-2">
                     <select id="status_i_input" name="status[]" onchange="ClickChange()" style="border-color:#102958;" class="form-control" readOnly >
                         <option value="New"  <?php if ("New"==$result['status']) { echo 'selected="selected"'; } ?> >New</option>
                         <option value="Follow up" <?php if ("Follow up"==$result['status']) { echo 'selected="selected"'; } ?> >Follow up</option>
@@ -193,7 +196,7 @@
                         <option value="Wait" <?php if ("Wait"==$result['status']) { echo 'selected="selected"'; } ?> >Wait</option>
                         <option value="Not renew" <?php if ("Not renew"==$result['status']) { echo 'selected="selected"'; } ?> >Not renew</option>
                     </select>
-                </div>
+                </div> -->
 
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Payment Status:</label>
@@ -360,11 +363,11 @@
 
         <div class="form-group row col-md-10 col-md-offset-1">
                 <div class="col-sm-2 label_left" >
-                     <label style="color: #102958;" for="staticEmail" >Commission Type:</label>
+                     <label style="color: #102958;" for="staticEmail" >Comm. Type:</label>
                 </div>
                 <div class="col-4 " >
-                     <input id="calculate" name="calculate[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $result['calculate_type']; ?>" readOnly>
-                    <!-- <select id="calculate" name="calculate[]"  style="color: #0C1830;border-color:#102958;" class="form-control" 
+                     <!-- <input id="calculate" name="calculate[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" value="<?php //echo $result['calculate_type']; ?>" > -->
+                    <select id="calculate" name="calculate"  style="color: #0C1830;border-color:#102958;" class="form-control" 
                         onchange="
                         if(document.getElementById('percent_trade').value!=''){
                         var premium = parseFloat(document.getElementById('premium_rate').value).toFixed(2);
@@ -384,20 +387,20 @@
                         document.getElementById('commission').value =parseFloat(commission).toFixed(2);
                         }
                         "  />
-                        <option value="Percentage" <?php //if ("Percentage"==$calculate_type) { echo ' selected="selected"'; } ?> >Percentage</option>
-                        <option value="Net Value" <?php //if ("Net Value"==$calculate_type) { echo ' selected="selected"'; } ?> >Net Value</option>
-                    </select> -->
+                        <option value="Percentage" <?php if ("Percentage"==$result['calculate_type']) { echo ' selected="selected"'; } ?> >Percentage</option>
+                        <option value="Net Value" <?php if ("Net Value"==$result['calculate_type']) { echo ' selected="selected"'; } ?> >Net Value</option>
+                    </select>
                 </div>
 
         </div>
 
         <div class="form-group row col-md-10 col-md-offset-1">
                 <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" >Commission Value:</label>
+                    <label style="color: #102958;" >Comm. Value:</label>
                 </div> 
                 <div class="col-2 " >
 
-                    <input id="percent_trade" name="percent_trade[]" value="<?php echo number_format((float)$result['percent_trade'], 2, '.', ''); ?>" type="text" class="form-control" style="border-color:#102958;text-align: right;" onchange="
+                    <input id="percent_trade" name="percent_trade" value="<?php echo number_format((float)$result['percent_trade'], 2, '.', ''); ?>" type="text" class="form-control" style="border-color:#102958;text-align: right;" onchange="
                         var num = parseInt(parseFloat(this.value).toFixed(0));
                         if(Number.isInteger(num)){
                         var premium = parseFloat(document.getElementById('premium_rate').value).toFixed(2);
@@ -418,10 +421,10 @@
                         }else{
                             this.value='';
                         }
-                        " readOnly />
+                        "  />
                 </div> 
                  <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" >Commission Rate:</label>
+                    <label style="color: #102958;" for="staticEmail" >Comm. Rate:</label>
                 </div> 
                 <div class="col-2 " >
                     <input type="number" id="commission" name="commission[]" value="<?php echo number_format((float)$result['commission_rate'], 2, '.', ''); ?>" style="border-color:#102958;text-align: right;" class="form-control" readOnly/>
@@ -433,23 +436,23 @@
 
         <div class="form-group row col-md-10 col-md-offset-1" >
             <div class="col-sm-2 label_left" >
-                <label style="color: #102958;" for="staticEmail" >Commission Status:</label>
+                <label style="color: #102958;" for="staticEmail" >Comm. Status:</label>
             </div> 
             <div class="col-2 " >
                 <input id="commission_status" name="commission_status[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $result['commission_status']; ?>" readOnly>
             </div>
 
             <div class="col-sm-2 label_left" >
-                <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Commission Paid Date:</label>
+                <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Comm. Receive Date:</label>
             </div>
             <div class="col-2">
                 <input id="commission_paid_date" name="commission_paid_date" style="color: #0C1830;border-color:#102958; text-align: center;" type="text"  class="form-control" 
                     value="<?php echo $result['commission_paid_date_day']; ?>" placeholder="dd-mm-yyyy" required>
             </div>
 
-            <div class="col-sm-4 label_left" >
-                <label style="color: #102958;" >
-                    Please input paid date only then submit, system will automatically change status to paid.
+            <div class="col label_left" >
+                <label style="color: red; font-size: 12px;" >
+                    <I>Please input paid date only then submit, system will automatically change status to paid.</I>
                 </label>
             </div>
 
@@ -461,7 +464,7 @@
             </div>
 
             <div class="col-4">
-                <input id="commission_status" name="commission_status[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $result['full_name']; ?>" readOnly>
+                <input id="commission_status" name="commission_status[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $result['agent_name']; ?>" readOnly>
 
                <!--  <select id="agent_name" name="agent[]" style="color:#0C1830;border-color:#102958;" class="form-control selectpicker" data-live-search="true"  >
                     <?php  //foreach($results_agent as $result){ ?>
@@ -547,6 +550,10 @@
                 <div class="col-md-12">
                     <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
                     </button>
+					&nbsp;&nbsp;
+					<a href="paid_date_commission.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
+						<span class="text">Cancel</span>
+					</a>
                 </div>
                 </div>
  

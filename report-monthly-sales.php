@@ -139,7 +139,7 @@ if(strlen($_SESSION['alogin'])=="")
                         
                         <label style="color: #102958;" for="year" class="col-sm-2 label_left">Year:</label>
                         <div class="col-sm-2">
-                            <select name="year" style="border-color:#102958;" id="year" onchange="" class="form-control" >
+                            <select name="year" style="border-color:#102958; color: #000; text-align:center;" id="year" onchange="" class="form-control" >
                                 <option value="all">Select Year</option>
                                 <?php 
                                 $today = date('Y-m-d');
@@ -159,7 +159,7 @@ if(strlen($_SESSION['alogin'])=="")
                         
                         <label style="color: #102958;" for="month" class="col-sm-2 label_left">Month From:</label>
                         <div class="col-sm-2">
-                            <select name="month_from" style="border-color:#102958;" id="month_from" onchange="" class="form-control" >
+                            <select name="month_from" style="border-color:#102958; color: #000;" id="month_from" onchange="" class="form-control" >
                                 <option value="">Select Month</option>
                                 <?php 
                                 $ctr = 1;
@@ -174,7 +174,7 @@ if(strlen($_SESSION['alogin'])=="")
                         
                         <label style="color: #102958;" for="month" class="col-sm-2 label_left">Month To:</label>
                         <div class="col-sm-2">
-                            <select name="month_to" style="border-color:#102958;" id="month_to" onchange="" class="form-control" >
+                            <select name="month_to" style="border-color:#102958; color: #000;" id="month_to" onchange="" class="form-control" >
                                 <option value="">Select Month</option>
                                 <?php 
                                 $ctr = 1;
@@ -192,10 +192,10 @@ if(strlen($_SESSION['alogin'])=="")
                     
                     <div class="form-group row col-md-12 ">
                     
-                    <label style="color: #102958;" for="customer" class="col-sm-2 label_left">Customer name:</label>
+                    <label style="color: #102958;" for="customer" class="col-sm-2 label_left">Cust. name:</label>
                         <div class="col-sm-2">
-                            <select name="customer" style="border-color:#102958;" id="customer" class="form-control selectpicker" data-live-search="true" >
-                                <option value="">Select Customer</option>
+                            <select name="customer" style="border-color:#102958; color: #000;" id="customer" class="form-control selectpicker" data-live-search="true" >
+                                <option value="">Select Cust.</option>
                                 <?php foreach ($customers as $c) { ?>
                                 <option value="<?php echo $c['id'];?>" <?php echo  ($_GET['customer'] == $c['id']) ? 'selected' : '';?>><?php echo $c['customer_name'];?></option>
                                 <?php } ?>
@@ -204,7 +204,7 @@ if(strlen($_SESSION['alogin'])=="")
                     
         			<label style="color: #102958;" for="staticEmail" class="col-sm-2 label_left">Policy no:</label>
                     <div class="col-sm-2">
-                    	<select name="policy_no" style="border-color:#102958;" id="policy_no" class="form-control selectpicker" data-live-search="true">
+                    	<select name="policy_no" style="border-color:#102958; color: #000;" id="policy_no" class="form-control selectpicker" data-live-search="true">
                             <option value="">Select Policy</option>
                             <?php foreach ($insurance_policy as $p) { ?>
                             <option value="<?php echo $p['policy_no'];?>" <?php echo  ($_GET['policy_no'] == $p['policy_no']) ? 'selected' : '';?>><?php echo $p['policy_no'];?></option>
@@ -215,9 +215,9 @@ if(strlen($_SESSION['alogin'])=="")
 
                     
 
-                    <label style="color: #102958;" for="staticEmail" class="col-sm-2 label_left">Product:</label>                    
+                    <label style="color: #102958;" for="staticEmail" class="col-sm-2 label_left">Prod.:</label>                    
                     <div class="col-sm-2">                		
-                		<select name="product" style="border-color:#102958;" id="product" class="form-control selectpicker" data-live-search="true">
+                		<select name="product" style="border-color:#102958; color: #000;" id="product" class="form-control selectpicker" data-live-search="true">
                             <option value="">Select Product</option>
                             <?php foreach ($products as $p) { ?>
                             <option value="<?php echo $p['id'];?>" <?php echo  ($_GET['product'] == $p['id']) ? 'selected' : '';?>><?php echo $p['product_name'];?></option>
@@ -383,6 +383,10 @@ if(strlen($_SESSION['alogin'])=="")
 		
 		.caret {
 			right: 10px !important;
+		}
+		
+		.btn-group>.btn:first-child {
+			border-color: #102958;
 		}
     </style>
 

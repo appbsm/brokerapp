@@ -189,7 +189,7 @@ function validateForm() {
                         <label  style="color: #102958;"  ><small><font color="red">*</font></small>Cust. Type:</label>
                     </div>
                     <div class="col-3 ">
-                        <select name="customer_type" style="border-color:#102958;" id="customer_type" onchange="" class="form-control" required>
+                        <select name="customer_type" style="border-color:#102958; color: #000;" id="customer_type" onchange="" class="form-control" required>
 							<option value="">Select Cust. Type</option>
 							<option value="Personal" >Personal</option>
 							<option value="Corporate" >Corporate</option>
@@ -197,7 +197,7 @@ function validateForm() {
                     </div>
                     <div class="col-sm-2 label_left" >
                          <input name="status" class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked="checked">
-                        <label style="color: #0C1830;" class="form-check-label" for="flexCheckDefault">
+                        <label style="color: #000;" class="form-check-label" for="flexCheckDefault">
                         &nbsp;&nbsp;&nbsp;&nbsp; Active
                     </div>
                     <div class="col-4 ">
@@ -210,13 +210,13 @@ function validateForm() {
                         <label style="color: #102958;"  >Cust. ID:</label>
                     </div>
                     <div class="col-3 ">
-                        <input name="customer_id" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="name" class="form-control" value="<?php echo $customer_id;?>"  readOnly> 
+                        <input name="customer_id" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="name" class="form-control" value="<?php echo $customer_id;?>"  readOnly> 
                     </div>
                     <div class="col-1 label_left" >
                         <label style="color: #102958;"  ><small><font color="red">*</font></small>Cust. Level:</label>
                     </div>
                     <div class="col-sm-2 ">
-                        <select id="customer_level" name="customer_level" style="border-color:#102958;"  class="form-control" required>
+                        <select id="customer_level" name="customer_level" style="border-color:#102958; color: #000;"  class="form-control" required>
                             <option value="" selected>Select Cust. Level</option>
                             <?php foreach ($customer_level_list as $pc) {?>
                                 <option value="<?php echo $pc['id'];?>" data-description="<?php echo $pc['description'];?>" ><?php echo $pc['level_name'];?></option>
@@ -225,7 +225,7 @@ function validateForm() {
                     </div>
 
                     <div class="col-4 ">
-                        <input id="customer_de" name="customer_de" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  readOnly> 
+                        <input id="customer_de" name="customer_de" style="color: #000;border-color:#102958;" type="text" class="form-control"  readOnly> 
                     </div>
 
                 </div> 
@@ -257,7 +257,7 @@ function validateForm() {
                         <label  style="color: #102958;" ><small><font color="red">*</font></small>Company name:</label>
                     </div>
                     <div class="col corporate">
-                        <input id="company_c_input" name="company_name" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" required>    
+                        <input id="company_c_input" name="company_name" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" required>    
                     </div>
                     <!--<div class="col-sm-2 label_left" >
                     </div>
@@ -270,7 +270,7 @@ function validateForm() {
                         <label id="label_title" style="color: #102958;"  >Title:</label>
                     </div>
                     <div id="col_title" class="col-3 personal">
-                        <select id="title_name" style="border-color:#102958;" name="title_name" class="form-control" id="title_name"  >
+                        <select id="title_name" style="border-color:#102958; color: #000;" name="title_name" class="form-control" id="title_name"  >
                             <option value="" selected>Select Title</option>
                             <option value="Mr." <?php echo (trim($customer['title_name'])=="Mr.") ? 'selected' : '';?>>Mr.</option>
                             <option value="Ms." <?php echo (trim($customer['title_name'])=="Ms.") ? 'selected' : '';?>>Ms.</option>
@@ -284,13 +284,13 @@ function validateForm() {
                         <label style="color: #102958;" ><small><font color="red">*</font></small>First name:</label>
                     </div>
                     <div  class="col-4 personal">
-                        <input id="first_name" name="first_name" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  required>
+                        <input id="first_name" name="first_name" minlength="1" maxlength="100" style="color: #000;border-color:#102958;" type="text"  class="form-control"  required>
                     </div>
 					<div class="col-2  label_left personal"  >
                         <label  style="color: #102958;" >Last name:</label>
                     </div>
                     <div class="col-4 personal">
-                        <input id="last_name" name="last_name" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  >
+                        <input id="last_name" name="last_name" minlength="1" maxlength="100" style="color: #000;border-color:#102958;" type="text"  class="form-control"  >
                     </div>
                 </div>
 				
@@ -299,7 +299,7 @@ function validateForm() {
                         <label style="color: #102958;"  >Nickname:</label>
                     </div>
                     <div class="col-4 personal ">
-                        <input id="nick_name" name="nick_name"  minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
+                        <input id="nick_name" name="nick_name"  minlength="1" maxlength="100" style="color: #000;border-color:#102958;" type="text" class="form-control" >
                     </div>
 				</div>
 				
@@ -308,13 +308,13 @@ function validateForm() {
                         <label style="color: #102958;" >Tax ID / Passport ID:</label>
                     </div>
                     <div class="col-4 ">
-                        <input id="tax_id" name="tax_id"  minlength="1" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" > 
+                        <input id="tax_id" name="tax_id"  minlength="1" maxlength="13" style="color: #000;border-color:#102958;" type="text" class="form-control" > 
 					</div>
                     <div class="col-sm-2 label_left" >
                         <label style="color: #102958;" >Email:</label>
                     </div>
                     <div class="col-4 ">
-                        <input name="email" id="email" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="email" class="form-control"  >
+                        <input name="email" id="email" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="email" class="form-control"  >
                     </div>
                 </div>
 
@@ -323,7 +323,7 @@ function validateForm() {
                         <label style="color: #102958;" >Mobile:</label>
                     </div>
                     <div class="col-4 ">
-                        <input id="mobile" name="mobile" minlength="10" maxlength="12" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  pattern="\d{3}-\d{3}-\d{4}" >    
+                        <input id="mobile" name="mobile" minlength="10" maxlength="12" style="color: #000;border-color:#102958;" type="text" class="form-control"  pattern="\d{3}-\d{3}-\d{4}" >    
                     </div>
 					<script>
 						document.getElementById('mobile').addEventListener('input', function (e) {
@@ -335,7 +335,7 @@ function validateForm() {
                         <label style="color: #102958;" >Tel:</label>
                     </div>
                     <div class="col-4 ">
-                        <input id="tel" name="tel" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
+                        <input id="tel" name="tel" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" >
                     </div>
                 </div>
 
@@ -387,19 +387,19 @@ function validateForm() {
 						<label style="color: #102958;"><small><font color="red">*</font></small>Address No:</label>
 					</div>
 					<div class="col-2">
-						<input name="address_number" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" required>
+						<input name="address_number" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" required>
 					</div>
 				<div class="col-sm-1 label_left">
 						<label style="color: #102958;">Soi:</label>
 					</div>
 					<div class="col pl-0">
-						<input name="soi" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control">
+						<input name="soi" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control">
 					</div>
 					<div class="col-sm-1 label_left">
 						<label style="color: #102958;">Road:</label>
 					</div>
 					<div class="col pl-0">
-						<input name="road" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control">
+						<input name="road" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control">
 					</div>
 				</div>
 				<div class="form-group row col-md-10 col-md-offset-1">
@@ -407,7 +407,7 @@ function validateForm() {
 						<label style="color: #102958;">Building Name:</label>
 					</div>
 					<div class="col">
-						<input name="building_name" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control">
+						<input name="building_name" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control">
 					</div>
 				</div>
 
@@ -417,7 +417,7 @@ function validateForm() {
                     </div>
                     <div class="col-4 ">
                         <!-- class="remove-example form-control selectpicker" data-live-search="true" -->
-                         <select style="border-color:#102958;" name="province" class="form-control selectpicker" id="province" data-live-search="true"  required>
+                         <select style="border-color:#102958; color: #000;" name="province" class="form-control selectpicker" id="province" data-live-search="true"  required>
                             <option value="" selected>Select Province</option>
                         <?php foreach ($provinces as $province) { ?>
                         <option value="<?php echo $province['code']?>"><?php echo $province['name_en'];?></option>
@@ -428,7 +428,7 @@ function validateForm() {
                         <label style="color: #102958;" ><small><font color="red">*</font></small>District:</label>
                     </div>
                     <div class="col-4 ">
-                        <select style="border-color:#102958;" name="district" class="form-control selectpicker" id="district" data-live-search="true"   required>
+                        <select style="border-color:#102958; color: #000;" name="district" class="form-control selectpicker" id="district" data-live-search="true"   required>
                             <option value="" selected>Select District</option>
                     <?php foreach ($districts as $district) { ?>
                         <option value="<?php echo $district['code']?>"><?php echo $district['name_en'];?></option>
@@ -441,7 +441,7 @@ function validateForm() {
                         <label style="color: #102958;" ><small><font color="red">*</font></small>Sub-district:</label>
                     </div>
                     <div class="col-4 ">
-                        <select id="subdistrict" name="sub_district" style="border-color:#102958;" class="form-control selectpicker" data-live-search="true"   required>  
+                        <select id="subdistrict" name="sub_district" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true"   required>  
                         <option value="" selected>Select Subdistrict</option> 
                     <?php foreach ($subdistricts as $sub) { ?>
                         <option value="<?php echo $sub['code']?>"><?php echo $sub['name_en'];?></option>
@@ -452,7 +452,7 @@ function validateForm() {
                         <label style="color: #102958;" ><small><font color="red">*</font></small>Post Code:</label>
                     </div>
                     <div class="col-4 ">
-                        <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control"  required>
+                        <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control"  required>
                     </div>
                 </div>
 
@@ -497,7 +497,7 @@ function validateForm() {
             <div class="form-check" style="top:20px;">
                 <!-- disabled="true" -->
                 <input name="same_customer" id="same_customer" class="form-check-input same_customer" type="checkbox" >
-                <label style="color: #0C1830;" class="form-check-label" for="SameCheck">
+                <label style="color: #000;" class="form-check-label" for="SameCheck">
                         &nbsp;&nbsp;&nbsp;&nbsp; Same Customer Name
                 </label>
             </div>
@@ -517,7 +517,7 @@ function validateForm() {
                     <label style="color: #102958;" >Title:</label>
                 </div>
                 <div class="col-3">
-                    <select name="contact_title_name[]" id="contact_title_name" style="border-color:#102958;"  class="form-control" id="default"  >
+                    <select name="contact_title_name[]" id="contact_title_name" style="border-color:#102958; color: #000;"  class="form-control" id="default"  >
                         <option value="" selected>Select Title </option>
                         <option value="Mr." <?php echo (trim($customer['title_name'])=="Mr.") ? 'selected' : '';?>>Mr.</option>
                         <option value="Ms." <?php echo (trim($customer['title_name'])=="Ms.") ? 'selected' : '';?>>Ms.</option>
@@ -529,11 +529,11 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;" class="col-sm-2 label_left"><small><font color="red">*</font></small>First name:</label>
                 <div class="col-4">
-                    <input id="contact_first_name" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="contact_first_name[]" class="form-control"  required>
+                    <input id="contact_first_name" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="contact_first_name[]" class="form-control"  required>
                 </div>
 				<label  style="color: #102958;" class="col-sm-2 label_left">Last name:</label>
                 <div class="col-4">
-                    <input id="contact_last_name" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="contact_last_name[]" class="form-control"  >
+                    <input id="contact_last_name" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="contact_last_name[]" class="form-control"  >
                
                 </div>
             </div>
@@ -541,7 +541,7 @@ function validateForm() {
 			<div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;" class="col-sm-2 label_left">Nickname:</label>
                 <div class="col-4">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="contact_nick_name[]" id="contact_nick_name" class="form-control" >
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="contact_nick_name[]" id="contact_nick_name" class="form-control" >
                 </div>
                
             </div>
@@ -549,7 +549,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;" class="col-sm-2 label_left">Mobile:</label>
                 <div class="col-4">
-                    <input  minlength="10" maxlength="12" style="color: #0C1830;border-color:#102958;" type="text" name="contact_mobile[]" id="contact_mobile" class="form-control" pattern="\d{3}-\d{3}-\d{4}" >
+                    <input  minlength="10" maxlength="12" style="color: #000;border-color:#102958;" type="text" name="contact_mobile[]" id="contact_mobile" class="form-control" pattern="\d{3}-\d{3}-\d{4}" >
                 </div>
 				<script>
 					document.getElementById('contact_mobile').addEventListener('input', function (e) {
@@ -559,37 +559,37 @@ function validateForm() {
 				</script>
                 <label style="color: #102958;" class="col-sm-2 label_left">Tel:</label>
                 <div class="col-4">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="contact_tel[]" id="contact_tel" class="form-control" >
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="contact_tel[]" id="contact_tel" class="form-control" >
                 </div>
             </div>
 
              <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;" class="col-sm-2 label_left">Email:</label>
                 <div class="col-4">
-                    <input id="contact_email" name="contact_email[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="email" class="form-control" >
+                    <input id="contact_email" name="contact_email[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="email" class="form-control" >
                 </div>
                 <label style="color: #102958;" class="col-sm-2 label_left">Line ID:</label>
-                <div class="col-sm-4">
-                    <input id="contact_line_id" name="contact_line_id[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" >
+                <div class="col-4">
+                    <input id="contact_line_id" name="contact_line_id[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" >
                 </div>
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1" >
 				<label style="color: #102958;" class="col-sm-2 label_left">Position:</label>
                 <div class="col-4">
-                    <input id="contact_position" name="contact_position[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
+                    <input id="contact_position" name="contact_position[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" >
                
                 </div>
 				<label style="color: #102958;" class="col-sm-2 label_left">Department:</label>
-                <div class="col-sm-4">
-                    <input id="department" name="department[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
+                <div class="col-4">
+                    <input id="department" name="department[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" >
                 </div> 
             </div> 
 						
 			<div class="form-group row col-md-10 col-md-offset-1">
 				<label style="color: #102958;" class="col-sm-2 label_left" for="contact_remark">Remark:</label>
 				<div class="col-10 ">
-					<textarea id="contact_remark" name="contact_remark[]" minlength="1" maxlength="255" style="color: #0C1830;border-color:#102958;" class="form-control" rows="2"></textarea>
+					<textarea id="contact_remark" name="contact_remark[]" minlength="1" maxlength="255" style="color: #000;border-color:#102958;" class="form-control" rows="2"></textarea>
 				</div>
 			</div>
 
@@ -601,7 +601,7 @@ function validateForm() {
                     <!-- hidden="true" -->
                     <input id="hid_default1" name="hid_default[]" hidden="true" type="text" value="1" >
                     <input id="id_default1"  name="default_contact[]" class="form-check-input" type="radio" value="1" checked>
-                    <label style="color: #0C1830;" class="form-check-label" >
+                    <label style="color: #000;" class="form-check-label" >
                     &nbsp;&nbsp;&nbsp;&nbsp; Default Contact
                     </label>
                 </div>
@@ -648,11 +648,11 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;"  class="col-sm-2 label_left">Policy No:</label>
                 <div class="col-4">
-                    <input name="policy_no[]" id="policy_no" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" >
+                    <input name="policy_no[]" id="policy_no" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" >
                 </div>
                 <label style="color: #102958;"  class="col-sm-2 label_right">Period:</label>
                 <div class="col-2">
-                    <select name="period[]" id="period" style="color: #0C1830;border-color:#102958;" class="form-control" value="" >
+                    <select name="period[]" id="period" style="color: #000;border-color:#102958;" class="form-control" value="" >
 						<option value="">Select Period</option>
 						<?php foreach ($period_list as $pc) { ?>
 							<option value="<?php echo $pc['id'];?>"><?php echo $pc['period'];?></option>
@@ -664,7 +664,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;"  class="col-sm-2 label_left">Prod.Category:</label>
                 <div class="col-4">
-                    <select name="product_category[]" id="product_category" style="color: #0C1830;border-color:#102958;"class="form-control" >
+                    <select name="product_category[]" id="product_category" style="color: #000;border-color:#102958;"class="form-control" >
 						<option value="">Select Category</option>
 						<?php foreach ($product_categories as $pc){ ?>
 							<option value="<?php echo $pc['id'];?>" ><?php echo $pc['categorie'];?></option>
@@ -673,7 +673,7 @@ function validateForm() {
                 </div>
                 <label style="color: #102958;"  class="col-sm-2 label_right">Sub Categories:</label>
                 <div class="col-4">
-                    <select name="sub_cat[]" id="sub_cat" style="color: #0C1830;border-color:#102958;"class="form-control sub_cat" >
+                    <select name="sub_cat[]" id="sub_cat" style="color: #000;border-color:#102958;"class="form-control sub_cat" >
                     <option value="">Select Sub Categories</option>                    
                     </select>
                 </div>
@@ -684,7 +684,7 @@ function validateForm() {
                     <label style="color: #102958;" >Partner Company:</label>
                 </div>  
                 <div class="col-10">
-                    <select name="insurance_company[]" id="insurance_company" style="color: #0C1830;border-color:#102958;"class="form-control" >
+                    <select name="insurance_company[]" id="insurance_company" style="color: #000;border-color:#102958;"class="form-control" >
                     <option value="">Select Partner</option>
                     <?php foreach ($insurance_company as $insurance) {?>
                         <option value="<?php echo $insurance['id'];?>" ><?php echo $insurance['insurance_company'];?></option>
@@ -696,7 +696,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;"  class="col-sm-2 label_left">Prod. Name:</label>
                 <div class="col-10">
-                    <select name="product_name[]" id="product_name" style="color: #0C1830;border-color:#102958;"class="form-control" >
+                    <select name="product_name[]" id="product_name" style="color: #000;border-color:#102958;"class="form-control" >
                     <option value="">Select Product</option>                    
                     </select>
                 </div>
@@ -718,12 +718,12 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;"  class="col-sm-2 label_left">Start date:</label>
                 <div class="col-2">
-                    <input id="start_date" name="start_date[]" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy">
+                    <input id="start_date" name="start_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control" value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy">
                
                 </div>
                 <label style="color: #102958;"  class="col-sm-2 label_left">End date:</label>
                 <div class="col-2">
-                    <input id="end_date" name="end_date[]" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" value="<?php echo $stop_date; ?>" placeholder="dd-mm-yyyy">
+                    <input id="end_date" name="end_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control" value="<?php echo $stop_date; ?>" placeholder="dd-mm-yyyy">
                 </div>
             </div>
 
@@ -731,13 +731,13 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;"  class="col-sm-2 label_left">Premium Rate:</label>
                 <div class="col-2">
-                    <input id="premium_rate" name="premium_rate[]" step="0.01" min="0" style="color: #0C1830;border-color:#102958;" type="number" class="form-control"  >
+                    <input id="premium_rate" name="premium_rate[]" step="0.01" min="0" style="color: #000;border-color:#102958;" type="number" class="form-control"  >
                     
                 </div>
 
                 <label style="color: #102958;"  class="col-sm-2 label_left">Status:</label>
                 <div class="col-2">
-					<select id="insurance_status" name="insurance_status[]" onchange="ClickChange()" style="border-color:#102958;" class="form-control" >
+					<select id="insurance_status" name="insurance_status[]" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" >
 						<option value="">Select Status</option>
 						<option value="New">New</option>
 						<option value="Follow up">Follow up</option>
@@ -751,7 +751,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;"  class="col-sm-2 label_left">Agent Name:</label>
 				<div class="col-4">
-					<select id="agent_name" name="agent_name[]" style="color: #0C1830;border-color:#102958;"class="form-control" value="" >
+					<select id="agent_name" name="agent_name[]" style="color: #000;border-color:#102958;"class="form-control" value="" >
 						<option value="">Select Agent</option>
 						<?php //foreach ($agents  as $a) { ?>
 							<!-- <option value="<?php //echo $a['id']?>"><?php //echo $a['first_name'].' '.$a['last_name'];?></option> -->
@@ -835,8 +835,12 @@ function validateForm() {
 
                 <div class="form-group row col-md-10 col-md-offset-1">
                 <div class="col-md-12">
-                    <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
+                    <button style="background-color: #0275d8;color: #F9FAFA; padding: 3px 16px 3px 16px;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
                     </button>
+					&nbsp;&nbsp;
+					<a href="customer-information.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
+						<span class="text">Cancel</span>
+					</a>
                 </div>
                 </div>
  

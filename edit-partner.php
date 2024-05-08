@@ -157,7 +157,7 @@ if($_GET[id]){
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Partner ID:</label>
                 <div class="col-sm-4">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="insurance_id" class="form-control" id="insurance_id" value="<?php echo $partner['insurance_id'];?>" readOnly>
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="insurance_id" class="form-control" id="insurance_id" value="<?php echo $partner['insurance_id'];?>" readOnly>
                 </div>
 
                 <div class="col-sm-6">
@@ -172,7 +172,7 @@ if($_GET[id]){
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Partner Name:</label>
                 <div class="col-sm-10">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="insurance_company"  class="form-control" id="insurance_company" value="<?php echo $partner['insurance_company'];?>" required>
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="insurance_company"  class="form-control" id="insurance_company" value="<?php echo $partner['insurance_company'];?>" required>
                 </div>
 
                  
@@ -181,7 +181,7 @@ if($_GET[id]){
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Short Partner Name:</label>
                 <div class="col-sm-4">
-                    <input id="short_name_partner" name="short_name_partner" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $partner['short_name_partner'];?>" >
+                    <input id="short_name_partner" name="short_name_partner" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $partner['short_name_partner'];?>" >
                 </div>
             </div>
 
@@ -189,12 +189,12 @@ if($_GET[id]){
                
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tax ID / Passport ID:</label>
                 <div class="col-sm-4">
-                    <input minlength="1" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" name="tax_id" class="form-control" id="tax_id" value="<?php echo $partner['tax_id'];?>" >
+                    <input minlength="1" maxlength="13" style="color: #000;border-color:#102958;" type="text" name="tax_id" class="form-control" id="tax_id" value="<?php echo $partner['tax_id'];?>" >
                 </div>
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Currency:</label>
                 <div class="col-sm-4">
-                    <select style="border-color:#102958;" name="id_currency_list" class="form-control" id="id_currency_list"  >
+                    <select style="border-color:#102958; color: #000;" name="id_currency_list" class="form-control" id="id_currency_list"  >
                         <?php foreach ($currency  as $value_currency) { ?>
                         <option value="<?php echo $value_currency['id']?>"
                             <?php echo ($partner['id_currency_list'] == $value_currency['id']) ? 'selected' : ''; ?>
@@ -212,7 +212,7 @@ if($_GET[id]){
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Mobile:</label>
                 <div class="col-sm-4">
-                    <input minlength="10" maxlength="12" style="color: #0C1830;border-color:#102958;" type="text" name="phone" class="form-control" id="phone" value="<?php echo $partner['phone'];?>" pattern="\d{3}-\d{3}-\d{4}">
+                    <input minlength="10" maxlength="12" style="color: #000;border-color:#102958;" type="text" name="phone" class="form-control" id="phone" value="<?php echo $partner['phone'];?>" pattern="\d{3}-\d{3}-\d{4}">
                 </div>   
 				<script>
 					document.getElementById('phone').addEventListener('input', function (e) {
@@ -223,7 +223,7 @@ if($_GET[id]){
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tel:</label>
                 <div class="col-sm-4">
-                    <input id="tel" name="tel" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $partner['tel'];?>" >
+                    <input id="tel" name="tel" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $partner['tel'];?>" >
                 </div>
 
             </div>
@@ -231,12 +231,12 @@ if($_GET[id]){
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
                 <div class="col-sm-4">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="email" name="email" class="form-control" id="email" value="<?php echo $partner['email'];?>" >
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="email" name="email" class="form-control" id="email" value="<?php echo $partner['email'];?>" >
                 </div>
 
                 <label style="color: #102958;"  class="col-sm-2 col-form-label">Web Company:</label>
                 <div class="col-sm-4">
-                    <input id="web_company" name="web_company" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $partner['web_company'];?>" >
+                    <input id="web_company" name="web_company" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $partner['web_company'];?>" >
                 </div>
                
             </div>
@@ -245,7 +245,7 @@ if($_GET[id]){
 
                  <label style="color: #102958;" class="col-sm-2 col-form-label">Fax:</label>
                 <div class="col-sm-4">
-                    <input id="fax" name="fax" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $partner['fax'];?>" >
+                    <input id="fax" name="fax" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $partner['fax'];?>" >
                 </div>
 
             </div>  
@@ -281,7 +281,7 @@ if($_GET[id]){
                 </div>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Road:</label>
                 <div class="col-sm-4">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="road"  class="form-control" id="road" value="<?php echo $partner['road'];?>"  >
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="road"  class="form-control" id="road" value="<?php echo $partner['road'];?>"  >
                 </div>
             </div>
 			-->
@@ -289,30 +289,30 @@ if($_GET[id]){
 			<div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Address No:</label>
                 <div class="col-2">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="<?php echo $partner['address_number'];?>"  required>
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="<?php echo $partner['address_number'];?>"  required>
                 </div>
 				<label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Soi:</label>
                 <div class="col">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="soi"  class="form-control" id="soi" value="<?php echo $partner['soi'];?>"  >
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="soi"  class="form-control" id="soi" value="<?php echo $partner['soi'];?>"  >
                
                 </div>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Road:</label>
                 <div class="col">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="road"  class="form-control" id="road" value="<?php echo $partner['road'];?>"  >
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="road"  class="form-control" id="road" value="<?php echo $partner['road'];?>"  >
                 </div> 
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Building Name:</label>
                 <div class="col">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="building_name" class="form-control" id="building_name" value="<?php echo $partner['building_name'];?>"  >
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="building_name" class="form-control" id="building_name" value="<?php echo $partner['building_name'];?>"  >
                 </div>
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
 				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Province:</label>
                 <div class="col-sm-4">
-                     <select style="color: #4590B8;border-color:#102958;" name="province" class="form-control selectpicker" id="province" data-live-search="true"  required>
+                     <select style="color: #000;border-color:#102958;" name="province" class="form-control selectpicker" id="province" data-live-search="true"  required>
                                 <option value="" selected>Select Province</option>
 								<?php foreach($provinces as $province) { ?>
 						<option value="<?php echo $province['code']?>" <?php echo ($partner['province'] == $province['code']) ? 'selected' : ''; ?>><?php echo $province['name_en'];?></option>
@@ -323,7 +323,7 @@ if($_GET[id]){
                 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>District:</label>
                 <div class="col-sm-4">
-                     <select style="color: #4590B8;border-color:#102958;" name="district" class="form-control selectpicker" id="district" data-live-search="true"  required>
+                     <select style="color: #000;border-color:#102958;" name="district" class="form-control selectpicker" id="district" data-live-search="true"  required>
                                 <option value="" selected>Select District</option>
 								<?php 
                                 if($partner['province']!=""){
@@ -340,7 +340,7 @@ if($_GET[id]){
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Sub-district:</label>
                 <div class="col-sm-4">
-                    <select id="sub_district" name="sub_district" style="color: #4590B8;border-color:#102958;"
+                    <select id="sub_district" name="sub_district" style="color: #000;border-color:#102958;"
                      class="form-control selectpicker" data-live-search="true"  required>
                         
                        <option value="" selected>Select Subdistrict</option>
@@ -353,7 +353,7 @@ if($_GET[id]){
                 </div>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Post Code:</label>
                 <div class="col-sm-4">
-					<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control" value="<?php echo $partner['post_code'];?>" required>
+					<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control" value="<?php echo $partner['post_code'];?>" required>
                 </div>
             </div>
 
@@ -413,24 +413,24 @@ if($_GET[id]){
                     <input hidden="true" id="id_bank<? echo $x; ?>" name="id_bank[]" type="text" class="form-control" value="<? echo $bank['id']; ?>"  required>
                     <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Bank Name:</label>
                     <div class="col-sm-4">
-                    <input id="bank_name" name="bank_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $bank['bank_name'];?>" >                    
+                    <input id="bank_name" name="bank_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $bank['bank_name'];?>" >                    
                     </div>
                     
                     <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Bank Account:</label>
                     <div class="col-sm-4">
-                    <input id="bank_account" name="bank_account[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $bank['bank_account'];?>" >
+                    <input id="bank_account" name="bank_account[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $bank['bank_account'];?>" >
         			</div>  
         		</div>  
         		
         		<div class="form-group row col-md-10 col-md-offset-1" >
                     <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Bank Type:</label>
                     <div class="col-sm-4">
-                    <input id="bank_type" name="bank_type[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" value="<?php echo $bank['bank_type'];?>" >                   
+                    <input id="bank_type" name="bank_type[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $bank['bank_type'];?>" >                   
                     </div>
                     
                     <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Bank Account Name:</label>
                     <div class="col-sm-4">
-                    <input id="bank_account_name" name="bank_account_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" value="<?php echo $bank['bank_account_name'];?>">  
+                    <input id="bank_account_name" name="bank_account_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $bank['bank_account_name'];?>">  
         			</div>  
         	
         		</div>  
@@ -465,24 +465,24 @@ if($_GET[id]){
                     <input hidden="true" id="id_bank<? echo $x; ?>" name="id_bank[]" type="text" class="form-control" value="" >
                     <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Bank Name:</label>
                     <div class="col-sm-4">
-                    <input id="bank_name" name="bank_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $bank['bank_name'];?>"  required>                    
+                    <input id="bank_name" name="bank_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $bank['bank_name'];?>"  required>                    
                     </div>
                     
                     <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Bank Account:</label>
                     <div class="col-sm-4">
-                    <input id="bank_account" name="bank_account[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $bank['bank_account'];?>" required>
+                    <input id="bank_account" name="bank_account[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $bank['bank_account'];?>" required>
                     </div>  
                 </div>  
                 
                 <div class="form-group row col-md-10 col-md-offset-1" >
                     <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Bank Type:</label>
                     <div class="col-sm-4">
-                    <input id="bank_type" name="bank_type[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" value="<?php echo $bank['bank_type'];?>" required>                   
+                    <input id="bank_type" name="bank_type[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $bank['bank_type'];?>" required>                   
                     </div>
                     
                     <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Bank Account Name:</label>
                     <div class="col-sm-4">
-                    <input id="bank_account_name" name="bank_account_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" value="<?php echo $bank['bank_account_name'];?>" required>  
+                    <input id="bank_account_name" name="bank_account_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $bank['bank_account_name'];?>" required>  
                     </div>  
             
                 </div>  
@@ -522,7 +522,7 @@ if($_GET[id]){
                             <label style="color: #102958;" for="staticEmail" class="col-form-label"><small><font color="red">*</font></small>Products Name:</label>
                         </div>
                         <div class="col-sm-10">
-                            <select id="product_id" name="product_id[]" style="color: #4590B8;border-color:#102958;" class="form-control selectpicker" data-live-search="true" multiple="multiple" title="Search Products" required>
+                            <select id="product_id" name="product_id[]" style="color: #000;border-color:#102958;" class="form-control selectpicker" data-live-search="true" multiple="multiple" title="Search Products" required>
                                 <?php foreach ($products as $p) { ?>
                                     <option value="<?php echo $p['id'];?>" 
                                         <?php foreach ($rela_products as $rela){ if($p['id']==$rela['id_product']){ echo "selected"; }  } ?>
@@ -536,7 +536,7 @@ if($_GET[id]){
                         <div class="col-sm-2">
                         </div>
                         <div class="col-sm-10">
-                            <textarea id="product_name_all" name="product_name_all" class="form-control" style="color: #0C1830;border-color:#102958;" rows="1" readonly>
+                            <textarea id="product_name_all" name="product_name_all" class="form-control" style="color: #000;border-color:#102958;" rows="1" readonly>
                             </textarea>
                         </div>
                     </div>
@@ -639,7 +639,7 @@ if($_GET[id]){
                 <div class="form-group row col-md-10 col-md-offset-1">
                     <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Under Code:</label>
                     <div class="col-sm-4">
-                        <input id="agent_code<?php echo $x; ?>" name="agent_code[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $data_under['under_code']; ?>" readonly>
+                        <input id="agent_code<?php echo $x; ?>" name="agent_code[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $data_under['under_code']; ?>" readonly>
                     </div>
 
 
@@ -648,7 +648,7 @@ if($_GET[id]){
                     <div class="col-sm-4">
                         <!-- data-live-search="true" selectpicker -->
 
-                        <select id="agent_under<?php echo $x; ?>" name="agent_under[]" style="color: #102958;border-color:#102958;"  class="form-control " >
+                        <select id="agent_under<?php echo $x; ?>" name="agent_under[]" style="color: #000;border-color:#102958;"  class="form-control " >
                             <option value="" selected>Select Agent</option>
                             <?php foreach ($agents as $a) { ?>
                             <option value="<?php echo $a['id']?>" 
@@ -688,13 +688,13 @@ if($_GET[id]){
 						
 						<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Under Code:</label>
 						<div class="col-sm-4">
-							<input minlength="1" maxlength="50" name="agent_code[]" id="agent_code" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" value="" readonly>
+							<input minlength="1" maxlength="50" name="agent_code[]" id="agent_code" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="" readonly>
 						</div>
 
 						<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Under Name:</label>
 						<div class="col-sm-4">
 							<!-- data-live-search="true" selectpicker -->
-							<select style="color: #102958;border-color:#102958;" name="agent_under[]" id="agent_under"  class="form-control " >
+							<select style="color: #000;border-color:#102958;" name="agent_under[]" id="agent_under"  class="form-control " >
 								<option value="" selected>Select Agent</option>
 								<?php foreach ($agents  as $a) { ?>
 									<option value="<?php echo $a['id']?>"><?php echo $a['first_name'].' '.$a['last_name'];?></option>
@@ -733,13 +733,13 @@ if($_GET[id]){
 
                     <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Under Code:</label>
                     <div class="col-sm-4">
-                         <input id="agent_code" name="agent_code[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" id="success" value="<?php echo $data_under['under_code']; ?>" readonly>
+                         <input id="agent_code" name="agent_code[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" id="success" value="<?php echo $data_under['under_code']; ?>" readonly>
                     </div>
 
                     <input hidden="true" id="id_under<? echo $x; ?>" name="id_under[]" type="text" class="form-control" value="" >
                     <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Under Name:</label>
                     <div class="col-sm-4">
-                         <select id="agent_under" name="agent_under[]" style="color: #4590B8;border-color:#102958;" data-live-search="true"  class="form-control selectpicker" >
+                         <select id="agent_under" name="agent_under[]" style="color: #000;border-color:#102958;" data-live-search="true"  class="form-control selectpicker" >
                             <option value="" selected>Select Agent</option>
                             <?php foreach ($agents  as $a) { ?>
                             <option value="<?php echo $a['id']?>"
@@ -828,7 +828,7 @@ if($_GET[id]){
                 <input hidden="true" id="id_contact<? echo $x; ?>" name="id_contact[]" type="text" class="form-control" value="<? echo $contact['id']; ?>" >
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Title:</label>
                 <div class="col-2">                   
-                     <select id="contact_title_name" name="contact_title_name[]" id="input_title_contact" style="border-color:#102958;" class="form-control"   required>
+                     <select id="contact_title_name" name="contact_title_name[]" id="input_title_contact" style="border-color:#102958; color: #000;" class="form-control"   required>
                             <option value="Mr." <?php echo (trim($contact['title_name'])=="Mr.") ? 'selected' : '';?>>Mr.</option>
                             <option value="Ms." <?php echo (trim($contact['title_name'])=="Ms.") ? 'selected' : '';?>>Ms.</option>
                             <option value="Mrs." <?php echo (trim($contact['title_name'])=="Mrs.") ? 'selected' : '';?>>Mrs.</option>       
@@ -839,19 +839,19 @@ if($_GET[id]){
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>First name:</label>
                 <div class="col-4">
-                    <input id="contact_first_name" name="contact_first_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" value="<?php echo $contact['first_name']; ?>" required>
+                    <input id="contact_first_name" name="contact_first_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $contact['first_name']; ?>" required>
                 </div>
 
                 <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Last name:</label>
                 <div class="col-4">
-                    <input id="contact_last_name" name="contact_last_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['last_name']; ?>" >
+                    <input id="contact_last_name" name="contact_last_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['last_name']; ?>" >
                 </div>
             </div>
 			
 			<div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Nickname:</label>
                 <div class="col-4">
-                    <input id="contact_nick_name" name="contact_nick_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['nick_name']; ?>">
+                    <input id="contact_nick_name" name="contact_nick_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['nick_name']; ?>">
                 </div>
             </div>
 
@@ -859,7 +859,7 @@ if($_GET[id]){
                 
                  <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Mobile:</label>
                 <div class="col-4">
-                    <input id="contact_mobile<?php echo $x; ?>" name="contact_mobile[]" minlength="10" maxlength="12" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['mobile']; ?>" pattern="\d{3}-\d{3}-\d{4}">
+                    <input id="contact_mobile<?php echo $x; ?>" name="contact_mobile[]" minlength="10" maxlength="12" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['mobile']; ?>" pattern="\d{3}-\d{3}-\d{4}">
                 </div>
                 <script>
                     document.getElementById('contact_mobile<?php echo $x; ?>').addEventListener('input', function (e) {
@@ -870,7 +870,7 @@ if($_GET[id]){
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tel:</label>
                 <div class="col-4">
-                    <input id="contact_tel" name="contact_tel[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['tel']; ?>">
+                    <input id="contact_tel" name="contact_tel[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['tel']; ?>">
                 </div>
             </div>
 
@@ -879,12 +879,12 @@ if($_GET[id]){
                 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Line ID:</label>
                 <div class="col-4">
-                    <input id="contact_line_id" name="contact_line_id[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['line_id']; ?>" >
+                    <input id="contact_line_id" name="contact_line_id[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['line_id']; ?>" >
                 </div>
 				
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
                 <div class="col-4">
-                    <input id="contact_email" name="contact_email[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="email" class="form-control"  value="<?php echo $contact['email']; ?>" >
+                    <input id="contact_email" name="contact_email[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="email" class="form-control"  value="<?php echo $contact['email']; ?>" >
                 </div>
             </div>
 
@@ -892,13 +892,13 @@ if($_GET[id]){
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Position:</label>
                 <div class="col-4">
-                    <input id="contact_position" name="contact_position[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['position']; ?>" >
+                    <input id="contact_position" name="contact_position[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['position']; ?>" >
                
                 </div>
 
 				<label style="color: #102958;" class="col-sm-2 col-form-label">Department:</label>
                 <div class="col-4">
-                    <input id="department" name="department[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['department']; ?>" >
+                    <input id="department" name="department[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['department']; ?>" >
                 </div>
                 
             </div>
@@ -906,7 +906,7 @@ if($_GET[id]){
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;" class="col-sm-2 col-form-label">Remark:</label>
                 <div class="col-10">
-                    <textarea id="contact_remark" name="contact_remark[]" minlength="1" maxlength="255" rows="2" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['remark']; ?>"></textarea>
+                    <textarea id="contact_remark" name="contact_remark[]" minlength="1" maxlength="255" rows="2" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['remark']; ?>"></textarea>
                 </div>
             </div>
 
@@ -918,7 +918,7 @@ if($_GET[id]){
                     <input id="hid_default<? echo $x; ?>" name="hid_default[]" hidden="true" type="text" value="<? echo $x; ?>" >
                     <input id="id_default<? echo $x; ?>" name="default_contact[]" class="form-check-input" type="radio" value="<? echo $x; ?>"  
                     <?php if($contact['default_contact']=='1'){ echo "checked";} ?> >
-                    <label style="color: #0C1830;" class="form-check-label" for="flexCheckDefault">
+                    <label style="color: #000;" class="form-check-label" for="flexCheckDefault">
                         &nbsp;&nbsp;&nbsp;&nbsp; Default Contact
                     </label>
                 </div>
@@ -952,7 +952,7 @@ if($_GET[id]){
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Title:</label>
                 <div class="col-2">
                      
-                     <select id="contact_title_name" name="contact_title_name[]" id="input_title_contact" style="border-color:#102958;" class="form-control"   >
+                     <select id="contact_title_name" name="contact_title_name[]" id="input_title_contact" style="border-color:#102958; color: #000;" class="form-control"   >
                             <option value="Mr." <?php echo (trim($contact['title_name'])=="Mr.") ? 'selected' : '';?>>Mr.</option>
                             <option value="Ms." <?php echo (trim($contact['title_name'])=="Ms.") ? 'selected' : '';?>>Ms.</option>
                             <option value="Mrs." <?php echo (trim($contact['title_name'])=="Mrs.") ? 'selected' : '';?>>Mrs.</option>       
@@ -963,26 +963,26 @@ if($_GET[id]){
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>First name:</label>
                 <div class="col-4">
-                    <input id="contact_first_name" name="contact_first_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" value="<?php echo $contact['first_name']; ?>" required>
+                    <input id="contact_first_name" name="contact_first_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $contact['first_name']; ?>" required>
                 </div>
 
                 <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Last name:</label>
                 <div class="col-4">
-                    <input id="contact_last_name" name="contact_last_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['last_name']; ?>" required>
+                    <input id="contact_last_name" name="contact_last_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['last_name']; ?>" required>
                 </div>
             </div>
 			
 			<div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Nickname:</label>
                 <div class="col-4">
-                    <input id="contact_nick_name" name="contact_nick_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['nick_name']; ?>">
+                    <input id="contact_nick_name" name="contact_nick_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['nick_name']; ?>">
                 </div> 
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Mobile:</label>
                 <div class="col-4">
-                    <input id="contact_mobile" name="contact_mobile[]" minlength="10" maxlength="12" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['mobile']; ?>" required pattern="\d{3}-\d{3}-\d{4}">
+                    <input id="contact_mobile" name="contact_mobile[]" minlength="10" maxlength="12" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['mobile']; ?>" required pattern="\d{3}-\d{3}-\d{4}">
                 </div>
                 <script>
                     document.getElementById('contact_mobile').addEventListener('input', function (e) {
@@ -993,7 +993,7 @@ if($_GET[id]){
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tel:</label>
                 <div class="col-4">
-                    <input id="contact_tel" name="contact_tel[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['tel']; ?>">
+                    <input id="contact_tel" name="contact_tel[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['tel']; ?>">
                 </div>
             </div>
 
@@ -1001,12 +1001,12 @@ if($_GET[id]){
                 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Line ID:</label>
                 <div class="col-4">
-                    <input id="contact_line_id" name="contact_line_id[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['line_id']; ?>" >
+                    <input id="contact_line_id" name="contact_line_id[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['line_id']; ?>" >
                 </div>
 				
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
                 <div class="col-4">
-                    <input id="contact_email" name="contact_email[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="email" class="form-control"  value="<?php echo $contact['email']; ?>" >
+                    <input id="contact_email" name="contact_email[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="email" class="form-control"  value="<?php echo $contact['email']; ?>" >
                 </div>
             </div>
 
@@ -1014,13 +1014,13 @@ if($_GET[id]){
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Position:</label>
                 <div class="col-4">
-                    <input id="contact_position" name="contact_position[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['position']; ?>" >
+                    <input id="contact_position" name="contact_position[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['position']; ?>" >
                
                 </div>
 
 				<label style="color: #102958;" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Department:</label>
                 <div class="col-4">
-                    <input id="department" name="department[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['department']; ?>" required>
+                    <input id="department" name="department[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $contact['department']; ?>" required>
                 </div>
 				
                
@@ -1029,7 +1029,7 @@ if($_GET[id]){
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;" class="col-sm-2 col-form-label">Remark:</label>
                 <div class="col-10">
-                    <textarea id="contact_remark" name="contact_remark[]" minlength="1" maxlength="255" rows="2" style="color: #0C1830;border-color:#102958;"  class="form-control"  value="<?php echo $contact['remark']; ?>"></textarea>
+                    <textarea id="contact_remark" name="contact_remark[]" minlength="1" maxlength="255" rows="2" style="color: #000;border-color:#102958;"  class="form-control"  value="<?php echo $contact['remark']; ?>"></textarea>
                 </div>
             </div>
 
@@ -1041,7 +1041,7 @@ if($_GET[id]){
                     <input id="hid_default<? echo $x; ?>" name="hid_default[]" hidden="true" type="text" value="<? echo $x; ?>" >
                     <input id="id_default<? echo $x; ?>" name="default_contact[]" class="form-check-input" type="radio" value="<? echo $x; ?>"  
                      checked>
-                    <label style="color: #0C1830;" class="form-check-label" for="flexCheckDefault">
+                    <label style="color: #000;" class="form-check-label" for="flexCheckDefault">
                         &nbsp;&nbsp;&nbsp;&nbsp; Default Contact
                     </label>
                 </div>
@@ -1068,6 +1068,10 @@ if($_GET[id]){
                 <div class="col-md-12">
                     <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
                     </button>
+					&nbsp;&nbsp;
+					<a href="insurance-partner.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
+						<span class="text">Cancel</span>
+					</a>
                 </div>
                 </div>
  

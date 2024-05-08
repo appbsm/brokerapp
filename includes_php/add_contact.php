@@ -16,7 +16,12 @@
         // document.getElementById("id_customer_input").value =customer_id;
         // alert('item.customer_name:'+item.customer_name);
 
-        document.getElementById("name_c_input").value = item.customer_name;
+        if(item.customer_type=="Personal"){
+            document.getElementById("name_c_input").value = item.customer_name;
+        }else{
+            document.getElementById("name_c_input").value = item.company_name;
+        }
+
         document.getElementById("type_c_input").value = item.customer_type;
 
         document.getElementById("customer_c_input").value = item.customer_id;
@@ -31,7 +36,9 @@
         document.getElementById("mobile_c_input").value = item.mobile;
 
         document.getElementById("personal_c_input").value = item.tax_id;
-        document.getElementById("company_c_input").value = item.company_name;
+
+
+        // document.getElementById("company_c_input").value = item.company_name;
         
         document.getElementById("tel_c_input").value = item.tel;
         document.getElementById("tel_c_input2").value = item.tel;
@@ -175,12 +182,15 @@
         // document.getElementById('default_co').readOnly = true;
         var value = document.getElementById("same_co").value;
         var customer_id = document.getElementById("id_customer_input").value;
-        // alert('customer_id:'+customer_id);
-        if(value=="false"){
+        var default_contact = document.getElementById("id_default_contact").value;
+        // alert('default_contact:'+default_contact);
+
+        // if(value=="false"){
             var start="true";
             if (customer_id != "") {
             
-                    $.get('get_contact.php?id=' + customer_id, function(data){
+                    // $.get('get_contact.php?id=' + customer_id, function(data){
+                $.get('get_contact_for_rela_default.php?id=' + default_contact, function(data){
                     var result = JSON.parse(data);
                     if(result!=""){
                     $.each(result, function(index, item){
@@ -230,7 +240,7 @@
                         }else{
                             input_value++;
                             input_contact++;
-                            same_contact(item);
+                            // same_contact(item);
                              
                         }
                     });
@@ -299,33 +309,27 @@
 
             }
        
-            document.getElementById("same_co").value="true";
-        }else{
-            document.getElementById('title_co').removeAttribute("disabled");
-            document.getElementById('default_co').removeAttribute("disabled");
+            // document.getElementById("same_co").value="true";
+        // }else{
+        //     document.getElementById('title_co').removeAttribute("disabled");
+        //     document.getElementById('default_co').removeAttribute("disabled");
 
-            for (var i = 0; i < input_contact_array.length; i++){
-                document.getElementById(input_contact_array[i]).readOnly = false;
-                document.getElementById(input_contact_array[i]).value = "";
-            }
+        //     for (var i = 0; i < input_contact_array.length; i++){
+        //         document.getElementById(input_contact_array[i]).readOnly = false;
+        //         document.getElementById(input_contact_array[i]).value = "";
+        //     }
 
-            document.getElementById("title_co").value = "Mr."
-            document.getElementById("same_co").value="false";
-            document.getElementById("default_co").checked = true;
-            document.getElementById("id_co").value = "";
+        //     document.getElementById("title_co").value = "Mr."
+        //     document.getElementById("same_co").value="false";
+        //     document.getElementById("default_co").checked = true;
+        //     document.getElementById("id_co").value = "";
 
-            // alert('Check :'+input_value);
-            for (let i = 0; i <= input_value; i++) {
-                input_contact=0;
-                $('#row-con' + i + '').remove();
-            }
-
-            // value="false";
-
-            // $(document).on('click', '.btn_remove_con', function() {
-
-            // }
-        }
+        //     // alert('Check :'+input_value);
+        //     for (let i = 0; i <= input_value; i++) {
+        //         input_contact=0;
+        //         $('#row-con' + i + '').remove();
+        //     }
+        // }
 
     }
 
@@ -385,7 +389,7 @@
         body_add +='    <div class="form-group row col-md-10 col-md-offset-1">';
 
         body_add +='        <div class="col-sm-2 label_left" >';
-        body_add +='            <label style="color: #102958;" ><small><font color="red">*</font></small>First name:</label>';
+        body_add +='            <label style="color: #102958;" >First name:</label>';
         body_add +='        </div>';
         body_add +='        <div class="col">';
         body_add +='            <input id="first_co" name="first_co[]" value="'+item.first_name+'" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" disabled="true" >';
@@ -589,10 +593,10 @@
         
         body_add +='    <div class="form-group row col-md-10 col-md-offset-1">';
         body_add +='        <div class="col-sm-2 label_left" >';
-        body_add +='            <label style="color: #102958;" ><small><font color="red">*</font></small>First name:</label>';
+        body_add +='            <label style="color: #102958;" >First name:</label>';
         body_add +='        </div>';
         body_add +='        <div class="col">';
-        body_add +='            <input id="first_co" name="first_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" required>';
+        body_add +='            <input id="first_co" name="first_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >';
         body_add +='        </div>';
         body_add +='        <div class="col-sm-2 label_left" >';
         body_add +='            <label style="color: #102958;" ><small><font color="red">*</font></small>Mobile:</label>';
@@ -673,6 +677,7 @@
         body_add +='        <div class="col-sm-2 label_left" >';
         body_add +='        </div>';
         body_add +='        <div class="col-sm-4" >';
+        
         var value = document.getElementById("same_co").value;
         if(value=="false"){
         body_add +='            <input id="default_co'+input_value+'" name="default_co[]" class="form-check-input" type="radio" value="'+input_value+'" id="flexCheckDefault" >';
@@ -715,43 +720,43 @@
     function clear_customer() {
         input_contact=0;
         document.getElementById("id_customer_input").value="";
-        document.getElementById('type_c_input').removeAttribute("disabled");
-        document.getElementById('status_c_input').removeAttribute("disabled");
-        document.getElementById('same_co').removeAttribute("disabled");
+        // document.getElementById('type_c_input').removeAttribute("disabled");
+        // document.getElementById('status_c_input').removeAttribute("disabled");
+        // document.getElementById('same_co').removeAttribute("disabled");
 
         for (var i = 0; i < input_customer.length; i++){
-            document.getElementById(input_customer[i]).readOnly = false;
+            // document.getElementById(input_customer[i]).readOnly = false;
             document.getElementById(input_customer[i]).value ="";
         }
 
-        document.getElementById('province').removeAttribute("disabled");
-        document.getElementById('district').removeAttribute("disabled");
-        document.getElementById('sub_district').removeAttribute("disabled");
-        document.getElementById('postcode').removeAttribute("disabled");
+        // document.getElementById('province').removeAttribute("disabled");
+        // document.getElementById('district').removeAttribute("disabled");
+        // document.getElementById('sub_district').removeAttribute("disabled");
+        // document.getElementById('postcode').removeAttribute("disabled");
 
-        document.getElementById('level_c_input').removeAttribute("disabled");
-        document.getElementById('title_c_input').removeAttribute("disabled");
+        // document.getElementById('level_c_input').removeAttribute("disabled");
+        // document.getElementById('title_c_input').removeAttribute("disabled");
 
         document.getElementById("type_c_input").value = "Personal";
 
 
-        document.getElementById("same_co").checked = false;
+        // document.getElementById("same_co").checked = false;
         document.getElementById("same_co").value="false";
 
-        document.getElementById('title_co').removeAttribute("disabled");
-        document.getElementById('default_co').removeAttribute("disabled");
-        document.getElementById("default_co").checked = true;
+        // document.getElementById('title_co').removeAttribute("disabled");
+        // document.getElementById('default_co').removeAttribute("disabled");
+        // document.getElementById("default_co").checked = true;
 
-            document.getElementById('first_co').readOnly = false;
-            document.getElementById('mobile_co').readOnly = false;
-            document.getElementById('last_co').readOnly = false;
-            document.getElementById('tel_co').readOnly = false;
-            document.getElementById('nick_co').readOnly = false;
-            document.getElementById('email_co').readOnly = false;
-            document.getElementById('position_co').readOnly = false;
-            document.getElementById('line_co').readOnly = false;
-            document.getElementById('remark_co').readOnly = false;
-            document.getElementById('department').readOnly = false;
+            // document.getElementById('first_co').readOnly = false;
+            // document.getElementById('mobile_co').readOnly = false;
+            // document.getElementById('last_co').readOnly = false;
+            // document.getElementById('tel_co').readOnly = false;
+            // document.getElementById('nick_co').readOnly = false;
+            // document.getElementById('email_co').readOnly = false;
+            // document.getElementById('position_co').readOnly = false;
+            // document.getElementById('line_co').readOnly = false;
+            // document.getElementById('remark_co').readOnly = false;
+            // document.getElementById('department').readOnly = false;
             
 
         document.getElementById("title_co").value = "Mr."
@@ -798,8 +803,7 @@
     }
 
     function contact_person_hidden() {
-       document.getElementById('name_c_input').readOnly = true;
-        // document.getElementById('type_c_input').setAttribute("disabled","disabled");
+        document.getElementById('name_c_input').readOnly = true;
         document.getElementById('type_c_input').setAttribute("disabled","disabled");
         document.getElementById('customer_c_input').readOnly = true;
 
@@ -831,8 +835,43 @@
         document.getElementById('company_c_input').readOnly = true;
     }
 
+    $(document).on('click','.editAction_contact', function () {
+        var customer_id = $(this).closest("tr").find(".customer_id_c").text();
+        document.getElementById("id_co").value = $(this).closest("tr").find(".id_c").text();
+        document.getElementById("title_co").value = $(this).closest("tr").find(".title_name_c").text();
+        document.getElementById("first_co").value = $(this).closest("tr").find(".first_name_c").text();
+        document.getElementById("last_co").value = $(this).closest("tr").find(".last_name_c").text();
+        document.getElementById("nick_co").value = $(this).closest("tr").find(".nick_name_c").text();
+
+        document.getElementById('mobile_co').value = $(this).closest("tr").find(".mobile_c").text();
+        document.getElementById('tel_co').value = $(this).closest("tr").find(".tel_c").text();
+        document.getElementById('email_co').value = $(this).closest("tr").find(".email_c").text();
+
+        document.getElementById('position_co').value = $(this).closest("tr").find(".position_c").text();
+        document.getElementById('line_co').value = $(this).closest("tr").find(".line_id_c").text();
+        document.getElementById('remark_co').value = $(this).closest("tr").find(".remark_c").text();
+        document.getElementById('department').value = $(this).closest("tr").find(".department_c").text();
+
+        if($(this).closest("tr").find(".default_contact_c").text()=="0"){
+            document.getElementById("default_co").checked = false; 
+        }else{
+            document.getElementById("default_co").checked = true; 
+        }
+        $('#ModalContact').modal('hide');
+    });
+
     $(document).on('click','.editAction', function () {
         var customer_id = $(this).closest("tr").find(".customer_id_c").text();
+
+        // alert('start:'+customer_id);
+        var modalUrl = 'model_contact.php?id_customer=' + customer_id;
+        // $('#ModalContact').modal('show');
+        // โหลดเนื้อหาใหม่ของโมดัลด้วย URL ใหม่
+        // $('#ModalContact .modal-content').load(modalUrl);
+        $('#ModalContact .table_contact').load(modalUrl);
+        // $('#table_contact .modal-content').load(modalUrl);
+        // alert('modalUrl:'+modalUrl);
+
         var name = $(this).closest("tr").find(".name_c").text();
         var type = $(this).closest("tr").find(".type_c").text();
         var id = $(this).closest("tr").find(".id_c").text();
@@ -866,7 +905,7 @@
       
         contact_person_hidden();
 
-        // document.getElementById('same_co').removeAttribute("disabled");
+        document.getElementById("id_default_contact").value = $(this).closest("tr").find(".id_con").text();
 
         document.getElementById("id_customer_input").value =customer_id;
         document.getElementById("name_c_input").value = name;
@@ -1008,7 +1047,7 @@ function ClickChange_personal() {
                 document.getElementById("nick_c_label").hidden = true;
 
                 document.getElementById("div_personal").hidden = true;
-                document.getElementById("div_personal_tel").hidden = true;
+                // document.getElementById("div_personal_tel").hidden = true;
 
                 document.getElementById("div_corporate").hidden = false;
                 document.getElementById("div_personal_tel_la").hidden = false;
@@ -1017,22 +1056,17 @@ function ClickChange_personal() {
                 document.getElementById("div_personal_e_per").hidden = true;
                 document.getElementById("div_personal_e_cor").hidden = false;
 
-                document.getElementById("div_r_email_label").hidden = false;
-                document.getElementById("div_r_email_input").hidden = false;
+                // document.getElementById("div_r_email_label").hidden = false;
+                // document.getElementById("div_r_email_input").hidden = false;
 
-                // document.getElementById("company_c_label").hidden = false;
-                // document.getElementById("company_input").hidden = false;
-
-                // document.getElementById('title_c_input').removeAttribute('required');
                 document.getElementById('first_c_input').removeAttribute('required');
                 document.getElementById('last_c_input').removeAttribute('required');
                 document.getElementById('company_c_input').setAttribute("required","required");
 
-    }else{company_c_label
+    }else{
         $('.corporate').hide();
         $('.personal').show();
-
-        // }else if(value_type=="Personal"){
+        
                 document.getElementById("title_input").hidden = false;
                 document.getElementById("first_input").hidden = false;
                 document.getElementById("last_input").hidden = false;
@@ -1046,7 +1080,7 @@ function ClickChange_personal() {
                 document.getElementById("div_personal_e_per").hidden = false;
 
                 document.getElementById("div_personal").hidden = false;
-                document.getElementById("div_personal_tel").hidden = false;
+                // document.getElementById("div_personal_tel").hidden = false;
 
 
                 document.getElementById("div_corporate").hidden = true;
@@ -1056,8 +1090,8 @@ function ClickChange_personal() {
                 
                 document.getElementById("div_personal_e_cor").hidden = true;
 
-                document.getElementById("div_r_email_label").hidden = true;
-                document.getElementById("div_r_email_input").hidden = true;
+                // document.getElementById("div_r_email_label").hidden = true;
+                // document.getElementById("div_r_email_input").hidden = true;
 
                 // document.getElementById("company_c_label").hidden = true;
                 // document.getElementById("company_input").hidden = true;

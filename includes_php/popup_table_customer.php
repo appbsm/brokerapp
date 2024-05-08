@@ -54,6 +54,7 @@ include('../includes/config.php');
                 <th>Mobile</th>
                 <th width="100px" >Tel</th>
                 <th>Cust. Type</th>
+                <th >con</th>
 
                 <th hidden="ture"></th>
                 <th hidden="ture"></th>
@@ -77,14 +78,20 @@ include('../includes/config.php');
                 <th hidden="ture"></th>
                 <th hidden="ture"></th>
                 <th hidden="ture"></th>
+
               </tr>
             </thead>
             <tbody  style="font-size: 13px;">
 <?php 
 // $sql_c = " SELECT * from customer WHERE status = 1 ";
-$sql_c = " SELECT cl.description,customer.* from customer 
+$sql_c = " SELECT (SELECT TOP 1 con.id  FROM customer ct 
+     INNER JOIN rela_customer_to_contact rc ON ct.id = rc.id_customer 
+     INNER JOIN contact con ON con.id = rc.id_contact 
+     WHERE con.default_contact='1' and ct.id=customer.id) AS default_contact_id
+    ,cl.description,customer.* from customer 
     LEFT JOIN customer_level cl ON customer.customer_level = cl.id
     WHERE customer.status = 1 ";
+    // print_r($sql_c);
 $query_c = $dbh->prepare($sql_c);
 $query_c->execute();
 $results_c=$query_c->fetchAll(PDO::FETCH_OBJ);
@@ -124,6 +131,7 @@ $results_c=$query_c->fetchAll(PDO::FETCH_OBJ);
                 <td class="tel_c" ><?php echo $result->tel;?></td>
                 
                 <td class="type_c text-center"><?php echo $result->customer_type;?></td>
+                <td class="id_con" ><?php echo $result->default_contact_id;?></td>
 
                 <td class="nick_c" hidden="ture"><?php echo $result->nick_name;?></td>
                 <td class="status_c" hidden="ture"><?php echo $result->status;?></td>
@@ -148,6 +156,8 @@ $results_c=$query_c->fetchAll(PDO::FETCH_OBJ);
                 <!-- <td class="customer_name" hidden="ture"><?php //echo $result->customer_name;?></td> -->
                 <td class="customer_name" hidden="ture"><?php echo $result->company_name;?></td>
                 <td class="description" hidden="ture"><?php echo $result->description;?></td>
+
+                
               </tr>
 <?php }} ?>
 

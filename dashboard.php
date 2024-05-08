@@ -17,8 +17,6 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- <link rel="stylesheet" href="css/bootstrap.min.css" media="screen" > -->
         <link rel="stylesheet" href="css/font-awesome.min.css" media="screen" >
         <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen" >
         <link rel="stylesheet" href="css/lobipanel/lobipanel.min.css" media="screen" >
@@ -31,7 +29,6 @@
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script> -->
         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-
 
 </head>
 <style>
@@ -51,6 +48,13 @@
 	.text-warning-2 {
 		color: #dd8337 !important;
 	}
+	.text-primary-2 {
+		color: #df4eb9 !important;
+	}
+	.border-left-primary-2 {
+		border-left: .25rem solid #df4eb9 !important;
+	}
+	
 		
 	
 	
@@ -105,10 +109,7 @@
 		}
 	}
 	
-	h1, h2, h3, h4, h5, h6, b, span, p, table, a, div, label, ul, li, div,
-	button {
-		font-family: Manrope, 'IBM Plex Sans Thai';
-	}
+
 </style>
 
 <body id="page-top">
@@ -198,12 +199,15 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
+					
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        
+						<h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <!--<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+						-->
                     </div>
-
+					
                     <!-- Content Row -->
                     <div class="row">
 						<!-- Total Policy MONTHLY(New, Follow Up, Renew )-->
@@ -221,7 +225,7 @@
 							// Query to get the number of policies that will expire within the next month
 							//$sql = "SELECT COUNT(*) AS num_policies, SUM(premium_rate) AS total_premium FROM [brokerapp].[dbo].[insurance_info] WHERE DATEDIFF(month, GETDATE(), end_date) = 1";
 							//$sql = "SELECT COUNT(*) AS num_policies, SUM(premium_rate) AS total_premium FROM [brokerapp].[dbo].[insurance_info] WHERE status IN ('New', 'Follow Up', 'Renew')";
-							$sql = "SELECT COUNT(*) AS num_policies, SUM(premium_rate) AS total_premium FROM [brokerapp].[dbo].[insurance_info] WHERE status IN ('New', 'Follow Up', 'Renew') AND MONTH(paid_date) = MONTH(GETDATE()) AND YEAR(paid_date) = YEAR(GETDATE())";
+							$sql = "SELECT COUNT(*) AS num_policies, SUM(premium_rate) AS total_premium FROM [brokerapp].[dbo].[insurance_info] WHERE status IN ('New', 'Follow Up', 'Renew') AND MONTH(start_date) = MONTH(GETDATE()) AND YEAR(start_date) = YEAR(GETDATE())";
 					
 							$stmt = $dbh->prepare($sql);
 							$stmt->execute();
@@ -258,6 +262,62 @@
 							</div>
 						</div>
 						
+						<!-- Total Policy collected(New, Follow Up, Renew )-->
+						<?php
+							include('includes/config.php');
+
+							try {
+								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							} catch (PDOException $e) {
+								echo "Error: " . $e->getMessage();
+								die();
+							}
+
+							$sql = "SELECT COUNT(*) AS num_policies, 
+									SUM(premium_rate) AS total_collected 
+									FROM [brokerapp].[dbo].[insurance_info] 
+									WHERE status IN ('New', 'Follow Up', 'Renew') 
+									AND MONTH(paid_date) = MONTH(GETDATE()) 
+									AND YEAR(paid_date) = YEAR(GETDATE())";
+
+							$stmt = $dbh->prepare($sql);
+							$stmt->execute();
+							$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+							$num_policies = $result['num_policies'];
+							$total_premium = $result['total_collected']; 
+
+						?>
+													
+						<div class="col-xl-3 col-md-6 mb-4">
+							<div class="card border-left-primary-2 shadow h-100 py-2">
+								<a href="entry-policy.php" style="text-decoration: none; color: inherit;">
+									<div class="card-body">
+										<div class="row">
+											<div class="col mr-2">
+												<div class="text-xs font-weight-bold text-primary-2 text-uppercase mb-1" style="font-size: medium;">Total Policy</div>
+												<div class="text-xs font-weight-bold text-primary-2 text-uppercase mb-1" style="font-size: medium;">(Collected)</div>
+												<div class="text-xs font-weight-bold text-primary-2 text-uppercase mt-3">Total Policy </div>
+												<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0"><?php echo $num_policies; ?></div>
+											</div>
+											<div class="col-auto">
+												<i class="fas fa-calendar fa-2x text-gray-300"></i>
+											</div>
+										</div>
+										<div class="row mt-3">
+											<div class="col">
+												<div class="text-xs font-weight-bold text-primary-2 text-uppercase mb-0">Total Premium </div>
+												<!--<div class="h5 mb-0 font-weight-bold text-gray-800">฿<?php //echo number_format($total_premium); ?></div>-->
+												<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+						</div>
+
+						
 						<!-- ToTal Policy status=New -->
 						<?php
 							include('includes/config.php');
@@ -273,7 +333,7 @@
 							try {
 								$sql = "SELECT COUNT(*) AS num_policies, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
 										FROM [brokerapp].[dbo].[insurance_info]
-										WHERE status = 'New' AND MONTH(paid_date) = MONTH(GETDATE()) AND YEAR(paid_date) = YEAR(GETDATE())";
+										WHERE status = 'New' AND MONTH(start_date) = MONTH(GETDATE()) AND YEAR(start_date) = YEAR(GETDATE())";
 								$stmt = $dbh->prepare($sql);
 								$stmt->execute();
 								$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -329,7 +389,7 @@
 							try {
 								$sql = "SELECT COUNT(*) AS num_policies, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
 										FROM [brokerapp].[dbo].[insurance_info]
-										WHERE status = 'Renew' AND MONTH(paid_date) = MONTH(GETDATE()) AND YEAR(paid_date) = YEAR(GETDATE())";
+										WHERE status = 'Renew' AND MONTH(start_date) = MONTH(GETDATE()) AND YEAR(start_date) = YEAR(GETDATE())";
 								$stmt = $dbh->prepare($sql);
 								$stmt->execute();
 								$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -369,61 +429,7 @@
 							</div>
 						</div>
 						
-						<!-- ToTal Policy status=Not Renew -->
-						<?php
-							include('includes/config.php');
-
-							try {
-								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
-								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
-
-							try {
-								$sql = "SELECT COUNT(*) AS num_policies, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
-										FROM [brokerapp].[dbo].[insurance_info]
-										WHERE status = 'Not Renew'";
-								$stmt = $dbh->prepare($sql);
-								$stmt->execute();
-								$result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-								$num_policies = $result['num_policies'];
-								$total_premium = $result['total_premium'];
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
-						?>
-
-						<div class="col-xl-3 col-md-6 mb-4">
-							<div class="card border-left-dark shadow h-100 py-2">
-								<a href="entry-policy.php" style="text-decoration: none; color: inherit;">
-									<div class="card-body">
-										<div class="row ">
-											<div class="col mr-2">
-												<div class="text-xs font-weight-bold text-dark text-uppercase mb-1" style="font-size: medium;">Policy</div>
-												<div class="text-xs font-weight-bold text-dark text-uppercase mb-1" style="font-size: medium;">(Not Renew)</div>
-												<div class="text-xs font-weight-bold text-dark text-uppercase mt-3">TOTAL Policy</div>
-												<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0"><?php echo $num_policies; ?></div>
-											</div>
-											<div class="col-auto">
-												<i class="fa fa-btc fa-2x text-gray-300"></i>
-											</div>
-										</div>
-										<div class="row mt-3">
-											<div class="col">
-												<div class="text-xs font-weight-bold text-dark text-uppercase mb-0">TOTAL PREMIUM</div>
-												<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0"><?php echo isset($total_premium) ? $total_premium : '฿0'; ?></div>
-												<!--<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
-												
-											</div>
-										</div>
-									</div>
-								</a>
-							</div>
-						</div>
+						
 						
 						<!-- Pending Requests Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -444,7 +450,7 @@
                         </div>
 						
 						<!-- Due Policy -->
-						<?php
+						<?php/*
 							include('includes/config.php');
 
 							try {
@@ -455,11 +461,6 @@
 								die();
 							}
 
-							// Query to get the number of policies that will expire within the next month
-							//$sql = "SELECT COUNT(*) AS num_policies, SUM(premium_rate) AS total_premium FROM [brokerapp].[dbo].[insurance_info] WHERE DATEDIFF(month, GETDATE(), end_date) = 1";
-							/*$sql = "SELECT COUNT(*) AS num_policies, SUM(premium_rate) AS total_premium
-							FROM [brokerapp].[dbo].[insurance_info]
-							WHERE end_date BETWEEN GETDATE() AND DATEADD(day, 30, GETDATE()) AND status IN ('New', 'Follow Up')";*/
 							$sql = "SELECT '30-day Range' AS period,
 								   COUNT(*) AS num_policies, 
 								   SUM(premium_rate) AS total_premium
@@ -474,8 +475,8 @@
 								   FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
 							FROM [brokerapp].[dbo].[insurance_info]
 							WHERE status = 'Follow Up'
-								  AND MONTH(paid_date) = MONTH(GETDATE())
-								  AND YEAR(paid_date) = YEAR(GETDATE())
+								  AND MONTH(start_date) = MONTH(GETDATE())
+								  AND YEAR(start_date) = YEAR(GETDATE())
 							";
 							$stmt = $dbh->prepare($sql);
 							$stmt->execute();
@@ -483,9 +484,10 @@
 
 							$num_policies = $result['num_policies'];
 							$total_premium = $result['total_premium'];
+							*/
 						?>
 
-						
+						<!--
 						<div class="col-xl-3 col-md-6 mb-4">
 							<div class="card border-left-warning-2 shadow h-100 py-2">
 								<a href="entry-policy.php" style="text-decoration: none; color: inherit;">
@@ -504,7 +506,6 @@
 										<div class="row mt-3">
 											<div class="col">
 												<div class="text-xs font-weight-bold text-warning-2 text-uppercase mb-0">Total Premium </div>
-												<!--<div class="h5 mb-0 font-weight-bold text-gray-800">฿<?php //echo number_format($total_premium); ?></div>-->
 												<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>
 											</div>
 										</div>
@@ -512,6 +513,7 @@
 								</a>
 							</div>
 						</div>
+						-->
 			
 						
 						<!-- ToTal Policy status=Follow Up -->
@@ -527,9 +529,17 @@
 							}
 
 							try {
-								$sql = "SELECT COUNT(*) AS num_policies, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
-										FROM [brokerapp].[dbo].[insurance_info]
-										WHERE status = 'Follow Up' AND MONTH(paid_date) = MONTH(GETDATE()) AND YEAR(paid_date) = YEAR(GETDATE())";
+								$sql = "SELECT 
+									COUNT(*) AS num_policies, 
+									FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
+								FROM 
+									[brokerapp].[dbo].[insurance_info]
+								WHERE 
+									status = 'Follow Up' 
+									AND MONTH(end_date) = MONTH(GETDATE()) 
+									AND YEAR(end_date) = YEAR(GETDATE())
+									AND DATEDIFF(DAY, start_date, end_date) <= 30;
+								";
 								$stmt = $dbh->prepare($sql);
 								$stmt->execute();
 								$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -543,14 +553,14 @@
 						?>
 
 						<div class="col-xl-3 col-md-6 mb-4">
-							<div class="card border-left-warning shadow h-100 py-2">
+							<div class="card border-left-warning-2 shadow h-100 py-2">
 								<a href="entry-policy.php" style="text-decoration: none; color: inherit;">
 									<div class="card-body">
 										<div class="row ">
 											<div class="col mr-2">
-												<div class="text-xs font-weight-bold text-warning text-uppercase mb-1" style="font-size: medium;">Policy</div>
-												<div class="text-xs font-weight-bold text-warning text-uppercase mb-1" style="font-size: medium;">(Follow Up)</div>
-												<div class="text-xs font-weight-bold text-warning text-uppercase mt-3">TOTAL Policy</div>
+												<div class="text-xs font-weight-bold text-warning-2 text-uppercase mb-1" style="font-size: medium;">Policy</div>
+												<div class="text-xs font-weight-bold text-warning-2 text-uppercase mb-1" style="font-size: medium;">(Follow Up)</div>
+												<div class="text-xs font-weight-bold text-warning-2 text-uppercase mt-3">TOTAL Policy</div>
 												<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0"><?php echo $num_policies; ?></div>
 											</div>
 											<div class="col-auto">
@@ -559,7 +569,7 @@
 										</div>
 										<div class="row mt-3">
 											<div class="col">
-												<div class="text-xs font-weight-bold text-warning text-uppercase mb-0">TOTAL PREMIUM</div>
+												<div class="text-xs font-weight-bold text-warning-2 text-uppercase mb-0">TOTAL PREMIUM</div>
 												<!--<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $total_premium; ?></div>-->
 												<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0"><?php echo isset($total_premium) ? $total_premium : '฿0'; ?></div>
 												<!--<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
@@ -585,8 +595,8 @@
 
 							try {
 								$sql = "SELECT COUNT(*) AS num_policies, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
-										FROM [brokerapp].[dbo].[insurance_info]
-										WHERE status = 'Wait'";
+								FROM [brokerapp].[dbo].[insurance_info]
+								WHERE status = 'Wait' AND MONTH(start_date) = MONTH(GETDATE()) AND YEAR(start_date) = YEAR(GETDATE())";
 								$stmt = $dbh->prepare($sql);
 								$stmt->execute();
 								$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -617,6 +627,62 @@
 										<div class="row mt-3">
 											<div class="col">
 												<div class="text-xs font-weight-bold text-danger text-uppercase mb-0">TOTAL PREMIUM</div>
+												<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0"><?php echo isset($total_premium) ? $total_premium : '฿0'; ?></div>
+												<!--<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
+												
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+						</div>
+						
+						<!-- ToTal Policy status=Not Renew -->
+						<?php
+							include('includes/config.php');
+
+							try {
+								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							} catch (PDOException $e) {
+								echo "Error: " . $e->getMessage();
+								die();
+							}
+
+							try {
+								$sql = "SELECT COUNT(*) AS num_policies, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
+										FROM [brokerapp].[dbo].[insurance_info]
+										WHERE status = 'Not New' AND MONTH(start_date) = MONTH(GETDATE()) AND YEAR(start_date) = YEAR(GETDATE())";
+								$stmt = $dbh->prepare($sql);
+								$stmt->execute();
+								$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+								$num_policies = $result['num_policies'];
+								$total_premium = $result['total_premium'];
+							} catch (PDOException $e) {
+								echo "Error: " . $e->getMessage();
+								die();
+							}
+						?>
+
+						<div class="col-xl-3 col-md-6 mb-4">
+							<div class="card border-left-dark shadow h-100 py-2">
+								<a href="entry-policy.php" style="text-decoration: none; color: inherit;">
+									<div class="card-body">
+										<div class="row ">
+											<div class="col mr-2">
+												<div class="text-xs font-weight-bold text-dark text-uppercase mb-1" style="font-size: medium;">Policy</div>
+												<div class="text-xs font-weight-bold text-dark text-uppercase mb-1" style="font-size: medium;">(Not Renew)</div>
+												<div class="text-xs font-weight-bold text-dark text-uppercase mt-3">TOTAL Policy</div>
+												<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0"><?php echo $num_policies; ?></div>
+											</div>
+											<div class="col-auto">
+												<i class="fa fa-btc fa-2x text-gray-300"></i>
+											</div>
+										</div>
+										<div class="row mt-3">
+											<div class="col">
+												<div class="text-xs font-weight-bold text-dark text-uppercase mb-0">TOTAL PREMIUM</div>
 												<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0"><?php echo isset($total_premium) ? $total_premium : '฿0'; ?></div>
 												<!--<div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
 												
@@ -686,6 +752,9 @@
 							}
 						?>
 						
+						<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script> -->
+						<script src="js/chart.min.js"></script>
+
 						<div class="col-xl-12 col-lg-12">
 							<div class="card shadow mb-4">
 								<a href="report-monthly-sales.php" style="text-decoration: none; color: inherit;">
@@ -700,7 +769,7 @@
 								</div>
 							</div>
 						</div>
-						<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+						
 						<script>
 							var months = [];
 							var sales_current_year = [];
@@ -805,6 +874,8 @@
 							}
 							?>
 
+							
+							<script src="js/chart.min.js"></script>
 							<div class="col-xl-6 col-lg-6">
 								<div class="card shadow mb-4">
 									<a href="report-product-sales.php" style="text-decoration: none; color: inherit;">
@@ -820,7 +891,7 @@
 								</div>
 							</div>
 
-							<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+							
 							<script>
 								var ctx = document.getElementById('myDonutChart').getContext('2d');
 								var myDonutChart = new Chart(ctx, {
@@ -910,11 +981,17 @@
 								die();
 							}
 
-							$sql = "SELECT p.subcategorie, COUNT(*) AS count 
+							/*$sql = "SELECT p.subcategorie, COUNT(*) AS count 
 							FROM [brokerapp].[dbo].[product_subcategories] p
 							INNER JOIN [brokerapp].[dbo].[insurance_info] i ON p.id = i.sub_categories
 							WHERE YEAR(i.paid_date) = YEAR(GETDATE()) 
-							GROUP BY p.subcategorie";
+							GROUP BY p.subcategorie";*/
+							$sql = "SELECT p.subcategorie, COUNT(*) AS count, SUM(i.premium_rate) AS total_amount
+								FROM [brokerapp].[dbo].[product_subcategories] p
+								INNER JOIN [brokerapp].[dbo].[insurance_info] i ON p.id = i.sub_categories
+								WHERE YEAR(i.paid_date) = YEAR(GETDATE()) 
+								GROUP BY p.subcategorie
+							";
 							$stmt = $dbh->prepare($sql);
 							$stmt->execute();
 							$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -925,6 +1002,7 @@
 							foreach ($result as $row) {
 								$labels[] = $row['subcategorie'];
 								$data[] = $row['count'];
+								$totalAmounts[] = $row['total_amount'];
 							}
 						?>
 
@@ -933,20 +1011,6 @@
 								<a href="report-product-sales.php" style="text-decoration: none; color: inherit;">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 										<h6 class="m-0 font-weight-bold text-primary">Product Sub Categories (YTD)</h6>
-										<!--<div class="dropdown no-arrow">
-											<a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-												data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-												<i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-											</a>
-											<div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-												aria-labelledby="dropdownMenuLink">
-												<div class="dropdown-header">Dropdown Header:</div>
-												<a class="dropdown-item" href="#">Action</a>
-												<a class="dropdown-item" href="#">Another action</a>
-												<div class="dropdown-divider"></div>
-												<a class="dropdown-item" href="#">Something else here</a>
-											</div>
-										</div>-->
 									</div>
 								</a>
 								<div class="card-body">
@@ -964,11 +1028,14 @@
 
 							function drawChart() {
 								var data = google.visualization.arrayToDataTable([
-									['Task', 'Count'],
+									//['Task', 'Count'],
+									['Task', 'Count', { role: 'tooltip' }, 'Total Amount'],
 									<?php
-									foreach ($result as $row) {
-										echo "['{$row['subcategorie']}', {$row['count']}],";
-									}
+										foreach ($result as $index => $row) {
+											//echo "['{$row['subcategorie']}', {$row['count']}],";
+											//echo "['{$row['subcategorie']}', {$row['count']}, '{$row['count']} (".number_format($row['total_amount'], 2).")', {$row['total_amount']}],";
+											echo "['{$row['subcategorie']}', {$row['count']}, '({$row['count']}), ".number_format($row['total_amount'], 2)."', {$row['total_amount']}],";
+										}
 									?>
 								]);
 								
@@ -1031,26 +1098,24 @@
 								die();
 							}
 
-							/*$sql = "SELECT cu.title_name, cu.first_name, cu.last_name, 
-											SUM(info.premium_rate) AS total_premium_rate, 
-											psup.subcategorie AS product
-									FROM customer cu
-									LEFT JOIN rela_customer_to_insurance recu ON cu.id = recu.id_customer
-									JOIN insurance_info info ON info.id = recu.id_insurance_info
-									JOIN product_subcategories psup ON psup.id = info.sub_categories
-									WHERE YEAR(info.paid_date) = YEAR(GETDATE())
-									GROUP BY cu.title_name, cu.first_name, cu.last_name, psup.subcategorie
-									ORDER BY total_premium_rate DESC";
-							*/
-							$sql = "SELECT cu.title_name, cu.first_name, cu.last_name, 
-											SUM(info.premium_rate) AS total_premium_rate, 
-											psup.categorie AS product
+							$sql = "SELECT 
+										CASE 
+											WHEN cu.customer_type = 'Corporate' THEN cu.company_name
+											ELSE CONCAT(cu.first_name, ' ', cu.last_name) 
+										END AS customer_name,
+										SUM(info.premium_rate) AS total_premium_rate, 
+										psup.categorie AS product
 									FROM customer cu
 									LEFT JOIN rela_customer_to_insurance recu ON cu.id = recu.id_customer
 									JOIN insurance_info info ON info.id = recu.id_insurance_info
 									JOIN product_categories psup ON psup.id = info.product_category
 									WHERE YEAR(info.paid_date) = YEAR(GETDATE())
-									GROUP BY cu.title_name, cu.first_name, cu.last_name, psup.categorie
+									GROUP BY 
+										CASE 
+											WHEN cu.customer_type = 'Corporate' THEN cu.company_name
+											ELSE CONCAT(cu.first_name, ' ', cu.last_name) 
+										END,
+										psup.categorie
 									ORDER BY total_premium_rate DESC";
 
 							$stmt = $dbh->prepare($sql);
@@ -1061,7 +1126,7 @@
 							$products = array();
 
 							foreach ($result as $row) {
-								$customer = $row['title_name'] . ' ' . $row['first_name'] . ' ' . $row['last_name'];
+								$customer = $row['customer_name'];
 								$product = $row['product'];
 								$total_premium_rate = $row['total_premium_rate'];
 
@@ -1092,6 +1157,7 @@
 							}
 						?>
 
+						<script src="js/chart.min.js"></script>
 						<div class="col-xl-12 col-lg-12">
 							<div class="card shadow mb-4">
 								<a href="report-customer-sales-total.php" style="text-decoration: none; color: inherit;">
@@ -1101,13 +1167,12 @@
 								</a>
 								<div class="card-body">
 									<div class="chart-bar">
-										<canvas id="myStackedBarChart" class="style-StackedBar" style="width: 100%; height: 70%;"></canvas>
+										<canvas id="myStackedBarChart" class="style-StackedBar" style="width: 100%; height: 300px;"></canvas>
 									</div>
 								</div>
 							</div>
 						</div>
 
-						<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 						<script>
 							var labels = <?php echo json_encode($labels); ?>;
 							var data = <?php echo json_encode($data); ?>;
@@ -1131,7 +1196,7 @@
 													case 'Life':
 														echo "'#ffb0c1'";
 														break;
-													case 'None Life':
+													case 'Non Life':
 														echo "'#9ad0f5'";
 														break;
 													default:
@@ -1141,13 +1206,13 @@
 											borderColor: <?php
 												switch ($product) {
 													case 'Life':
-														echo "'#ffb0c1'";
+														echo "'rgba(255, 99, 132, 1)'";
 														break;
-													case 'None Life':
-														echo "'#9ad0f5'";
+													case 'Non Life':
+														echo "'rgba(54, 162, 235, 1)'";
 														break;
 													default:
-														echo "'#bd9af5'";
+														echo "'rgba(138, 43, 226, 1)'";
 												}
 											?>,
 											borderWidth: 1
@@ -1268,6 +1333,8 @@
 							// Call resizeCanvas() when the page loads or resizes
 							window.onload = resizeCanvas;
 						</script>
+
+						<script src="js/chart.min.js"></script>
 						<div class="col-xl-12 col-lg-12">
 							<div class="card shadow mb-4">
 								<a href="report-customer-sales-total.php" style="text-decoration: none; color: inherit;">
@@ -1277,13 +1344,12 @@
 								</a>
 								<div class="card-body">
 									<div class="chart-bar">
-										<canvas id="myStackedBarChartPartner" class="style-StackedBar" style="width: 100%; height: 70%;"></canvas>
+										<canvas id="myStackedBarChartPartner" class="style-StackedBar" style="width: 100%; height: 300px;"></canvas>
 									</div>
 								</div>
 							</div>
 						</div>
 
-						<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 						<script>
 							var partners = <?php echo json_encode(array_keys($partners)); ?>;
 							var products = <?php echo json_encode($products); ?>;
@@ -1291,15 +1357,19 @@
 
 							var datasets = products.map(function(product, index) {
 							var color;
+							var borderColor;
 								switch (product) {
 									case 'Life':
 										color = '#ffb0c1';
+										borderColor = 'rgba(255, 99, 132, 1)';
 										break;
-									case 'None Life':
+									case 'Non Life':
 										color = '#9ad0f5';
+										borderColor = 'rgba(54, 162, 235, 1)';
 										break;
 									default:
 										color = '#bd9af5'; 
+										borderColor = 'rgba(138, 43, 226, 1)';
 								}
 
 								return {
@@ -1308,7 +1378,8 @@
 										return partner[product] || 0;
 									}),
 									backgroundColor: color,
-									borderColor: color,
+									//borderColor: color,
+									borderColor: borderColor,
 									borderWidth: 1
 								};
 							});
@@ -1418,9 +1489,6 @@
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
-
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
@@ -1451,8 +1519,6 @@
             });
         </script>
 
-
-    
         <?php include('includes/footer.php');?>
 </body>
 

@@ -348,7 +348,13 @@ foreach($results_table as $result)
         <div class="form-group">
             <div class="col-sm-offset-1 col-sm-7">
                 <input type="hidden" name="id_role" value="<?php echo $id_role; ?>" > 
-                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                <!--<button type="submit" name="submit" class="btn btn-primary">Submit</button>-->
+				<button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
+                    </button>
+				&nbsp;&nbsp;
+				<a href="manage-role.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
+					<span class="text">Cancel</span>
+				</a> 
             </div>
         </div>
 

@@ -204,7 +204,7 @@ function validateForm() {
     <div class="form-group row col-md-10 col-md-offset-1">
         <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Cust. Type:</label>
             <div class="col-3">
-            <select style="border-color:#102958;" id="customer_type" name="customer_type" class="form-control" id="default" readonly required>
+            <select style="border-color:#102958; color: #000;" id="customer_type" name="customer_type" class="form-control" id="default" readonly required>
                                 <option value="Personal" <?php echo (trim($customer_value['customer_type']) == 'Personal') ? 'selected' : '';?> >Personal</option>
                                 <option value="Corporate"<?php echo (trim($customer_value['customer_type']) == 'Corporate') ? 'selected' : '';?>  >Corporate</option>
             </select>
@@ -212,7 +212,7 @@ function validateForm() {
 
             <div class="col-sm-2 label_left" >
             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" <?php echo ($customer_value['status'] == 1) ? 'checked="checked"' : '' ?> name="check_active">
-            <label style="color: #0C1830;" class="form-check-label" for="flexCheckDefault">
+            <label style="color: #000;" class="form-check-label" for="flexCheckDefault">
             &nbsp;&nbsp;&nbsp;&nbsp; Active    </label>
             </div>
             <div class="col-4 ">
@@ -223,14 +223,14 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Cust. ID:</label>
                 <div class="col-3">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="customer_id" required="required" class="form-control" id="success" value="<?php echo $customer_value['customer_id'];?>" readOnly>               
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="customer_id" required="required" class="form-control" id="success" value="<?php echo $customer_value['customer_id'];?>" readOnly>               
                 </div>
 
                 <div class="col-sm-1 " >
                         <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Cust. Level:</label>
                 </div>
                 <div class="col-2 ">
-                        <select id="customer_level" name="customer_level" style="border-color:#102958;"  class="form-control" required>
+                        <select id="customer_level" name="customer_level" style="border-color:#102958; color: #000;"  class="form-control" required>
                             <?php foreach ($customer_level_list as $pc) {?>
                                 <option value="<?php echo $pc['id'];?>" data-description="<?php echo $pc['description'];?>"
                                     <?php if ($pc['id']==$customer_value['customer_level']) { echo 'selected="selected"'; } ?>
@@ -240,7 +240,7 @@ function validateForm() {
                 </div> 
 
                  <div class="col-4 ">
-                    <input id="customer_de" name="customer_de" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  readOnly> 
+                    <input id="customer_de" name="customer_de" style="color: #000;border-color:#102958;" type="text" class="form-control"  readOnly> 
                 </div>
             </div>
 
@@ -273,7 +273,7 @@ function validateForm() {
                         <label  style="color: #102958;" ><small><font color="red">*</font></small>Company name:</label>
                     </div>
                     <div class="col corporate">
-                        <input id="company_c_input" name="company_name" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $customer_value['company_name'];?>" required>    
+                        <input id="company_c_input" name="company_name" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $customer_value['company_name'];?>" required>    
                     </div>
                 </div>
 
@@ -282,7 +282,7 @@ function validateForm() {
                     <label style="color: #102958;" >Title:</label>
                 </div>
                 <div id="col_title" class="col-3 personal">
-                <select style="border-color:#102958;" id="title_name" name="title_name" class="form-control personal"  >
+                <select style="border-color:#102958; color: #000;" id="title_name" name="title_name" class="form-control personal"  >
                         <option value="Mr." <?php echo (trim($customer_value['title_name'])=="Mr.") ? 'selected' : '';?>>Mr.</option>
                         <option value="Ms." <?php echo (trim($customer_value['title_name'])=="Ms.") ? 'selected' : '';?>>Ms.</option>
                         <option value="Mrs." <?php echo (trim($customer_value['title_name'])=="Mrs.") ? 'selected' : '';?>>Mrs.</option>
@@ -295,13 +295,13 @@ function validateForm() {
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>First name:</label>
                 </div>
                 <div class="col-4 personal">
-                    <input id="first_name" name="first_name" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" value="<?php echo $customer_value['first_name'];?>" required>
+                    <input id="first_name" name="first_name" minlength="1" maxlength="100" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $customer_value['first_name'];?>" required>
                 </div>
 				<div class="col-sm-2   personal"  >
                     <label id="label_lname" style="color: #102958;" >Last name:</label>
                 </div>
                 <div id="col_lname" class="col-4 personal">
-                    <input id="last_name" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text" name="last_name" class="form-control" value="<?php echo $customer_value['last_name'];?>" >
+                    <input id="last_name" minlength="1" maxlength="100" style="color: #000;border-color:#102958;" type="text" name="last_name" class="form-control" value="<?php echo $customer_value['last_name'];?>" >
                 </div>
             </div>
 			
@@ -310,7 +310,7 @@ function validateForm() {
                     <label style="color: #102958;" >Nickname:</label>
                 </div>
                 <div class="col-4 personal">
-                    <input name="nick_name" id="nick_name" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $customer_value['nick_name'];?>">
+                    <input name="nick_name" id="nick_name" minlength="1" maxlength="100" style="color: #000;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $customer_value['nick_name'];?>">
                 </div>
 			</div>
 			
@@ -318,18 +318,18 @@ function validateForm() {
 				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tax ID / Passport ID:</label>
                 <div class="col-4">
                     <!--<input minlength="13" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" name="tax_id" class="form-control" id="success" value="<?php echo $customer_value['tax_id'];?>" required pattern="\d{13}" >-->
-					<input id="tax_id" name="tax_id" minlength="1" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" id="success" value="<?php echo $customer_value['tax_id'];?>" >               
+					<input id="tax_id" name="tax_id" minlength="1" maxlength="13" style="color: #000;border-color:#102958;" type="text" class="form-control" id="success" value="<?php echo $customer_value['tax_id'];?>" >               
                 </div>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
                 <div class="col-4">
-                    <input name="email" id="email" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="email"  class="form-control"  value="<?php echo $customer_value['email'];?>" >
+                    <input name="email" id="email" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="email"  class="form-control"  value="<?php echo $customer_value['email'];?>" >
                 </div>
             </div>
     
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Mobile:</label>
                 <div class="col-4">
-                    <input id="mobile" name="mobile" minlength="10" maxlength="12" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" id="success" value="<?php echo $customer_value['mobile'];?>" pattern="\d{3}-\d{3}-\d{4}" >
+                    <input id="mobile" name="mobile" minlength="10" maxlength="12" style="color: #000;border-color:#102958;" type="text" class="form-control" id="success" value="<?php echo $customer_value['mobile'];?>" pattern="\d{3}-\d{3}-\d{4}" >
                 </div>
 				<script>
 					document.getElementById('mobile').addEventListener('input', function (e) {
@@ -339,7 +339,7 @@ function validateForm() {
 				</script>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tel:</label>
                 <div class="col-4">
-                    <input name="tel" id="tel" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $customer_value['tel'];?>">
+                    <input name="tel" id="tel" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $customer_value['tel'];?>">
                
                 </div>
             </div>
@@ -373,7 +373,7 @@ function validateForm() {
                 </div>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Road:</label>
                 <div class="col-4">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="road" class="form-control"  value="<?php echo $customer_value['road'];?>">
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="road" class="form-control"  value="<?php echo $customer_value['road'];?>">
                 </div>
             </div>
 			-->
@@ -381,32 +381,32 @@ function validateForm() {
              <div class="form-group row col-md-10 col-md-offset-1">
                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Address No:</label>
                 <div class="col-2">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="address_number"  class="form-control"  value="<?php echo $customer_value['address_number'];?>" required>
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="address_number"  class="form-control"  value="<?php echo $customer_value['address_number'];?>" required>
                
                 </div>
                 
 				 <label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Soi:</label>
                 <div class="col-3">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="soi"  class="form-control"  value="<?php echo $customer_value['soi'];?>">
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="soi"  class="form-control"  value="<?php echo $customer_value['soi'];?>">
                
                 </div>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Road:</label>
                 <div class="col-3">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="road" class="form-control"  value="<?php echo $customer_value['road'];?>">
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="road" class="form-control"  value="<?php echo $customer_value['road'];?>">
                 </div>
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Building Name:</label>
                 <div class="col">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="building_name"  class="form-control"  value="<?php echo $customer_value['building_name'];?>">
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="building_name"  class="form-control"  value="<?php echo $customer_value['building_name'];?>">
                 </div>
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Province:</label>
                 <div class="col-4">
-                    <select style="border-color:#102958;" name="province" class="form-control selectpicker" id="province" data-live-search="true" required >
+                    <select style="border-color:#102958; color: #000;" name="province" class="form-control selectpicker" id="province" data-live-search="true" required >
                         <?php foreach ($provinces as $province) { ?>
                         <option value="<?php echo $province['code']?>" <?php echo ($province['code'] == $customer_value['province']) ? 'selected' : '';?>><?php echo $province['name_en'];?></option>
                         <?php } ?>
@@ -416,7 +416,7 @@ function validateForm() {
                 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>District:</label>
                 <div class="col-4">
-                     <select style="border-color:#102958;" name="district"  class="form-control selectpicker" id="district" data-live-search="true" required >
+                     <select style="border-color:#102958; color: #000;" name="district"  class="form-control selectpicker" id="district" data-live-search="true" required >
                     <?php 
                         if(trim($customer_value['province'])!=""){
                            $districts = get_district_by_province($conn, $customer_value['province']);
@@ -431,9 +431,9 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Sub-district:</label>
                 <div class="col-4">
-                    <!-- <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="name" required="required" class="form-control" id="success" value" > -->
+                    <!-- <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="name" required="required" class="form-control" id="success" value" > -->
 
-                    <select style="border-color:#102958;" name="sub_district" class="form-control selectpicker" id="subdistrict" data-live-search="true" required >   
+                    <select style="border-color:#102958; color: #000;" name="sub_district" class="form-control selectpicker" id="subdistrict" data-live-search="true" required >   
                     <?php 
                     $subdistricts = get_subdistrict_by_district($conn, $customer_value['district']);
                  //print_r($subdistricts);
@@ -445,7 +445,7 @@ function validateForm() {
                 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Post Code:</label>
                 <div class="col-4">
-                     <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control" value="<?php echo $customer_value['post_code'];?>" required>
+                     <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control" value="<?php echo $customer_value['post_code'];?>" required>
                 </div>
             </div>   
 
@@ -508,7 +508,7 @@ function validateForm() {
                             <div class="col  "  >           
                                 <div  class="form-check " style="top:15px;">
                                     <input id="same_customer" name="same_customer" class="form-check-input same_customer" type="checkbox" id="">
-                                    <label style="color: #0C1830;" class="form-check-label" for="SameCheck">
+                                    <label style="color: #000;" class="form-check-label" for="SameCheck">
                                         &nbsp;&nbsp;&nbsp;&nbsp; Same Customer Name
                                     </label>
                                 </div>
@@ -523,10 +523,10 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Title:</label>
                 <!-- hidden="ture" -->
-                <input hidden="ture" id="id_contact<? echo $x; ?>" name="id_contact[]" value="<?php echo $c['id'];?>" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" id="success"  >
+                <input hidden="ture" id="id_contact<? echo $x; ?>" name="id_contact[]" value="<?php echo $c['id'];?>" style="color: #000;border-color:#102958;" type="text" class="form-control" id="success"  >
                 </input>
                 <div class="col-3">
-                     <select name="contact_title_name[]" id="contact_title_name<?php echo $x; ?>" style="border-color:#102958;"  class="form-control" >
+                     <select name="contact_title_name[]" id="contact_title_name<?php echo $x; ?>" style="border-color:#102958; color: #000;"  class="form-control" >
                             <option value="Mr." <?php echo (trim($c['title_name'])=="Mr.") ? 'selected' : '';?>>Mr.</option>
                                 <option value="Ms." <?php echo (trim($c['title_name'])=="Ms.") ? 'selected' : '';?>>Ms.</option>
                                 <option value="Mrs." <?php echo (trim($c['title_name'])=="Mrs.") ? 'selected' : '';?>>Mrs.</option>       
@@ -537,25 +537,25 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>First name:</label>
                 <div class="col-4">
-                    <input name="contact_first_name[]" id="contact_first_name<?php echo $x; ?>" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['first_name'];?>" required>
+                    <input name="contact_first_name[]" id="contact_first_name<?php echo $x; ?>" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['first_name'];?>" required>
                 </div>
 				<label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Last name:</label>
                 <div class="col-4">
-                    <input name="contact_last_name[]" id="contact_last_name<?php echo $x; ?>" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['last_name'];?>" >
+                    <input name="contact_last_name[]" id="contact_last_name<?php echo $x; ?>" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['last_name'];?>" >
                 </div>
             </div>
 			
 			<div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" class="col-sm-2 col-form-label">Nickname:</label>
                 <div class="col-4">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="contact_nick_name[]" id="contact_nick_name<?php echo $x; ?>" class="form-control" value="<?php echo $c['nick_name'];?>">
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="contact_nick_name[]" id="contact_nick_name<?php echo $x; ?>" class="form-control" value="<?php echo $c['nick_name'];?>">
                 </div>
 			</div>
 			
 			<div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Mobile:</label>
                 <div class="col-4">
-                    <input name="contact_mobile[]" id="contact_mobile<?php echo $x; ?>" minlength="10" maxlength="12" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['mobile'];?>" pattern="\d{3}-\d{3}-\d{4}" >
+                    <input name="contact_mobile[]" id="contact_mobile<?php echo $x; ?>" minlength="10" maxlength="12" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['mobile'];?>" pattern="\d{3}-\d{3}-\d{4}" >
                 </div>
 				<script>
 					document.getElementById('contact_mobile<?php echo $x; ?>').addEventListener('input', function (e) {
@@ -565,36 +565,36 @@ function validateForm() {
 				</script>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tel:</label>
                 <div class="col-4">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="contact_tel[]" id="contact_tel<?php echo $x; ?>" class="form-control" value="<?php echo $c['tel']?>">
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="contact_tel[]" id="contact_tel<?php echo $x; ?>" class="form-control" value="<?php echo $c['tel']?>">
                 </div>
             </div>
 			
 			<div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
                 <div class="col-4">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="email" name="contact_email[]" id="contact_email<?php echo $x; ?>" class="form-control" value="<?php echo $c['email']?>" >
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="email" name="contact_email[]" id="contact_email<?php echo $x; ?>" class="form-control" value="<?php echo $c['email']?>" >
                 </div>
 				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Line ID:</label>
                 <div class="col-4">
-                    <input id="contact_line_id<?php echo $x; ?>" name="contact_line_id[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['line_id']?>" >
+                    <input id="contact_line_id<?php echo $x; ?>" name="contact_line_id[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['line_id']?>" >
                 </div>
             </div>
             
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Position:</label>
                 <div class="col-4">
-                    <input id="contact_position<?php echo $x; ?>" name="contact_position[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['position'];?>" >
+                    <input id="contact_position<?php echo $x; ?>" name="contact_position[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['position'];?>" >
                 </div>
                 <label style="color: #102958;" class="col-sm-2 ">Department:</label>
                 <div class="col-4">
-                    <input id="department<?php echo $x; ?>" name="department[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['department'];?>" >
+                    <input id="department<?php echo $x; ?>" name="department[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['department'];?>" >
                 </div>
             </div>
 
 			<div class="form-group row col-md-10 col-md-offset-1">
 				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label label-right">Remark:</label>
 				<div class="col-10">
-					<textarea id="contact_remark<?php echo $x; ?>" name="contact_remark[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" class="form-control" rows="2"><?php echo $c['remark'];?></textarea>
+					<textarea id="contact_remark<?php echo $x; ?>" name="contact_remark[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" class="form-control" rows="2"><?php echo $c['remark'];?></textarea>
 				</div>  
 			</div>
 
@@ -606,7 +606,7 @@ function validateForm() {
                     <!-- hidden="true" -->
                 <input id="hid_default<? echo $x; ?>" name="hid_default[]" hidden="true" type="text" value="<? echo $x; ?>" >
                 <input id="id_default<? echo $x; ?>" name="default_contact[]" class="form-check-input" type="radio" value="<? echo $x; ?>" <?php if($c['default_contact']=='1' ){ echo "checked";} ?> >
-                        <label style="color: #0C1830;" class="form-check-label" for="flexCheckDefault">
+                        <label style="color: #000;" class="form-check-label" for="flexCheckDefault">
                     &nbsp;&nbsp;&nbsp;&nbsp; Default Contact
                     </label>
                   </div>
@@ -635,7 +635,7 @@ function validateForm() {
         <div  class="col-sm-12 text-right  ">
             <div style="padding-top: 10px;">
              
-             <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_insurance" class="btn  btn-labeled" id="add-insur">+ Add More Policy<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
+             <!-- <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_insurance" class="btn  btn-labeled" id="add-insur">+ Add More Policy<span class="btn-label btn-label-right"><i class="fa "></i></span></button> -->
             </div>
         </div>
         </div>
@@ -681,13 +681,13 @@ function validateForm() {
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Policy No:</label>
                 <div class="col-4">
                     <!-- hidden="true"  -->
-                <input hidden="true" id="id_insurance_info<? echo $int_insu; ?>" name="id_insurance_info[]" value="<?php echo $i['id'];?>" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" id="success" >
+                <input hidden="true" id="id_insurance_info<? echo $int_insu; ?>" name="id_insurance_info[]" value="<?php echo $i['id'];?>" style="color: #000;border-color:#102958;" type="text" class="form-control" id="success" >
                 </input>
-                    <input id="policy_no" name="policy_no[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $i['policy_no'];?>">
+                    <input id="policy_no" name="policy_no[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $i['policy_no'];?>">
                 </div>
                  <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Period:</label>
                 <div class="col-4">
-                    <select name="period[]" id="period" style="color: #0C1830;border-color:#102958;" class="form-control" value="" >
+                    <select name="period[]" id="period" style="color: #000;border-color:#102958;" class="form-control" value="" >
                      <?php foreach ($period_list as $pc) { ?>
                         <option value="<?php echo $pc['id'];?>"
                             <?php if ($pc['id']==$i['period']) { echo 'selected="selected"'; } ?>
@@ -700,7 +700,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Product Category:</label>
                 <div class="col-4">
-                    <select name="product_category[]" id="product_category<?php echo $int_insu; ?>" style="color: #0C1830;border-color:#102958;"class="form-control" >
+                    <select name="product_category[]" id="product_category<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" >
                     <option value="">Select Category</option>
                     <?php foreach ($product_categories as $pc) {?>
                     <option value="<?php echo $pc['id'];?>" <?php if($i['product_category'] == $pc['id']){ echo "selected"; }
@@ -711,7 +711,7 @@ function validateForm() {
 
                 <label style="color: #102958;"  class="col-sm-2 label_right">Sub Categories:</label>
                 <div class="col-4">
-                    <select name="sub_cat[]" id="sub_cat<?php echo $int_insu; ?>" style="color: #0C1830;border-color:#102958;"class="form-control" >
+                    <select name="sub_cat[]" id="sub_cat<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" >
                     <option value="">Select Sub Categories</option>                    
                     </select>
                 </div>
@@ -767,7 +767,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Partner Company:</label>
                 <div class="col-4">
-                <select name="insurance_company[]" id="insurance_company<?php echo $int_insu; ?>" style="color: #0C1830;border-color:#102958;"class="form-control" value="<?php echo $i['insurance_company'];?>">
+                <select name="insurance_company[]" id="insurance_company<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" value="<?php echo $i['insurance_company'];?>">
                     <option value="">Select Partner</option>
                     <?php foreach ($insurance_company as $insurance) {?>
                     <option value="<?php echo $insurance['id'];?>" <?php echo ($insurance['id'] == $i['insurance_company_id'] ) ? 'selected' : '';?>><?php echo $insurance['insurance_company'];?></option>
@@ -777,7 +777,7 @@ function validateForm() {
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Product Name:</label>
                 <div class="col-4">
-                    <select name="product_name[]" id="product_name<?php echo $int_insu; ?>" style="color: #0C1830;border-color:#102958;"class="form-control"   >
+                    <select name="product_name[]" id="product_name<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control"   >
                     <option value="">Select Product</option>                    
                     </select>
                
@@ -888,25 +888,25 @@ function validateForm() {
                $s_date = '';
                $e_date = '';              
                 ?>
-                    <input id="start_date<?php echo $int_insu; ?>" name="start_date[]" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $i['start_date_f']; ?>" placeholder="dd-mm-yyyy">
+                    <input id="start_date<?php echo $int_insu; ?>" name="start_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control"  value="<?php echo $i['start_date_f']; ?>" placeholder="dd-mm-yyyy">
                
                 </div>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">End date:</label>
                 <div class="col-4">
-                    <input id="end_date<?php echo $int_insu; ?>" name="end_date[]" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $i['end_date_f']; ?>" placeholder="dd-mm-yyyy">
+                    <input id="end_date<?php echo $int_insu; ?>" name="end_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control"  value="<?php echo $i['end_date_f']; ?>" placeholder="dd-mm-yyyy">
                 </div>
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Premium Rate:</label>
                 <div class="col-4">
-                    <input id="premium_rate" name="premium_rate[]" step="0.01" min="0" style="color: #0C1830;border-color:#102958;" type="number" class="form-control"  value="<?php echo $i['premium_rate']?>">
+                    <input id="premium_rate" name="premium_rate[]" step="0.01" min="0" style="color: #000;border-color:#102958;" type="number" class="form-control"  value="<?php echo $i['premium_rate']?>">
                
                 </div>
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Status:</label>
                 <div class="col-4">
-                <select id="insurance_status" name="insurance_status[]" onchange="ClickChange()" style="border-color:#102958;" class="form-control" >
+                <select id="insurance_status" name="insurance_status[]" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" >
                     <option value="New" <?php echo ($i['status'] == 'New') ? 'selected' : ''; ?>>New</option>
                     <option value="Follow up" <?php echo ($i['status'] == 'Follow up') ? 'selected' : ''; ?>>Follow up</option>
                     <option value="Renew" <?php echo ($i['status'] == 'Renew') ? 'selected' : ''; ?>>Renew</option>
@@ -920,7 +920,7 @@ function validateForm() {
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Agent Name:</label>
                 
 				<div class="col-4">
-					<select id="agent_name<?php echo $int_insu; ?>" name="agent_name[]" style="color: #0C1830;border-color:#102958;"class="form-control" value="" >
+					<select id="agent_name<?php echo $int_insu; ?>" name="agent_name[]" style="color: #000;border-color:#102958;"class="form-control" value="" >
 					   <option value="">Select Agent</option>
 						<?php //foreach ($agents  as $a) { ?>
 							<!-- <option value="<?php //echo $a['id']?>" <?php //echo ($i['agent_id'] == $a['id']) ? 'selected' :' ';?>><?php //echo $a['first_name'].' '.$a['last_name'];?></option> -->
@@ -1024,13 +1024,13 @@ function validateForm() {
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Policy No:</label>
                 <div class="col-4">
                     <!-- hidden="true"  -->
-                <input hidden="true" id="id_insurance_info<? echo $int_insu; ?>" name="id_insurance_info[]" value="" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" id="success" >
+                <input hidden="true" id="id_insurance_info<? echo $int_insu; ?>" name="id_insurance_info[]" value="" style="color: #000;border-color:#102958;" type="text" class="form-control" id="success" >
                 </input>
-                    <input id="policy_no" name="policy_no[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $i['policy_no'];?>">
+                    <input id="policy_no" name="policy_no[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $i['policy_no'];?>">
                 </div>
                  <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Period:</label>
                 <div class="col-2">
-                    <select name="period[]" id="period" style="color: #0C1830;border-color:#102958;" class="form-control" value="" >
+                    <select name="period[]" id="period" style="color: #000;border-color:#102958;" class="form-control" value="" >
                      <?php foreach ($period_list as $pc) { ?>
                         <option value="<?php echo $pc['id'];?>"
                             <?php if ($pc['id']==$i['period']) { echo 'selected="selected"'; } ?>
@@ -1043,7 +1043,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Prod. Category:</label>
                 <div class="col-4">
-                    <select name="product_category[]" id="product_category<?php echo $int_insu; ?>" style="color: #0C1830;border-color:#102958;"class="form-control" >
+                    <select name="product_category[]" id="product_category<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" >
                     <option value="">Select Category</option>
                     <?php foreach ($product_categories as $pc) {?>
                     <option value="<?php echo $pc['id'];?>" <?php if($i['product_category'] == $pc['id']){ echo "selected"; }
@@ -1054,7 +1054,7 @@ function validateForm() {
 
                 <label style="color: #102958;"  class="col-sm-2 col-form-label">Sub Categories:</label>
                 <div class="col-4">
-                    <select name="sub_cat[]" id="sub_cat<?php echo $int_insu; ?>" style="color: #0C1830;border-color:#102958;"class="form-control" >
+                    <select name="sub_cat[]" id="sub_cat<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" >
                     <option value="">Select Sub Categories</option>                    
                     </select>
                 </div>
@@ -1108,7 +1108,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Policy Company:</label>
                 <div class="col-4">
-                <select name="insurance_company[]" id="insurance_company<?php echo $int_insu; ?>" style="color: #0C1830;border-color:#102958;"class="form-control" value="<?php echo $i['insurance_company'];?>">
+                <select name="insurance_company[]" id="insurance_company<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" value="<?php echo $i['insurance_company'];?>">
                     <option value="">Select Partner</option>
                     <?php foreach ($insurance_company as $insurance) {?>
                     <option value="<?php echo $insurance['id'];?>" <?php echo ($insurance['id'] == $i['insurance_company_id'] ) ? 'selected' : '';?>><?php echo $insurance['insurance_company'];?></option>
@@ -1118,7 +1118,7 @@ function validateForm() {
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Prod. Name:</label>
                 <div class="col-4">
-                    <select name="product_name[]" id="product_name<?php echo $int_insu; ?>" style="color: #0C1830;border-color:#102958;"class="form-control"   >
+                    <select name="product_name[]" id="product_name<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control"   >
                     <option value="">Select Product</option>                    
                     </select>
                
@@ -1170,32 +1170,45 @@ function validateForm() {
                 });
             </script>
 
+<script>
+  $(document).ready(function(){
+    $('#start_date').datepicker({
+      format: 'dd-mm-yyyy',
+      language: 'en'
+    });
+    $('#end_date').datepicker({
+      format: 'dd-mm-yyyy',
+      language: 'en'
+    });
+  });
+</script>
+
             <div class="form-group row col-md-10 col-md-offset-1">
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Start date:</label>
+                <label style="color: #102958;"  for="staticEmail" class="col-sm-2 col-form-label">Start date:</label>
                 <div class="col-2">
                 <?php 
                $s_date = '';
                $e_date = '';              
                 ?>
-                    <input id="start_date" name="start_date[]" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  value="<?php echo $i['start_date_f']; ?>" placeholder="dd-mm-yyyy">
+                    <input id="start_date" name="start_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control"  value="<?php echo $i['start_date_f']; ?>" placeholder="dd-mm-yyyy">
                
                 </div>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">End date:</label>
                 <div class="col-2">
-                    <input id="end_date" name="end_date[]" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $i['end_date_f']; ?>" placeholder="dd-mm-yyyy">
+                    <input id="end_date" name="end_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control"  value="<?php echo $i['end_date_f']; ?>" placeholder="dd-mm-yyyy">
                 </div>
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Premium Rate:</label>
                 <div class="col-2">
-                    <input id="premium_rate" name="premium_rate[]" step="0.01" min="0" style="color: #0C1830;border-color:#102958;" type="number" class="form-control"  value="<?php echo $i['premium_rate']?>">
+                    <input id="premium_rate" name="premium_rate[]" step="0.01" min="0" style="color: #000;border-color:#102958;" type="number" class="form-control"  value="<?php echo $i['premium_rate']?>">
                
                 </div>
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Status:</label>
                 <div class="col-2">
-                <select id="insurance_status" name="insurance_status[]" onchange="ClickChange()" style="border-color:#102958;" class="form-control" >
+                <select id="insurance_status" name="insurance_status[]" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" >
                     <option value="New" <?php echo ($i['status'] == 'New') ? 'selected' : ''; ?>>New</option>
                     <option value="Follow up" <?php echo ($i['status'] == 'Follow up') ? 'selected' : ''; ?>>Follow up</option>
                     <option value="Renew" <?php echo ($i['status'] == 'Renew') ? 'selected' : ''; ?>>Renew</option>
@@ -1209,7 +1222,7 @@ function validateForm() {
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Agent Name:</label>
                 
             <div class="col-4">
-                <select id="agent_name<?php echo $int_insu; ?>" name="agent_name[]" style="color: #0C1830;border-color:#102958;"class="form-control" value="" >
+                <select id="agent_name<?php echo $int_insu; ?>" name="agent_name[]" style="color: #000;border-color:#102958;"class="form-control" value="" >
                    <option value="">Select Agent</option>
                         <?php //foreach ($agents  as $a) { ?>
                         <!-- <option value="<?php //echo $a['id']?>" <?php //echo ($i['agent_id'] == $a['id']) ? 'selected' :' ';?>><?php //echo $a['first_name'].' '.$a['last_name'];?></option> -->
@@ -1256,6 +1269,10 @@ function validateForm() {
                 <div class="col-md-12">
                     <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
                     </button>
+					&nbsp;&nbsp;
+					<a href="customer-information.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
+						<span class="text">Cancel</span>
+					</a>
                 </div>
                 </div>
  

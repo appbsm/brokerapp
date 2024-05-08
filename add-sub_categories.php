@@ -178,7 +178,7 @@
                     </div> 
                     <div class="col  ">
                          <!-- <input minlength="1" maxlength="50" style="border-color:#102958;" type="text" required="required" class="form-control" name="currency" id="currency" value="<?php echo $currency; ?>" > -->
-                        <select name="categorie" style="color: #0C1830;border-color:#102958;"class="form-control"  required>
+                        <select name="categorie" style="color: #000;border-color:#102958;"class="form-control"  required>
 							<option value="" selected>Select Products categories</option>
                             <?php  foreach($results_currency as $result){ ?>
                                 <option value="<?php echo $result->id; ?>" ><?php echo $result->categorie; ?></option>
@@ -225,7 +225,7 @@
                         </button>
                         &nbsp;&nbsp;
                         <a href="sub_categories.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
-                            <span class="text">Clear</span>
+                            <span class="text">Cancel</span>
                         </a> 
                     </div>
                 </div>

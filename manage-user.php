@@ -86,6 +86,10 @@ echo "<script>window.location.href ='manage-user.php'</script>";
 	button {
 		font-family: Manrope, 'IBM Plex Sans Thai';
 	}
+	
+	div.dataTables_wrapper div.dataTables_filter input {
+		//border-color: #102958;
+	}
 </style>
 
 <body id="page-top" >

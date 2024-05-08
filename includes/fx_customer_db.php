@@ -67,7 +67,7 @@ function get_customers_search_start($conn) {
  // 	WHERE con.default_contact =1 ";
 
 		// ,CONCAT(ct.first_name,' ',ct.last_name) AS full_name,con.first_name as con_first_name ,con.last_name as con_last_name
-	$sql = "SELECT pr.name_th AS name_th_province,di.name_th AS name_th_district,su.name_th AS name_th_sub
+	$sql = "SELECT pr.name_en AS name_en_province,di.name_en AS name_en_district,su.name_en AS name_en_sub
 	,con.email AS con_email,con.mobile AS con_mobile
 	,CASE WHEN ct.customer_type = 'Personal'
       THEN CONCAT(ct.first_name,' ',ct.last_name)
@@ -99,7 +99,7 @@ function get_customers_search($conn,$post_data) {
 
 	// echo '<script>alert("Sql : '.$post_data['status']." : ".$post_data['customer'].'")</script>'; 
 	// CONCAT(ct.first_name,' ',ct.last_name) AS full_name,
-	$sql = "SELECT pr.name_th AS name_th_province,di.name_th AS name_th_district,su.name_th AS name_th_sub
+	$sql = "SELECT pr.name_en AS name_en_province,di.name_en AS name_en_district,su.name_en AS name_en_sub
 	,con.email AS con_email,con.mobile AS con_mobile
 	,CASE WHEN ct.customer_type = 'Personal'
       THEN CONCAT(ct.first_name,' ',ct.last_name)

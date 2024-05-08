@@ -100,11 +100,11 @@ $customers_list = get_customers_search_start($conn);
                 <br>
                     <div class="form-group row col-md-12 ">
                         
-                        <label style="color: #102958;"  class="col-sm-3 label_left">Customer Name:</label>
+                        <label style="color: #102958;"  class="col-sm-3 label_left">Cust. Name:</label>
 
                         <div class="col-sm-3">
                   
-                            <select id="customer" name="customer" style="border-color:#102958;" class="remove-example form-control selectpicker" data-live-search="true" value="<?php echo $customer; ?>" >
+                            <select id="customer" name="customer" style="border-color:#102958; color: #000;" class="remove-example form-control selectpicker" data-live-search="true" value="<?php echo $customer; ?>" >
                                 <option value="all">All</option>
                                 <?php //echo $value['id']; ?>
                                 <?php foreach ($customers_list as $value) { ?>
@@ -116,9 +116,9 @@ $customers_list = get_customers_search_start($conn);
                             </select>
                         </div>
 
-                        <label style="color: #102958;" class="col-sm-3 label_right">Customer Status:</label>
+                        <label style="color: #102958;" class="col-sm-3 label_right">Cust. Status:</label>
                         <div class="col-sm-3">
-                             <select id="status" name="status" style="border-color:#102958;" class="remove-example form-control" value="<?php echo $status; ?>"  >
+                             <select id="status" name="status" style="border-color:#102958; color: #000;" class="remove-example form-control" value="<?php echo $status; ?>"  >
                                 <option value="all" <?php if ($status=="all") { echo 'selected="selected"'; } ?> >All</option>
                                 <option value="1" <?php if ($status=="1") { echo 'selected="selected"'; } ?> >Active</option>
                                 <option value="0" <?php if ($status=="0") { echo 'selected="selected"'; } ?>>InActive</option>
@@ -159,12 +159,12 @@ $customers_list = get_customers_search_start($conn);
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th width="200px">Customer name</th>
+                                            <th width="200px">Cust. name</th>
                                             <th width="100px">Status</th>
                                             <th>Level</th>
                                             <th width="400px">Address</th>
-                                            <th width="200px">Customer email</th>
-                                            <th width="100px">Customer mobile</th>
+                                            <th width="200px">Cust. email</th>
+                                            <th width="100px">Cust. mobile</th>
 
                                             <th width="150px">Contact person</th>
                                             <th width="130px">Position</th>
@@ -179,15 +179,17 @@ $customers_list = get_customers_search_start($conn);
 										<?php 
 										$ctr = 1; 
 										foreach ($customers as $c) {
-										$contact = get_customer_contact ($conn, $c['id']);
+										$contact = get_customer_contact($conn, $c['id']);
 										    ?>
 										<tr>
                                             <td class="text-center"><?php echo $ctr;?></td>
                                             <td><?php echo $c['full_name']; ?></td>
                                             <td class="text-center"><?php echo ($c['status'] == 1) ? 'Active' : 'Inactive';?></td>
 
+<!-- .$c['sub_district']." ".$c['district']." ".$c['name_th_province']." ".$c['name_th_district']." ".$c['name_th_sub']." " -->
+
                                             <td class="text-center"><?php echo $c['level_name'];?></td>
-                                            <td><?php echo $c['soi']." ".$c['road']." ".$c['sub_district']." ".$c['district']." ".$c['name_th_province']." ".$c['name_th_district']." ".$c['name_th_sub']." ".$c['post_code'];?></td>
+                                            <td><?php echo $c['address_number']." ".$c['building_name']." ".$c['soi']." ".$c['road']." ".$c['name_en_province']." ".$c['name_en_district']." ".$c['name_en_sub']." "." ".$c['post_code'];?></td>
                                             <td><?php echo $c['email'];?></td>
                                             <td class="text-center"><?php echo $c['mobile'];?></td>
                                             <td><?php echo $c['con_first_name'].' '.$c['con_last_name'];?></td>
@@ -266,12 +268,21 @@ $customers_list = get_customers_search_start($conn);
 	.table thead th.sorting:after,
 	.table thead th.sorting_asc:after,
 	.table thead th.sorting_desc:after {
-		top: 20px;
+		top: 10px;
 	}
 	
 	.caret {
 		right: 10px !important;
 	}
+	
+	.btn-group>.btn:first-child {
+		border-color: #102958;
+	}
+	
+	div.dataTables_wrapper div.dataTables_filter input {
+		//border-color: #102958;
+	}
+
     </style> 
 
     <script>

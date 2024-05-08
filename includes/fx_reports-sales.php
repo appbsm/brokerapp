@@ -32,10 +32,15 @@ LEFT JOIN contact con_p ON con_p.id =
  WHERE rec.id_insurance_partner = ip.id)
 LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
 LEFT JOIN currency_convertion cc ON  cc.id = 
-  (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id = ip.id_currency_list
-  OR cc.id_currency_list_convert    = cl.id
- AND  info.paid_date >= c_c.start_date and info.paid_date <= c_c.stop_date)
+  (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id_currency_list = ip.id_currency_list
+ AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1')
+
 ORDER BY cu.first_name ASC";
+
+ // AND  info.paid_date >= c_c.start_date and info.paid_date <= c_c.stop_date)
+
+// (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id = ip.id_currency_list
+//   OR cc.id_currency_list_convert    = cl.id
     // $sql = $sql." order by LTRIM(ct.first_name) asc ";
     $stmt = sqlsrv_query( $conn, $sql);  
     if( $stmt === false) {
@@ -79,11 +84,14 @@ function get_customers_sales_search($conn,$post_data) {
 " WHERE rec.id_insurance_partner = ip.id)".
 " LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list".
 " LEFT JOIN currency_convertion cc ON  cc.id = ".
-" (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id = ip.id_currency_list ".
-" OR cc.id_currency_list_convert    = cl.id ".
-" AND  info.paid_date >= c_c.start_date and info.paid_date <= c_c.stop_date) ".
+" (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id_currency_list = ip.id_currency_list ".
+" AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1') ".
 " where info.policy_no != '' " ;
 
+// AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1'
+
+// " (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id = ip.id_currency_list ".
+// " OR cc.id_currency_list_convert    = cl.id ".
     if (isset($post_data['start_date']) && $post_data['start_date'] != '') {
         $sql .= " and info.start_date >= '".date("Y-m-d", strtotime($post_data['start_date']))."' ";
     }

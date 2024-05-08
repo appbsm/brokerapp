@@ -100,7 +100,7 @@
 						<div class="form-group row col-md-10 col-md-offset-1">
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Agent ID:</label>
 							<div class="col-2 label_left">
-								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="agent_id" required="required" class="form-control" id="success" value="<?php echo $agent_id;?>" readOnly>               
+								<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="agent_id" required="required" class="form-control" id="success" value="<?php echo $agent_id;?>" readOnly>               
 							</div>
 							
 							<!-- <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"></label> -->
@@ -118,7 +118,7 @@
 						<div class="form-group row col-md-10 col-md-offset-1">
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Title:</label>
 							<div id="col_title" class="col-2 label_left">
-								<select id="input_title" style="border-color:#102958;" name="title_name" class="form-control" id="default" >
+								<select id="input_title" style="border-color:#102958; color: #000;" name="title_name" class="form-control" id="default" >
 									<option value="" selected>Select Title </option>
 									<option value="Mr." <?php echo (trim($customer['title_name'])=="Mr.") ? 'selected' : '';?>>Mr.</option>
 									<option value="Ms." <?php echo (trim($customer['title_name'])=="Ms.") ? 'selected' : '';?>>Ms.</option>
@@ -130,7 +130,7 @@
 							</div>
 							<label style="color: #102958;" for="agent_type" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Agent Type:</label>
 							<div id="col_title" class="col-4">
-								<select id="agent_type" style="border-color:#102958;" name="agent_type" class="form-control" id="default" >
+								<select id="agent_type" style="border-color:#102958; color: #000;" name="agent_type" class="form-control" id="default" >
 									<option value="" selected>Select Agent Type</option>
 									<option value="Primary" >Primary</option>
 									<option value="Sub-agent" >Sub-agent</option>							    
@@ -141,11 +141,11 @@
 						<div class="form-group row col-md-10 col-md-offset-1">               
 							<label style="color: #102958;" for="first_name" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>First name:</label>
 							<div class="col-4">
-								<input id="input_fname" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text" name="first_name" class="form-control" id="first_name"  required>
+								<input id="input_fname" minlength="1" maxlength="100" style="color: #000;border-color:#102958;" type="text" name="first_name" class="form-control" id="first_name"  required>
 							</div>
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Last name:</label>
 							<div class="col-4 ">
-								<input id="input_lname" minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text" name="last_name" class="form-control" required>
+								<input id="input_lname" minlength="1" maxlength="100" style="color: #000;border-color:#102958;" type="text" name="last_name" class="form-control" required>
 							</div>
 							
 						</div>
@@ -153,24 +153,24 @@
 						<div class="form-group row col-md-10 col-md-offset-1">
 							<label style="color: #102958;" for="nick_name" class="col-sm-2 col-form-label">Nickname:</label>
 							<div class="col-4 ">
-								<input minlength="1" maxlength="100" style="color: #0C1830;border-color:#102958;" type="text" name="nick_name" class="form-control" >
+								<input minlength="1" maxlength="100" style="color: #000;border-color:#102958;" type="text" name="nick_name" class="form-control" >
 							</div>
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tax ID / Passport ID:</label>
 							<div class="col-4">
-								<!--<input minlength="13" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" name="tax_id" class="form-control" id="success"  required pattern="\d{13}">-->
-								<input minlength="1" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" name="tax_id" class="form-control" id="success"  >
+								<!--<input minlength="13" maxlength="13" style="color: #000;border-color:#102958;" type="text" name="tax_id" class="form-control" id="success"  required pattern="\d{13}">-->
+								<input minlength="1" maxlength="13" style="color: #000;border-color:#102958;" type="text" name="tax_id" class="form-control" id="success"  >
 							</div>
 						</div>
 						
 						<div class="form-group row col-md-10 col-md-offset-1">
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tel:</label>
 							<div class="col-4">
-								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="tel" class="form-control" id="success" >
+								<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="tel" class="form-control" id="success" >
 							</div>
 							
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Mobile:</label>
 							<div class="col-4">
-								<input style="color: #0C1830;border-color:#102958;" type="text" name="mobile" class="form-control" id="mobile" value="" pattern="\d{3}-\d{3}-\d{4}">
+								<input style="color: #000;border-color:#102958;" type="text" name="mobile" class="form-control" id="mobile" value="" pattern="\d{3}-\d{3}-\d{4}">
 							</div>
 							<script>
 								document.getElementById('mobile').addEventListener('input', function (e) {
@@ -183,7 +183,7 @@
 						<div class="form-group row col-md-10 col-md-offset-1">
 							 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
 							<div class="col-4">
-								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="email" name="email" class="form-control" id="success" value="" >
+								<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="email" name="email" class="form-control" id="success" value="" >
 							</div>
 						</div>
            
@@ -223,23 +223,23 @@
 						<div class="form-group row col-md-10 col-md-offset-1">
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Address No:</label>
 							<div class="col-2">
-								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="" >
+								<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="" >
 							</div>
 							<label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Soi:</label>
 							<div class="col">
-								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="soi" class="form-control" id="soi" value="" >
+								<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="soi" class="form-control" id="soi" value="" >
 						   
 							</div>
 							<label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Road:</label>
 							<div class="col">
-								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="road"  class="form-control" id="road" value="" >
+								<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="road"  class="form-control" id="road" value="" >
 							</div>
 						</div>
 
 						<div class="form-group row col-md-10 col-md-offset-1">
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Building Name:</label>
 							<div class="col">
-								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="building_name"  class="form-control" id="building_name" value="" >
+								<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="building_name"  class="form-control" id="building_name" value="" >
 							</div>
 						</div>
 
@@ -280,7 +280,7 @@
 							</div>
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Post Code:</label>
 							<div class="col-4">
-								<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control" >
+								<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control" >
 								 <!--<select style="color: #4590B8;border-color:#102958;" name="name_title" class="form-control" id="default" >
 											<option value="Mr." selected></option>
 									</select>-->
@@ -319,12 +319,12 @@
 
 								<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Under Code:</label>
 								<div class="col-sm-4">
-									<input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="agent_code[]"  class="form-control" id="agent_code" value="" >
+									<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="agent_code[]"  class="form-control" id="agent_code" value="" >
 								</div>
 								
 								<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Partner Name:</label>
 								<div class="col-sm-4">
-									<select name="insurance_company[]" style="color:#0C1830;border-color:#102958;" class="form-control" id="insurance_company" value="" >
+									<select name="insurance_company[]" style="color:#000;border-color:#102958;" class="form-control" id="insurance_company" value="" >
 									<option value="" selected>Select Partner</option>
 									<?php foreach ($insurance as $i) {
 									
@@ -342,7 +342,11 @@
 						<div class="form-group row col-md-10 col-md-offset-1">
 							<div class="col-md-12">
 							<button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
-																	   </button>
+							</button>
+							&nbsp;&nbsp;
+							<a href="agent-management.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
+								<span class="text">Cancel</span>
+							</a>
 							</div>
 						</div>
           

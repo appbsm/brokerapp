@@ -9,7 +9,6 @@ if(strlen($_SESSION['alogin'])=="") {
     header('Location: logout.php');
 }
 
-
 $contacts=null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -134,12 +133,12 @@ $subcategories = get_product_subcategory($conn);
                         <label style="color: #102958;"  class="col-sm-2 label_left">From Date:</label>
                         <div class="col-sm-2">
                             <?php //echo ($_GET['date_from'] != '') ? date('Y-m-d', strtotime($_GET['date_from'])) : '';?>
-                            <input  style="color: #0C1830;border-color:#102958;" type="test" name="start_date" class="form-control" id="start_date" value="<?php echo ($_POST['start_date'] != '') ? date('d-m-Y', strtotime($_POST['start_date'])) : '';?>" placeholder="dd-mm-yyyy">
+                            <input  style="color: #000;border-color:#102958; text-align: center;" type="test" name="start_date" class="form-control" id="start_date" value="<?php echo ($_POST['start_date'] != '') ? date('d-m-Y', strtotime($_POST['start_date'])) : '';?>" placeholder="dd-mm-yyyy">
                         </div>
 
                         <label style="color: #102958;"  class="col-sm-2 label_right">End Date:</label>
                         <div class="col-sm-2">
-                            <input  style="color: #0C1830;border-color:#102958;" type="test" name="end_date" class="form-control" id="end_date" value="<?php echo ($_POST['end_date'] != '') ? date('d-m-Y', strtotime($_POST['end_date'])) : '';?>" placeholder="dd-mm-yyyy">
+                            <input  style="color: #000;border-color:#102958; text-align: center;" type="test" name="end_date" class="form-control" id="end_date" value="<?php echo ($_POST['end_date'] != '') ? date('d-m-Y', strtotime($_POST['end_date'])) : '';?>" placeholder="dd-mm-yyyy">
                         </div>
 
 
@@ -161,7 +160,7 @@ $subcategories = get_product_subcategory($conn);
                     <div class="form-group row col-md-12 ">
                         <label style="color: #102958;" class="col-md-2 label_left">Policy no:</label>
                         <div class="col-md-2">
-                            <select id="policy_no" name="policy_no" value="<?php echo $policy; ?>" style="border-color:#102958;" class="form-control selectpicker" data-live-search="true" >
+                            <select id="policy_no" name="policy_no" value="<?php echo $policy; ?>" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true" >
                                  <option value="all">All</option>
                                 <?php foreach ($insurance_policy as $p) { ?>
                                 <option value="<?php echo $p['id'];?>" <?php echo  ($policy == $p['id']) ? 'selected' : '';?>><?php echo $p['policy_no'];?></option>
@@ -171,7 +170,7 @@ $subcategories = get_product_subcategory($conn);
 
                          <label style="color: #102958;"  class="col-md-2 label_left">Partners:</label>
                         <div class="col-md-2">
-                            <select  id="partner" name="partner" value="<?php echo $partner; ?>" style="border-color:#102958;" class="form-control selectpicker" data-live-search="true" >
+                            <select  id="partner" name="partner" value="<?php echo $partner; ?>" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true" >
                                  <option value="all">All</option>
                                 <?php foreach ($partners as $p) { ?>
                                 <option value="<?php echo $p['id'];?>" <?php echo  ($partner == $p['id']) ? 'selected' : '';?>><?php echo $p['insurance_company'];?></option>
@@ -180,10 +179,10 @@ $subcategories = get_product_subcategory($conn);
                             
                         </div>
 
-                        <label style="color: #102958;" class="col-md-2 label_right">Customer name:</label>
+                        <label style="color: #102958;" class="col-md-2 label_right">Cust. name:</label>
                         <div class="col-md-2">
                            
-                            <select id="customer" name="customer" value="<?php echo $customer; ?>" style="border-color:#102958;" class="remove-example form-control selectpicker" data-live-search="true" value="<?php echo $customer; ?>" >
+                            <select id="customer" name="customer" value="<?php echo $customer; ?>" style="border-color:#102958; color: #000;" class="remove-example form-control selectpicker" data-live-search="true" value="<?php echo $customer; ?>" >
                                 <option value="all">All</option>
                                 <?php //echo $value['id']; ?>
                                 <?php foreach ($customers_list as $value) { ?>
@@ -199,9 +198,9 @@ $subcategories = get_product_subcategory($conn);
 
                     <div class="form-group row col-md-12 ">
                         
-                        <label style="color: #102958;"  class="col-sm-2 label_left">Product Categories:</label>
+                        <label style="color: #102958;"  class="col-sm-2 label_left">Prod. Categories:</label>
                         <div class="col-sm-2">                     
-                        <select id="product_cat" name="product_cat" value="<?php echo $pro_categorie; ?>" style="border-color:#102958;" onchange="" class="form-control selectpicker" data-live-search="true" >
+                        <select id="product_cat" name="product_cat" value="<?php echo $pro_categorie; ?>" style="border-color:#102958; color: #000;" onchange="" class="form-control selectpicker" data-live-search="true" >
                              <option value="all">All</option>
                             <?php foreach ($product_categorie as $p) { ?>
                             <option value="<?php echo $p['id'];?>" <?php echo  ($pro_categorie == $p['id']) ? 'selected' : '';?>><?php echo $p['categorie'];?></option>
@@ -211,7 +210,7 @@ $subcategories = get_product_subcategory($conn);
 
                          <label style="color: #102958;" for="staticEmail" class="col-sm-2 label_right">Sub Categories:</label>                    
                         <div class="col-sm-2">                      
-                            <select id="sub_cat" name="sub_cat" style="border-color:#102958;" value="<?php echo $product; ?>" class="form-control selectpicker" data-live-search="true" >
+                            <select id="sub_cat" name="sub_cat" style="border-color:#102958; color: #000;" value="<?php echo $product; ?>" class="form-control selectpicker" data-live-search="true" >
                                  <option value="all">All</option>
                             <?php foreach ($subcategories as $p) { ?>
                             <option value="<?php echo $p['id'];?>" <?php echo  ($categorie== $p['id']) ? 'selected' : '';?>><?php echo $p['subcategorie'];?></option>
@@ -228,7 +227,7 @@ $subcategories = get_product_subcategory($conn);
 
                         <label style="color: #102958;" for="staticEmail" class="col-sm-2 label_left">Status:</label>
                         <div class="col-sm-2">   
-                        <select id="status" name="status" value="<?php echo $status; ?>" style="border-color:#102958;" class="form-control" >
+                        <select id="status" name="status" value="<?php echo $status; ?>" style="border-color:#102958; color: #000;" class="form-control" >
                             <option value="all">All</option>
                     <option value="New"  <?php if ("New"==$status) { echo 'selected="selected"'; } ?> >New</option>
                     <option value="Follow up" <?php if ("Follow up"==$status) { echo 'selected="selected"'; } ?> >Follow up</option>
@@ -246,7 +245,7 @@ $subcategories = get_product_subcategory($conn);
                         </div>
                     <div class="col-sm-2 " >
                         <input id="status_currency" name="status_currency" class="form-check-input" value="true" type="checkbox" id="flexCheckDefault"  <?php if($status_currency=="true"){ echo "checked"; }?> >
-                        <label style="color: #0C1830;" class="form-check-label" for="flexCheckDefault">
+                        <label style="color: #000;" class="form-check-label" for="flexCheckDefault">
                         <!-- &nbsp;&nbsp;&nbsp;&nbsp; Active -->
                     </div>
                     </div>
@@ -282,21 +281,21 @@ $subcategories = get_product_subcategory($conn);
                                         <tr>
                                             <!-- <th class="text-center" width="20px" hidden="true" >No run</th> -->
                                             <th>No</th>
-                                            <th width="200px">Customer name</th>
+                                            <th width="200px">Cust. name</th>
                                             <th width="200px">Contact person</th>
                                             <th width="130px">Position</th>
                                             <th width="200px">Email</th>
 
-                                            <th width="110px">Customer mobile</th>
+                                            <th width="110px">Cust. mobile</th>
                                             <th width="100px">Policy No</th>
-                                            <th width="250px">Product/Sub Categories</th>
+                                            <th width="250px">Prod./Sub Categories</th>
                                             <!-- <th>Tel</th> -->
                                             <th width="90px">Start Date</th>
                                             <th width="90px">End Date</th>
-                                            <th width="100px">Premium Rate(THB)</th>
+                                            <th width="100px">Premium Rate</th>
                                             <?php if($status_currency=="true"){ ?>
                                             <th class="text-center" >Convert Value</th>
-                                            <th class="text-center" >Convert Unit</th>
+                                            <th class="text-center" >Symbol</th>
                                             <?php } ?>
                                             <th width="100px">Status</th>
                                             <th width="300px" >Partner company</th>
@@ -383,13 +382,20 @@ $subcategories = get_product_subcategory($conn);
 											</td>
 
                                             <?php if($status_currency=="true"){ ?>
-                                            <td class="text-right"><?php if($value['premium_rate']!=""){ 
-                                            $convert = number_format((float)($value['premium_rate']/$value['currency_value_convert']), 2, '.', ',');
-                                            $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
-                                            $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
-                                                echo $convert; 
-                                                }else{ echo "0.00"; }; 
-                                             ?></td>
+                                            <td class="text-right"><?php if($value['premium_rate']!="" && $value['currency'] !="฿THB" ){ 
+                                                if($value['currency_value']<$value['currency_value_convert']){
+                                                    $convert = number_format((float)($value['premium_rate']/$value['currency_value_convert']), 2, '.', ',');
+                                                    $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
+                                                    $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
+                                                    echo $convert;
+                                                }else{
+                                                    $convert = number_format((float)($value['premium_rate']*$value['currency_value_convert']), 2, '.', ',');
+                                                    $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
+                                                    $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
+                                                    echo $convert;
+                                                }
+                                            }else{ echo "0.00"; $convert=0; }; 
+                                            ?></td>
                                             <td><?php if($value['currency']!=""){ echo "(".$value['currency'].")"; } ?></td>
                                             <?php } ?>
 
@@ -415,17 +421,25 @@ $subcategories = get_product_subcategory($conn);
                                             <td><?php echo $value['categorie']; if($value['subcategorie']!=""){ echo "/".$value['subcategorie'];} ?></td>
                                             <td class="text-center"><?php echo $value['in_start_date'];?></td>
                                             <td class="text-center"><?php echo $value['in_end_date'];?></td>
-                                            <td class="text-right"><?php if($value['premium_rate']!=""){ echo number_format((float)$value['premium_rate'], 2, '.', ','); }else{ echo "0.00"; }
-                                            $premium_rate=$premium_rate+$value['premium_rate']; 
-                                            $total_premium_rate+=$value['premium_rate']; ?></td>
+                                            <td class="text-right"><?php if($value['premium_rate']!="" ){ 
+                                                echo number_format((float)$value['premium_rate'], 2, '.', ','); }else{ echo "0.00"; }
+                                                $premium_rate=$premium_rate+$value['premium_rate']; 
+                                                $total_premium_rate+=$value['premium_rate']; ?></td>
 
                                             <?php if($status_currency=="true"){ ?>
-                                            <td class="text-right"><?php if($value['premium_rate']!=""){ 
-                                            $convert = number_format((float)($value['premium_rate']/$value['currency_value_convert']), 2, '.', ',');
-                                            $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
-                                            $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
-                                                echo $convert; 
-                                            }else{ echo "0.00"; }; 
+                                            <td class="text-right"><?php if($value['premium_rate']!="" && $value['currency'] !="฿THB"){
+                                                if($value['currency_value']<$value['currency_value_convert']){
+                                                    $convert = number_format((float)($value['premium_rate']/$value['currency_value_convert']), 2, '.', ',');
+                                                    $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
+                                                    $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
+                                                    echo $convert; 
+                                                }else{
+                                                    $convert = number_format((float)($value['premium_rate']*$value['currency_value_convert']), 2, '.', ',');
+                                                    $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
+                                                    $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
+                                                    echo $convert; 
+                                                }
+                                            }else{ echo "0.00"; $convert=0; }; 
                                              ?></td>
                                             <td><?php if($value['currency']!=""){ echo "(".$value['currency'].")"; } ?></td>
                                             <?php } ?>
@@ -593,6 +607,10 @@ $subcategories = get_product_subcategory($conn);
 	
 	.caret {
 		right: 10px !important;
+	}
+	
+	.btn-group>.btn:first-child {
+		border-color: #102958;
 	}
     </style> 
 

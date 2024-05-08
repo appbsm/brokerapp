@@ -259,7 +259,7 @@
 											<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Title:</label>
 										</div> 
 										<div  class="col-2">
-											<select id="name_title" name="name_title" required="required" style="border-color:#102958;" class="form-control personal"  >
+											<select id="name_title" name="name_title" required="required" style="border-color:#102958; color: #000;" class="form-control personal"  >
 												<option value="Mr." <?php echo ($name_title=="Mr.") ? 'selected' : '';?>>Mr.</option>
 												<option value="Ms." <?php echo ($name_title=="Ms.") ? 'selected' : '';?>>Ms.</option>
 												<option value="Mrs." <?php echo ($name_title=="Mrs.") ? 'selected' : '';?>>Mrs.</option>
@@ -348,7 +348,7 @@
 											<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Role User:</label>
 										</div> 
 										<div class="col ">
-											<select style="border-color:#102958;" id="id_role" name="id_role" class="form-control" required>
+											<select style="border-color:#102958;  color: #000;" id="id_role" name="id_role" class="form-control" required>
 												<option value="" selected>Select Role User</option>
 												<?php $sql = "SELECT * from role_name where status=1 ";
 													$query = $dbh->prepare($sql);
@@ -437,7 +437,7 @@
 											</button>
 											&nbsp;&nbsp;
 											<a href="manage-user.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
-												<span class="text">Clear</span>
+												<span class="text">Cancel</span>
 											</a>
 										</div>
 									</div>

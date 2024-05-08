@@ -194,6 +194,9 @@ $results = $query->fetchAll(PDO::FETCH_OBJ);
 		top: 10px;
 	}
 	
+	div.dataTables_wrapper div.dataTables_filter input {
+		//border-color: #102958;
+	}
 </style>
 
 <body id="page-top" >

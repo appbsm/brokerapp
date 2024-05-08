@@ -382,7 +382,7 @@ if(count($user_info)>0){
                         </button>
                          &nbsp;&nbsp;
                         <a href="Dashboard.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
-                            <span class="text">Clear</span>
+                            <span class="text">Cancel</span>
                         </a>
                     </div>
                 </div>

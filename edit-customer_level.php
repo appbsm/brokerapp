@@ -175,7 +175,7 @@
                         <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Level Code</label>
                     </div> 
                     <div class="col ">
-                         <input minlength="1" maxlength="50" style="border-color:#102958;" type="text" name="level_name" required="required" class="form-control" id="level_name" value="<?php echo $level_name; ?>" >
+                         <input minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" name="level_name" required="required" class="form-control" id="level_name" value="<?php echo $level_name; ?>" >
                     </select>
                     </div> 
                     <div class="col ">
@@ -196,7 +196,7 @@
                         <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Level Description</label>
                     </div>
                     <div class="col">
-                        <input minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" name="description" id="description" value="<?php echo $description; ?>" required>
+                        <input minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" name="description" id="description" value="<?php echo $description; ?>" required>
                     </div> 
                     <div class="col-sm-2 label_left">
                     </div> 
@@ -214,7 +214,7 @@
                         </button>
                         &nbsp;&nbsp;
                         <a href="customer_level.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
-                            <span class="text">Clear</span>
+                            <span class="text">Cancel</span>
                         </a> 
                     </div>
                 </div>

@@ -140,19 +140,23 @@ $results = $query -> fetchAll(PDO::FETCH_OBJ);
                                 </div> -->
                                 <div class="form-group has-success row">
                                     <label style="color: #102958;" for="success" class="control-label col-sm-3 col-form-label"><small><font color="red">*</font></small>New Password</label>
-                                    <div class="col-sm-9">
+                                    <div class="col-6">
                                         <input style="color: #0C1830;border-color:#102958;" minlength="4" maxlength="20" type="password" name="newpassword" required="required" class="form-control" id="success">
                                     </div>
                                 </div>
                                 <div class="form-group has-success row">
                                     <label style="color: #102958;" for="success" class="control-label col-sm-3 col-form-label"><small><font color="red">*</font></small>Confirm Password</label>
-                                    <div class="col-sm-9">
+                                    <div class="col-6">
                                         <input style="color: #0C1830;border-color:#102958;" minlength="4" maxlength="20" type="password" name="confirmpassword" class="form-control" required="required" id="success">
                                     </div>
                                 </div>
                                 <div class="form-group has-success row">
-                                    <div class="col-sm-9 offset-sm-3">
+                                    <div class="col-6 offset-sm-3">
                                         <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Change<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span></button>
+										&nbsp;&nbsp;
+										<a href="Dashboard.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
+											<span class="text">Cancel</span>
+										</a>
                                     </div>
                                 </div>
 

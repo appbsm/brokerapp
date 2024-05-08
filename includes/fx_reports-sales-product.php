@@ -29,10 +29,11 @@ join contact co on co.id = recon.id_contact AND co.default_contact=1
 LEFT JOIN agent ag ON ag.id = info.agent_id
 LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
  LEFT JOIN currency_convertion cc ON  cc.id = 
- (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id = ip.id_currency_list 
- OR cc.id_currency_list_convert    = cl.id 
- AND  info.paid_date >= c_c.start_date and info.paid_date <= c_c.stop_date)
+ (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id_currency_list = ip.id_currency_list 
+ AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1')
 ORDER BY pr.id";
+ // (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id = ip.id_currency_list 
+ // OR cc.id_currency_list_convert    = cl.id 
 	$stmt = sqlsrv_query( $conn, $sql);
             if( $stmt === false) {
                 die( print_r( sqlsrv_errors(), true) );
@@ -71,10 +72,13 @@ join contact co on co.id = recon.id_contact AND co.default_contact=1
 LEFT JOIN agent ag ON ag.id = info.agent_id
 LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
  LEFT JOIN currency_convertion cc ON  cc.id = 
- (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id = ip.id_currency_list 
- OR cc.id_currency_list_convert    = cl.id 
- AND  info.paid_date >= c_c.start_date and info.paid_date <= c_c.stop_date)
+ (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id_currency_list = ip.id_currency_list 
+ AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1')
  WHERE info.policy_no !='' ";
+
+
+ // AND  info.paid_date >= c_c.start_date and info.paid_date <= c_c.stop_date)
+
 
     // echo '<script>alert("customer: '.$post_data['customer'].'")</script>'; 
     if (isset($post_data['date_from']) && $post_data['date_from'] != '') {

@@ -174,7 +174,7 @@ window.location.href='alert-date-settings.php';
                         <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Subject</label>
                     </div> 
                     <div class="col ">
-                         <input minlength="1" maxlength="50" style="border-color:#102958;" type="text" name="subject" required="required" class="form-control" id="subject" value="<?php //echo $subject; ?>" > 
+                         <input minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" name="subject" required="required" class="form-control" id="subject" value="<?php //echo $subject; ?>" > 
                        <!--  <select id="subject" name="subject" style="color: #0C1830;border-color:#102958;" class="form-control" value="<?php echo $subject; ?>" required="required" >
                         <option value="">Select Subject</option>
                         <option value="Policy Date">Policy Date</option>
@@ -185,7 +185,7 @@ window.location.href='alert-date-settings.php';
                         <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Due Date</label>
                     </div> 
                     <div class="col ">
-                         <input minlength="1" maxlength="3" style="border-color:#102958;" type="number" name="due_date" required="required" class="form-control" id="success" value="<?php echo $due_date; ?>" >
+                         <input minlength="1" maxlength="3" style="border-color:#102958; color: #000;" type="number" name="due_date" required="required" class="form-control" id="success" value="<?php echo $due_date; ?>" >
                     </div>   
                 </div> 
 
@@ -209,6 +209,10 @@ window.location.href='alert-date-settings.php';
                     <div class="col-md-10">
                         <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
                         </button>
+						&nbsp;&nbsp;
+						<a href="alert-date-settings.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
+							<span class="text">Cancel</span>
+						</a>
                     </div>
                 </div>
                 

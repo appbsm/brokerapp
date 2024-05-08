@@ -72,7 +72,7 @@ function get_partners_search_start($conn) {
 // left JOIN rela_customer_to_contact re_ct ON cu.id = re_ct.id_customer
 // left JOIN contact con ON con.id = re_ct.id_contact
 // WHERE con.default_contact = 1 ";
-	$sql = $sql."SELECT pr.name_th AS name_th_province,di.name_th AS name_th_district,su.name_th AS name_th_sub
+	$sql = $sql."SELECT pr.name_en AS name_en_province,di.name_en AS name_en_district,su.name_en AS name_en_sub
 		,con.email as email_con,con.mobile as mobile_con,con.position,con.first_name,con.last_name,ip.* FROM  insurance_partner ip
 		left JOIN rela_partner_to_contact re_ct ON ip.id = re_ct.id_insurance_partner
 		left JOIN contact con ON con.id = re_ct.id_contact
@@ -104,7 +104,7 @@ function get_partners_search($conn,$post_data) {
 	// ." left JOIN rela_customer_to_contact re_ct ON cu.id = re_ct.id_customer "
 	// ." left JOIN contact con ON con.id = re_ct.id_contact WHERE con.default_contact = 1 ";
 
-	$sql = $sql."SELECT pr.name_th AS name_th_province,di.name_th AS name_th_district,su.name_th AS name_th_sub
+	$sql = $sql."SELECT pr.name_en AS name_en_province,di.name_en AS name_en_district,su.name_en AS name_en_sub
 		,con.email as email_con,con.mobile,con.position,con.first_name,con.last_name,ip.* FROM  insurance_partner ip
 		left JOIN rela_partner_to_contact re_ct ON ip.id = re_ct.id_insurance_partner
 		left JOIN contact con ON con.id = re_ct.id_contact

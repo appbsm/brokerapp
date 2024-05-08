@@ -222,7 +222,7 @@
                         
                     </div> 
                     <div class="col-sm-2 pb-4">
-                         <input step="0.01" min="0" style="border-color:#102958;text-align: right;" type="number" class="form-control text-end" name="currency" id="currency" value="<?php echo number_format((float)$currency, 2, '.', ''); ?>" onchange="
+                         <input step="0.01" min="0" style="border-color:#102958;text-align: right; color: #000;" type="number" class="form-control text-end" name="currency" id="currency" value="<?php echo number_format((float)$currency, 2, '.', ''); ?>" onchange="
                         if(Number.isInteger(parseFloat(this.value).toFixed(2))){
                             this.value=this.value+'.00';
                         }else{
@@ -244,7 +244,7 @@
                        <label style="color: #102958;" for="success" class="control-label" ><small><font color="red">*</font></small>Convert to</label>
                     </div> 
 					<div class="col-sm-3">
-                        <select name="currency_list_to" id="currency_list_to" style="color: #0C1830;border-color:#102958;"class="form-control" required >
+                        <select name="currency_list_to" id="currency_list_to" style="color: #000;border-color:#102958;"class="form-control" required >
                             <?php  foreach($results_currency as $result){ ?>
                                 <option value="<?php echo $result->id; ?>" 
                                 <?php if ($result->id==$currency_list_to) { echo ' selected="selected"'; } ?>
@@ -253,7 +253,7 @@
                         </select>
                     </div>
                     <div class="col-sm-2 pb-4 ">
-                       <input step="0.01" min="0" style="border-color:#102958;text-align: right;" type="number" class="form-control" name="currency_to" id="currency_to" value="<?php echo number_format((float)$currency_to, 2, '.', ''); ?>" onchange="
+                       <input step="0.01" min="0" style="border-color:#102958;text-align: right; color: #000;" type="number" class="form-control" name="currency_to" id="currency_to" value="<?php echo number_format((float)$currency_to, 2, '.', ''); ?>" onchange="
                         if(Number.isInteger(parseFloat(this.value).toFixed(2))){
                             this.value=this.value+'.00';
                         }else{
@@ -267,14 +267,14 @@
                         <label style="color: #102958;" required="required" class="control-label"><small><font color="red">*</font></small>Start Date</label>
                     </div>
                     <div class="col-sm-3 ">
-                        <input id="start_date" name="start_date" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $start_date; ?>" >
+                        <input id="start_date" name="start_date" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control" value="<?php echo $start_date; ?>" >
                         <!-- <input minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" name="description" id="description" value="<?php echo $description; ?>" > -->
                     </div> 
                     <div class="col-sm-2 label_right">
                         <label style="color: #102958;" required="required" class="control-label"><small><font color="red">*</font></small>Stop Date</label>
                     </div> 
                     <div class="col-sm-3 ">
-                         <input id="stop_date" name="stop_date" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $stop_date; ?>" >
+                         <input id="stop_date" name="stop_date" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control" value="<?php echo $stop_date; ?>" >
                     </div>   
                 </div>
 
@@ -301,7 +301,7 @@
                         </button>
                         &nbsp;&nbsp;
                         <a href="currency_convertion.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
-                            <span class="text">Clear</span>
+                            <span class="text">Cancel</span>
                         </a> 
                     </div>
                 </div>

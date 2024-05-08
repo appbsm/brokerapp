@@ -41,6 +41,23 @@ $(document).ready(function(){
     table.buttons().container()
     .appendTo('#example_wrapper .col-md-6:eq(0)');
 
+    var table = $('#example2').DataTable({
+
+        "aLengthMenu": [[10,50,100,200,-1],[10,50,100,200,"ALL"]],
+        "scrollCollapse": true,
+        "paging":         true,
+        buttons: [
+            { extend: 'csv',class: 'buttons-csv',className: 'btn-primary',charset: 'UTF-8',filename: 'file_csv',bom: true
+            ,init : function(api,node,config){ $(node).hide();} },
+            { extend: 'excel',class: 'buttons-excel', className: 'btn-primary',charset: 'UTF-8',filename: 'file_excel',bom: true 
+            ,init : function(api,node,config){ $(node).hide();} },
+            { extend: 'pdf',class: 'buttons-pdf',className: 'btn-primary',charset: 'UTF-8',filename: 'file_pdf',bom: true 
+            ,init : function(api,node,config){ $(node).hide();} },
+            { extend: 'print',class: 'buttons-print',className: 'btn-primary',charset: 'UTF-8',bom: true 
+            ,init : function(api,node,config){ $(node).hide();} }
+            ]
+    });
+
 });
 
 // =============  Data Table - (End) ================= //

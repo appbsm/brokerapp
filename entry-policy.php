@@ -57,9 +57,9 @@
 
 	// }
 
-	$sql = " SELECT ip.insurance_company AS insurance_company_in,pr.product_name AS product_name_in,cu.mobile AS mobile_customer,cu.tel AS tel_customer,cu.email AS email_customer,insu.status AS status_insurance 
+	$sql = " SELECT cl.currency,ip.insurance_company AS insurance_company_in,pr.product_name AS product_name_in,cu.mobile AS mobile_customer,cu.tel AS tel_customer,cu.email AS email_customer,insu.status AS status_insurance 
 		 ,CASE WHEN cu.customer_type = 'Personal'
-		  THEN CONCAT(cu.title_name,' ',cu.first_name,' ',cu.last_name)
+		  THEN CONCAT(cu.first_name,' ',cu.last_name)
 		  ELSE cu.company_name
 		  END as full_name
 
@@ -72,7 +72,10 @@
 		 left JOIN agent ag ON ag.id = insu.agent_id 
 		 LEFT JOIN product pr ON pr.id = insu.product_id
 		 LEFT JOIN insurance_partner ip ON ip.id = insu.insurance_company_id
-		  ORDER BY LTRIM(insu.policy_no) asc ";
+         LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
+		 ORDER BY insu.cdate desc ";
+
+        // ORDER BY LTRIM(insu.policy_no) asc ";
 		   // WHERE insu.default_insurance = 1
 	$query = $dbh->prepare($sql);
 	$query->execute();
@@ -108,7 +111,7 @@
 	<script src="js/modernizr/modernizr.min.js"></script>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+	<link   href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 	<script src="js/DataTables/datatables.min.js"></script>
 
@@ -168,7 +171,7 @@
                                     </a>  
                                      &nbsp;&nbsp;
 
-                                    <div class="dropdown pl-1">
+                                    <div class="dropdown pl-1 pr-3">
                                       <button class="btn btn-primary mr-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Export
                                       </button>
@@ -181,7 +184,7 @@
                                       </div>
                                     </div>
 
-                                    <div class="pl-1 pr-3">
+                                   <!--  <div class="pl-1 pr-3">
                                     <a href="entry-policy-import-backup.php" class="btn btn-primary" style="color:#F9FAFA;" >
                                     <svg width="16" height="16" fill="currentColor" class="bi bi-file-earmark-plus" viewBox="0 0 16 16">
                                       <path d="M8 6.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 .5-.5"/>
@@ -189,7 +192,7 @@
                                     </svg>
                                     <span class="text">Import File</span>
                                     </a>
-                                    </div>
+                                    </div> -->
 
                                 </div>
 
@@ -205,17 +208,22 @@
                                     <thead >
                                         <tr style="color: #102958;" >
                                             <th width="20px" style="color: #102958;">#</th>
-                                            <th width="100px" style="color: #102958;">Policy no.</th>
-                                            <th width="250px" style="color: #102958;">Prod.</th>
+                                            <th width="150px" style="color: #102958;">Policy no.</th>
                                             <th width="200px" style="color: #102958;">Cust. name</th>
-                                            <th width="110px" style="color: #102958;" >Cust. Mobile</th>
-                                            <th width="200px" style="color: #102958;">Cust. Email</th>
-                                            <th width="90px" style="color: #102958;">Start Date</th>
-                                            <th width="90px" style="color: #102958;">End Date</th>
-                                            <th width="100px" style="color: #102958;">Amount of premium</th>
                                             <th width="200px" style="color: #102958;">Partner company</th>
-                                            <th width="200px" style="color: #102958;" >Agent/Customer</th>
-                                            <th width="70px" style="color: #102958;">Status</th>
+                                            <th width="250px" style="color: #102958;">Prod.</th>
+                                            
+                                           <!--  <th width="110px" style="color: #102958;" >Cust. Mobile</th>
+                                            <th width="200px" style="color: #102958;">Cust. Email</th> -->
+                                            <th width="50px" style="color: #102958;">Status</th>
+                                            <th width="70px" style="color: #102958;">Start Date</th>
+                                            <th width="70px" style="color: #102958;">End Date</th>
+                                            <th width="100px" style="color: #102958;">Amount of premium</th>
+                                            <th width="100px" style="color: #102958;">Convert Value</th>
+                                            <th width="50px" style="color: #102958;">Symbol</th>
+                                            
+                                            <th width="150px" style="color: #102958;" >Agent/Customer</th>
+                                            
                                             <th width="50px" style="color: #102958;">Action</th>
                                         </tr>
                                     </thead>
@@ -228,22 +236,32 @@
     <tr>
         <td class="text-center"><?php echo $cnt;?></td>
         <td><?php echo $result->policy_no;?></td>
+
+         <td><?php echo $result->full_name;?></td>
+         <td><?php echo $result->insurance_company_in;?></td>
         <td><?php echo $result->product_name_in;?></td>
 
-        
-        <td><?php echo $result->full_name;?></td>
-      
+        <!-- <td class="text-center"><?php echo $result->mobile_customer;?></td>
+        <td><?php echo $result->email_customer;?></td> -->
 
-        <td class="text-center"><?php echo $result->mobile_customer;?></td>
-        <td><?php echo $result->email_customer;?></td>
         <!-- <td><?php //echo date('Y-m-d',$result->start_date);?></td> -->
+        <td class="text-center"><?php echo $result->status_insurance;?></td>
         <td class="text-center"><?php echo $result->start_date_day;?></td>
         <td class="text-center"><?php echo $result->end_date_day;?></td>
         <td class="text-right" ><?php echo number_format((float)$result->premium_rate, 2, '.', ',');?></td>
-        <td><?php echo $result->insurance_company_in;?></td>
-        <td><?php echo $result->title_name_agent." ".$result->first_name_agent." ".$result->last_name_agent;?></td>
+        <td class="text-right" >
+            <?php   if($result->currency !="฿THB" && $result->currency !="THB"){
+                        echo number_format((float)$result->convertion_value, 2, '.', ',');
+                    }else{
+                        echo "0.00";
+                    }
+            ?>
+        </td>
+        <td class="text-center"><?php echo $result->currency;?></td>
+        <!-- $result->title_name_agent." ". -->
+        <td><?php echo $result->first_name_agent." ".$result->last_name_agent;?></td>
         
-        <td class="text-center"><?php echo $result->status_insurance;?></td>
+        
         <td class="text-center">
         <i title="Edit Record"><a href="edit-policy.php?id=<?php echo $result->id_insurance;?>">
  <svg width="20" height="20" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
@@ -271,9 +289,8 @@
                             </div>
                         </div>
                     </div>
-				</div>
-			</div>
-
+            </div>
+    </div>
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
@@ -315,54 +332,11 @@
         <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" /> -->
 
-
     <script src="assets/js/datatables.min.js"></script>
     <script src="assets/js/pdfmake.min.js"></script>
     <script src="assets/js/vfs_fonts.js"></script>
     <!-- <script src="assets/js/custom.js"></script> -->
 
-	<!--
-    <script>
-    $(document).ready(function(){
-    var table = $('#example').DataTable({
-        scrollX: true,
-        lengthMenu: [[10, 25, 50, 100, -1], [10,25, 50, 100, "All"]],
-        "scrollCollapse": true,
-        "paging":         true,
-        buttons: [
-            { extend: 'csv',class: 'buttons-csv',className: 'btn-primary',charset: 'UTF-8',filename: 'Entry Policy',bom: true
-            ,init : function(api,node,config){ $(node).hide();} },
-            { extend: 'excel',class: 'buttons-excel', className: 'btn-primary',charset: 'UTF-8',filename: 'Entry Policy',bom: true 
-            ,init : function(api,node,config){ $(node).hide();} },
-            { extend: 'pdf',class: 'buttons-pdf',className: 'btn-primary',charset: 'UTF-8',filename: 'Entry Policy',bom: true 
-            ,init : function(api,node,config){ $(node).hide();} },
-            { extend: 'print',class: 'buttons-print',className: 'btn-primary',charset: 'UTF-8',bom: true 
-            ,init : function(api,node,config){ $(node).hide();} }
-            ]
-    });
-
-     $('#btnCsv').on('click',function(){
-        table.button('.buttons-csv').trigger();
-    });
-
-    $('#btnExcel').on('click',function(){
-        table.button('.buttons-excel').trigger();
-    });
-
-    $('#btnPdf').on('click',function(){
-        table.button('.buttons-pdf').trigger();
-    });
-
-    $('#btnPrint').on('click',function(){
-        table.button('.buttons-print').trigger();
-    });
-
-    table.buttons().container()
-    .appendTo('#example_wrapper .col-md-6:eq(0)');
-
-    });
-    </script>
-    -->    
 	<script>
 		$(document).ready(function(){
 		var table = $('#example').DataTable({

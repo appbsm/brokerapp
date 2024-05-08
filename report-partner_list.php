@@ -101,7 +101,7 @@ $partners_list = get_partners($conn);
 
                         <div class="col-sm-3">
                   
-                            <select id="partner" name="partner" style="border-color:#102958;" class="remove-example form-control selectpicker" data-live-search="true" value="<?php echo $partner; ?>" >
+                            <select id="partner" name="partner" style="border-color:#102958; color: #000;" class="remove-example form-control selectpicker" data-live-search="true" value="<?php echo $partner; ?>" >
                                 <option value="all">All</option>
                                 <?php foreach ($partners_list as $value) { ?>
                                     <option value="<?php echo trim($value['insurance_company']); ?>" 
@@ -114,7 +114,7 @@ $partners_list = get_partners($conn);
 
                         <label style="color: #102958;" class="col-sm-3 label_right">Partner Status:</label>
                         <div class="col-sm-3">
-                             <select id="status" name="status" style="border-color:#102958;" class="remove-example form-control" value="<?php echo $status; ?>"  >
+                             <select id="status" name="status" style="border-color:#102958; color: #000;" class="remove-example form-control" value="<?php echo $status; ?>"  >
                                 <option value="all" <?php if ($status=="all") { echo 'selected="selected"'; } ?> >All</option>
                                 <option value="1" <?php if ($status=="1") { echo 'selected="selected"'; } ?> >Active</option>
                                 <option value="0" <?php if ($status=="0") { echo 'selected="selected"'; } ?>>InActive</option>
@@ -172,7 +172,7 @@ $partners_list = get_partners($conn);
                                             <td><?php echo $p['insurance_company'];?></td>
                                            <!-- <td> <?php //echo $p['first_name'].' '.$p['last_name'];?></td> -->
                                             <td class="text-center"><?php echo ($p['status'] == 1) ? 'Active' : 'Inactive';?></td>
-                                            <td><?php echo $p['soi']." ".$p['road']." ".$p['sub_district']." ".$p['district']." ".$p['name_th_province']." ".$p['name_th_district']." ".$p['name_th_sub']." ".$c['post_code'];?></td>
+                                            <td><?php echo $p['address_number']." ".$p['building_name']." ".$p['soi']." ".$p['road']." ".$p['name_en_province']." ".$p['name_en_district']." ".$p['name_en_sub']." ".$p['post_code'];?></td>
                                             <td><?php echo $p['email'];?></td>
                                             <td><?php echo $p['phone'];?></td>
 
@@ -260,6 +260,10 @@ $partners_list = get_partners($conn);
 	
 	.caret {
 		right: 10px !important;
+	}
+	
+	.btn-group>.btn:first-child {
+		border-color: #102958;
 	}
     </style> 
 

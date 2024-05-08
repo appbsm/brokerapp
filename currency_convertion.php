@@ -214,9 +214,14 @@
 	.table thead th.sorting:after,
 	.table thead th.sorting_asc:after,
 	.table thead th.sorting_desc:after {
-		top: 20px;
+		top: 10px;
 	}
 	
+	div.dataTables_wrapper div.dataTables_filter input {
+		//border-color: #102958;
+	}
+	
+
 </style>
 
 <body id="page-top" >

@@ -5,6 +5,8 @@ error_reporting(0);
 // require_once "excel/PHPExcel.php";
 
 include('includes/config.php');
+// include('includes/config.php');
+
 if(strlen($_SESSION['alogin'])==""){   
     header("Location: index.php"); 
 }else{
@@ -101,19 +103,22 @@ if($_GET['id']){
 
      <div class="card-body" >
         <div class="table-responsive">
-
-        <form action="" method="post" enctype="multipart/form-data">
+			<form action="" method="post" enctype="multipart/form-data">
                 <div class="col-md-3">
                 <br />
                 </div>  
                 <div class="col-md-4">  
-                   <input type="file" name="file" id="file"  style="margin-top:15px;" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" required/>
+                    <!-- , application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel -->
+                   <input type="file" name="file" id="file"  style="margin-top:15px;" accept=".csv" />
                 </div>  
                 <div class="col-md-5">  
-                    <input type="submit" name="submit" id="submit" value="Upload" style="margin-top:10px;" class="btn btn-info" />
-                </div>  
+                    <!--<input type="submit" name="submit" id="submit" value="Preview" style="margin-top:10px;" class="btn btn-info mr-2" />-->
+					<input type="submit" name="preview" id="preview" value="Preview" style="margin-top:10px;" class="btn btn-info mr-2" />
+
+					<input type="submit" name="upload" id="preview" value="Upload" style="margin-top:10px;" class="btn btn-info mr-2" />
+                </div> 				
                 <div style="clear:both"></div>
-        </form>
+			</form>
 
    <br />
    <br />
@@ -126,7 +131,8 @@ if($_GET['id']){
     require 'PHPExcel2/Classes/PHPExcel.php';
     require 'PHPExcel2/Classes/PHPExcel/IOFactory.php';
 
-    if(isset($_POST['submit'])) {
+	//if(isset($_POST['submit'])) {
+    if(isset($_POST['preview'])) {
         $file = $_FILES['file']['tmp_name'];
 
         $objPHPExcel = PHPExcel_IOFactory::load($file);
@@ -177,6 +183,59 @@ if($_GET['id']){
         // echo '</tbody>';
         // echo '</table>';
     }
+	
+	if(isset($_POST['upload'])) {
+    $file = $_FILES['file']['tmp_name'];
+    $objPHPExcel = PHPExcel_IOFactory::load($file);
+    $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+    
+    // $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // foreach ($sheetData as $row) {
+    //     echo '<tr>';
+    //     foreach ($row as $cell) {
+    //         echo '<td>' . $cell . '</td>';
+    //     }
+    //     echo '</tr>';
+    // }
+
+    $sql = "INSERT INTO agent (agent_ctr, agent_id, title_name, first_name, last_name, nick_name, agent_type, tax_id, address_number, building_name, soi, road, sub_district, district, province, post_code, tel, mobile, email, id_rela_agent_insurance, status, cdate, udate, create_by, modify_by) VALUES ";
+    
+    $sheetData = array_slice($sheetData, 1);
+
+    foreach ($sheetData as $row_t) {
+        $sql =$sql."(";
+
+        $rowCount = count($row_t);
+        foreach ($row_t as $colIndex => $row) {
+           $sql =$sql."'".$row."'";
+           if ($colIndex < $rowCount - 1) {
+            $sql = $sql . ",";
+            }
+        }
+        $sql = rtrim($sql, ",");
+        $sql =$sql.")";
+        if ($rowIndex < count($sheetData) - 1) {
+        $sql = $sql . ",";
+        }
+    }
+    $sql = rtrim($sql, ",");
+
+            // $sql =$sql."('".$row['agent_ctr']."', '".$row['agent_id']."', '".$row['title_name']."', '".$row['first_name']."', '".$row['last_name']."', '".$row['nick_name']."', '".$row['agent_type']."', '".$row['tax_id']."', '".$row['address_number']."', '".$row['building_name']."', '".$row['soi']."', '".$row['road']."', '".$row['sub_district']."', '".$row['district']."', '".$row['province']."', '".$row['post_code']."', '".$row['tel']."', '".$row['mobile']."', '".$row['email']."', '".$row['id_rela_agent_insurance']."', '".$row['status']."', '".$row['cdate']."', '".$row['udate']."', '".$row['create_by']."', '".$row['modify_by']."')";
+            
+    echo "SQL :".$sql;
+    // if ($conn->query($sql) === TRUE) {
+    //     echo "New record created successfully";
+    // } else {
+    //     echo "Error: " . $sql . "<br>" . $conn->error;
+    // }
+
+    $conn->close();
+}
+
     ?>
 
             </div>

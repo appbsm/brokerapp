@@ -287,7 +287,7 @@
 											<label style="color: #102958;" for="success" class="control-label">Title:</label>
 										</div> 
 										<div  class="col-2">
-											<select id="name_title" name="name_title" style="border-color:#102958;" class="form-control personal"  >
+											<select id="name_title" name="name_title" style="border-color:#102958; color: #000;" class="form-control personal"  >
 											<option value="Mr." <?php echo ($name_title=="Mr.") ? 'selected' : '';?>>Mr.</option>
 											<option value="Ms." <?php echo ($name_title=="Ms.") ? 'selected' : '';?>>Ms.</option>
 											<option value="Mrs." <?php echo ($name_title=="Mrs.") ? 'selected' : '';?>>Mrs.</option>
@@ -300,13 +300,13 @@
 											<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>First name:</label>
 										</div> 
 										<div class="col ">
-											 <input id="first_name" name="first_name" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $first_name; ?>" >
+											 <input id="first_name" name="first_name" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $first_name; ?>" >
 										</div>
 										<div class="col-sm-2  label_left" >
 											<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Last name:</label>
 										</div> 
 										<div class="col ">
-											 <input id="last_name" name="last_name" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $last_name; ?>" >
+											 <input id="last_name" name="last_name" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $last_name; ?>" >
 										</div>
 									</div>
 
@@ -315,13 +315,13 @@
 											<label style="color: #102958;" for="success" class="control-label">Nickname:</label>
 										</div> 
 										<div class="col ">
-											 <input name="nick_name" id="nick_name" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $nick_name; ?>" >
+											 <input name="nick_name" id="nick_name" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $nick_name; ?>" >
 										</div>
 										<div class="col-sm-2  label_right" >
 											<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Email:</label>
 										</div> 
 										<div class="col ">
-											 <input id="email" name="email" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $email; ?>" >
+											 <input id="email" name="email" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $email; ?>" >
 										</div>
 									</div>
 									
@@ -330,13 +330,13 @@
 											<label style="color: #102958;" for="success" class="control-label">Mobile:</label>
 										</div> 
 										<div class="col ">
-											 <input id="mobile" name="mobile" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $mobile; ?>" >
+											 <input id="mobile" name="mobile" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $mobile; ?>" >
 										</div>
 										<div class="col-sm-2  label_left" >
 											<label style="color: #102958;" for="success" class="control-label">Tel:</label>
 										</div> 
 										<div class="col ">
-											<input name="tel" id="tel" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $tel; ?>">
+											<input name="tel" id="tel" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $tel; ?>">
 										</div>
 									</div>
 
@@ -345,13 +345,13 @@
 											<label style="color: #102958;" for="success" class="control-label">Position:</label>
 										</div> 
 										<div class="col ">
-											 <input id="position" name="position" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $position; ?>" >
+											 <input id="position" name="position" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $position; ?>" >
 										</div>
 										<div class="col-sm-2  label_right" >
 											<label style="color: #102958;" for="success" class="control-label">Department:</label>
 										</div> 
 										<div class="col ">
-											 <input name="department" id="department" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $department; ?>" >
+											 <input name="department" id="department" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $department; ?>" >
 										</div>
 									</div>
 
@@ -370,7 +370,7 @@
 											<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Role User:</label>
 										</div> 
 										<div class="col ">
-											<select style="border-color:#102958;" id="id_role" name="id_role" class="form-control" >
+											<select style="border-color:#102958; color: #000;" id="id_role" name="id_role" class="form-control" >
 												<?php $sql = "SELECT * from role_name where status=1 ";
 													$query = $dbh->prepare($sql);
 													$query->execute();
@@ -407,13 +407,13 @@
 											<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Username:</label>
 										</div> 
 										<div class="col ">
-											 <input id="username" name="username" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $username; ?>" required="required" >
+											 <input id="username" name="username" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $username; ?>" required="required" >
 										</div> 
 										<div class="col-sm-2  label_right" >
 											<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Password:</label>
 										</div> 
 										<div class="col ">
-											 <input minlength="4" maxlength="12" style="border-color:#102958;" type="password" name="password_old" class="form-control" required="required" id="success" value="<?php echo $password; ?>" hidden="true" >
+											 <input minlength="4" maxlength="12" style="border-color:#102958; color: #000;" type="password" name="password_old" class="form-control" required="required" id="success" value="<?php echo $password; ?>" hidden="true" >
 									<input minlength="4" maxlength="12" style="border-color:#102958;" type="password" name="password" class="form-control" required="required" id="success" value="<?php echo $password; ?>">
 										</div>
 									</div>
@@ -495,7 +495,7 @@
 											</button>
 											&nbsp;&nbsp;
 											<a href="manage-user.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
-												<span class="text">Clear</span>
+												<span class="text">Cancel</span>
 											</a>
 										</div>
 									</div>

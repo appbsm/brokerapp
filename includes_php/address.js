@@ -31,8 +31,8 @@ $(function(){
         var amphureId = $(this).val();
         // alert('Change amphureId:'+amphureId);
         // districtObject.html('<option value="">เลือกตำบล</option>');
-        sub_districtObject.html('<option value="" >Choose a sub-district</option>');
-        postcodeObject.html('<option value="">Choose a post code</option>');
+        sub_districtObject.html('<option value="" >Select sub-district</option>');
+        postcodeObject.html('<option value="">Select post code</option>');
         
         $.get('get_district.php?amphure_id=' + amphureId, function(data){
             var result = JSON.parse(data);
@@ -48,7 +48,7 @@ $(function(){
     sub_districtObject.on('change', function(){
         var sub_districtId = $(this).val();
         // alert('Change sub_districtId:'+sub_districtId);
-        postcodeObject.html('<option value="" >Choose a sub-district</option>');
+        postcodeObject.html('<option value="" >Select a sub-district</option>');
         $.get('get_subdistrict.php?subdistrict_id=' + sub_districtId, function(data){
             var result = JSON.parse(data);
             $.each(result, function(index, item){

@@ -127,12 +127,12 @@ $subcategories = get_product_subcategory($conn);
                         <label style="color: #102958;"  class="col-sm-2 label_left">From Date:</label>
                         <div class="col-sm-2">
                             <!-- <input  style="color: #0C1830;border-color:#102958;" type="date" name="start_date" class="form-control" id="start_date" value="<?php echo ($_POST['start_date'] != '') ? date('d-m-Y', strtotime($_POST['start_date'])) : '';?>" placeholder="dd-mm-yyyy"> -->
-                            <input id="start_date" name="start_date" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo ($_POST['start_date'] != '') ? $_POST['start_date'] : '';?>" placeholder="dd-mm-yyyy" >
+                            <input id="start_date" name="start_date" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control" value="<?php echo ($_POST['start_date'] != '') ? $_POST['start_date'] : '';?>" placeholder="dd-mm-yyyy" >
                         </div>
 
                         <label style="color: #102958;"  class="col-sm-2 label_right">End Date:</label>
                         <div class="col-sm-2">
-                            <input  style="color: #0C1830;border-color:#102958;" type="text" name="end_date" class="form-control" id="end_date" value="<?php echo ($_POST['end_date'] != '') ? date('d-m-Y', strtotime($_POST['end_date'])) : '';?>" placeholder="dd-mm-yyyy" >
+                            <input  style="color: #000;border-color:#102958; text-align: center;" type="text" name="end_date" class="form-control" id="end_date" value="<?php echo ($_POST['end_date'] != '') ? date('d-m-Y', strtotime($_POST['end_date'])) : '';?>" placeholder="dd-mm-yyyy" >
                         </div>
                     </div>
 
@@ -152,7 +152,7 @@ $subcategories = get_product_subcategory($conn);
                     <div class="form-group row col-md-12 ">
                         <label style="color: #102958;" class="col-md-2 label_left">Policy no:</label>
                         <div class="col-md-2">
-                            <select id="policy_no" name="policy_no" value="<?php echo $policy; ?>" style="border-color:#102958;" class="form-control selectpicker" data-live-search="true" >
+                            <select id="policy_no" name="policy_no" value="<?php echo $policy; ?>" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true" >
                                  <option value="all">All</option>
                                 <?php foreach ($insurance_policy as $p) { ?>
                                 <option value="<?php echo $p['policy_no'];?>" <?php echo  ($policy == $p['policy_no']) ? 'selected' : '';?>><?php echo $p['policy_no'];?></option>
@@ -160,10 +160,10 @@ $subcategories = get_product_subcategory($conn);
                             </select>
                         </div>
 
-                        <label style="color: #102958;" class="col-md-2 label_right">Customer name:</label>
+                        <label style="color: #102958;" class="col-md-2 label_right">Custo. name:</label>
                         <div class="col-md-2">
                            
-                            <select id="customer" name="customer" value="<?php echo $customer_select; ?>" style="border-color:#102958;" class="remove-example form-control selectpicker" data-live-search="true" >
+                            <select id="customer" name="customer" value="<?php echo $customer_select; ?>" style="border-color:#102958; color: #000;" class="remove-example form-control selectpicker" data-live-search="true" >
                                 <option value="all">All</option>
                                 <?php //echo $value['id']; ?>
                                 <?php foreach ($customers_list as $value) { ?>
@@ -178,7 +178,7 @@ $subcategories = get_product_subcategory($conn);
                         
                         <label style="color: #102958;"  class="col-md-2 label_left">Partners:</label>
                         <div class="col-md-2">
-                            <select  id="partner" name="partner" value="<?php echo $partner; ?>" style="border-color:#102958;" class="form-control selectpicker" data-live-search="true" >
+                            <select  id="partner" name="partner" value="<?php echo $partner; ?>" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true" >
                                  <option value="all">All</option>
                                 <?php foreach ($partners as $p) { ?>
                                 <option value="<?php echo $p['id'];?>" <?php echo  ($partner == $p['id']) ? 'selected' : '';?>><?php echo $p['insurance_company'];?></option>
@@ -190,9 +190,9 @@ $subcategories = get_product_subcategory($conn);
 
                     <div class="form-group row col-md-12 ">
                         
-                        <label style="color: #102958;"  class="col-sm-2 label_left">Product Categories:</label>
+                        <label style="color: #102958;"  class="col-sm-2 label_left">Produ. Categories:</label>
                         <div class="col-sm-2">                     
-                        <select id="product_cat" name="product_cat" value="<?php echo $pro_categorie; ?>" style="border-color:#102958;" onchange="" class="form-control selectpicker" data-live-search="true">
+                        <select id="product_cat" name="product_cat" value="<?php echo $pro_categorie; ?>" style="border-color:#102958; color: #000;" onchange="" class="form-control selectpicker" data-live-search="true">
                              <option value="all">All</option>
                             <?php foreach ($product_categorie as $p) { ?>
                             <option value="<?php echo $p['id'];?>" <?php echo  ($pro_categorie == $p['id']) ? 'selected' : '';?>><?php echo $p['categorie'];?></option>
@@ -202,7 +202,7 @@ $subcategories = get_product_subcategory($conn);
 
                          <label style="color: #102958;" for="staticEmail" class="col-sm-2 label_right">Sub Categories:</label>                    
                         <div class="col-sm-2">                      
-                            <select id="sub_cat" name="sub_cat" style="border-color:#102958;" value="<?php echo $product; ?>" class="form-control selectpicker" data-live-search="true">
+                            <select id="sub_cat" name="sub_cat" style="border-color:#102958; color: #000;" value="<?php echo $product; ?>" class="form-control selectpicker" data-live-search="true">
                                  <option value="all">All</option>
                             <?php foreach ($subcategories as $p) { ?>
                             <option value="<?php echo $p['id'];?>" <?php echo  ($categorie== $p['id']) ? 'selected' : '';?>><?php echo $p['subcategorie'];?></option>
@@ -212,7 +212,7 @@ $subcategories = get_product_subcategory($conn);
 
                         <label style="color: #102958;" for="staticEmail" class="col-sm-2 label_left">Status:</label>
                         <div class="col-sm-2">   
-                        <select id="status" name="status" value="<?php echo $status; ?>" style="border-color:#102958;" class="form-control" >
+                        <select id="status" name="status" value="<?php echo $status; ?>" style="border-color:#102958; color: #000;" class="form-control" >
                             <option value="all">All</option>
                     <option value="New"  <?php if ("New"==$status) { echo 'selected="selected"'; } ?> >New</option>
                     <option value="Follow up" <?php if ("Follow up"==$status) { echo 'selected="selected"'; } ?> >Follow up</option>
@@ -226,11 +226,11 @@ $subcategories = get_product_subcategory($conn);
 
                     <div class="form-group row col-md-12 ">
                         <div class="col-sm-2 label_left" >
-                            <label style="color: #102958;" >Currency Convertion:</label>
+                            <label style="color: #102958;" >Currency Conversion:</label>
                         </div>
                     <div class="col-sm-2 " >
                         <input id="status_currency" name="status_currency" class="form-check-input" value="true" type="checkbox" id="flexCheckDefault"  <?php if($status_currency=="true"){ echo "checked"; }?> >
-                        <label style="color: #0C1830;" class="form-check-label" for="flexCheckDefault">
+                        <label style="color: #000;" class="form-check-label" for="flexCheckDefault">
                         <!-- &nbsp;&nbsp;&nbsp;&nbsp; Active -->
                     </div>
                 </div>
@@ -262,14 +262,14 @@ $subcategories = get_product_subcategory($conn);
                                         <tr>
                                             <!-- <th class="text-center" width="20px" hidden="true" >No run</th> -->
                                             <th>No</th>
-                                            <th width="200px">Customer name</th>
+                                            <th width="200px">Cust. name</th>
                                             <th width="200px">Contact person</th>
                                             <th width="130px">Position</th>
                                             <th width="200px">Email</th>
 
                                             <th width="100px">Mobile phone</th>
                                             <th width="100px">Policy No</th>
-                                            <th width="250px">Product/Sub Categories</th>
+                                            <th width="250px">Prod./Sub Categories</th>
                                             <!-- <th>Tel</th> -->
                                             <th width="90px">Start Date</th>
                                             <th width="90px">End Date</th>
@@ -400,6 +400,13 @@ $subcategories = get_product_subcategory($conn);
 		
 		.caret {
 			right: 10px !important;
+		}
+		
+		.btn-group>.btn:first-child {
+			border-color: #102958;
+		}
+		div.dataTables_wrapper div.dataTables_filter input {
+			//border-color: #102958;
 		}
     </style> 
 

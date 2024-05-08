@@ -277,10 +277,10 @@
 
 				<div class="pull-right" >
 					&nbsp;&nbsp;
-						<select id="status" name="status" onchange="handleChange(this)" style="border-color:#102958;"  >
+						<select class="form-select form-select-sm" id="status" name="status" onchange="handleChange(this)" style="border-color:#767676; border-radius: 2px;"  >
+							<option value="Show All" <?php if($_GET['status']=='Show All'){ echo "selected"; } ?> >Show All</option>
 		                    <option value="Not Paid" <?php if($_GET['status']=='Not Paid'){ echo "selected"; } ?> >Not Paid</option>
-		                    <option value="Paid" <?php if($_GET['status']=='Paid'){ echo "selected"; } ?> >Paid</option>
-		                    <option value="Show All" <?php if($_GET['status']=='Show All'){ echo "selected"; } ?> >Show All</option>
+		                    <option value="Paid" <?php if($_GET['status']=='Paid'){ echo "selected"; } ?> >Paid</option> 
 		                </select>
 				</div>
 
@@ -291,27 +291,27 @@
 					}
 
 				</script>
-
+<!-- width="100%" -->
 				<!-- </div> -->
-				<table id="example"  class="table table-bordered"  style="color: #969FA7; font-size: 13px;" width="100%"  >
+				<table id="example"  class="table table-bordered"  style="color: #969FA7; font-size: 13px;"   >
 					<thead >
 						<tr style="color: #102958;" >
-							<th style="color: #102958;">#</th>
-							<th style="color: #102958;">Policy no.</th>
-							
-							<th style="color: #102958;">Partner Company:</th>
-							<th style="color: #102958;">Agent Name:</th>
-							
-							<th style="color: #102958;">Commission Rate:</th>
+							<th style="color: #102958;" width="20px" >#</th>
+							<th style="color: #102958;" width="100px" >Policy no.</th>
+							<th style="color: #102958;" width="70px">Policy Status</th>
+							<th style="color: #102958;" width="280px">Partner Name:</th>
+							<th style="color: #102958;" width="150px">Cust. Name:</th>
 
-							<th style="color: #102958;">Paid Date</th>
-							<th style="color: #102958;">Status Policy</th>
+							<th style="color: #102958;" width="70px">Premium Rate:</th>
 
-							<th style="color: #102958;" width="100px">Commission Paid Date</th>
-							<th style="color: #102958;">Status Paid</th>
+							<th style="color: #102958;" width="70px">Paid Date</th>
+							<th style="color: #102958;" width="70px">Comm. Rate:</th>
+
+							<th style="color: #102958;" width="70px">Comm. Receive Date</th>
+							<th style="color: #102958;" width="70px">Comm. Status</th>
 							
 							<!-- <th style="color: #102958;" width="100px">End Date</th> -->
-							<th style="color: #102958;">Action</th>
+							<th style="color: #102958;" width="40px">Action</th>
 						</tr>
 					</thead>
 					<tbody style="color: #0C1830; font-size: 13px;" >
@@ -324,13 +324,16 @@
 					<tr>
 						<td class="text-center"><?php echo $cnt;?></td>
 						<td class="id_table"  ><?php echo $result['policy_no']; ?></td>
-						<td class="text-center" class="currency_value" ><?php echo $result['insurance_company_in']; ?></td>
-						<td class="text-center" class="currency_code" ><?php echo $result['full_name'];?></td>
-
-						<td class="text-center" class="currency_table" ><?php echo number_format((float)$result['commission_rate'], 2, '.', '');?></td>
-						<td class="text-center" ><?php echo $result['paid_date_day']; ?></td>
 						<td class="text-center" ><?php echo $result['status'];?></td>
+						<td class="text-left" class="currency_value" ><?php echo $result['insurance_company_in']; ?></td>
+						<td class="text-left" class="currency_code" ><?php echo $result['full_name'];?></td>
 
+						<td class="text-right" ><?php echo number_format((float)$result['premium_rate'], 2,'.', ','); ?></td>
+						<td class="text-center" ><?php echo $result['paid_date_day']; ?></td>
+						
+
+					<td class="text-right"  ><?php echo number_format((float)$result['commission_rate'],2, '.', ',');?></td>
+					
 						<td class="text-center" ><?php echo $result['commission_paid_date_day'];?></td>
 						<td class="text-center" ><?php echo $result['commission_status'];?></td>
 						

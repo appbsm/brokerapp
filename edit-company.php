@@ -415,7 +415,7 @@ return valid();
                 </div>
                 <!-- readOnly -->
                 <div class="col ">
-                    <input id="company_id" name="company_id" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" required="required" class="form-control" value="<?php echo $company_id; ?>" readOnly>
+                    <input id="company_id" name="company_id" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" required="required" class="form-control" value="<?php echo $company_id; ?>" readOnly>
                 </div>
 
                 <div class="col-sm-2 label_right" >
@@ -439,7 +439,7 @@ return valid();
                     
                 </div>
                 <div class="col ">
-                    <input id="company_name" name="company_name" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $company_name; ?>" required >
+                    <input id="company_name" name="company_name" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $company_name; ?>" required >
                 </div>
                 
                 <div class="col-sm-2  label_right"  >
@@ -447,7 +447,7 @@ return valid();
                 </div>
                 <div class="col ">
                      <!--<input id="tax_id" name="tax_id" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"   class="form-control" value="<?php echo $tax_id; ?>"  required>-->
-					 <input id="tax_id" name="tax_id" minlength="1" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text"   class="form-control" value="<?php echo $tax_id; ?>"  required>
+					 <input id="tax_id" name="tax_id" minlength="1" maxlength="13" style="color: #000;border-color:#102958;" type="text"   class="form-control" value="<?php echo $tax_id; ?>"  required>
                 </div>    
             </div>
 
@@ -456,13 +456,13 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" >Tel:</label>
                 </div>
                 <div class="col">
-                    <input id="tel" name="tel" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"   class="form-control" value="<?php echo $tel; ?>" >
+                    <input id="tel" name="tel" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"   class="form-control" value="<?php echo $tel; ?>" >
                 </div>
                 <div class="col-sm-2  label_right" >
                     <label style="color: #102958;" for="staticEmail" >Mobile:</label>
                 </div>
                 <div class="col">
-                    <input id="mobile" name="mobile" minlength="10" maxlength="12" style="color: #0C1830;border-color:#102958;" type="text"   class="form-control" value="<?php echo $mobile; ?>"  required pattern="\d{3}-\d{3}-\d{4}">
+                    <input id="mobile" name="mobile" minlength="10" maxlength="12" style="color: #000;border-color:#102958;" type="text"   class="form-control" value="<?php echo $mobile; ?>"  required pattern="\d{3}-\d{3}-\d{4}">
                 </div>
 				<script>
 					document.getElementById('mobile').addEventListener('input', function (e) {
@@ -477,7 +477,7 @@ return valid();
                     <label style="color: #102958;" >Email:</label>
                 </div>   
                 <div class="col">
-                    <input id="email" name="email" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="email" class="form-control" value="<?php echo $email; ?>" required>
+                    <input id="email" name="email" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="email" class="form-control" value="<?php echo $email; ?>" required>
                 </div>
                 <div class="col-sm-2  label_right" >
                     <label style="color: #102958;"  for="staticEmail" >Company Logo:</label>
@@ -649,14 +649,14 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" >Address Number:</label>
                 </div>
                 <div class="col">
-                    <input id="address_input" name="address_number_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $address_number_input; ?>"  required>
+                    <input id="address_input" name="address_number_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $address_number_input; ?>"  required>
                 </div>
 
                 <div class="col-sm-2  label_right" >
                     <label style="color: #102958;" for="staticEmail" >Building Name:</label>
                 </div>
                 <div class="col">
-                    <input id="building_input" name="building_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $building_input; ?>" >
+                    <input id="building_input" name="building_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $building_input; ?>" >
                 </div>
             </div>
 
@@ -665,14 +665,14 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" >Soi:</label>
                 </div>
                 <div class="col">
-                    <input id="soi_input" name="soi_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $soi_input; ?>" >
+                    <input id="soi_input" name="soi_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $soi_input; ?>" >
                 </div>
 
                 <div class="col-sm-2  label_right" >
                     <label style="color: #102958;" for="staticEmail" >Road name:</label>
                 </div>
                 <div class="col">
-                    <input id="road_input" name="road_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $road_input; ?>" >
+                    <input id="road_input" name="road_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $road_input; ?>" >
                 </div>
             </div>
             
@@ -682,7 +682,7 @@ return valid();
                 </div>
                 <div class="col">
                     <!-- class="remove-example form-control selectpicker"  style="width: 100%;"-->
-                     <select id="province" name="province_id" style="border-color:#102958;" class="form-control selectpicker" data-live-search="true"  required >
+                     <select id="province" name="province_id" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true"  required >
                             <div id="row_option" >
                             <option  value="" >Select province</option>
                             <?php foreach($results_2 as $result_add){  ?>
@@ -711,7 +711,7 @@ return valid();
                     <label for="sub_district" style="color: #102958;" >Sub-district:</label>
                 </div>
                 <div class="col">
-                    <select id="sub_district" name="sub_district_id" style="border-color:#102958;" class="form-control selectpicker" data-live-search="true"  required>
+                    <select id="sub_district" name="sub_district_id" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true"  required>
                         <option value="" selected>Select sub-district</option>
                         <?php foreach($results_sub_dis as $result_add){  ?>
                                 <option value="<?php echo $result_add->code;?>" <? if($sub_district_id==$result_add->code){ echo "selected";} ?>><?php echo $result_add->name_en;?></option>
@@ -723,7 +723,7 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" >Post Code:</label>
                 </div> 
                 <div class="col">
-                    <select id="postcode" name="postcode_id" style="border-color:#102958;" class="form-control selectpicker" data-live-search="true"  required>
+                    <select id="postcode" name="postcode_id" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true"  required>
                         <option value="" selected>Select post code</option>
                         <?php foreach($results_zip_code as $result_add){  ?>
                                 <option value="<?php echo $result_add->code;?>" <? if($postcode_id==$result_add->code){ echo "selected";} ?>><?php echo $result_add->zip_code;?></option>
@@ -746,7 +746,7 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" >Email name:</label>
                 </div>
                 <div class="col">
-                    <input name="email_master" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="<?php echo $email_master; ?>"  required>
+                    <input name="email_master" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $email_master; ?>"  required>
                
                 </div>
 
@@ -770,14 +770,14 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" >Brach Code:</label>
                 </div>
                 <div class="col">
-                    <input name="brach_code" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" value="<?php echo $brach_code; ?>"  required>
+                    <input name="brach_code" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $brach_code; ?>"  required>
                
                 </div>
                 <div class="col-sm-2  label_right" >
                     <label style="color: #102958;" for="staticEmail" >Brach Descrition:</label>
                 </div>
                 <div class="col">
-                    <input name="brach_des" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" value="<?php echo $brach_des; ?>"  required>
+                    <input name="brach_des" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $brach_des; ?>"  required>
                 </div>
             </div>
 
@@ -815,16 +815,16 @@ return valid();
         <div class="panel-body">
             <div class="form-group row mb-20 col-md-10 col-md-offset-1">
 
-                <input id="rela_contact" name="rela_contact[]" value="" style="color: #0C1830;border-color:#102958;" 
+                <input id="rela_contact" name="rela_contact[]" value="" style="color: #000;border-color:#102958;" 
                 type="text" class="form-control"  hidden="true">
 
                 <input id="id_co" name="id_co[]" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  hidden="true" >
                 <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" >Title Name:</label>
+                    <label style="color: #102958;" for="staticEmail" >Title :</label>
                 </div>
                 <div  class="col">
-                     <select id="title_co" name="title_co[]" style="border-color:#102958;" class="form-control"  required>
-						<option value="" selected>Select Title Name</option>
+                     <select id="title_co" name="title_co[]" style="border-color:#102958; color: #000;" class="form-control"  required>
+						<option value="" selected>Select Title</option>
 						<?php  if($name_title=="Mr."){ ?>
 							<option value="Mr." selected>Mr.</option>
 						<?php }else{ ?>
@@ -854,13 +854,13 @@ return valid();
                     <label style="color: #102958;" >First name:</label>
                 </div>
                 <div class="col">
-                    <input id="first_co" name="first_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  required >
+                    <input id="first_co" name="first_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  required >
                 </div>
                 <div class="col-sm-2 label_right" >
                     <label style="color: #102958;" >Mobile:</label>
                 </div>
                 <div class="col">
-                    <input id="mobile_co" name="mobile_co[]" minlength="10" maxlength="12" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  required pattern="\d{3}-\d{3}-\d{4}" >
+                    <input id="mobile_co" name="mobile_co[]" minlength="10" maxlength="12" style="color: #000;border-color:#102958;" type="text" class="form-control"  required pattern="\d{3}-\d{3}-\d{4}" >
                 </div>
 				<script>
 					document.getElementById('mobile_co').addEventListener('input', function (e) {
@@ -874,13 +874,13 @@ return valid();
                     <label style="color: #102958;" >Last name:</label>
                 </div>
                 <div class="col">
-                    <input id="last_co" name="last_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  required >
+                    <input id="last_co" name="last_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  required >
                 </div>
                 <div class="col-sm-2 label_right" >
                     <label style="color: #102958;" >Tel:</label>
                 </div>  
                 <div class="col">
-                    <input id="tel_co" name="tel_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  >
+                    <input id="tel_co" name="tel_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  >
                 </div>
             </div>
 
@@ -889,14 +889,14 @@ return valid();
                     <label style="color: #102958;" >Nickname:</label>
                 </div>
                 <div class="col">
-                    <input id="nick_co" name="nick_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  >
+                    <input id="nick_co" name="nick_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  >
                 </div>
 
                 <div class="col-sm-2 label_right" >
                     <label style="color: #102958;" >Email:</label>
                 </div>
                 <div class="col">
-                    <input id="email_co" name="email_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="email" class="form-control" required  >
+                    <input id="email_co" name="email_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="email" class="form-control" required  >
                 </div>
             </div>
             <div class="form-group row col-md-10 col-md-offset-1">
@@ -904,14 +904,14 @@ return valid();
                     <label style="color: #102958;" >Position:</label>
                 </div>
                 <div class="col">
-                    <input id="position_co" name="position_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  required >
+                    <input id="position_co" name="position_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  required >
                 </div>
 
                 <div class="col-sm-2 label_right" >
                     <label style="color: #102958;" >Line ID:</label>
                 </div>
                 <div class="col">
-                    <input id="line_co" name="line_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"   >
+                    <input id="line_co" name="line_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"   >
                 </div>
             </div>
             <div class="form-group row col-md-10 col-md-offset-1">
@@ -919,13 +919,13 @@ return valid();
                     <label style="color: #102958;" >Department:</label>
                 </div>
                 <div class="col " class="form-control" >
-                    <input id="department" name="department[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  required >
+                    <input id="department" name="department[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  required >
                 </div>
                 <div class="col-sm-2 label_right" >
                     <label style="color: #102958;" >Remark:</label>
                 </div>
                 <div class="col " class="form-control" >
-                    <input id="remark_co" name="remark_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
+                    <input id="remark_co" name="remark_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" >
                 </div>
                 
             </div>
@@ -934,7 +934,7 @@ return valid();
                 <div class="col-sm-2 label_left" >
                 </div>  
                 <div class="col-sm-4 " >
-                    <input hidden="true" id="default_co_id" name="default_co_id[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="default_id:0" >
+                    <input hidden="true" id="default_co_id" name="default_co_id[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="default_id:0" >
 
                     <input id="default_co" name="default_co[]" class="form-check-input" type="radio" checked>
                     <label style="color: #102958;" class="form-check-label" for="flexCheckDefault">
@@ -956,12 +956,12 @@ return valid();
 
                 <div class="form-group row col-md-10 col-md-offset-1">
                 <div class="col-md-12">
-                    <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
+                    <button style="background-color: #0275d8;color: #F9FAFA; padding: 3px 16px 3px 16px;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
                     </button>
-                    <!-- &nbsp;&nbsp;
-                    <a href="companylist.php" class="btn btn-labeled" style="background-color: #0275d8;color: #F9FAFA;" >
-                        <span class="text">Clear</span>
-                    </a> -->
+                    &nbsp;&nbsp;
+					<a href="companylist.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
+						<span class="text">Cancel</span>
+					</a>
                 </div>
                 </div>
  

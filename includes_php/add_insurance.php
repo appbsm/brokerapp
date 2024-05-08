@@ -87,7 +87,7 @@ include('includes/config.php');
         body_add +='           <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Policy No:</label>';
         body_add +='        </div>';
         body_add +='        <div class="col ">';
-        body_add +='            <input id="policy" name="policy[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" required="required" value="'+item.policy_no+'" >';
+        body_add +='            <input id="policy" name="policy[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text"  value="'+item.policy_no+'" required>';
         body_add +='        </div>';
 
         body_add +='        <div class="col-sm-2  label_left" >';
@@ -201,12 +201,10 @@ include('includes/config.php');
 
         body_add +='   <div class="form-group row mb-20 col-md-10 col-md-offset-1">';
         body_add +='        <div class="col-sm-2  label_left" >';
-        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Partner Company:</label>';
+        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Partner Name:</label>';
         body_add +='        </div>';
         body_add +='        <div class="col"  >';
         body_add +='<input hidden="true" type="text" id="currency_id'+input_value+'" name="currency_id[]" style="border-color:#102958;" class="form-control" value="<?php echo $currency_id; ?>" required/>';
-
-         // body_add +=' <select id="product_cat'+input_value+'" name="product_cat[]" style="color:#0C1830;border-color:#102958;" class="form-control"  >';
 
         body_add +='<select id="insurance_com'+input_value+'" name="insurance_com[]" style="color:#0C1830;border-color:#102958;" class="form-control" >';
         body_add +='            <?php  foreach($results_company as $result){ ?>';
@@ -221,74 +219,49 @@ include('includes/config.php');
 
         body_add +='   </div>';
 
-        body_add +='   <div class="form-group row mb-20 col-md-10 col-md-offset-1">';
-        body_add +='       <div class="col-sm-2 label_left" >';
-        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Product Category:</label>';
-        body_add +='       </div>';
-        body_add +='        <div class="col">';
-        body_add +=' <select id="product_cat'+input_value+'" name="product_cat[]" style="color:#0C1830;border-color:#102958;"class="form-control" required>';
-
-        body_add +='<?php  foreach($results_categories as $result){ ?>';
-        body_add +='<option value="<?php echo $result->id; ?>" ><?php echo $result->categorie; ?></option>';
-        body_add +='<? } ?>';
-        body_add +='           </select>';
-
-        body_add +='<script type="text/javascript">';
-        body_add +='    document.getElementById("product_cat'+input_value+'").value = '+item.product_category+';';
-        body_add +='</'+'script>';
-
-        body_add +='        </div>';
-
-        body_add +='        <div class="col-sm-2  label_left" >';
-        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Sub Categories:</label>';
-        body_add +='        </div>';
-        body_add +='        <div class="col"  >';
-        body_add +=' <select id="sub_cat'+input_value+'" name="sub_cat[]"  style="color: #0C1830;border-color:#102958;"class="form-control" value="0" required>';
-
-        // body_add +='<?php  foreach($results_sub as $result){ ?>';
-        // body_add +='<option value="<?php echo $result->id; ?>"><?php echo $result->subcategorie; ?></option>';
-        // body_add +='<? } ?>';
-
-        body_add +='        </select>';
-        body_add +='<script type="text/javascript">';
-        body_add +='    var product_cat_object = $('+"'#product_cat"+input_value+"'"+');';
-        body_add +='    var product_sub_object = $('+"'#sub_cat"+input_value+"'"+');';
-        body_add +='        product_sub_object.html('+"''"+');';
-        body_add +='        $.get('+"'get_product_subcategories.php?id='"+' + '+item.product_category+', function(data){';
-        body_add +='        var result = JSON.parse(data);';
-        body_add +='        $.each(result, function(index, item){';
-        body_add +='            product_sub_object.append(';
-        body_add +='               $('+"'<option></option>'"+').val(item.id).html(item.subcategorie)';
-        body_add +='            );';
-        body_add +='        });';
-        body_add +='    document.getElementById("sub_cat'+input_value+'").value ='+item.sub_categories+' ;';
-        body_add +='        });';
-        body_add +='</'+'script>';
-
-        body_add +='<script type="text/javascript">';
-        
-        body_add +='</'+'script>';
-
-        body_add +='        </div>';
-        body_add +='    </div>';
-
-        body_add +='    <div class="form-group row col-md-10 col-md-offset-1">';
+        body_add +='<div class="form-group row col-md-10 col-md-offset-1">';
 
         body_add +='        <div class="col-sm-2 label_left" >';
-        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Product Name:</label>';
+        body_add +='            <label style="color: #102958;" ><small><font color="red">*</font></small>Product Name:</label>';
         body_add +='        </div> ';
         body_add +='        <div class="col">';
         body_add +='<select id="product_name'+input_value+'" name="product_name[]" style="color: #0C1830;border-color:#102958;"class="form-control" value="0" required>';
         body_add +='</select>';
+        body_add +='      </div>';
+
+        body_add +='<div class="col-sm-1">';
+        body_add +='            <button style="background-color: #0275d8;color: #F9FAFA;" type="button" class="btn " data-toggle="modal"  onclick="checkProductName'+input_value+'();" >';
+        body_add +='    <svg enable-background="new 0 0 512 512" height="20px" id="Layer_1" version="1.1" viewBox="0 0 512 512" width="20px" xml:space="preserve" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M256,512C114.625,512,0,397.391,0,256C0,114.609,114.625,0,256,0c141.391,0,256,114.609,256,256  C512,397.391,397.391,512,256,512z M256,64C149.969,64,64,149.969,64,256s85.969,192,192,192c106.047,0,192-85.969,192-192  S362.047,64,256,64z M288,384h-64v-96h-96v-64h96v-96h64v96h96v64h-96V384z" fill="#ffffff" /></svg>&nbsp;';
+                        
+        body_add +='            </button>';
+        body_add +='        </div>';
+
+        body_add +='    </div>';
+
+        body_add +='<script>';
+
+        body_add +='        function checkProductName'+input_value+'() {';
+        body_add +='            var productName = document.getElementById("insurance_com'+input_value+'").value;';
+        body_add +='            if (productName === "") {';
+        body_add +='                alert("Please select a partner name");';
+        body_add +='                return false;';
+        body_add +='            }else{';
+        body_add +='                $("#ModalProduct'+input_value+'").modal("show");';
+        body_add +='            }';
+        body_add +='        }';
+        body_add +='</'+'script>';
 
         body_add +='<script type="text/javascript">';
-        body_add +='    var insurance_com_object = $('+"'#insurance_com"+input_value+"'"+');';
-        body_add +='    var product_object = $('+"'#product_name"+input_value+"'"+');';
 
+        body_add +='    $(function(){';
+
+        body_add +='    var product_object = $('+"'#product_name"+input_value+"'"+');';
         body_add +='        product_object.html('+"''"+');';
+        // alert('insurance_company_id:'+item.insurance_company_id);
 
         body_add +='        $.get('+"'get_product.php?id='"+' + '+item.insurance_company_id+', function(data){';
         body_add +='        var result = JSON.parse(data);';
+
         body_add +='        $.each(result, function(index, item){';
         body_add +='            product_object.append(';
         body_add +='               $('+"'<option></option>'"+').val(item.id).html(item.product_name)';
@@ -296,14 +269,23 @@ include('includes/config.php');
         body_add +='        });';
         body_add +='    document.getElementById("product_name'+input_value+'").value ='+item.product_id+' ;';
         body_add +='        });';
-        body_add +='</'+'script>';
-        body_add +='      </div>';
 
+        body_add +='    });';
+
+        body_add +='</'+'script>';
+
+        body_add +='<div class="form-group row mb-20 col-md-10 col-md-offset-1">';
+        body_add +='        <div class="col-6">';
+        // hidden="true"
+        body_add +='            <input hidden="true" id="product_cat'+input_value+'" name="product_cat[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" value="'+item.product_category+'" >';
+        body_add +='        </div>';
+        body_add +='        <div class="col-6">';
+        body_add +='            <input hidden="true" id="sub_cat'+input_value+'" name="sub_cat[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" value="'+item.sub_categories+'" >';
+        body_add +='        </div>';
         body_add +='    </div>';
 
-        body_add +='    <div class="form-group row col-md-10 col-md-offset-1">';
 
-        
+        body_add +='    <div class="form-group row col-md-10 col-md-offset-1">';
 
         body_add +='        <div class="col-sm-2  label_left" >';
         body_add +='            <label style="color: #102958;"  >Currency:</label>';
@@ -473,23 +455,32 @@ body_add +='</'+'script>';
         body_add +='            <input id="premium_rate'+input_value+'" name="premium_rate[]" value="'+Math.round(item.premium_rate*100) / 100+'" type="number" style="border-color:#102958;text-align: right;" step="0.01" min="0" class="form-control" ';
         body_add +='                onchange="';
 
-        body_add +='   var premium = parseFloat(this.value).toFixed(2);';
+        // body_add +='   var premium = parseFloat(this.value).toFixed(2);';
 
-        body_add +='   var percent = parseFloat(document.getElementById('+"'percent_trade"+input_value+"'"+').value).toFixed(2);';
-        body_add +='                if(document.getElementById('+"'calculate"+input_value+"'"+').value=='+"'Percentage'"+'){';
-        body_add +='                if(Number.isInteger(parseFloat(this.value).toFixed(2))){';
-        body_add +='                    this.value=this.value+'+"'.00'"+';';
-        body_add +='                }else{';
-        body_add +='                    this.value=parseFloat(this.value).toFixed(2);';
-        body_add +='                }';
-        body_add +='                    var commission = ((percent / 100) * premium);';
-        body_add +='                }else{';
-        body_add +='   document.getElementById('+"'percent_trade"+input_value+"'"+').value = parseFloat(document.getElementById('+"'percent_trade"+input_value+"'"+').value).toFixed(2);';
-        body_add +='                    var commission = percent;';
-        body_add +='                }';
-        body_add +='                document.getElementById('+"'commission"+input_value+"'"+').value =parseFloat(commission).toFixed(2);';
+        // body_add +='   var percent = parseFloat(document.getElementById('+"'percent_trade"+input_value+"'"+').value).toFixed(2);';
+        // body_add +='                if(document.getElementById('+"'calculate"+input_value+"'"+').value=='+"'Percentage'"+'){';
+        // body_add +='                if(Number.isInteger(parseFloat(this.value).toFixed(2))){';
+        // body_add +='                    this.value=this.value+'+"'.00'"+';';
+        // body_add +='                }else{';
+        // body_add +='                    this.value=parseFloat(this.value).toFixed(2);';
+        // body_add +='                }';
+        // body_add +='                    var commission = ((percent / 100) * premium);';
+        // body_add +='                }else{';
+        // body_add +='   document.getElementById('+"'percent_trade"+input_value+"'"+').value = parseFloat(document.getElementById('+"'percent_trade"+input_value+"'"+').value).toFixed(2);';
+        // body_add +='                    var commission = percent;';
+        // body_add +='                }';
+        // body_add +='                document.getElementById('+"'commission"+input_value+"'"+').value =parseFloat(commission).toFixed(2);';
 
         body_add +='                " required/>';
+        body_add +='        </div>';
+
+        body_add +='        <div class="col-sm-2 label_left" >';
+        body_add +='            <label style="color: #102958;" >Convertion Value:</label>';
+        body_add +='        </div> ';
+        body_add +='        <div class="col-2">';
+        
+        body_add +='            <input id="convertion_value'+input_value+'" name="convertion_value[]"  style="color: #0C1830;border-color:#102958; text-align: center;" type="test"  class="form-control" ';
+        body_add +='            value="'+item.convertion_value+'"  readOnly>';
         body_add +='        </div>';
 
         body_add +='        <div class="col-sm-2 label_left" >';
@@ -501,6 +492,71 @@ body_add +='</'+'script>';
         body_add +='        </div>';
 
         body_add +='    </div>';
+        body_add +='<input hidden="true" id="partner_currency'+input_value+'"  type="text" value="" >';
+        body_add +='<input hidden="true" id="partner_currency_value'+input_value+'"  type="text" value="" >';
+
+        body_add +='<script>';
+        body_add +='    $(function(){';
+        body_add +='        var premium_rate_object = $("#premium_rate'+input_value+'");';
+        body_add +='        var convertion_value_object = $("#convertion_value'+input_value+'");';
+        body_add +='        var currency_object = $("#currency'+input_value+'");';
+
+        body_add +='        premium_rate_object.on("change", function(){';
+        body_add +='        var premium_value = $(this).val();';
+
+        body_add +='    var partner_currency'+input_value+' = document.getElementById("partner_currency'+input_value+'").value;';
+        body_add +='    var partner_currency_value'+input_value+' = document.getElementById("partner_currency_value'+input_value+'").value;';
+
+        body_add +='            if(currency_object.val()=="฿THB"){';
+
+    body_add +='var formattedResult = premium_value.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});';
+    body_add +='convertion_value_object.val(formattedResult);';
+
+        body_add +='            }else{';
+
+        body_add +='                if(partner_currency'+input_value+' !=""){';
+        body_add +='                  if(parseInt(partner_currency'+input_value+')>parseInt(partner_currency_value'+input_value+')){';
+        body_add +='                     var value = (premium_value/partner_currency_value'+input_value+');';
+        body_add +='                     var formattedResult = value.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});';
+        body_add +='                     convertion_value_object.val(formattedResult);';
+        body_add +='                  }else{';
+        body_add +='                        var value = (premium_value*partner_currency_value'+input_value+');';
+        body_add +='                        var formattedResult = value.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});';
+        body_add +='                       convertion_value_object.val(formattedResult);';
+        body_add +='                  }';
+        body_add +='                }else{';
+
+    body_add +='var formattedResult = premium_value.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});';
+    body_add +='convertion_value_object.val(formattedResult);';
+
+        body_add +='                }';
+        body_add +='            }';
+        
+        body_add +='      var commission=0;';
+
+        body_add +='      var premiumInput = document.getElementById("premium_rate'+input_value+'").value.replace(/,/g,'+"''"+');';
+        body_add +='      var premium = parseFloat(premiumInput).toFixed(2);';
+        body_add +='      var con_vaInput = document.getElementById("convertion_value'+input_value+'").value.replace(/,/g,'+"''"+');';
+        body_add +='      var con_va = parseFloat(con_vaInput).toFixed(2);';
+        body_add +='      var percentInput = document.getElementById("percent_trade'+input_value+'").value.replace(/,/g,'+"''"+');';
+        body_add +='      var percent = parseFloat(percentInput).toFixed(2);';
+
+        // body_add +='               if(Number.isInteger(parseFloat(premium))){';
+        body_add +='                    if(document.getElementById("calculate'+input_value+'").value=="Percentage"){';
+        body_add +='                        var commission = ((percent / 100) * con_va);';
+        body_add +='                    }else{';
+        body_add +='                        var commission = percent;';
+        body_add +='                    }';
+        // body_add +='                }else{';
+        // body_add +='                    document.getElementById("premium_rate'+input_value+'").value=parseFloat(con_va);';
+        // body_add +='                }';
+        body_add +='                var commissionNumber = parseFloat(commission).toFixed(2);';
+        body_add +='                document.getElementById("commission'+input_value+'").value =parseFloat(commission).toFixed(2);';
+
+        body_add +='        });';
+        body_add +='    });';
+
+        body_add +='</'+'script>';
 
         body_add +='<div class="form-group row col-md-10 col-md-offset-1">';
         body_add +='        <div class="col-sm-2 label_left" >';
@@ -510,7 +566,10 @@ body_add +='</'+'script>';
         body_add +='            <select id="calculate'+input_value+'" name="calculate[]"  style="color: #0C1830;border-color:#102958;" class="form-control" ';
         body_add +='                onchange="';
         body_add +='                if(document.getElementById('+"'percent_trade"+input_value+"'"+').value!='+"''"+'){';
-        body_add +='  var premium = parseFloat(document.getElementById('+"'premium_rate"+input_value+"'"+').value).toFixed(2);';
+
+    body_add +='var premiumInput = document.getElementById('+"'convertion_value"+input_value+"'"+').value.replace(/,/g,'+"''"+');';
+        body_add +='var premium = parseFloat(premiumInput).toFixed(2);';
+        // body_add +='  var premium = parseFloat(document.getElementById('+"'premium_rate"+input_value+"'"+').value).toFixed(2);';
         body_add +='  var percent = parseFloat(document.getElementById('+"'percent_trade"+input_value+"'"+').value).toFixed(2);';
 
         body_add +='      if(document.getElementById('+"'calculate"+input_value+"'"+').value=='+"'Percentage'"+'){';
@@ -560,9 +619,13 @@ body_add +='</'+'script>';
 
         body_add +='                var num = parseInt(parseFloat(this.value).toFixed(0));';
 
-        body_add +='                if(Number.isInteger(num)){';
+        body_add +='           if(Number.isInteger(num)){';
 
-        body_add +='var premium = parseFloat(document.getElementById('+"'premium_rate"+input_value+"'"+').value).toFixed(2);';
+        // body_add +='var premium = parseFloat(document.getElementById('+"'premium_rate"+input_value+"'"+').value).toFixed(2);';
+        // body_add +='var premiumInput = document.getElementById("convertion_value'+input_value+'").value.replace(/,/g,"");';
+    body_add +='var premiumInput = document.getElementById('+"'convertion_value"+input_value+"'"+').value.replace(/,/g,'+"''"+');';
+
+        body_add +='var premium = parseFloat(premiumInput).toFixed(2);';
 
         body_add +='                var percent = parseFloat(this.value).toFixed(2);';
 
@@ -609,7 +672,7 @@ body_add +='</'+'script>';
 
         body_add +='<div class="form-group row col-md-10 col-md-offset-1">';
         body_add +='        <div class="col-sm-2 label_left" >';
-        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Agent Name:'+item.agent_id+'</label>';
+        body_add +='            <label style="color: #102958;" for="staticEmail" >Agent Name:</label>';
         body_add +='        </div>';
 
         body_add +='    <div class="col">';
@@ -625,7 +688,7 @@ body_add +='</'+'script>';
         
 
         body_add +='    <div class="col-sm-2 label_left" >';
-        body_add +='        <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Upload Documents:</label>';
+        body_add +='        <label style="color: #102958;" for="staticEmail" >Upload Documents:</label>';
         body_add +='    </div>';
                 
         body_add +='    <div class="col">';
@@ -777,37 +840,96 @@ body_add +='</'+'script>';
     body_add +='        </div>';
     body_add +='        </div>  ';
     body_add +='        <div class="modal-body">';
+
     body_add +='        <div class="form-group row col-md-12">';
-    body_add +='            <div class="col-sm-2 " >';
-    body_add +='                <label style="color: #102958;" for="staticEmail" >Period:</label>';
-    body_add +='            </div> ';
-    body_add +='            <div class="col-sm-4">';
-    body_add +='            <select id="period_popup'+input_value+'"  required="required" style="color: #0C1830;border-color:#102958;"class="form-control" value="0" >';
-    body_add +='                    <?php  foreach($results_period as $result){ ?>';
-    body_add +='                    <option value="<?php echo $result->id; ?>" ><?php echo $result->period; ?></option>';
-    body_add +='                    <? } ?>';
+
+    body_add +='            <div class="col-sm-2 label_left" >';
+    body_add +='                <label style="color: #102958;" ><small><font color="red">*</font></small>Period type:</label>';
+    body_add +='            </div>';
+    body_add +='            <div class="col-2">';
+    body_add +='                <select id="period_popup'+input_value+'" style="color: #0C1830;border-color:#102958;"class="form-control" >';
+
+    
+    if(item.period_type=="Day"){
+        body_add +='                <option value="Day" selected>Day</option>';
+    }else{
+        body_add +='                <option value="Day" >Day</option>';
+    }
+
+    if(item.period_type=="Month"){
+        body_add +='                    <option value="Month" selected>Month</option>';
+    }else{
+        body_add +='                    <option value="Month" >Month</option>';
+    }
+
     body_add +='                </select>';
     body_add +='            </div>';
-    body_add +='            <div class="col-sm-2 " >';
+
+    body_add +='            <div class="col-sm-2 label_left" >';
+    body_add +='                <label style="color: #102958;"  ><small><font color="red">*</font></small>Period:</label>';
     body_add +='            </div>';
-    body_add +='            <div class="col-sm-4">';
+
+    body_add +='            <div class="col-2">';
+
+    body_add +='<select ';
+    if(item.period_type=="Day"){
+      body_add +=' hidden="true" ';
+    }
+    body_add +=' id="period_month_popup'+input_value+'" style="color: #0C1830;border-color:#102958;"class="form-control" value="" >';
+
+    body_add +='                    <?php  foreach($results_period as $result){ ?>';
+
+    body_add +='<option value="<?php echo $result->id; ?>"';
+    if(item.period=="<?php echo $result->id; ?>"){
+        body_add +=' selected ';
+    }
+    body_add +=' ><?php echo $result->period; ?></option>';
+
+
+    body_add +='                   <? } ?>';
+
+    body_add +='<input '; 
+    if(item.period_type=="Month"){
+      body_add +=' hidden="true" ';
+    }
+    body_add +='  id="period_day_popup'+input_value+'" minlength="1" maxlength="3" style="color: #0C1830;border-color:#102958;" type="number" class="form-control input_text" value="'+item.period_day+'" >';
+
     body_add +='            </div>';
+
     body_add +='        </div>';
+
+    body_add +='<script>';
+    body_add +='            $("#period_popup'+input_value+'").change(function(){';
+    body_add +='                var value_period = $(this).val();';
+    body_add +='                if(value_period == "Day"){';
+    body_add +='                    document.getElementById("period_day_popup'+input_value+'").hidden = false;';
+    body_add +='                    document.getElementById("period_day_popup'+input_value+'").readOnly = false;';
+    body_add +='                    document.getElementById("period_day_popup'+input_value+'").setAttribute("required","required");';
+    body_add +='                    document.getElementById("period_month_popup'+input_value+'").hidden = true;';
+    body_add +='                    document.getElementById("period_month_popup'+input_value+'").removeAttribute("required");';
+    body_add +='                }else if(value_period == "Month"){';
+    body_add +='                    document.getElementById("period_day_popup'+input_value+'").hidden = true;';
+    body_add +='                    document.getElementById("period_day_popup'+input_value+'").removeAttribute("required");';
+    body_add +='                    document.getElementById("period_month_popup'+input_value+'").hidden = false;';
+    body_add +='                    document.getElementById("period_month_popup'+input_value+'").setAttribute("required","required");';
+    body_add +='                }';
+    body_add +='            });';
+    body_add +='</'+'script>';
 
     body_add +='        <div class="form-group row col-md-12">';
     body_add +='            <div class="col-sm-2" >';
-    body_add +='                <label style="color: #102958;" >Start date:</label>';
+    body_add +='                <label style="color: #102958;" ><small><font color="red">*</font></small>Start date:</label>';
     body_add +='            </div> ';
     body_add +='            <div class="col-sm-4">';
-    body_add +='                <input id="start_date_popup'+input_value+'"  required="required" style="color: #0C1830;border-color:#102958;text-align: center;" type="text" class="form-control" ';
-    body_add +='                value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" >';
+    body_add +='                <input id="start_date_popup'+input_value+'" style="color: #0C1830;border-color:#102958;text-align: center;" type="text" class="form-control" ';
+    body_add +='                value="<?php //echo $start_date; ?>" placeholder="dd-mm-yyyy" >';
     body_add +='            </div>';
     body_add +='            <div class="col-sm-2 " >';
-    body_add +='                <label style="color: #102958;" for="staticEmail" >End date:</label>';
+    body_add +='                <label style="color: #102958;"  >End date:</label>';
     body_add +='            </div> ';
     body_add +='            <div class="col-sm-4">';
-    body_add +='                <input id="end_date_popup'+input_value+'"  required="required" style="color: #0C1830;border-color:#102958;text-align: center;" type="text"  class="form-control" ';
-    body_add +='                value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" >';
+    body_add +='                <input id="end_date_popup'+input_value+'" style="color: #0C1830;border-color:#102958;text-align: center;" type="text"  class="form-control" ';
+    body_add +='                value="<?php //echo $start_date; ?>" placeholder="dd-mm-yyyy" >';
     body_add +='            </div>';
     body_add +='        </div>';
 
@@ -835,7 +957,7 @@ body_add +='</'+'script>';
         body_add +='            <label style="color: #102958;" ><small><font color="red">*</font></small>Premium Rate:</label>';
         body_add +='       </div>';
         body_add +='        <div class="col-sm-2">';
-        body_add +='            <input id="premium_rate_pop'+input_value+'" type="number" style="border-color:#102958;text-align: right;" step="0.01" min="0" class="form-control" ';
+        body_add +='            <input id="premium_rate_pop'+input_value+'" type="number" style="border-color:#102958;text-align: right;" step="0.01" min="0" class="form-control" value="'+item.premium_rate+'" ';
         body_add +='                onchange="';
 
         body_add +='   var premium = parseFloat(this.value).toFixed(2);';
@@ -860,9 +982,14 @@ body_add +='</'+'script>';
         body_add +='        <div class="col-sm-2 " >';
         body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Paid Date:</label>';
         body_add +='        </div> ';
+
+        var paid_date = item.paid_date;
+        var parts = paid_date.split(" ")[0].split("-");
+        var converted_date = parts[2] + "-" + parts[1] + "-" + parts[0];
+
         body_add +='         <div class="col-sm-2">';
         body_add +='            <input id="paid_date_pop'+input_value+'" style="color: #0C1830;border-color:#102958;text-align: center;" type="text"  class="form-control" ';
-        body_add +='            value="<?php echo $paid_date; ?>" placeholder="dd-mm-yyyy" >';
+        body_add +='            value="'+converted_date+'" placeholder="dd-mm-yyyy" >';
         body_add +='        </div>';
 
         body_add +='        <div class="col-sm-2 " >';
@@ -891,16 +1018,29 @@ body_add +='</'+'script>';
         body_add +='                document.getElementById('+"'commission_pop"+input_value+"'"+').value =parseFloat(commission).toFixed(2);';
         body_add +='                }';
         body_add +='                " >';
-        body_add +='                <option value="Percentage" >Percentage</option>';
-        body_add +='                <option value="Net Value" >Net Value</option>';
+
+
+        body_add +='   <option value="Percentage" ';
+        if(item.calculate_type=="Percentage"){
+            body_add +='selected';
+        }
+        body_add +='   >Percentage</option>';
+        
+        body_add +='   <option value="Net Value" ';
+        if(item.calculate_type=="Net Value"){
+            body_add +='selected';
+        }
+        body_add +='   >Net Value</option>';
+
         body_add +='            </select>';
         body_add +='        </div>';
 
         body_add +='        <div class="col-sm-2 label_left" >';
-        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Value:</label>';
+        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Commission Value:</label>';
         body_add +='        </div> ';
+
         body_add +='        <div class="col-sm-2 " >';
-        body_add +='            <input id="percent_trade_pop'+input_value+'" type="text" class="form-control" style="border-color:#102958;text-align: right;" onchange="';
+        body_add +='            <input id="percent_trade_pop'+input_value+'" type="text" class="form-control" style="border-color:#102958;text-align: right;" value="'+item.percent_trade+'" onchange="';
 
         body_add +='                var num = parseInt(parseFloat(this.value).toFixed(0));';
 
@@ -933,15 +1073,27 @@ body_add +='</'+'script>';
         body_add +='            <label style="color: #102958;" for="staticEmail" >Commission rate:</label>';
         body_add +='        </div> ';
         body_add +='        <div class="col-sm-2 " >';
-        body_add +='            <input type="number" id="commission_pop'+input_value+'" style="border-color:#102958;text-align: right;" class="form-control" readOnly/>';
+        body_add +='            <input type="number" id="commission_pop'+input_value+'" style="border-color:#102958;text-align: right;" class="form-control" value="'+item.commission_rate+'" readOnly/>';
         body_add +='        </div>';
         body_add +='         <div class="col-sm-2 label_left" >';
         body_add +='            <label style="color: #102958;" for="staticEmail" >Payment status:</label>';
         body_add +='        </div> ';
         body_add +='        <div class="col-sm-2 " >';
         body_add +='<select  id="payment_status_pop'+input_value+'" style="color: #0C1830;border-color:#102958;" class="form-control" >';
-        body_add +='                <option value="Paid" >Paid</option>';
-        body_add +='                <option value="Not Paid" >Not Paid</option>';
+
+
+        body_add +='       <option value="Paid" ';
+        if(item.commission_status=="Paid"){
+        body_add +=' selected ';
+        }
+        body_add +='        >Paid</option>';
+
+        body_add +='       <option value="Not Paid" ';
+         if(item.commission_status=="Not Paid"){
+        body_add +=' selected ';
+        }
+        body_add +='        >Not Paid</option>';
+
         body_add +='            </select>';
         body_add +='        </div>';
 
@@ -961,27 +1113,51 @@ body_add +='</'+'script>';
     body_add +='<script >';
     body_add +='function click_payment'+input_value+'() {';
 
-    // body_add +=' alert('+"'click_payment:'"+'+'+input_value+'); ';
-
-    body_add +='    document.getElementById("period'+input_value+'").value = document.getElementById("period_popup'+input_value+'").value;';
-    body_add +='    $("#period'+input_value+'").selectpicker('+"'refresh'"+');';
-    body_add +='    document.getElementById("start_date'+input_value+'").value = document.getElementById("start_date_popup'+input_value+'").value;';
-    body_add +='    document.getElementById("end_date'+input_value+'").value = document.getElementById("end_date_popup'+input_value+'").value;';
-    
-    // body_add +='  $('+"'#ModalNotrenew"+input_value+"'"+').modal('+"'hide'"+');';
-
-    body_add +='var value_premium'+input_value+' = document.getElementById("premium_rate_pop'+input_value+'").value;';
+    body_add +='    var period_type'+input_value+'  = document.getElementById("period_popup'+input_value+'").value;';
+    body_add +='    var value_start'+input_value+' = document.getElementById("start_date_popup'+input_value+'").value;';
+    body_add +='    var value_end'+input_value+' = document.getElementById("end_date_popup'+input_value+'").value;';
+    body_add +='    var value_premium'+input_value+' = document.getElementById("premium_rate_pop'+input_value+'").value;';
     body_add +='    var value_percent'+input_value+' = document.getElementById("percent_trade_pop'+input_value+'").value;';
-    body_add +='    if(value_premium'+input_value+'=="" || value_percent'+input_value+'==""){';
+
+    body_add +='    var calculate'+input_value+' = document.getElementById("calculate_php'+input_value+'").value;';
+    body_add +='    var commission'+input_value+' = document.getElementById("commission_pop'+input_value+'").value;';
+    body_add +='    var payment_status'+input_value+' = document.getElementById("payment_status_pop'+input_value+'").value;';
+    body_add +='    var paid_date'+input_value+' = document.getElementById("paid_date_pop'+input_value+'").value;';
+
+    body_add +='if(value_premium'+input_value+'=="" || value_percent'+input_value+'=="" || value_start'+input_value+'=="" || value_end'+input_value+'=="" || calculate'+input_value+'=="" || commission'+input_value+'=="" || payment_status'+input_value+'=="" || paid_date'+input_value+'=="value_start"){';
     body_add +='        alert('+"'Please enter complete information.'"+');';
     body_add +='    }else{';
-    body_add +='        document.getElementById("premium_rate'+input_value+'").value = document.getElementById("premium_rate_pop'+input_value+'").value;';
-    body_add +='        document.getElementById("percent_trade'+input_value+'").value = document.getElementById("percent_trade_pop'+input_value+'").value;';
-    body_add +='        document.getElementById("calculate'+input_value+'").value = document.getElementById("calculate_php'+input_value+'").value;';
-    body_add +='        document.getElementById("commission'+input_value+'").value = document.getElementById("commission_pop'+input_value+'").value;';
-    body_add +='        document.getElementById("payment_status'+input_value+'").value = document.getElementById("payment_status_pop'+input_value+'").value;';
-     body_add +='        document.getElementById("paid_date'+input_value+'").value = document.getElementById("paid_date_pop'+input_value+'").value;';
-    // body_add +='        $('+"'#ModalRenew'"+').modal('+"hide'"+');';
+
+    body_add +='            if(period_type'+input_value+' == "Day"){';
+    body_add +='                if(document.getElementById("period_day_popup'+input_value+'").value==""){';
+    body_add +='                    alert("Please enter complete information.");';
+    body_add +='                    return false;';
+    body_add +='                }';
+    body_add +='                document.getElementById("period_day'+input_value+'").hidden = false;';
+    body_add +='                document.getElementById("period_day'+input_value+'").readOnly = false;';
+    body_add +='                document.getElementById("period_day'+input_value+'").setAttribute("required","required");';
+    body_add +='                document.getElementById("period_month'+input_value+'").hidden = true;';
+    body_add +='                document.getElementById("period_month'+input_value+'").removeAttribute("required");';
+    body_add +='                document.getElementById("period_day'+input_value+'").value = document.getElementById("period_day_popup'+input_value+'").value;';
+    body_add +='            }else if(period_type'+input_value+' == "Month"){ ';
+    body_add +='                document.getElementById("period_day'+input_value+'").hidden = true;';
+    body_add +='                document.getElementById("period_day'+input_value+'").removeAttribute("required");';
+    body_add +='                document.getElementById("period_month'+input_value+'").hidden = false;';
+    body_add +='                document.getElementById("period_month'+input_value+'").setAttribute("required","required");';
+    body_add +='                document.getElementById("period_month'+input_value+'").value = document.getElementById("period_month_popup'+input_value+'").value;';
+    body_add +='            }';
+
+    body_add +='        document.getElementById("period_type'+input_value+'").value = period_type'+input_value+';';
+    body_add +='        document.getElementById("start_date'+input_value+'").value  = value_start'+input_value+';';
+    body_add +='        document.getElementById("end_date'+input_value+'").value    = value_end'+input_value+';';
+    body_add +='        document.getElementById("premium_rate'+input_value+'").value = value_premium'+input_value+';';
+    body_add +='        document.getElementById("percent_trade'+input_value+'").value = value_percent'+input_value+';';
+
+    body_add +='        document.getElementById("calculate'+input_value+'").value = calculate'+input_value+';';
+    body_add +='        document.getElementById("commission'+input_value+'").value = commission'+input_value+';';
+    body_add +='        document.getElementById("payment_status'+input_value+'").value = payment_status'+input_value+';';
+    body_add +='        document.getElementById("paid_date'+input_value+'").value = paid_date'+input_value+';';
+
     body_add +='        $('+"'#ModalRenew"+input_value+"'"+').modal('+"'hide'"+');';
     body_add +='    }';
 
@@ -989,29 +1165,6 @@ body_add +='</'+'script>';
     body_add +='</'+'script>';
 
     //End popup ModalRenew ------------------------
-
-
-     // body_add +='var productObject = $('+"'#product_cat"+input_value+"'"+');';
-
-    body_add +='<script type="text/javascript">';
-    body_add +='$(function(){';
-    body_add +='    var product_cat_object = $('+"'#product_cat"+input_value+"'"+');';
-    body_add +='    var product_sub_object = $('+"'#sub_cat"+input_value+"'"+');';
-    body_add +='    product_cat_object.on('+"'change'"+', function(){';
-    body_add +='        var product_cat_id = $(this).val();  '; 
-    body_add +='        product_sub_object.html('+"''"+');';
-    body_add +='        $.get('+"'get_product_subcategories.php?id='"+' + product_cat_id, function(data){';
-    body_add +='        var result = JSON.parse(data);';
-    body_add +='        $.each(result, function(index, item){';
-    body_add +='            product_sub_object.append(';
-    body_add +='               $('+"'<option></option>'"+').val(item.id).html(item.subcategorie)';
-    body_add +='            );';
-    body_add +='        });';
-    body_add +='        $("#sub_cat'+input_value+'").selectpicker('+"'refresh'"+');';
-    body_add +='        });';
-    body_add +='    });';
-    body_add +='});';
-    body_add +='</'+'script>';
 
     body_add +='<script type="text/javascript">';
     body_add +='$(function(){';
@@ -1021,19 +1174,40 @@ body_add +='</'+'script>';
     body_add +='    var product_object = $('+"'#product_name"+input_value+"'"+');';
     body_add +='    var agent_name = $('+"'#agent"+input_value+"'"+');';
 
+    body_add +='    var selectedOptions = Array.from(document.getElementById("popup_product'+input_value+'").selectedOptions);';
+    body_add +='    var product_object_popup = $("#popup_product'+input_value+'");';
+    body_add +='    var productsArray = [];';
+
+
     body_add +='    insurance_com_object.on('+"'change'"+', function(){';
     body_add +='    var currency_id_new = $(this).val();';
+
+    body_add +='    document.getElementById("partner_currency'+input_value+'").value = "";';
+    body_add +='    document.getElementById("partner_currency_value'+input_value+'").value = "";';
+
     body_add +='    $.get('+"'get_currency_list.php?id='"+'+currency_id_new, function(data){';
     body_add +='        var result = JSON.parse(data);';
     body_add +='            $.each(result, function(index, item){';
-    body_add +='                document.getElementById("currency_id'+input_value+'").value = item.id;';
-    body_add +='                document.getElementById("currency'+input_value+'").value = item.currency;';
+    body_add +='             document.getElementById("currency_id'+input_value+'").value = item.id;';
+    body_add +='             document.getElementById("currency'+input_value+'").value = item.currency;';
+
+    body_add +='             document.getElementById("partner_currency'+input_value+'").value = item.currency_value;';
+    body_add +='             document.getElementById("partner_currency_value'+input_value+'").value = item.currency_value_convert;';
+
+    body_add +='             document.getElementById("premium_rate'+input_value+'").value = "";';
+    body_add +='             document.getElementById("convertion_value'+input_value+'").value = "";';
+
     body_add +='            });';
     body_add +='       });';
     
     body_add +='        product_object.html('+"''"+');';
     body_add +='        $.get('+"'get_product.php?id='"+'+currency_id_new, function(data){';
     body_add +='            var result = JSON.parse(data);';
+
+    body_add +='        product_object.append($('+"'<option></option>'"+').val("").html("Select Product Name"));';
+    body_add +='        document.getElementById("product_cat'+input_value+'").value = "";';
+    body_add +='        document.getElementById("sub_cat'+input_value+'").value = "";';
+
     body_add +='            $.each(result, function(index, item){';
     body_add +='                product_object.append(';
     body_add +='                $('+"'<option></option>'"+').val(item.id).html(item.product_name)';
@@ -1052,10 +1226,68 @@ body_add +='</'+'script>';
     body_add +='            });';
     body_add +='            $("#agent'+input_value+'").selectpicker('+"'refresh'"+');';
     body_add +='        });';
-    
-    body_add +='    });';
+
+    body_add +='        product_object_popup.html("");';
+    body_add +='        productsArray = [];';
+    body_add +='        $.get("get_product_not.php?id=" + currency_id_new,function(data){';
+    body_add +='                var result = JSON.parse(data);';
+    body_add +='                $.each(result, function(index, item){';
+
+    body_add +='                    productsArray.push({id: item.id, name: item.product_name,status : item.status_id});';
+    body_add +='                });';
+    body_add +='            doSomethingWithProducts(productsArray);';
+    body_add +='        });';
+
+    body_add +='        function doSomethingWithProducts(products) {';
+    body_add +='            products.forEach(function(product) {';
+    body_add +='                if(product.status === "true"){';
+    body_add +='         product_object_popup.append("<option value="+ product.id + " selected>"+product.name+"</option>");';
+    body_add +='                }else{';
+    body_add +='         product_object_popup.append("<option value=" + product.id + " >"+product.name+"</option>");';
+    body_add +='                }';
+    body_add +='            });';
+    body_add +='         $("#popup_product'+input_value+'").selectpicker("refresh");';
+
+    body_add +='         var selectedOptions = Array.from(document.getElementById("popup_product'+input_value+'").selectedOptions).map(option => option.textContent);';
+    body_add +='                var selectedOptionsText = selectedOptions.join("\\n");';
+    body_add +='                document.getElementById("popup_product_all'+input_value+'").value = selectedOptionsText;';
+    body_add +='                var lineCount = (selectedOptionsText.match(/'+'\\n/'+'g) || []).length + 1;';
+    body_add +='                document.getElementById("popup_product_all'+input_value+'").rows = lineCount;';
+
+    body_add +='       document.getElementById("popup_product'+input_value+'").addEventListener("change", function() {';
+    body_add +='                    var selectedOptions = Array.from(this.selectedOptions).map(option => option.textContent);';
+    body_add +='                    var selectedOptionsText = selectedOptions.join("\\n");';
+    body_add +='                    document.getElementById("popup_product_all'+input_value+'").value = selectedOptionsText;';
+    body_add +='                    var lineCount = (selectedOptionsText.match(/'+'\\n/'+'g) || []).length + 1;';
+    body_add +='                    document.getElementById("popup_product_all'+input_value+'").rows = lineCount;';
+    body_add +='            });';
+    body_add +='        }';
+
+   
+
+    body_add +='        product_object.on('+"'change'"+', function(){';
+    body_add +='        var product_id = $(this).val();';
+    body_add +='        document.getElementById("product_cat'+input_value+'").value = "";';
+    body_add +='        document.getElementById("sub_cat'+input_value+'").value = "";';
+    body_add +='            $.get('+"'get_product_for_cat_and_sub.php?id='"+' + product_id, function(data){';
+    body_add +='            var result = JSON.parse(data);';
+    body_add +='                $.each(result, function(index, item){';
+    body_add +='                    document.getElementById("product_cat'+input_value+'").value = item.id_product_categories;';
+    body_add +='                    document.getElementById("sub_cat'+input_value+'").value = item.product_subcategories;';
+    body_add +='                });';
+    body_add +='            });';
+    body_add +='        });';
+
+    body_add +='   });'; 
     body_add +='});';
     body_add +='</'+'script>';
+
+    //Start popup Product ------------------------
+
+    var result = popup_product_edit(input_value,item);
+    body_add +=result;
+
+    //End popup Product ------------------------
 
         $('#dynamic_field').append(body_add);
         return item;
@@ -1067,7 +1299,6 @@ body_add +='</'+'script>';
     $(document).ready(function() {
         var input_insurance = 0;
         var i=0; 
-       
 
         var customer_id = document.getElementById("id_insurance_info").value;
         if(customer_id != ""){
@@ -1128,7 +1359,7 @@ body_add +='</'+'script>';
         body_add +='           <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Policy No:</label>';
         body_add +='        </div>';
         body_add +='        <div class="col ">';
-        body_add +='            <input id="policy" name="policy[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" required="required" >';
+        body_add +='            <input id="policy" name="policy[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" required>';
         body_add +='        </div>';
 
         body_add +='        <div class="col-sm-2  label_left" >';
@@ -1210,7 +1441,7 @@ body_add +='</'+'script>';
 
         body_add +='    <div class="form-group row mb-20 col-md-10 col-md-offset-1">';
         body_add +='        <div class="col-sm-2  label_left" >';
-        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Partner Company:</label>';
+        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Partner Name:</label>';
         body_add +='        </div>';
         body_add +='        <div class="col"  >';
         body_add +='<input hidden="true" type="text" id="currency_id'+input_value+'" name="currency_id[]" style="border-color:#102958;" class="form-control" value="<?php echo $currency_id; ?>" />';
@@ -1224,49 +1455,78 @@ body_add +='</'+'script>';
 
         body_add +='    </div>';
 
-        body_add +='   <div class="form-group row mb-20 col-md-10 col-md-offset-1">';
-        body_add +='       <div class="col-sm-2 label_left" >';
-        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Product Category:</label>';
-        body_add +='       </div>';
-        body_add +='        <div class="col">';
-        body_add +=' <select id="product_cat'+input_value+'" name="product_cat[]" style="color:#0C1830;border-color:#102958;"class="form-control" id="default" required>';
-        body_add +='<option value="" selected>Select Product Category</option>';
-        body_add +='<?php  foreach($results_categories as $result){ ?>';
-        body_add +='<option value="<?php echo $result->id; ?>"><?php echo $result->categorie; ?></option>';
-        body_add +='<? } ?>';
+        // body_add +='   <div class="form-group row mb-20 col-md-10 col-md-offset-1">';
+        // body_add +='       <div class="col-sm-2 label_left" >';
+        // body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Product Category:</label>';
+        // body_add +='       </div>';
+        // body_add +='        <div class="col">';
+        // body_add +=' <select id="product_cat'+input_value+'" name="product_cat[]" style="color:#0C1830;border-color:#102958;"class="form-control" id="default" required>';
+        // body_add +='<option value="" selected>Select Product Category</option>';
+        // body_add +='<?php  foreach($results_categories as $result){ ?>';
+        // body_add +='<option value="<?php echo $result->id; ?>"><?php echo $result->categorie; ?></option>';
+        // body_add +='<? } ?>';
 
-        body_add +='           </select>';
-        body_add +='        </div>';
+        // body_add +='           </select>';
+        // body_add +='        </div>';
 
-        body_add +='        <div class="col-sm-2  label_left" >';
-        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Sub Categories:</label>';
-        body_add +='        </div>';
-        body_add +='        <div class="col"  >';
-        body_add +='        <select id="sub_cat'+input_value+'" name="sub_cat[]"  style="color: #0C1830;border-color:#102958;"class="form-control" value="0" required>';
+        // body_add +='        <div class="col-sm-2  label_left" >';
+        // body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Sub Categories:</label>';
+        // body_add +='        </div>';
+        // body_add +='        <div class="col"  >';
+        // body_add +='        <select id="sub_cat'+input_value+'" name="sub_cat[]"  style="color: #0C1830;border-color:#102958;"class="form-control" value="0" required>';
 
-        body_add +='<option value="" selected>Select Product Category</option>';
-        body_add +='<?php  foreach($results_sub as $result){ ?>';
-        body_add +='<option value="<?php echo $result->id; ?>"><?php echo $result->subcategorie; ?></option>';
-        body_add +='<? } ?>';
+        // body_add +='<option value="" selected>Select Product Category</option>';
+        // body_add +='<?php  foreach($results_sub as $result){ ?>';
+        // body_add +='<option value="<?php echo $result->id; ?>"><?php echo $result->subcategorie; ?></option>';
+        // body_add +='<? } ?>';
 
-        body_add +='        </select>';
-        body_add +='        </div>';
-        body_add +='    </div>';
+        // body_add +='        </select>';
+        // body_add +='        </div>';
+        // body_add +='    </div>';
 
         body_add +='    <div class="form-group row col-md-10 col-md-offset-1">';
 
         body_add +='        <div class="col-sm-2 label_left" >';
         body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Product Name:</label>';
         body_add +='        </div> ';
+
         body_add +='        <div class="col">';
-        body_add +='<select id="product_name'+input_value+'" name="product_name[]" style="color: #0C1830;border-color:#102958;"class="form-control" value="0" required>';
-        body_add +='<option value="" selected>Select Product Name</option>';
-        body_add +='<?php  foreach($results_product as $result){ ?>';
-        body_add +='    <option value="<?php echo $result->id; ?>" ><?php echo $result->product_name; ?></option>';
-        body_add +='<? } ?>';
-        body_add +='</select>';
+        body_add +='            <select id="product_name'+input_value+'" name="product_name[]" style="color: #0C1830;border-color:#102958;"class="form-control" value="0" required>';
+        body_add +='                <option value="" selected>Select Product Name</option>';
+        // body_add +='<?php  foreach($results_product as $result){ ?>';
+        // body_add +='    <option value="<?php echo $result->id; ?>" ><?php echo $result->product_name; ?></option>';
+        // body_add +='<? } ?>';
+        body_add +='            </select>';
         body_add +='       </div>';
 
+        body_add +='<div class="col-sm-1">';
+        body_add +='            <button style="background-color: #0275d8;color: #F9FAFA;" type="button" class="btn " data-toggle="modal"  onclick="checkProductName'+input_value+'();" >';
+        body_add +='    <svg enable-background="new 0 0 512 512" height="20px" id="Layer_1" version="1.1" viewBox="0 0 512 512" width="20px" xml:space="preserve" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M256,512C114.625,512,0,397.391,0,256C0,114.609,114.625,0,256,0c141.391,0,256,114.609,256,256  C512,397.391,397.391,512,256,512z M256,64C149.969,64,64,149.969,64,256s85.969,192,192,192c106.047,0,192-85.969,192-192  S362.047,64,256,64z M288,384h-64v-96h-96v-64h96v-96h64v96h96v64h-96V384z" fill="#ffffff" /></svg>&nbsp;';
+                        
+        body_add +='            </button>';
+        body_add +='        </div>';
+
+        body_add +='    </div>';
+
+        body_add +='<script>';
+        body_add +='        function checkProductName'+input_value+'() {';
+        body_add +='            var productName = document.getElementById("insurance_com'+input_value+'").value;';
+        body_add +='            if (productName === "") {';
+        body_add +='                alert("Please select a partner name");';
+        body_add +='                return false;';
+        body_add +='            }else{';
+        body_add +='                $("#ModalProduct'+input_value+'").modal("show");';
+        body_add +='            }';
+        body_add +='        }';
+        body_add +='</'+'script>';
+
+        body_add +='<div class="form-group row mb-20 col-md-10 col-md-offset-1">';
+        body_add +='        <div class="col-6">';
+        body_add +='            <input hidden="true" id="product_cat'+input_value+'" name="product_cat[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" value="product_cat'+input_value+'" >';
+        body_add +='        </div>';
+        body_add +='        <div class="col-6">';
+        body_add +='            <input hidden="true" id="sub_cat'+input_value+'" name="sub_cat[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text"  >';
+        body_add +='        </div>';
         body_add +='    </div>';
 
         body_add +='    <div class="form-group row col-md-10 col-md-offset-1">';
@@ -1294,7 +1554,7 @@ body_add +='</'+'script>';
         body_add +='       </div>';
 
         body_add +='       <div class="col-sm-2">';
-        body_add +='            <select hidden="true" id="period_month'+input_value+'" name="period_month[]"  style="color: #0C1830;border-color:#102958;"class="form-control" value="0" required>';
+        body_add +='            <select hidden="true" id="period_month'+input_value+'" name="period_month[]"  style="color: #0C1830;border-color:#102958;"class="form-control" value="0" >';
         body_add +='    <option value="" selected>Select Period</option>';
         body_add +='    <?php  foreach($results_period as $result){ ?>';
         body_add +='    <option value="<?php echo $result->id; ?>" ><?php echo $result->period; ?></option><? } ?>';
@@ -1409,31 +1669,21 @@ body_add +='</'+'script>';
         body_add +='        <div class="col-sm-2 label_left" >';
         body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Premium Rate:</label>';
         body_add +='       </div>';
+
         body_add +='        <div class="col-sm-2">';
         body_add +='            <input id="premium_rate'+input_value+'" name="premium_rate[]" type="number" style="border-color:#102958;text-align: right;" step="0.01" min="0" class="form-control" ';
         body_add +='                onchange="';
 
-        body_add +='   var premium = parseFloat(this.value).toFixed(2);';
-
-        body_add +='   var percent = parseFloat(document.getElementById('+"'percent_trade"+input_value+"'"+').value).toFixed(2);';
-        body_add +='                if(document.getElementById('+"'calculate"+input_value+"'"+').value=='+"'Percentage'"+'){';
-        body_add +='                if(Number.isInteger(parseFloat(this.value).toFixed(2))){';
-        body_add +='                    this.value=this.value+'+"'.00'"+';';
-        body_add +='                }else{';
-        body_add +='                    this.value=parseFloat(this.value).toFixed(2);';
-        body_add +='                }';
-        body_add +='                    var commission = ((percent / 100) * premium);';
-
-        body_add +='                }else if(document.getElementById('+"'calculate"+input_value+"'"+').value=='+"'Net Value'"+'){';
-
-        body_add +='   document.getElementById('+"'percent_trade"+input_value+"'"+').value = parseFloat(document.getElementById('+"'percent_trade"+input_value+"'"+').value).toFixed(2);';
-        body_add +='                    var commission = percent;';
-
-        body_add +='                }';
-
-        body_add +='                document.getElementById('+"'commission"+input_value+"'"+').value =parseFloat(commission).toFixed(2);';
-
         body_add +='                " required/>';
+        body_add +='        </div>';
+
+        body_add +='        <div class="col-sm-2 label_left" >';
+        body_add +='            <label style="color: #102958;" >Convertion Value:</label>';
+        body_add +='        </div> ';
+        body_add +='        <div class="col-2">';
+        
+        body_add +='            <input id="convertion_value'+input_value+'" name="convertion_value[]"  style="color: #0C1830;border-color:#102958; text-align: center;" type="test"  class="form-control" ';
+        body_add +='            value=""  readOnly>';
         body_add +='        </div>';
 
         body_add +='        <div class="col-sm-2 label_left" >';
@@ -1446,6 +1696,72 @@ body_add +='</'+'script>';
         
         body_add +='    </div>';
 
+        body_add +='<input hidden="true" id="partner_currency'+input_value+'"  type="text" value="" >';
+        body_add +='<input hidden="true" id="partner_currency_value'+input_value+'"  type="text" value="" >';
+
+        body_add +='<script>';
+        body_add +='    $(function(){';
+        body_add +='        var premium_rate_object = $("#premium_rate'+input_value+'");';
+        body_add +='        var convertion_value_object = $("#convertion_value'+input_value+'");';
+        body_add +='        var currency_object = $("#currency'+input_value+'");';
+
+        body_add +='        premium_rate_object.on("change", function(){';
+        body_add +='        var premium_value = $(this).val();';
+
+        body_add +='    var partner_currency'+input_value+' = document.getElementById("partner_currency'+input_value+'").value;';
+        body_add +='    var partner_currency_value'+input_value+' = document.getElementById("partner_currency_value'+input_value+'").value;';
+
+        body_add +='            if(currency_object.val()=="฿THB"){';
+
+    body_add +='var formattedResult = premium_value.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});';
+    body_add +='convertion_value_object.val(formattedResult);';
+
+        body_add +='            }else{';
+
+        body_add +='                if(partner_currency'+input_value+' !=""){';
+        body_add +='                  if(parseInt(partner_currency'+input_value+')>parseInt(partner_currency_value'+input_value+')){';
+        body_add +='                     var value = (premium_value/partner_currency_value'+input_value+');';
+        body_add +='                     var formattedResult = value.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});';
+        body_add +='                     convertion_value_object.val(formattedResult);';
+        body_add +='                  }else{';
+        body_add +='                        var value = (premium_value*partner_currency_value'+input_value+');';
+        body_add +='                        var formattedResult = value.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});';
+        body_add +='                       convertion_value_object.val(formattedResult);';
+        body_add +='                  }';
+        body_add +='                }else{';
+
+    body_add +='var formattedResult = premium_value.toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2});';
+    body_add +='convertion_value_object.val(formattedResult);';
+
+        body_add +='                }';
+        body_add +='            }';
+
+        body_add +='      var commission=0;';
+
+        body_add +='      var premiumInput = document.getElementById("premium_rate'+input_value+'").value.replace(/,/g,'+"''"+');';
+        body_add +='      var premium = parseFloat(premiumInput).toFixed(2);';
+        body_add +='      var con_vaInput = document.getElementById("convertion_value'+input_value+'").value.replace(/,/g,'+"''"+');';
+        body_add +='      var con_va = parseFloat(con_vaInput).toFixed(2);';
+        body_add +='      var percentInput = document.getElementById("percent_trade'+input_value+'").value.replace(/,/g,'+"''"+');';
+        body_add +='      var percent = parseFloat(percentInput).toFixed(2);';
+
+
+        // body_add +='               if(Number.isInteger(parseFloat(premium))){';
+        body_add +='                    if(document.getElementById("calculate'+input_value+'").value=="Percentage"){';
+        body_add +='                        var commission = ((percent / 100) * con_va);';
+        body_add +='                    }else{';
+        body_add +='                        var commission = percent;';
+        body_add +='                    }';
+        // body_add +='                }else{';
+        // body_add +='                    document.getElementById("premium_rate'+input_value+'").value=parseFloat(con_va);';
+        // body_add +='                }';
+        body_add +='                var commissionNumber = parseFloat(commission).toFixed(2);';
+        body_add +='                document.getElementById("commission'+input_value+'").value =parseFloat(commission).toFixed(2);';
+
+        body_add +='        });';
+        body_add +='    });';
+        body_add +='</'+'script>';
+
         body_add +='<div class="form-group row col-md-10 col-md-offset-1">';
 
         body_add +='        <div class="col-sm-2 label_left" >';
@@ -1455,7 +1771,9 @@ body_add +='</'+'script>';
         body_add +='            <select id="calculate'+input_value+'" name="calculate[]" value="<?php echo $result->product_category; ?>" style="color: #0C1830;border-color:#102958;" class="form-control" ';
         body_add +='                onchange="';
         body_add +='                if(document.getElementById('+"'percent_trade"+input_value+"'"+').value!='+"''"+'){';
-        body_add +='  var premium = parseFloat(document.getElementById('+"'premium_rate"+input_value+"'"+').value).toFixed(2);';
+        // body_add +='  var premium = parseFloat(document.getElementById('+"'premium_rate"+input_value+"'"+').value).toFixed(2);';
+    body_add +='var premiumInput = document.getElementById('+"'convertion_value"+input_value+"'"+').value.replace(/,/g,'+"''"+');';
+    body_add +='var premium = parseFloat(premiumInput).toFixed(2);';
         body_add +='  var percent = parseFloat(document.getElementById('+"'percent_trade"+input_value+"'"+').value).toFixed(2);';
 
         body_add +='      if(document.getElementById('+"'calculate"+input_value+"'"+').value=='+"'Percentage'"+'){';
@@ -1494,7 +1812,9 @@ body_add +='</'+'script>';
 
         body_add +='                if(Number.isInteger(num)){';
 
-        body_add +='        var premium = parseFloat(document.getElementById('+"'premium_rate"+input_value+"'"+').value).toFixed(2);';
+        // body_add +='        var premium = parseFloat(document.getElementById('+"'premium_rate"+input_value+"'"+').value).toFixed(2);';
+    body_add +='var premiumInput = document.getElementById('+"'convertion_value"+input_value+"'"+').value.replace(/,/g,'+"''"+');';
+    body_add +='var premium = parseFloat(premiumInput).toFixed(2);';
 
         body_add +='                var percent = parseFloat(this.value).toFixed(2);';
 
@@ -1542,11 +1862,11 @@ body_add +='</'+'script>';
 
         body_add +='<div class="form-group row col-md-10 col-md-offset-1">';
         body_add +='        <div class="col-sm-2 label_left" >';
-        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Agent Name:</label>';
+        body_add +='            <label style="color: #102958;" for="staticEmail" >Agent Name:</label>';
         body_add +='        </div>';
 
         body_add +='    <div class="col">';
-        body_add +=' <select id="agent'+input_value+'" name="agent[]" style="color:#0C1830;border-color:#102958;" class="form-control" required>';
+        body_add +=' <select id="agent'+input_value+'" name="agent[]" style="color:#0C1830;border-color:#102958;" class="form-control" >';
         body_add +=' <option value="" selected>Select Agent Name</option>';
         body_add +='<?php foreach($results_agent as $result){ ?>';
         body_add +='<option value="<?php echo $result->id; ?>" ><?php echo $result->title_name." ".$result->first_name." ".$result->last_name."(".$result->nick_name.")"; ?></option>';
@@ -1555,11 +1875,11 @@ body_add +='</'+'script>';
         body_add +='    </div>';
 
         body_add +='    <div class="col-sm-2 label_left" >';
-        body_add +='        <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Upload Documents:</label>';
+        body_add +='        <label style="color: #102958;" for="staticEmail" >Upload Documents:</label>';
         body_add +='    </div>';
                 
         body_add +='    <div class="col">';
-        body_add +='        <input name="file_d[]" type="file" style="width: 100%;" name="img" src="image.php?filename=<?php echo htmlentities($path_file) ?>" id="imgInp'+input_value+'"  accept="application/pdf" required>';
+        body_add +='        <input name="file_d[]" type="file" style="width: 100%;" name="img" src="image.php?filename=<?php echo htmlentities($path_file) ?>" id="imgInp'+input_value+'"  accept="application/pdf" >';
         body_add +='    </div>';
 
         body_add +='</div>';
@@ -1681,37 +2001,69 @@ body_add +='</'+'script>';
     body_add +='        </div>';
     body_add +='        </div>  ';
     body_add +='        <div class="modal-body">';
+
     body_add +='        <div class="form-group row col-md-12">';
-    body_add +='            <div class="col-sm-2 " >';
-    body_add +='                <label style="color: #102958;" for="staticEmail" >Period:</label>';
-    body_add +='            </div> ';
-    body_add +='            <div class="col-sm-4">';
-    body_add +='            <select id="period_popup'+input_value+'"  required="required" style="color: #0C1830;border-color:#102958;"class="form-control" value="0" >';
-    body_add +='                    <?php  foreach($results_period as $result){ ?>';
-    body_add +='                    <option value="<?php echo $result->id; ?>" ><?php echo $result->period; ?></option>';
-    body_add +='                    <? } ?>';
+
+    body_add +='            <div class="col-sm-2 label_left" >';
+    body_add +='                <label style="color: #102958;" ><small><font color="red">*</font></small>Period type:</label>';
+    body_add +='            </div>';
+    body_add +='            <div class="col-2">';
+    body_add +='                <select id="period_popup'+input_value+'" style="color: #0C1830;border-color:#102958;"class="form-control" >';
+    body_add +='                    <option value="Day" >Day</option>';
+    body_add +='                    <option value="Month" >Month</option>';
     body_add +='                </select>';
     body_add +='            </div>';
-    body_add +='            <div class="col-sm-2 " >';
+
+    body_add +='            <div class="col-sm-2 label_left" >';
+    body_add +='                <label style="color: #102958;"  ><small><font color="red">*</font></small>Period:</label>';
     body_add +='            </div>';
-    body_add +='            <div class="col-sm-4">';
+
+    body_add +='            <div class="col-2">';
+    body_add +='<select hidden="true" id="period_month_popup'+input_value+'" style="color: #0C1830;border-color:#102958;"class="form-control" value="" >';
+
+    body_add +='                    <?php  foreach($results_period as $result){ ?>';
+    body_add +='                    <option value="<?php echo $result->id; ?>" ><?php echo $result->period; ?></option>';
+     body_add +='                   <? } ?>';
+
+    body_add +='<input  id="period_day_popup'+input_value+'" minlength="1" maxlength="3" style="color: #0C1830;border-color:#102958;" type="number" class="form-control input_text" >';
+   
     body_add +='            </div>';
+
     body_add +='        </div>';
+
+    body_add +='<script>';
+    body_add +='            $("#period_popup'+input_value+'").change(function(){';
+    body_add +='                var value_period = $(this).val();';
+    body_add +='                if(value_period == "Day"){';
+    body_add +='                    document.getElementById("period_day_popup'+input_value+'").hidden = false;';
+    body_add +='                    document.getElementById("period_day_popup'+input_value+'").readOnly = false;';
+    body_add +='                    document.getElementById("period_day_popup'+input_value+'").setAttribute("required","required");';
+    body_add +='                    document.getElementById("period_month_popup'+input_value+'").hidden = true;';
+    body_add +='                    document.getElementById("period_month_popup'+input_value+'").removeAttribute("required");';
+    body_add +='                }else if(value_period == "Month"){';
+    body_add +='                    document.getElementById("period_day_popup'+input_value+'").hidden = true;';
+    body_add +='                    document.getElementById("period_day_popup'+input_value+'").removeAttribute("required");';
+    body_add +='                    document.getElementById("period_month_popup'+input_value+'").hidden = false;';
+    body_add +='                    document.getElementById("period_month_popup'+input_value+'").setAttribute("required","required");';
+    body_add +='                }';
+    body_add +='            });';
+    body_add +='</'+'script>';
+
 
     body_add +='        <div class="form-group row col-md-12">';
     body_add +='            <div class="col-sm-2" >';
     body_add +='                <label style="color: #102958;" >Start date:</label>';
     body_add +='            </div> ';
     body_add +='            <div class="col-sm-4">';
-    body_add +='                <input id="start_date_popup'+input_value+'"  required="required" style="color: #0C1830;border-color:#102958;text-align: center;" type="text" class="form-control" ';
-    body_add +='                value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" >';
+    body_add +='                <input id="start_date_popup'+input_value+'" style="color: #0C1830;border-color:#102958;text-align: center;" type="text" class="form-control" ';
+    body_add +='                value="<?php //echo $start_date; ?>" placeholder="dd-mm-yyyy" >';
     body_add +='            </div>';
     body_add +='            <div class="col-sm-2 " >';
     body_add +='                <label style="color: #102958;" for="staticEmail" >End date:</label>';
     body_add +='            </div> ';
     body_add +='            <div class="col-sm-4">';
-    body_add +='                <input id="end_date_popup'+input_value+'"  required="required" style="color: #0C1830;border-color:#102958;text-align: center;" type="text"  class="form-control" ';
-    body_add +='                value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" >';
+    body_add +='                <input id="end_date_popup'+input_value+'" style="color: #0C1830;border-color:#102958;text-align: center;" type="text"  class="form-control" ';
+    body_add +='                value="<?php //decho $start_date; ?>" placeholder="dd-mm-yyyy" >';
     body_add +='            </div>';
     body_add +='        </div>';
 
@@ -1770,7 +2122,7 @@ body_add +='</'+'script>';
         body_add +='        </div>';
 
         body_add +='        <div class="col-sm-2 " >';
-        body_add +='             <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Calculate by:</label>';
+        body_add +='             <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Commission Type:</label>';
         body_add +='        </div>';
         body_add +='        <div class="col-sm-2 " >';
         body_add +='            <select id="calculate_php'+input_value+'"  value="<?php echo $result->product_category; ?>" style="color: #0C1830;border-color:#102958;" class="form-control" ';
@@ -1801,7 +2153,7 @@ body_add +='</'+'script>';
         body_add +='        </div>';
 
         body_add +='        <div class="col-sm-2 " >';
-        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Value:</label>';
+        body_add +='            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Commission Value:</label>';
         body_add +='        </div> ';
         body_add +='        <div class="col-sm-2 " >';
         body_add +='            <input id="percent_trade_pop'+input_value+'" type="text" class="form-control" style="border-color:#102958;text-align: right;" onchange="';
@@ -1840,7 +2192,7 @@ body_add +='</'+'script>';
         body_add +='            <input type="number" id="commission_pop'+input_value+'" style="border-color:#102958;text-align: right;" class="form-control" readOnly/>';
         body_add +='        </div>';
         body_add +='         <div class="col-sm-2 label_left" >';
-        body_add +='            <label style="color: #102958;" for="staticEmail" >Payment status:</label>';
+        body_add +='            <label style="color: #102958;" for="staticEmail" >Commission Status:</label>';
         body_add +='        </div> ';
         body_add +='        <div class="col-sm-2 " >';
         body_add +='<select  id="payment_status_pop'+input_value+'" style="color: #0C1830;border-color:#102958;" class="form-control" >';
@@ -1865,79 +2217,127 @@ body_add +='</'+'script>';
     body_add +='<script >';
     body_add +='function click_payment'+input_value+'() {';
 
-    // body_add +=' alert('+"'click_payment:'"+'+'+input_value+'); ';
-
-    body_add +='    document.getElementById("period'+input_value+'").value = document.getElementById("period_popup'+input_value+'").value;';
-    body_add +='    $("#period'+input_value+'").selectpicker('+"'refresh'"+');';
-    body_add +='    document.getElementById("start_date'+input_value+'").value = document.getElementById("start_date_popup'+input_value+'").value;';
-    body_add +='    document.getElementById("end_date'+input_value+'").value = document.getElementById("end_date_popup'+input_value+'").value;';
-    
-    // body_add +='  $('+"'#ModalNotrenew"+input_value+"'"+').modal('+"'hide'"+');';
-
-    body_add +='var value_premium'+input_value+' = document.getElementById("premium_rate_pop'+input_value+'").value;';
+    body_add +='    var period_type'+input_value+'  = document.getElementById("period_popup'+input_value+'").value;';
+    body_add +='    var value_start'+input_value+' = document.getElementById("start_date_popup'+input_value+'").value;';
+    body_add +='    var value_end'+input_value+' = document.getElementById("end_date_popup'+input_value+'").value;';
+    body_add +='    var value_premium'+input_value+' = document.getElementById("premium_rate_pop'+input_value+'").value;';
     body_add +='    var value_percent'+input_value+' = document.getElementById("percent_trade_pop'+input_value+'").value;';
-    body_add +='    if(value_premium'+input_value+'=="" || value_percent'+input_value+'==""){';
+
+    body_add +='    var calculate'+input_value+' = document.getElementById("calculate_php'+input_value+'").value;';
+    body_add +='    var commission'+input_value+' = document.getElementById("commission_pop'+input_value+'").value;';
+    body_add +='    var payment_status'+input_value+' = document.getElementById("payment_status_pop'+input_value+'").value;';
+    body_add +='    var paid_date'+input_value+' = document.getElementById("paid_date_pop'+input_value+'").value;';
+
+    body_add +='if(value_premium'+input_value+'=="" || value_percent'+input_value+'=="" || value_start'+input_value+'=="" || value_end'+input_value+'=="" || calculate'+input_value+'=="" || commission'+input_value+'=="" || payment_status'+input_value+'=="" || paid_date'+input_value+'=="value_start"){';
     body_add +='        alert('+"'Please enter complete information.'"+');';
     body_add +='    }else{';
-    body_add +='        document.getElementById("premium_rate'+input_value+'").value = document.getElementById("premium_rate_pop'+input_value+'").value;';
-    body_add +='        document.getElementById("percent_trade'+input_value+'").value = document.getElementById("percent_trade_pop'+input_value+'").value;';
-    body_add +='        document.getElementById("calculate'+input_value+'").value = document.getElementById("calculate_php'+input_value+'").value;';
-    body_add +='        document.getElementById("commission'+input_value+'").value = document.getElementById("commission_pop'+input_value+'").value;';
-    body_add +='        document.getElementById("payment_status'+input_value+'").value = document.getElementById("payment_status_pop'+input_value+'").value;';
 
-    body_add +='document.getElementById("paid_date'+input_value+'").value = document.getElementById("paid_date_pop'+input_value+'").value;';
+    body_add +='            if(period_type'+input_value+' == "Day"){';
+    body_add +='                if(document.getElementById("period_day_popup'+input_value+'").value==""){';
+    body_add +='                    alert("Please enter complete information.");';
+    body_add +='                    return false;';
+    body_add +='                }';
+    body_add +='                document.getElementById("period_day'+input_value+'").hidden = false;';
+    body_add +='                document.getElementById("period_day'+input_value+'").readOnly = false;';
+    body_add +='                document.getElementById("period_day'+input_value+'").setAttribute("required","required");';
+    body_add +='                document.getElementById("period_month'+input_value+'").hidden = true;';
+    body_add +='                document.getElementById("period_month'+input_value+'").removeAttribute("required");';
+    body_add +='                document.getElementById("period_day'+input_value+'").value = document.getElementById("period_day_popup'+input_value+'").value;';
+    body_add +='            }else if(period_type'+input_value+' == "Month"){ ';
+    body_add +='                document.getElementById("period_day'+input_value+'").hidden = true;';
+    body_add +='                document.getElementById("period_day'+input_value+'").removeAttribute("required");';
+    body_add +='                document.getElementById("period_month'+input_value+'").hidden = false;';
+    body_add +='                document.getElementById("period_month'+input_value+'").setAttribute("required","required");';
+    body_add +='                document.getElementById("period_month'+input_value+'").value = document.getElementById("period_month_popup'+input_value+'").value;';
+    body_add +='            }';
 
-    // body_add +='        $('+"'#ModalRenew'"+').modal('+"hide'"+');';
+    body_add +='        document.getElementById("period_type'+input_value+'").value = period_type'+input_value+';';
+    body_add +='        document.getElementById("start_date'+input_value+'").value  = value_start'+input_value+';';
+    body_add +='        document.getElementById("end_date'+input_value+'").value    = value_end'+input_value+';';
+    body_add +='        document.getElementById("premium_rate'+input_value+'").value = value_premium'+input_value+';';
+    body_add +='        document.getElementById("percent_trade'+input_value+'").value = value_percent'+input_value+';';
+
+    body_add +='        document.getElementById("calculate'+input_value+'").value = calculate'+input_value+';';
+    body_add +='        document.getElementById("commission'+input_value+'").value = commission'+input_value+';';
+    body_add +='        document.getElementById("payment_status'+input_value+'").value = payment_status'+input_value+';';
+    body_add +='        document.getElementById("paid_date'+input_value+'").value = paid_date'+input_value+';';
+
     body_add +='        $('+"'#ModalRenew"+input_value+"'"+').modal('+"'hide'"+');';
     body_add +='    }';
 
     body_add +='} ';
     body_add +='</'+'script>';
 
-    //End popup ModalRenew ------------------------
 
+    //End popup ModalRenew ------------------------
 
      // body_add +='var productObject = $('+"'#product_cat"+input_value+"'"+');';
 
-    body_add +='<script type="text/javascript">';
-    body_add +='$(function(){';
-    body_add +='    var product_cat_object = $('+"'#product_cat"+input_value+"'"+');';
-    body_add +='    var product_sub_object = $('+"'#sub_cat"+input_value+"'"+');';
-    body_add +='    product_cat_object.on('+"'change'"+', function(){';
-    body_add +='        var product_cat_id = $(this).val();  '; 
-    body_add +='        product_sub_object.html('+"''"+');';
-    body_add +='        $.get('+"'get_product_subcategories.php?id='"+' + product_cat_id, function(data){';
-    body_add +='        var result = JSON.parse(data);';
-    body_add +='        $.each(result, function(index, item){';
-    body_add +='            product_sub_object.append(';
-    body_add +='               $('+"'<option></option>'"+').val(item.id).html(item.subcategorie)';
-    body_add +='            );';
-    body_add +='        });';
-    body_add +='        $("#sub_cat'+input_value+'").selectpicker('+"'refresh'"+');';
-    body_add +='        });';
-    body_add +='    });';
-    body_add +='});';
-    body_add +='</'+'script>';
+    // body_add +='<script type="text/javascript">';
+    // body_add +='$(function(){';
+    // body_add +='    var product_cat_object = $('+"'#product_cat"+input_value+"'"+');';
+    // body_add +='    var product_sub_object = $('+"'#sub_cat"+input_value+"'"+');';
+    // body_add +='    product_cat_object.on('+"'change'"+', function(){';
+    // body_add +='        var product_cat_id = $(this).val();  '; 
+    // body_add +='        product_sub_object.html('+"''"+');';
+    // body_add +='        $.get('+"'get_product_subcategories.php?id='"+' + product_cat_id, function(data){';
+    // body_add +='        var result = JSON.parse(data);';
+    // body_add +='        $.each(result, function(index, item){';
+    // body_add +='            product_sub_object.append(';
+    // body_add +='               $('+"'<option></option>'"+').val(item.id).html(item.subcategorie)';
+    // body_add +='            );';
+    // body_add +='        });';
+    // body_add +='        $("#sub_cat'+input_value+'").selectpicker('+"'refresh'"+');';
+    // body_add +='        });';
+    // body_add +='    });';
+    // body_add +='});';
+    // body_add +='</'+'script>';
 
     body_add +='<script type="text/javascript">';
+    // body_add +=' alert('+"'currency_id:'"+'); ';
+
     body_add +='$(function(){';
     body_add +='    var insurance_com_object = $('+"'#insurance_com"+input_value+"'"+');';
     body_add +='    var currency_object = $('+"'#currency"+input_value+"'"+');';
     body_add +='    var product_object = $('+"'#product_name"+input_value+"'"+');';
     body_add +='    var agent_name = $('+"'#agent"+input_value+"'"+');';
 
+    body_add +='var selectedOptions = Array.from(document.getElementById("popup_product'+input_value+'").selectedOptions);';
+    body_add +='var product_object_popup = $("#popup_product'+input_value+'");';
+    body_add +='var productsArray = [];';
+
+
+
     body_add +='    insurance_com_object.on('+"'change'"+', function(){';
     body_add +='    var currency_id_new = $(this).val();';
+
+    body_add +='    document.getElementById("partner_currency'+input_value+'").value = "";';
+    body_add +='    document.getElementById("partner_currency_value'+input_value+'").value = "";';
+
     body_add +='    $.get('+"'get_currency_list.php?id='"+'+currency_id_new, function(data){';
     body_add +='        var result = JSON.parse(data);';
-    // body_add +=' alert('+"'currency_id:'"+'+currency_id_new); ';
     body_add +='            $.each(result, function(index, item){';
     body_add +='                document.getElementById("currency_id'+input_value+'").value = item.id;';
     body_add +='                document.getElementById("currency'+input_value+'").value = item.currency;';
+
+    // body_add +='                partner_currency'+input_value+' = item.currency_value;';
+    // body_add +='                partner_currency_value'+input_value+' = item.currency_value_convert;';
+
+    body_add +='             document.getElementById("partner_currency'+input_value+'").value = item.currency_value;';
+    body_add +='             document.getElementById("partner_currency_value'+input_value+'").value = item.currency_value_convert;';
+
+    body_add +='                document.getElementById("premium_rate'+input_value+'").value = "";';
+    body_add +='                document.getElementById("convertion_value'+input_value+'").value = "";';
+
     body_add +='            });';
     body_add +='       });';
     
     body_add +='        product_object.html('+"''"+');';
+
+    body_add +='        product_object.append($('+"'<option></option>'"+').val("").html("Select Product Name"));';
+    body_add +='        document.getElementById("product_cat'+input_value+'").value = "";';
+    body_add +='        document.getElementById("sub_cat'+input_value+'").value = "";';
+
     body_add +='        $.get('+"'get_product.php?id='"+'+currency_id_new, function(data){';
     body_add +='            var result = JSON.parse(data);';
     body_add +='            $.each(result, function(index, item){';
@@ -1959,9 +2359,68 @@ body_add +='</'+'script>';
     body_add +='            $("#agent'+input_value+'").selectpicker('+"'refresh'"+');';
     body_add +='        });';
 
+    body_add +='        product_object_popup.html("");';
+    body_add +='        productsArray = [];';
+    body_add +='        $.get("get_product_not.php?id=" + currency_id_new,function(data){';
+    body_add +='                var result = JSON.parse(data);';
+    body_add +='                $.each(result, function(index, item){';
+
+    body_add +='                    productsArray.push({id: item.id, name: item.product_name,status : item.status_id});';
+    body_add +='                });';
+    body_add +='            doSomethingWithProducts(productsArray);';
+    body_add +='        });';
+
+    body_add +='        function doSomethingWithProducts(products) {';
+    body_add +='            products.forEach(function(product) {';
+    body_add +='                if(product.status === "true"){';
+    body_add +='         product_object_popup.append("<option value="+ product.id + " selected>"+product.name+"</option>");';
+    body_add +='                }else{';
+    body_add +='         product_object_popup.append("<option value=" + product.id + " >"+product.name+"</option>");';
+    body_add +='                }';
+    body_add +='            });';
+    body_add +='         $("#popup_product'+input_value+'").selectpicker("refresh");';
+
+    body_add +='         var selectedOptions = Array.from(document.getElementById("popup_product'+input_value+'").selectedOptions).map(option => option.textContent);';
+    body_add +='                var selectedOptionsText = selectedOptions.join("\\n");';
+    body_add +='                document.getElementById("popup_product_all'+input_value+'").value = selectedOptionsText;';
+        body_add +='                var lineCount = (selectedOptionsText.match(/'+'\\n/'+'g) || []).length + 1;';
+        body_add +='                document.getElementById("popup_product_all'+input_value+'").rows = lineCount;';
+
+        body_add +='       document.getElementById("popup_product'+input_value+'").addEventListener("change", function() {';
+        body_add +='                    var selectedOptions = Array.from(this.selectedOptions).map(option => option.textContent);';
+        body_add +='                    var selectedOptionsText = selectedOptions.join("\\n");';
+        body_add +='                    document.getElementById("popup_product_all'+input_value+'").value = selectedOptionsText;';
+        body_add +='                    var lineCount = (selectedOptionsText.match(/'+'\\n/'+'g) || []).length + 1;';
+        body_add +='                    document.getElementById("popup_product_all'+input_value+'").rows = lineCount;';
+        body_add +='       });';
+    body_add +='        }';
+
+    body_add +='    });';
+
+    body_add +='product_object.on('+"'change'"+', function(){';
+    body_add +='    var product_id = $(this).val();';
+    body_add +='    document.getElementById("product_cat'+input_value+'").value = "ff";';
+    body_add +='    document.getElementById("sub_cat'+input_value+'").value = "vv";';
+    body_add +='    $.get('+"'get_product_for_cat_and_sub.php?id='"+' + product_id, function(data){';
+    body_add +='        var result = JSON.parse(data);';
+    body_add +='        $.each(result, function(index, item){';
+    body_add +='            document.getElementById("product_cat'+input_value+'").value = item.id_product_categories;';
+    body_add +='            document.getElementById("sub_cat'+input_value+'").value = item.product_subcategories;';
+    body_add +='        });';
     body_add +='    });';
     body_add +='});';
+
+
+    body_add +='});';
+
     body_add +='</'+'script>';
+
+    //Start popup Product ------------------------
+
+    var result = popup_product(input_value);
+    body_add +=result;
+
+    //End popup Product ------------------------
 
 
         $('#dynamic_field').append(body_add);
@@ -1975,4 +2434,319 @@ body_add +='</'+'script>';
     });
 
     });
+</script>
+
+
+<script>
+    function popup_product(input_value) {
+        var body_add="";
+        // body_add +=' alert('+"'test popup_product:'"+'); ';
+
+        body_add +='<div id="ModalProduct'+input_value+'" class="modal fade" role="dialog">';
+        body_add +='<div class="modal-dialog modal-lg" >';
+
+        body_add +='<div class="modal-content">';
+        body_add +='<br>';
+        body_add +='    <div class="form-group row px-3 ">';
+        body_add +='    <div class="col-sm-6" class="text-left">';
+        body_add +='        <h4 class="modal-title padding-left">Select Product</h4>';
+        body_add +='    </div>';
+        body_add +='    <div class="col-sm-6 text-right" >';
+        body_add +='    </div>';
+        body_add +='</div>';
+
+        body_add +='<div class="modal-body">';
+        body_add +='            <div class="form-group row col-md-10 col-md-offset-1">';
+        body_add +='                <div class="col-sm-2">';
+        body_add +='                    <label style="color: #102958;" for="staticEmail" class="col-form-label">Products Name:</label>';
+        body_add +='                </div>';
+
+        body_add +='                <div class="col-sm-10">';
+        body_add +='                    <select id="popup_product'+input_value+'" style="color: #4590B8;border-color:#102958;" class="form-control selectpicker" data-live-search="true" multiple="multiple" title="Search Products" >';
+        body_add +='                    </select>';
+        body_add +='                </div>';
+
+        body_add +='<script>';
+        body_add +='$("#popup_product'+input_value+'").selectpicker("refresh");';
+        body_add +='</'+'script>';
+
+        body_add +='            </div>';
+                    
+        body_add +='            <div class="form-group row col-md-10 col-md-offset-1">';
+        body_add +='                <div class="col-sm-2">';
+        body_add +='                </div>';
+        body_add +='                <div class="col-sm-10">';
+        body_add +='                    <textarea id="popup_product_all'+input_value+'" name="popup_product_all" class="form-control" style="color: #0C1830;border-color:#102958;" rows="1" readonly>';
+        body_add +='                    </textarea>';
+        body_add +='                </div>';
+        body_add +='            </div>';
+
+        body_add +='<script>';
+        body_add +='                var selectedOptions = Array.from(document.getElementById("popup_product'+input_value+'").selectedOptions).map(option => option.textContent);';
+        body_add +='                var selectedOptionsText = selectedOptions.join("\\n");';
+        body_add +='                document.getElementById("popup_product_all'+input_value+'").value = selectedOptionsText;';
+        body_add +='                var lineCount = (selectedOptionsText.match(/'+'\\n/'+'g) || []).length + 1;';
+        body_add +='                document.getElementById("popup_product_all'+input_value+'").rows = lineCount;';
+
+        body_add +='       document.getElementById("popup_product'+input_value+'").addEventListener("change", function() {';
+        body_add +='                    var selectedOptions = Array.from(this.selectedOptions).map(option => option.textContent);';
+        body_add +='                    var selectedOptionsText = selectedOptions.join("\\n");';
+        body_add +='                    document.getElementById("popup_product_all'+input_value+'").value = selectedOptionsText;';
+        body_add +='                    var lineCount = (selectedOptionsText.match(/'+'\\n/'+'g) || []).length + 1;';
+        body_add +='                    document.getElementById("popup_product_all'+input_value+'").rows = lineCount;';
+        body_add +='       });';
+        body_add +='</'+'script>';
+        
+        body_add +='</div>';
+
+        body_add +='<div class="modal-footer">';
+        body_add +='<button type="button" style="background-color: #0275d8;color: #F9FAFA;" class="btn btn-default" onclick="saveFunction'+input_value+'()" >Save</button>';
+
+        body_add +='<button type="button" style="background-color: #0275d8;color: #F9FAFA;" class="btn btn-default" data-dismiss="modal">Close</button>';
+        body_add +='</div>';
+
+        body_add +='</div>';
+
+        body_add +='<script>';
+
+        body_add +='function saveFunction'+input_value+'() {';
+        body_add +='var product_object = $("#product_name'+input_value+'");';
+        body_add +='    var selectElement = document.getElementById("popup_product'+input_value+'");';
+
+        body_add +='    if (selectElement.selectedOptions.length > 0) {';
+
+        body_add +='        var selectedValues = [];';
+        body_add +='        for (var i = 0; i < selectElement.selectedOptions.length; i++) {';
+        body_add +='           selectedValues.push(selectElement.selectedOptions[i].value);';
+        body_add +='        }';
+        body_add +='        var xhr = new XMLHttpRequest();';
+        body_add +='        var id = document.getElementById("insurance_com'+input_value+'").value;';
+        body_add +='        xhr.open("POST", "save_product.php?id="+id, true);';
+        body_add +='        xhr.setRequestHeader("Content-Type", "application/json");';
+        body_add +='        xhr.onreadystatechange = function () {';
+        body_add +='            if (xhr.readyState === 4 && xhr.status === 200) {';
+        body_add +='                product_object.html("");';
+        body_add +='                $.get("get_product.php?id=" + id,function(data){';
+        body_add +='                    var result = JSON.parse(data);';
+        body_add +='                   product_object.append($("<option></option>").val("").html("Select Product Name"));';
+        body_add +='                    document.getElementById("product_cat").value = "";';
+        body_add +='                    document.getElementById("sub_cat").value = "";';
+        body_add +='                    $.each(result, function(index, item){';
+        body_add +='                        product_object.append(';
+        body_add +='                        $("<option></option>").val(item.id).html(item.product_name));';
+        body_add +='                    });';
+        body_add +='                });';
+        body_add +='                $("#popup_product'+input_value+'").selectpicker("refresh");';
+        body_add +='                $("#ModalProduct'+input_value+'").modal("hide");';
+        body_add +='            }';
+        body_add +='        };';
+        body_add +='        xhr.send(JSON.stringify(selectedValues));';
+        // body_add +='        alert("sent JSON :"+JSON.stringify(selectedValues));';
+
+        body_add +='    } else {';
+        body_add +='        alert("Please select at least one product.");';
+        body_add +='    }';
+  
+        body_add +='}';
+
+        body_add +='</'+'script>';
+        body_add +='</div>';
+        body_add +='</div>';
+
+        
+        return body_add;
+    }
+
+
+    function popup_product_edit(input_value,item) {
+        var body_add="";
+        // body_add +=' alert('+"'test popup_product:'"+'); ';
+
+        body_add +='<div id="ModalProduct'+input_value+'" class="modal fade" role="dialog">';
+        body_add +='<div class="modal-dialog modal-lg" >';
+
+        body_add +='<div class="modal-content">';
+        body_add +='<br>';
+        body_add +='    <div class="form-group row px-3 ">';
+        body_add +='    <div class="col-sm-6" class="text-left">';
+        body_add +='        <h4 class="modal-title padding-left">Select Product</h4>';
+        body_add +='    </div>';
+        body_add +='    <div class="col-sm-6 text-right" >';
+        body_add +='    </div>';
+        body_add +='</div>';
+
+        body_add +='<div class="modal-body">';
+        body_add +='            <div class="form-group row col-md-10 col-md-offset-1">';
+        body_add +='                <div class="col-sm-2">';
+        body_add +='                    <label style="color: #102958;" for="staticEmail" class="col-form-label">Products Name test edit:</label>';
+        body_add +='                </div>';
+
+        body_add +='                <div class="col-sm-10">';
+        body_add +='                    <select id="popup_product'+input_value+'" style="color: #4590B8;border-color:#102958;" class="form-control selectpicker" data-live-search="true" multiple="multiple" title="Search Products" >';
+        body_add +='                    </select>';
+        body_add +='                </div>';
+
+        body_add +='<script>';
+        body_add +='$("#popup_product'+input_value+'").selectpicker("refresh");';
+        body_add +='</'+'script>';
+
+        body_add +='            </div>';
+                    
+        body_add +='            <div class="form-group row col-md-10 col-md-offset-1">';
+        body_add +='                <div class="col-sm-2">';
+        body_add +='                </div>';
+        body_add +='                <div class="col-sm-10">';
+        body_add +='                    <textarea id="popup_product_all'+input_value+'" name="popup_product_all" class="form-control" style="color: #0C1830;border-color:#102958;" rows="1" readonly>';
+        body_add +='                    </textarea>';
+        body_add +='                </div>';
+        body_add +='            </div>';
+
+
+        // <script >
+        //     var product_object_popup = $('#popup_product');
+        //     product_object_popup.html('');
+        //     productsArray = [];
+        //     $.get('get_product_not.php?id=' + <?php echo $insurance_company_id; ?>,function(data){
+        //             var result = JSON.parse(data);        
+        //             $.each(result, function(index, item){
+
+        //                 productsArray.push({id: item.id, name: item.product_name,status : item.status_id});
+        //             });
+        //         doSomethingWithProducts(productsArray);
+        //     });
+        //     function doSomethingWithProducts(products) {
+        //         products.forEach(function(product) {
+        //             if(product.status === "true"){
+        //                 product_object_popup.append('<option value="' + product.id + '" selected>' + product.name + '</option>');
+        //             }else{
+        //                 product_object_popup.append('<option value="' + product.id + '" >' + product.name + '</option>');
+        //             }
+        //         });
+        //         $("#popup_product").selectpicker('refresh');
+
+        //         var selectedOptions = Array.from(document.getElementById("popup_product").selectedOptions).map(option => option.textContent);
+        //             var selectedOptionsText = selectedOptions.join("\n");
+        //             document.getElementById("popup_product_all").value = selectedOptionsText;
+        //             var lineCount = (selectedOptionsText.match(/\n/g) || []).length + 1;
+        //             document.getElementById("popup_product_all").rows = lineCount;
+        //             document.getElementById("popup_product").addEventListener("change", function() {
+        //                 var selectedOptions = Array.from(this.selectedOptions).map(option => option.textContent);
+        //                 var selectedOptionsText = selectedOptions.join("\n");
+        //                 document.getElementById("popup_product_all").value = selectedOptionsText;
+        //                 var lineCount = (selectedOptionsText.match(/\n/g) || []).length + 1;
+        //                 document.getElementById("popup_product_all").rows = lineCount;
+        //             });
+        //     }
+
+        // </ script>
+
+        body_add +='</div>';
+
+        body_add +='<div class="modal-footer">';
+        body_add +='<button type="button" style="background-color: #0275d8;color: #F9FAFA;" class="btn btn-default" onclick="saveFunction'+input_value+'()" >Save</button>';
+
+        body_add +='<button type="button" style="background-color: #0275d8;color: #F9FAFA;" class="btn btn-default" data-dismiss="modal">Close</button>';
+        body_add +='</div>';
+
+        body_add +='</div>';
+
+        body_add +='<script>';
+        
+        body_add +='    $(function(){';
+
+        body_add +='        var product_object_popup = $("#popup_product'+input_value+'");';
+
+        body_add +='        product_object_popup.html("");';
+        body_add +='        productsArray = [];';
+        body_add +='        $.get("get_product_not.php?id=" + '+item.insurance_company_id+',function(data){';
+        body_add +='                var result = JSON.parse(data);';
+        body_add +='                $.each(result, function(index, item){';
+        body_add +='                    productsArray.push({id: item.id, name: item.product_name,status : item.status_id});';
+        body_add +='                });';
+        body_add +='            doSomethingWithProducts(productsArray);';
+        body_add +='        });';
+
+
+        body_add +='        function doSomethingWithProducts(products) {';
+
+        body_add +='            products.forEach(function(product) {';
+        body_add +='                if(product.status === "true"){';
+        body_add +='         product_object_popup.append("<option value="+ product.id + " selected>"+product.name+"</option>");';
+        body_add +='                }else{';
+        body_add +='         product_object_popup.append("<option value=" + product.id + " >"+product.name+"</option>");';
+        body_add +='                }';
+        body_add +='            });';
+
+        body_add +='         $("#popup_product'+input_value+'").selectpicker("refresh");';
+
+        body_add +='         var selectedOptions = Array.from(document.getElementById("popup_product'+input_value+'").selectedOptions).map(option => option.textContent);';
+        body_add +='                var selectedOptionsText = selectedOptions.join("\\n");';
+        body_add +='                document.getElementById("popup_product_all'+input_value+'").value = selectedOptionsText;';
+        body_add +='                var lineCount = (selectedOptionsText.match(/'+'\\n/'+'g) || []).length + 1;';
+        body_add +='                document.getElementById("popup_product_all'+input_value+'").rows = lineCount;';
+
+        body_add +='       document.getElementById("popup_product'+input_value+'").addEventListener("change", function() {';
+        body_add +='                    var selectedOptions = Array.from(this.selectedOptions).map(option => option.textContent);';
+        body_add +='                    var selectedOptionsText = selectedOptions.join("\\n");';
+        body_add +='                    document.getElementById("popup_product_all'+input_value+'").value = selectedOptionsText;';
+        body_add +='                    var lineCount = (selectedOptionsText.match(/'+'\\n/'+'g) || []).length + 1;';
+        body_add +='                    document.getElementById("popup_product_all'+input_value+'").rows = lineCount;';
+        body_add +='       });';
+
+        body_add +='        }';
+
+        body_add +='});';
+        body_add +='</'+'script>';
+
+
+        body_add +='<script>';
+
+        body_add +='function saveFunction'+input_value+'() {';
+        body_add +='var product_object = $("#product_name'+input_value+'");';
+        body_add +='    var selectElement = document.getElementById("popup_product'+input_value+'");';
+
+        body_add +='    if (selectElement.selectedOptions.length > 0) {';
+
+        body_add +='        var selectedValues = [];';
+        body_add +='        for (var i = 0; i < selectElement.selectedOptions.length; i++) {';
+        body_add +='           selectedValues.push(selectElement.selectedOptions[i].value);';
+        body_add +='        }';
+        body_add +='        var xhr = new XMLHttpRequest();';
+        body_add +='        var id = document.getElementById("insurance_com'+input_value+'").value;';
+        body_add +='        xhr.open("POST", "save_product.php?id="+id, true);';
+        body_add +='        xhr.setRequestHeader("Content-Type", "application/json");';
+        body_add +='        xhr.onreadystatechange = function () {';
+        body_add +='            if (xhr.readyState === 4 && xhr.status === 200) {';
+        body_add +='                product_object.html("");';
+        body_add +='                $.get("get_product.php?id=" + id,function(data){';
+        body_add +='                    var result = JSON.parse(data);';
+        body_add +='                   product_object.append($("<option></option>").val("").html("Select Product Name"));';
+        body_add +='                    document.getElementById("product_cat").value = "";';
+        body_add +='                    document.getElementById("sub_cat").value = "";';
+        body_add +='                    $.each(result, function(index, item){';
+        body_add +='                        product_object.append(';
+        body_add +='                        $("<option></option>").val(item.id).html(item.product_name));';
+        body_add +='                    });';
+        body_add +='                });';
+        body_add +='                $("#popup_product'+input_value+'").selectpicker("refresh");';
+        body_add +='                $("#ModalProduct'+input_value+'").modal("hide");';
+        body_add +='            }';
+        body_add +='        };';
+        body_add +='        xhr.send(JSON.stringify(selectedValues));';
+        // body_add +='        alert("sent JSON :"+JSON.stringify(selectedValues));';
+
+        body_add +='    } else {';
+        body_add +='        alert("Please select at least one product.");';
+        body_add +='    }';
+  
+        body_add +='}';
+
+        body_add +='</'+'script>';
+        body_add +='</div>';
+        body_add +='</div>';
+
+        
+        return body_add;
+    }
+
 </script>

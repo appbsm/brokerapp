@@ -202,7 +202,7 @@ if($_GET['id']){
                         <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Prod.categorie</label>
                     </div> 
                     <div class="col ">
-                         <input minlength="1" maxlength="50" style="border-color:#102958;" type="text" required="required" class="form-control" name="categorie" id="categorie" value="<?php echo $categorie; ?>" >
+                         <input minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" required="required" class="form-control" name="categorie" id="categorie" value="<?php echo $categorie; ?>" >
 
                     </div> 
                     <div class="col ">
@@ -246,7 +246,7 @@ if($_GET['id']){
                         </button>
                         &nbsp;&nbsp;
                         <a href="products_categories.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
-                            <span class="text">Clear</span>
+                            <span class="text">Cancel</span>
                         </a> 
                     </div>
                 </div>

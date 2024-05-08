@@ -167,7 +167,7 @@
                         <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Currency Code</label>
                     </div> 
                     <div class="col ">
-                         <input minlength="1" maxlength="50" style="border-color:#102958;" type="text" required="required" class="form-control" name="currency" id="currency" value="<?php echo $currency; ?>" >
+                         <input minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" required="required" class="form-control" name="currency" id="currency" value="<?php echo $currency; ?>" >
                     </select>
                     </div> 
                     <div class="col ">
@@ -190,7 +190,7 @@
                         <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Description</label>
                     </div>
                     <div class="col ">
-                        <input minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" name="description" id="description" value="<?php echo $description; ?>" required>
+                        <input minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" name="description" id="description" value="<?php echo $description; ?>" required>
                     </div> 
                     <div class="col-sm-2 ">
                     </div> 
@@ -208,7 +208,7 @@
                         </button>
                         &nbsp;&nbsp;
                         <a href="currency_list.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
-                            <span class="text">Clear</span>
+                            <span class="text">Cancel</span>
                         </a> 
                     </div>
 

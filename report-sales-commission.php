@@ -13,12 +13,15 @@ if(strlen($_SESSION['alogin'])==""){
     $products = get_products($conn);
     $insurance_policy = get_policy_no($conn);
     $agents_paid = agents_paid($conn);
+    $get_partner = get_partners($conn);
+
     $data = array();
     $data['customer'] = '';
     $data['date_from']='';
     $data['date_to']='';
     $data['policy_no']='';
     $data['product']='';
+    $data['partner']='';
     
     //$sales =  get_sales_by_customer ($conn, $data);
     
@@ -29,6 +32,7 @@ if(strlen($_SESSION['alogin'])==""){
         $data['customer'] =$_GET['customer'];
         $data['policy_no']=$_GET['policy_no'];
         $data['product']=$_GET['product'];
+        $data['partner']=$_GET['partner'];
         //print_r($_GET);
         //$insurance_customer = get_customer_insurance ($conn);
         
@@ -113,16 +117,16 @@ if(strlen($_SESSION['alogin'])==""){
                 <br>
                     <div class="form-group row col-md-12 ">
                     
-                    <label style="color: #102958;"  class="col-sm-2 label_left">From Date:</label>
+                    <label style="color: #102958;"  class="col-sm-2 label_left">From Policy Date:</label>
 
                     <div class="col-sm-2">
                        <!-- <input type='text' style="color: #0C1830;border-color:#102958;" class=" form-control datepicker search_input" name="date_from" id="date_from" value="" /> -->                                               
-                        <input  style="color: #0C1830;border-color:#102958;" type="text" name="date_from" class="form-control" id="date_from" value="<?php echo ($_GET['date_from'] != '') ? date('d-m-Y', strtotime($_GET['date_from'])) : '';?>" placeholder="dd-mm-yyyy" >
+                        <input  style="color: #000;border-color:#102958; text-align: center;" type="text" name="date_from" class="form-control" id="date_from" value="<?php echo ($_GET['date_from'] != '') ? date('d-m-Y', strtotime($_GET['date_from'])) : '';?>" placeholder="dd-mm-yyyy" >
                     </div>
 
                     <label style="color: #102958;" for="staticEmail" class="col-sm-2 label_left">To Date:</label>
                     <div class="col-sm-2">
-                        <input  style="color: #0C1830;border-color:#102958;" type="text" name="date_to" class="form-control" id="date_to" value="<?php echo  ($_GET['date_to'] != '') ? date('d-m-Y', strtotime($_GET['date_to'])) : '';?>" placeholder="dd-mm-yyyy" >
+                        <input  style="color: #000;border-color:#102958; text-align: center;" type="text" name="date_to" class="form-control" id="date_to" value="<?php echo  ($_GET['date_to'] != '') ? date('d-m-Y', strtotime($_GET['date_to'])) : '';?>" placeholder="dd-mm-yyyy" >
                     </div>
 
 <script>
@@ -138,9 +142,9 @@ if(strlen($_SESSION['alogin'])==""){
   });
 </script>
                         
-                    <label style="color: #102958;" for="staticEmail" class="col-sm-2 label_left">Customer name:</label>
+                    <label style="color: #102958;" for="staticEmail" class="col-sm-2 label_left">Cust. name:</label>
                         <div class="col-sm-2">
-                            <select name="customer" style="border-color:#102958;" id="customer" class="form-control selectpicker" data-live-search="true" >
+                            <select name="customer" style="border-color:#102958; color: #000;" id="customer" class="form-control selectpicker" data-live-search="true" >
                                 <option value="">Select Customer</option>
                                 <?php foreach ($customers as $c) { ?>
                                 <option value="<?php echo $c['id'];?>" <?php echo  ($_GET['customer'] == $c['id']) ? 'selected' : '';?>><?php echo $c['customer_name'];?></option>
@@ -153,7 +157,7 @@ if(strlen($_SESSION['alogin'])==""){
                     
 						<label style="color: #102958;" for="staticEmail" class="col-sm-2 label_left">Policy no:</label>
 						<div class="col-sm-2">
-							<select name="policy_no" style="border-color:#102958;" id="policy_no" class="form-control selectpicker" data-live-search="true" >
+							<select name="policy_no" style="border-color:#102958; color: #000;" id="policy_no" class="form-control selectpicker" data-live-search="true" >
 								<option value="">Select Policy</option>
 								<?php foreach ($insurance_policy as $p) { ?>
 								<option value="<?php echo $p['policy_no'];?>" <?php echo  ($_GET['policy_no'] == $p['policy_no']) ? 'selected' : '';?>><?php echo $p['policy_no'];?></option>
@@ -162,15 +166,27 @@ if(strlen($_SESSION['alogin'])==""){
 							
 						</div>
 
-						<label style="color: #102958;" for="staticEmail" class="col-sm-2 label_left">Product:</label>                    
+                        <label style="color: #102958;" for="staticEmail" class="col-sm-2 label_left">Partner Name:</label>                    
+                        <div class="col-sm-2">                      
+                            <select name="partner" style="border-color:#102958; color: #000;" id="product" class="form-control selectpicker" data-live-search="true">
+                                <option value="">Select Product</option>
+                                <?php foreach ($get_partner as $p) { ?>
+                                <option value="<?php echo $p['id'];?>" <?php echo  ($_GET['partner'] == $p['id']) ? 'selected' : '';?>><?php echo $p['insurance_company'];?></option>
+                                <?php } ?>
+                            </select> 
+                        </div>
+
+						<label style="color: #102958;" for="staticEmail" class="col-sm-2 label_left">Prod.:</label>                    
 						<div class="col-sm-2">                		
-							<select name="product" style="border-color:#102958;" id="product" class="form-control selectpicker" data-live-search="true">
-								<option value="">Select Product</option>
+							<select name="product" style="border-color:#102958; color: #000;" id="product" class="form-control selectpicker" data-live-search="true">
+								<option value="">Select Prod.</option>
 								<?php foreach ($products as $p) { ?>
 								<option value="<?php echo $p['id'];?>" <?php echo  ($_GET['product'] == $p['id']) ? 'selected' : '';?>><?php echo $p['product_name'];?></option>
 								<?php } ?>
 							</select> 
 						</div>
+						
+						
 
                     </div>
 					
@@ -209,16 +225,19 @@ if(strlen($_SESSION['alogin'])==""){
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Name of Agent</th>
-                                            <th>Product Name</th>
-                                            <th>Policy No.</th>
-                                            <th>Premium Amount</th>
+											<th>Policy No.</th>
+											<th>Partner Name</th>
+											<th>Cust. Name</th>
+                                            <th>Agent Name</th>
+                                            <th>Prod. Name</th>
+                                            
+                                            <th>Premium Rate</th>
                                             <?php if($_GET['currency_conversion']=="true"){ ?>
                                             <th class="text-center converted">Converted Value</th>
-                                            <th class="text-center converted">Convert Unit</th>
+                                            <th class="text-center converted">Symbol</th>
                                             <?php } ?>
                                             <th>Paid Date</th>
-                                            <th>Commission Paid</th>                                
+                                            <th>Comm. Paid</th>                                
                                         </tr>
                                     </thead>
                                     <tbody style="font-size: 13px;">
@@ -245,27 +264,44 @@ if(strlen($_SESSION['alogin'])==""){
                                         $p_date = $s['paid_date'];
                                         $paid_date = $p_date->format('d-m-Y');
                                          // echo $s['id_currency'];
-                                        $agent_currency = get_conversion ($conn,$s['id_currency'], date('Y-m-d', strtotime($paid_date)));
+                                        $agent_currency = get_conversion($conn,$s['id_currency'], date('Y-m-d', strtotime($start_date)));
                                         // echo count($agent_currency);
                                         $acurrency = (count($agent_currency)) ? $agent_currency[0] : array();
                                         //print_r($agent_currency);
                                         
-                                        $converted_value = (isset($acurrency['currency_value_convert'])) ? floatval($s['premium_rate']) / floatval($acurrency['currency_value_convert']) : 0;
+                                        if($acurrency['currency'] !="฿THB" ){
+                                            if($acurrency['currency_value']<$acurrency['currency_value_convert']){
+                                                $converted_value = (isset($acurrency['currency_value_convert'])) ? floatval($s['premium_rate']) / floatval($acurrency['currency_value_convert']) : 0;
+                                            }else{
+                                                $converted_value = (isset($acurrency['currency_value_convert'])) ? floatval($s['premium_rate']) * floatval($acurrency['currency_value_convert']) : 0;
+                                            }
+                                        }else{
+                                            $converted_value = 0;
+                                        }
+
                                         //print_r($converted_value);
                                         //$converted_value = floatval($acurrency['currency_value_convert']);
                                         ?>
                                         <tr>
                                     		<td class="text-center"><?php echo $ctr;?></td>
+											<td><?php echo $s['policy_no'];?></td>
+
+											<td><?php echo $s['insurance_company'];?></td>
+											<td><?php echo $s['customer_name'];?></td>
+
                                             <td><?php echo $s['agent_name'];?></td>                                                                                           
                                             <td><?php echo $s['product_name'];?></td>
-                                            <td><?php echo $s['policy_no'];?></td>
+                                            
                                             <td class="text-right"><?php echo number_format( $s['premium_rate'], 2);?></td> 
 
                                             <?php if($_GET['currency_conversion']=="true"){ ?>
-                                            <td class="converted text-right"><?php echo number_format($converted_value, 2);?></td>
-                                            <td class="converted text-center"><?php echo (isset($acurrency['currency_value_convert'])) ? $acurrency['currency'] : '';?></td>
-                                            <?php } ?>
 
+                                            <td class="converted text-right"><?php echo number_format($converted_value, 2); ?></td>
+                                            <td class="converted text-center">
+                                            <?php echo (isset($acurrency['currency_value_convert'])) ? $acurrency['currency']:'฿THB';?>
+                                            </td>
+                                            <?php } ?>
+                                            
                                             <td class="text-center"><?php echo $paid_date; ?></td>
                                             <td class="text-right">
 												<?php echo number_format( $s['commission_rate'], 2);?>
@@ -288,6 +324,8 @@ if(strlen($_SESSION['alogin'])==""){
                                        <tr style="font-weight: bold;">                                            
                                             <th>TOTAL</th>
                                             <th></th>
+											<th></th>
+											<th></th>
 											<th></th>
                                             <th></th>                                                   
                                             <th style="text-align: right !important;"><?php echo number_format($total_premium_rate, 2)?></th> 
@@ -359,6 +397,10 @@ if(strlen($_SESSION['alogin'])==""){
 		
 		.caret {
 			right: 10px !important;
+		}
+		
+		.btn-group>.btn:first-child {
+			border-color: #102958;
 		}
     </style> 
 

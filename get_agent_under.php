@@ -9,9 +9,10 @@ include('includes/config.php');
 // ." GROUP BY ag.id,ag.title_name,ag.first_name,ag.last_name ";
 
 // if (isset($_POST['action']) && $_POST['action'] == 'get_agen_fopage_partner') {
+
     $sql = "SELECT a.id AS id_agent,first_name,last_name,un.* from agent a 
      left join under un on un.id_agent = a.id 
-     where a.id = '{$_GET['id']}'";
+     where a.id = '{$_GET['id']}' and un.id_partner = '{$_GET['partner_id']}' ";
 
     $query = $dbh->prepare($sql);
     $query->execute();

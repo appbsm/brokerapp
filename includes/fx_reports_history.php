@@ -6,7 +6,7 @@ function get_reports_history_start($conn) {
     // ,(SELECT TOP 1  re.modify_by FROM report_history_policy re WHERE re.policy_no = hist.policy_no ORDER BY id desc) AS modify_by_user
 	$result = array();
 	$sql ="SELECT CONCAT(u_up.name_title,' ',u_up.first_name,' ',u_up.last_name) AS modify_by_user
- ,(SELECT CONCAT(ui.name_title,' ',ui.first_name,' ',ui.last_name) FROM report_history_policy re
+ ,(SELECT TOP 1 CONCAT(ui.name_title,' ',ui.first_name,' ',ui.last_name) FROM report_history_policy re
   LEFT JOIN user_info ui ON re.create_by = ui.id WHERE re.policy_no = hist.policy_no AND re.type ='insert' ) AS create_by_user
  ,(SELECT FORMAT(MIN(re.cdate),'dd-MM-yyyy') FROM report_history_policy re WHERE re.policy_no = hist.policy_no ) AS mindate
  ,(SELECT FORMAT(MAX(re.cdate),'dd-MM-yyyy') FROM report_history_policy re WHERE re.policy_no = hist.policy_no ) AS maxdate
@@ -54,7 +54,7 @@ function get_reports_history_search($conn,$post_data) {
 	$result = array();
 
 	$sql ="SELECT CONCAT(u_up.name_title,' ',u_up.first_name,' ',u_up.last_name) AS modify_by_user
- ,(SELECT CONCAT(ui.name_title,' ',ui.first_name,' ',ui.last_name) FROM report_history_policy re
+ ,(SELECT TOP 1 CONCAT(ui.name_title,' ',ui.first_name,' ',ui.last_name) FROM report_history_policy re
   LEFT JOIN user_info ui ON re.create_by = ui.id WHERE re.policy_no = hist.policy_no AND re.type ='insert' ) AS create_by_user
  ,(SELECT FORMAT(MIN(re.cdate),'dd-MM-yyyy') FROM report_history_policy re WHERE re.policy_no = hist.policy_no ) AS mindate
  ,(SELECT FORMAT(MAX(re.cdate),'dd-MM-yyyy') FROM report_history_policy re WHERE re.policy_no = hist.policy_no ) AS maxdate
@@ -127,13 +127,24 @@ function get_reports_history_search($conn,$post_data) {
     return $result;
 }
 
+        // CASE WHEN c.customer_type = 'Personal' 
+        // THEN CONCAT(c.title_name, ' ', c.first_name, ' ', c.last_name) 
+        //    ELSE company_name "
+        //    END as customer_name, 
+// ,CASE WHEN CONCAT(c.first_name, ' ', c.last_name) as customer_name
 function get_customers_list ($conn) {
     $result = array();
-    $tsql = "select c.id, CONCAT(c.title_name, ' ', c.first_name, ' ', c.last_name) as customer_name 
+    $tsql = "select c.id
+    ,CASE WHEN c.customer_type = 'Personal' 
+        THEN CONCAT(c.first_name, ' ', c.last_name) 
+        ELSE c.company_name
+        END as customer_name
  from insurance_info ii
  left join rela_customer_to_insurance rci on rci.id_insurance_info = ii.id
  left join customer c on c.id = rci.id_customer
- where c.id IS NOT NULL order by c.last_name, c.first_name ";
+ where c.id IS NOT NULL 
+ GROUP BY c.id,c.customer_type,c.first_name,c.last_name,c.company_name
+ order by c.company_name ";
                         //echo $tsql;
                         echo '<script>alert("sql: '.$tsql.'")</script>'; 
                         $stmt = sqlsrv_query( $conn, $tsql);

@@ -161,11 +161,18 @@
 
 				$per = substr($_POST['percent_trade'][$i],0,-1);
 
-				$query->bindParam(':premium_rate_p',$_POST['convertion_value'][$i],PDO::PARAM_STR);
-				$query->bindParam(':convertion_value_p',$_POST['premium_rate'][$i],PDO::PARAM_STR);
+				$premium_rate_p = (float) str_replace(',', '', $_POST['convertion_value'][$i]);
+				$query->bindParam(':premium_rate_p',$premium_rate_p,PDO::PARAM_STR);
 
-				$query->bindParam(':percent_trade_p',$per,PDO::PARAM_STR);
-				$query->bindParam(':commission_rate_p',$_POST['commission'][$i],PDO::PARAM_STR);
+				$convertion_value_p = (float) str_replace(',', '', $_POST['premium_rate'][$i]);
+				$query->bindParam(':convertion_value_p',$convertion_value_p,PDO::PARAM_STR);
+
+				$percent_trade_p = (float) str_replace(',', '', $per);
+				$query->bindParam(':percent_trade_p',$percent_trade_p,PDO::PARAM_STR);
+
+				$commission_rate_p = (float) str_replace(',', '',$_POST['commission'][$i]);
+				$query->bindParam(':commission_rate_p',$commission_rate_p,PDO::PARAM_STR);
+
 				$query->bindParam(':agent_id_p',$_POST['agent'][$i],PDO::PARAM_STR);
 				$query->bindParam(':payment_status_p',$_POST['payment_status'][$i],PDO::PARAM_STR);
 
@@ -187,25 +194,26 @@
 					$value=0;
 					$query->bindParam(':default_insurance_p',$value,PDO::PARAM_STR);
 				}
-		//////////// upload ////////////
-		$new_file_name="";
-		// echo '<script>alert("post file_d : '.$_FILES['file_d']['name'][$i].'")</script>'; 
-		if($_FILES['file_d']['name'][$i]!=""){
-			try {
-				$file = $_FILES['file_d']['name'][$i];
-				$file_loc = $_FILES['file_d']['tmp_name'][$i];
-				// $image=$_POST['file_d'];
-				$folder=$sourceFilePath;
-				$ext = pathinfo($file, PATHINFO_EXTENSION);
-				$new_file_name = uniqid().".".$ext;
-				$path_file = $folder."/".$new_file_name;
-				$final_file=str_replace(' ','-',$new_file_name);
-				move_uploaded_file($file_loc,$folder.$final_file);    
-			}catch(Exception $e) {
-				// echo '<script>alert("Error : '.$e.'")</script>'; 
-			}
-		}
-		////////////////////////////////////
+
+				//////////// upload ////////////
+				$new_file_name="";
+				// echo '<script>alert("post file_d : '.$_FILES['file_d']['name'][$i].'")</script>'; 
+				if($_FILES['file_d']['name'][$i]!=""){
+					try {
+						$file = $_FILES['file_d']['name'][$i];
+						$file_loc = $_FILES['file_d']['tmp_name'][$i];
+						// $image=$_POST['file_d'];
+						$folder=$sourceFilePath;
+						$ext = pathinfo($file, PATHINFO_EXTENSION);
+						$new_file_name = uniqid().".".$ext;
+						$path_file = $folder."/".$new_file_name;
+						$final_file=str_replace(' ','-',$new_file_name);
+						move_uploaded_file($file_loc,$folder.$final_file);    
+					}catch(Exception $e) {
+						// echo '<script>alert("Error : '.$e.'")</script>'; 
+					}
+				}
+				////////////////////////////////////
 
 				$query->bindParam(':file_name_p',$_FILES['file_d']['name'][$i],PDO::PARAM_STR);
 				$query->bindParam(':file_name_uniqid_p',$new_file_name,PDO::PARAM_STR);
@@ -221,12 +229,15 @@
 
 				// $lastInsertId_customer
 				$sql = "INSERT INTO rela_customer_to_insurance".
-					"(id_customer,id_insurance_info,id_default_insurance)";
-				$sql=$sql." VALUES (:id_customer_p,:id_insurance_info_p,:id_default_insurance)";
+					"(id_customer,id_insurance_info,id_default_insurance,id_default_contact)";
+				$sql=$sql." VALUES (:id_customer_p,:id_insurance_info_p,:id_default_insurance_p,:id_default_contact_p)";
 				$query = $dbh->prepare($sql); 
 				$query->bindParam(':id_customer_p',$lastInsertId_customer,PDO::PARAM_STR);
 				$query->bindParam(':id_insurance_info_p',$lastInsertId_insurance,PDO::PARAM_STR);
-				$query->bindParam(':id_default_insurance',$start_lastInsertId_insurance,PDO::PARAM_STR);
+				$query->bindParam(':id_default_insurance_p',$start_lastInsertId_insurance,PDO::PARAM_STR);
+				// alert('id_co:'+$_POST['id_co'][0]);
+				$query->bindParam(':id_default_contact_p',$_POST['id_co'][0],PDO::PARAM_STR);
+
 				$query->execute();
 				// print_r($query->errorInfo());
 			}//loop for Insurance information
@@ -299,19 +310,26 @@
 			   ,:convertion_value_p
 			   ,:percent_trade_p,:commission_rate_p,:payment_status_p
 			   ,:insurance_company_id_p,:insurance_company_name_p,:status_p,:agent_id_p
-			   ,:customer_id_p,:customer_name_p,:tel_p,:mobile_p,:email_p,:paid_date_p,:type_p,:contact_id_default_p,create_by_p,GETDATE()) ";
+			   ,:customer_id_p,:customer_name_p,:tel_p,:mobile_p,:email_p,:paid_date_p,:type_p,:contact_id_default_p,:create_by_p,GETDATE()) ";
 				$query = $dbh->prepare($sql); 
 				$query->bindParam(':id_insurance_info_p',$lastInsertId_insurance,PDO::PARAM_STR);
 				$query->bindParam(':policy_no_p',$_POST['policy'][0],PDO::PARAM_STR);
 				$query->bindParam(':start_date_p',date("Y-m-d", strtotime($_POST['start_date'][0])),PDO::PARAM_STR);
 				$query->bindParam(':end_date_p',date("Y-m-d", strtotime($_POST['end_date'][0])),PDO::PARAM_STR);
 
+				$premium_rate_p = (float) str_replace(',','',$_POST['convertion_value'][0]);
+				$query->bindParam(':premium_rate_p',$premium_rate_p,PDO::PARAM_STR);
 
-				$query->bindParam(':premium_rate_p',$_POST['convertion_value'][0],PDO::PARAM_STR);
-				$query->bindParam(':convertion_value_p',$_POST['premium_rate'][0],PDO::PARAM_STR);
+				$convertion_value_p = (float) str_replace(',','',$_POST['premium_rate'][0]);
+				$query->bindParam(':convertion_value_p',$convertion_value_p,PDO::PARAM_STR);
 
-				$query->bindParam(':percent_trade_p',substr($_POST['percent_trade'][0],0,-1),PDO::PARAM_STR);
-				$query->bindParam(':commission_rate_p',$_POST['commission'][0],PDO::PARAM_STR);
+				$percent_trade_p = (float) str_replace(',','',substr($_POST['percent_trade'][0],0,-1));
+				$query->bindParam(':percent_trade_p',$percent_trade_p,PDO::PARAM_STR);
+
+				$commission_rate_p = (float) str_replace(',','',$_POST['commission'][0]);
+				$query->bindParam(':commission_rate_p',$commission_rate_p,PDO::PARAM_STR);
+
+
 				$query->bindParam(':payment_status_p',$_POST['payment_status'][0],PDO::PARAM_STR);
 
 				$query->bindParam(':insurance_company_id_p',$_POST['insurance_com'][0],PDO::PARAM_STR);
@@ -479,11 +497,24 @@
 			</div>
         </div>
 
+<script>
+	function validateForm() {
+		// var tax_id_value = document.getElementById("tax_id").value;
+		if (document.getElementById("name_c_input").value!="") {
+	        document.getElementById("loading-overlay").style.display = "flex";
+	        return true;
+	    }else{
+	        alert("Please select a customer first.");
+	        return false;
+	    }	
+	}
+</script>
+
 <!-- <form method="post" onSubmit="return valid();" action = "validate.php" > -->
 <form method="post" action = "add-policy.php" enctype="multipart/form-data" onsubmit="
 $(this).find('select').prop('disabled', false);
 $(this).find('input').prop('disabled', false);
-return valid();
+return validateForm();
 " >
 <!-- <section class="section"> -->
 
@@ -503,12 +534,12 @@ return valid();
                         <div class="col-sm-2 ">
                             <!-- style="background-color: #0275d8;color: #F9FAFA;" -->
                         </div>
-                         <div class="col-sm-4 text-right ">
+
+                        <!-- <div class="col-sm-4 text-right ">
                             <br>
-                            <!-- href="#"  -->
                             <a  name="add" id="add" class="btn" style="background-color: #0275d8;color: #F9FAFA;"><i
                                 class="fas  fa-sm text-white-50"></i>+ Add More Insurance</a>
-                        </div>&nbsp;&nbsp;
+                        </div>&nbsp;&nbsp; -->
 
                     </div>
                 </div> 
@@ -524,7 +555,7 @@ return valid();
                 </div>
                 <!-- col-xs-auto -->
                 <div class="col">
-                    <input id="policy" name="policy[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text"  required>
+                    <input id="policy" name="policy[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control input_text"  required>
                 </div>
                 <div class="col-sm-2  label_left" >
                 </div>
@@ -537,7 +568,7 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Policy Status:</label>
                 </div>
                 <div class="col-2">
-					<select id="status_i_input" name="status[]" onchange="ClickChange()" style="border-color:#102958;" class="form-control" required>
+					<select id="status_i_input" name="status[]" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" required>
 						<!-- <option value="" selected>Select Status</option> -->
 						<option value="New">New</option>
 						<option value="Follow up">Follow up</option>
@@ -548,10 +579,10 @@ return valid();
                 </div>
 
                 <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" >Payment Status:</label>
+                    <label style="color: #102958;" >Payment Status:</label>
                 </div> 
                 <div class="col-2 " >
-                     <select disabled="true" id="payment_status" name="payment_status[]" style="color: #0C1830;border-color:#102958;" class="form-control"   >
+                     <select disabled="true" id="payment_status" name="payment_status[]" style="color: #000;border-color:#102958;" class="form-control"   >
                         <option value="Paid" >Paid</option>
                         <option value="Not Paid" >Not Paid</option>
                     </select>
@@ -566,7 +597,7 @@ return valid();
                 </div>
                 <div class="col"  >
                 <input hidden="true" type="text" id="currency_id" name="currency_id[]" style="border-color:#102958;" class="form-control" value="<?php echo $currency_id; ?>" required/>
-                <select id="insurance_com" name="insurance_com[]"  style="color: #0C1830;border-color:#102958;"class="form-control"  required>
+                <select id="insurance_com" name="insurance_com[]"  style="color: #000;border-color:#102958;"class="form-control"  required>
                     <option value="" selected>Select Partner Name</option>
                     <?php  foreach($results_company as $result){ ?>
                         <option value="<?php echo $result->id_partner; ?>" ><?php echo $result->insurance_company; ?></option>
@@ -607,7 +638,7 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Product Name:</label>
                 </div> 
                 <div class="col">
-                    <select id="product_name" name="product_name[]"  style="color: #0C1830;border-color:#102958;"class="form-control" value="0" required>
+                    <select id="product_name" name="product_name[]"  style="color: #000;border-color:#102958;"class="form-control" value="0" required>
                         <option value="" selected>Select Product Name</option>
                         <?php  //foreach($results_product as $result){ ?>
                             <!-- <option value="<?php //echo $result->id; ?>" ><?php //echo $result->product_name; ?></option> -->
@@ -640,10 +671,10 @@ return valid();
             <!-- hidden="true" -->
             <div class="form-group row mb-20 col-md-10 col-md-offset-1">
             	<div class="col-6">
-            		<input hidden="true" id="product_cat" name="product_cat[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" >
+            		<input hidden="true" id="product_cat" name="product_cat[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control input_text" >
             	</div>
             	<div class="col-6">
-            		<input hidden="true" id="sub_cat" name="sub_cat[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" >
+            		<input hidden="true" id="sub_cat" name="sub_cat[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control input_text" >
             	</div>
             </div> 
 
@@ -652,7 +683,7 @@ return valid();
                     <label style="color: #102958;" >Currency:</label>
                 </div>
                 <div class="col-2">
-                    <input type="text" id="currency" name="currency[]" style="border-color:#102958;  text-align: center;" class="form-control"
+                    <input type="text" id="currency" name="currency[]" style="border-color:#102958; color: #000;  text-align: center;" class="form-control"
                      value="<?php echo $currency_name; ?>" readOnly/>
                 </div>
 
@@ -660,7 +691,7 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Period type:</label>
                 </div>
                 <div class="col-2">
-                    <select id="period_type" name="period_type[]"  style="color: #0C1830;border-color:#102958;"class="form-control" required>
+                    <select id="period_type" name="period_type[]"  style="color: #000;border-color:#102958;"class="form-control" required>
                         <option value="" selected>Select Period type</option>
                         <option value="Day" >Day</option>
                         <option value="Month" >Month</option>
@@ -671,14 +702,13 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Period:</label>
                 </div>
                 <div class="col-2">
-                    <select hidden="true" id="period_month" name="period_month[]"  style="color: #0C1830;border-color:#102958;"class="form-control" value="" required>
+                    <select hidden="true" id="period_month" name="period_month[]"  style="color: #000;border-color:#102958;"class="form-control" value="" required>
                         <option value="" selected>Select Period</option>
                         <?php  foreach($results_period as $result){ ?>
-                        <option value="<?php echo $result->id; 
-                        //echo $result->period; ?>" ><?php echo $result->period; ?></option>
+                        <option value="<?php echo $result->id; ?>" ><?php echo $result->period; ?></option>
                         <? } ?>
                     </select>
-                    <input  id="period_day" name="period_day[]" minlength="1" maxlength="3" style="color: #0C1830;border-color:#102958;" type="number" class="form-control input_text" required readOnly>
+                    <input  id="period_day" name="period_day[]" minlength="1" maxlength="3" style="color: #000;border-color:#102958;" type="number" class="form-control input_text" required readOnly>
                 </div>
             </div>
 
@@ -687,13 +717,13 @@ return valid();
                     <label style="color: #102958;" id="datepicker" ><small><font color="red">*</font></small>Start Date:</label>
                 </div> 
                 <div class="col-2">
-                    <input id="start_date" name="start_date[]" style="color: #0C1830;border-color:#102958; text-align: center;" type="text" class="form-control" value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" required>
+                    <input id="start_date" name="start_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control" value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" required>
                 </div>
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>End Date:</label>
                 </div> 
                 <div class="col-2">
-                    <input id="end_date" name="end_date[]" style="color: #0C1830;border-color:#102958; text-align: center;" type="text"  class="form-control" 
+                    <input id="end_date" name="end_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control" 
                     value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" required>
                 </div>
             </div>
@@ -801,7 +831,7 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Premium Rate:</label>
                 </div>
                 <div class="col-2">
-                    <input id="premium_rate" name="premium_rate[]" type="number"  style="border-color:#102958;text-align: right;" step="0.01" min="0" class="form-control text-end" 
+                    <input id="premium_rate" name="premium_rate[]" type="test"  style="border-color:#102958;text-align: right; color: #000;" step="0.01" min="0" class="form-control text-end" 
                         onchange="
             //             var premium = parseFloat(this.value).toFixed(2);
             //             // parseFloat(document.getElementById('convertion_value').value).toFixed(2);
@@ -840,10 +870,10 @@ return valid();
                 </script>
                 
            		<div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" >Convertion Value:</label>
+                    <label style="color: #102958;" for="staticEmail" >Conversion Value:</label>
                 </div> 
                 <div class="col-2">
-                    <input id="convertion_value" name="convertion_value[]"  style="color: #0C1830;border-color:#102958; text-align: center;" type="test"  class="form-control" 
+                    <input id="convertion_value" name="convertion_value[]"  style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control" 
                     value="<?php //echo $paid_date; ?>"  readOnly>
                 </div>
 
@@ -851,7 +881,7 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Paid Date:</label>
                 </div>
                 <div class="col-2">
-                    <input id="paid_date" name="paid_date[]"  style="color: #0C1830;border-color:#102958; text-align: center;" type="test"  class="form-control" 
+                    <input id="paid_date" name="paid_date[]"  style="color: #000;border-color:#102958; text-align: center;" type="test"  class="form-control" 
                     value="<?php echo $paid_date; ?>" placeholder="dd-mm-yyyy" required>
                 </div>
             </div>
@@ -862,24 +892,28 @@ return valid();
 	            var convertion_value_object = $('#convertion_value');
 	            var currency_object = $('#currency');
 
-	            premium_rate_object.on('change', function(){
-	            	var premium_value = $(this).val();
+	           premium_rate_object.on('change', function(){
+	            	
+	            var premium_value = $(this).val().replace(/,/g,'');
+
+	            if (parseFloat(premium_value)) {
+	            	
 	            	if(currency_object.val()=='฿THB'){
-	            		var formattedResult = premium_value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+	            		var formattedResult  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(premium_value);
 	            		convertion_value_object.val(formattedResult);
 	            	}else{
 	            		if(partner_currency!=''){
 	            			if(parseInt(partner_currency)>parseInt(partner_currency_value)){
 	            				var value = (premium_value/partner_currency_value);
-	            				var formattedResult = value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+	            				var formattedResult  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(premium_value);
 	            				convertion_value_object.val(formattedResult);
 	            			}else{
 	            				var value = (premium_value*partner_currency_value);
-	            				var formattedResult = value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+	            				var formattedResult  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
 	            				convertion_value_object.val(formattedResult);
 	            			}
 	            		}else{
-	            			var formattedResult = premium_value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+	            			var formattedResult  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(premium_value);
 	            			convertion_value_object.val(formattedResult);
 	            		}
 	            	}
@@ -891,18 +925,31 @@ return valid();
                         var con_va = parseFloat(con_vaInput).toFixed(2);
                         var percentInput = document.getElementById('percent_trade').value.replace(/,/g,'');
                         var percent = parseFloat(percentInput).toFixed(2);
-                        if(Number.isInteger(parseFloat(premium))){
+
+                        // if(Number.isInteger(parseFloat(premium))){
                         	if(document.getElementById('calculate').value=='Percentage'){
                         		var commission = ((percent / 100) * con_va);
                         	}else{
 
                         		var commission = percent;
                         	}
-                        }else{
-                        	document.getElementById('premium_rate').value=parseFloat(con_va);
+                        // }else{
+                        // 	document.getElementById('premium_rate').value=parseFloat(con_va);
+                        // }
+
+                        if(commission!='NaN'){
+	                        var commissionNumber  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(commission);
+	                        document.getElementById('commission').value =commissionNumber;
                         }
-                        var commissionNumber = parseFloat(commission).toFixed(2);
-                        document.getElementById('commission').value =parseFloat(commission).toFixed(2);
+
+                        // var value_pre  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(premium_value);
+                        var value_pre  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format($(this).val().replace(/,/g,''));
+                        this.value=value_pre;
+                 }else{
+                 	this.value='';
+                 	document.getElementById('commission').value ='';
+                 	convertion_value_object.val('');
+                 }
 
 	            });
 	        });
@@ -914,7 +961,7 @@ return valid();
                      <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Commission Type:</label>
                 </div>
                 <div class="col-4 " >
-                    <select id="calculate" name="calculate[]" value="<?php echo $result->product_category; ?>" style="color: #0C1830;border-color:#102958;" class="form-control" 
+                    <select id="calculate" name="calculate[]" value="<?php echo $result->product_category; ?>" style="color: #000;border-color:#102958;" class="form-control" 
                         onchange="
                     if(document.getElementById('percent_trade').value!=''){
                     	var premiumInput = document.getElementById('convertion_value').value.replace(/,/g,'');
@@ -936,7 +983,10 @@ return valid();
                             // var commission = premium-percent;
                             var commission = percent;
                         }
-                        document.getElementById('commission').value =parseFloat(commission).toFixed(2);
+                        if(commission!='NaN'){
+	                        var commissionNumber  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(commission);
+	                        document.getElementById('commission').value =commissionNumber;
+                    	}
                     }
 
                         " required/>
@@ -954,31 +1004,38 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Commission Value:</label>
                 </div> 
                 <div class="col-2 " >
-                    <input id="percent_trade" name="percent_trade[]" type="text" class="form-control" style="border-color:#102958;text-align: right;" onchange="
-                        var num = parseInt(parseFloat(this.value).toFixed(0));
-                        if(Number.isInteger(num)){
+                    <input id="percent_trade" name="percent_trade[]" type="text" class="form-control" style="border-color:#102958;text-align: right; color: #000;" onchange="
+                        // var num = parseInt(parseFloat(this.value).toFixed(0));
+                         var num = $(this).val().replace(/,/g,'');
+
+                        // if(Number.isInteger(num)){
+                        if (parseFloat(num)) {
                         	var premiumInput = document.getElementById('convertion_value').value.replace(/,/g,'');
 							var premium = parseFloat(premiumInput).toFixed(2);
                         // var premium = parseFloat(document.getElementById('convertion_value').value).toFixed(2);
-                        var percent = parseFloat(this.value).toFixed(2);
                         
                         if(document.getElementById('calculate').value=='Percentage'){
-                            if (parseFloat(this.value)>100){
+                            if (parseFloat(num)>100){
                                 this.value=parseFloat(100.00).toFixed(2)+'%';
                             }else{
-                                this.value=parseFloat(this.value).toFixed(2)+'%';
+                                this.value=parseFloat(num).toFixed(2)+'%';
                             } 
                             var percent = parseFloat(this.value).toFixed(2);
                             var commission = ((percent / 100) * premium);
                         }else{
-                        	document.getElementById('percent_trade').value = this.value;
-                            var commission = percent;
-                            // document.getElementById('percent_trade').value = this.value;
-                            // var commission = percent.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                        	document.getElementById('percent_trade').value = num;
+                            var value_con  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
+                        	this.value=value_con;
+                            var commission = num;
                         }
-                            document.getElementById('commission').value =parseFloat(commission).toFixed(2);
+                            // document.getElementById('commission').value =parseFloat(commission).toFixed(2);
+                        	if(commissionNumber!=''){
+	                        	var commissionNumber  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(commission);
+	                        	document.getElementById('commission').value =commissionNumber;
+                        	}
                         }else{
                             this.value='';
+                            document.getElementById('commission').value ='';
                         }
                         " required/>
                 </div> 
@@ -986,14 +1043,14 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" >Commission Rate:</label>
                 </div> 
                 <div class="col-2 " >
-                    <input type="number" id="commission" name="commission[]" style="border-color:#102958;text-align: right;" class="form-control" readOnly/>
+                    <input type="text" id="commission" name="commission[]" style="border-color:#102958;text-align: right; color: #000;" class="form-control" readOnly/>
                 </div>
 
                 <div class="col-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Commission Status:</label>
                 </div> 
                 <div class="col-2 " >
-                     <select disabled="true" id="commission_status" name="commission_status[]" style="color: #0C1830;border-color:#102958;" class="form-control"   >
+                     <select disabled="true" id="commission_status" name="commission_status[]" style="color: #000;border-color:#102958;" class="form-control"   >
                         <!-- <option value="Paid" >Paid</option> -->
                         <option value="Not Paid" >Not Paid</option>
                     </select>
@@ -1007,7 +1064,7 @@ return valid();
                 </div>
 
             <div class="col-4">
-                <select id="agent_name" name="agent[]" style="color:#0C1830;border-color:#102958;" class="form-control selectpicker" data-live-search="true" >
+                <select id="agent_name" name="agent[]" style="color:#000;border-color:#102958;" class="form-control selectpicker" data-live-search="true" >
                     <option value="" selected>Select Agent Name</option>
                     <?php  //foreach($results_agent as $result){ ?>
                         <!-- <option value="<?php //echo $result->id; ?>" ><?php //echo $result->title_name." ".$result->first_name." ".$result->last_name."(".$result->nick_name.")"; ?></option> -->
@@ -1151,39 +1208,15 @@ return valid();
    
         <div class="panel-body">
 
-    <div class="form-group row col-md-10 col-md-offset-1">
-
-         <input hidden="true" id="id_customer_input" name="id_customer_input" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" id="success" >
-         </input>
-
-        <div class="col-sm-2 label_left" >
-            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Cust. name:</label>
-        </div>
-                <div class="col-3">
-                    <input id="name_c_input" name="name_c_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" id="success" value="" required>
-                        <!-- <span class="btn-label btn-label-right"><i class="fa fa-check"></i></span> -->
-                    </input>
-                </div>
-
-                <div class="col-sm-3">
-                    <button style="background-color: #0275d8;color: #F9FAFA;" type="button" class="btn " data-toggle="modal" data-target="#ModalCustomer">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                        </svg>&nbsp;
-                    </button>
-                    <button style="background-color: #0275d8;color: #F9FAFA;" type="button" class="btn" onclick="clear_customer()" >Clear</button>
-                </div>    
-            <div class="col-3">
-            </div>  
-    </div>
+    
 
     <div class="form-group row col-md-10 col-md-offset-1">
         <div class="col-sm-2 label_left mb-20" >
-            <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Cust. Type:</label>
+            <label style="color: #102958;" for="staticEmail" >Cust. Type:</label>
         </div>
 
         <div class="col-3">
-            <select id="type_c_input" name="type_c_input" type="hidden" onchange="ClickChange_personal()" style="border-color:#102958;" class="form-control" required>
+            <select id="type_c_input" name="type_c_input" type="hidden" onchange="ClickChange_personal()" style="border-color:#102958; color: #000;" class="form-control" disabled="true" >
                 <option value="" selected>Select Customer Type</option>
                 <option value="Personal">Personal</option>
                 <option value="Corporate" >Corporate</option>
@@ -1197,7 +1230,10 @@ return valid();
                         &nbsp;&nbsp;&nbsp;&nbsp; Active
             </label>
         </div>  
-        <div class="col" >
+        <div class="col ">
+			<label style="color: red; font-size: 12px;" >
+				<I>Please select the search icon to locate your customer.</I>
+			</label>
         </div>  
 
        <!--  <div class="col-sm-2 label_right" >
@@ -1207,18 +1243,46 @@ return valid();
     </div>  
 
     <div class="form-group row col-md-10 col-md-offset-1">
+
+         <input hidden="true" id="id_customer_input" name="id_customer_input" type="text" class="form-control" id="success" >
+         </input>
+
+          <input hidden="true" id="id_default_contact" name="id_default_contact" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $id_default_contact; ?>" >
+    		</input>
+
         <div class="col-sm-2 label_left" >
-            <label style="color: #102958;" ><small><font color="red">*</font></small>Cust. ID:</label>
+        	<!-- <small><font color="red">*</font></small> -->
+            <label style="color: #102958;" for="staticEmail" >Cust. name:</label>
+        </div>
+                <div class="col">
+                    <input id="name_c_input" name="name_c_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" id="success" value="" readOnly>
+                        <!-- <span class="btn-label btn-label-right"><i class="fa fa-check"></i></span> -->
+                    </input>
+                </div>
+
+                <div class="col-sm-3">
+                    <button style="background-color: #0275d8;color: #F9FAFA;" type="button" class="btn " data-toggle="modal" data-target="#ModalCustomer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>&nbsp;
+                    </button>
+                    <button style="background-color: #0275d8;color: #F9FAFA;" type="button" class="btn" onclick="clear_customer()" >Clear</button>
+                </div>
+    </div>
+
+    <div class="form-group row col-md-10 col-md-offset-1">
+        <div class="col-sm-2 label_left" >
+            <label style="color: #102958;" >Cust. ID:</label>
         </div>
         <div class="col-3">
-            <input id="customer_c_input" name="customer_c_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" value="" required>
+            <input id="customer_c_input" name="customer_c_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="" readOnly>
             
         </div>
             <div class="col-sm-1 label_left">
-                <label style="color: #102958;"  ><small><font color="red">*</font></small>Cust. Level:</label>
+                <label style="color: #102958;" >Cust. Level:</label>
             </div>   
             <div class="col">
-                <select id="level_c_input" name="level_c_input" style="border-color:#102958;" class="form-control" data-description="<?php echo $result->description;?>" required>
+                <select id="level_c_input" name="level_c_input" style="border-color:#102958; color: #000;" class="form-control" data-description="<?php echo $result->description;?>" disabled="true" >
                     <option value="0" selected>Select Cust. Level</option>
                     <?php  foreach($results_c_level as $result){ ?>
                         <option value="<?php echo $result->id; ?>" data-description="<?php echo $result->description; ?>" ><?php echo $result->level_name; ?></option>
@@ -1227,7 +1291,7 @@ return valid();
             </div>
 
             <div class="col-4 ">
-                <input id="customer_de" name="customer_de" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  readOnly> 
+                <input id="customer_de" name="customer_de" style="color: #000;border-color:#102958;" type="text" class="form-control"  readOnly> 
             </div>
 
         </div>
@@ -1253,13 +1317,12 @@ return valid();
                     });
                 </script>
 
-
     <div class="form-group row col-md-10 col-md-offset-1">
-            <div class="col-sm-2 label_left personal" id="title_c_label" >
+    		<div class="col-sm-2 label_left personal" id="title_c_label" >
                 <label  style="color: #102958;" for="staticEmail" >Title:</label>
             </div>
             <div id="title_input" class="col-3 personal"  >
-                <select id="title_c_input" name="title_c_input" style="border-color:#102958;"  class="form-control" >
+                <select id="title_c_input" name="title_c_input" style="border-color:#102958;" class="form-control" disabled="true" >
                     <option value="" selected>Select Title</option>
                     <?php  if($name_title=="Mr."){ ?>
                         <option value="Mr." selected>Mr.</option>
@@ -1280,39 +1343,44 @@ return valid();
                 </select>    
             </div>
 
+
+    </div>
+
+    <div hidden="true" class="form-group row col-md-10 col-md-offset-1">
+           
             <div class="col-sm-2 label_left corporate" style="margin-top: 0 !important;" >
-                    <label id="company_c_label" style="color: #102958;" ><small><font color="red">*</font></small>Company name:</label>
+                <label hidden="true" id="company_c_label" style="color: #102958;" >Company name:</label>
             </div>
             <div class="col corporate" id="company_input"  >
-                    <input id="company_c_input" name="company_c_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  required>
+                <input hidden="true" id="company_c_input" name="company_c_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" >
             </div>
-  
+
     </div>
 
         <div class="form-group row col-md-10 col-md-offset-1 personal">
 
                 <div id="first_c_label" class="col-sm-2 label_left personal" >
-                    <label  style="color: #102958;" ><small><font color="red">*</font></small>First name:</label>
+                    <label  style="color: #102958;" >First name:</label>
                 </div>
                 <div id="first_input" class="col personal">
-                    <input id="first_c_input"  minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  required>
+                    <input id="first_c_input"  minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
 
                 <div id="last_c_label" class="col-sm-2 label_left personal" >
                     <label  style="color: #102958;" >Last name:</label>
                 </div>
                 <div id="last_input" class="col personal">
-                    <input id="last_c_input" name="last_c_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
+                    <input id="last_c_input" name="last_c_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
         </div>
 
 
-        <div class="form-group row col-md-10 col-md-offset-1">    
+        <div class="form-group row col-md-10 col-md-offset-1 ">    
 			<div id="nick_c_label" class="col-sm-2 label_left" >
 				<label style="color: #102958;" for="staticEmail" >Nickname:</label>
 			</div>
 			<div id="nick_input" class="col">
-				<input id="nick_c_input" name="nick_c_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  >
+				<input id="nick_c_input" name="nick_c_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  readOnly>
 			</div>
             <div  class="col-sm-2 label_left" >
             </div> 
@@ -1325,8 +1393,8 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" >Tax ID / Passport ID:</label>
             </div>
             <div class="col">
-                    <!--<input id="personal_c_input" name="personal_c_input" minlength="13" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control"  required  pattern="\d{13}">-->
-                <input id="personal_c_input" name="personal_c_input" minlength="1" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" >
+                    <!--<input id="personal_c_input" name="personal_c_input" minlength="13" maxlength="13" style="color: #000;border-color:#102958;" type="text"  class="form-control"   pattern="\d{13}">-->
+                <input id="personal_c_input" name="personal_c_input" minlength="1" maxlength="13" style="color: #000;border-color:#102958;" type="text"  class="form-control" readOnly>
             </div>
 			
 			<div id="div_personal_e_per" class="col-sm-2 label_left" >
@@ -1336,7 +1404,7 @@ return valid();
 				<label style="color: #102958;" >Email:</label>
 			</div> 
 			<div class="col">
-				<input id="email_c_input" name="email_c_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="email"   class="form-control" >
+				<input id="email_c_input" name="email_c_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="email"   class="form-control" readOnly>
 			</div>
 
 			<div id="div_r_email_label" class="col-sm-2 personal" hidden="true" >
@@ -1354,7 +1422,7 @@ return valid();
                     <label style="color: #102958;" for="staticEmail" >Mobile:</label>
                 </div>
                 <div class="col">
-                    <input id="mobile_c_input" name="mobile_c_input" minlength="10" maxlength="12" style="color: #0C1830;border-color:#102958;" type="text"   class="form-control" pattern="\d{3}-\d{3}-\d{4}">
+                    <input id="mobile_c_input" name="mobile_c_input" minlength="10" maxlength="12" style="color: #000;border-color:#102958;" type="text"   class="form-control" pattern="\d{3}-\d{3}-\d{4}" readOnly>
                 </div>
                 <script>
                     document.getElementById('mobile_c_input').addEventListener('input', function (e) {
@@ -1367,25 +1435,17 @@ return valid();
                     <label style="color: #102958;" >Tel:</label>
                 </div>
                 <div id="div_personal_tel_in" hidden="true" class="col">
-                    <input id="tel_c_input" name="tel_c_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  >
+                    <input id="tel_c_input" name="tel_c_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
 
                 <div  class="col-sm-2 label_left personal" >
                     <label style="color: #102958;" for="staticEmail" >Tel:</label>
                 </div>
                 <div class="col personal">
-                    <input id="tel_c_input2" name="tel_c_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  >
+                    <input id="tel_c_input2" name="tel_c_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  readOnly>
                 </div>
 
-        </div>  
-
-        <div id="div_personal_tel" class="form-group row col-md-10 col-md-offset-1">
-                
-               
-        </div> 
-
-            
-            
+        </div>    
 
              <div class="panel-heading">
                 <div class="form-group row col-md-10 col-md-offset-1">
@@ -1410,7 +1470,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Address No:</label>
                 </div>  
                 <div class="col">
-                    <input id="address_input" name="address_number_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text"   class="form-control"  required>
+                    <input id="address_input" name="address_number_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
 
                 <div class="col-sm-2 label_left" >
@@ -1418,7 +1478,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                 </div>
 
                 <div class="col">
-                    <input id="building_input" name="building_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  >
+                    <input id="building_input" name="building_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
             </div>
 
@@ -1427,38 +1487,39 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                     <label style="color: #102958;" for="staticEmail" >Soi:</label>
                 </div>
                 <div class="col">
-                    <input id="soi_input" name="soi_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  >
+                    <input id="soi_input" name="soi_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
 
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Road:</label>
                 </div>
                 <div class="col">
-                    <input id="road_input" name="road_input" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  >
+                    <input id="road_input" name="road_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
             </div>      
         
             <div class="form-group row mb-20 col-md-10 col-md-offset-1">
                 <div class="col-sm-2 label_left"  >
-                    <label for="province" style="color: #102958;" ><small><font color="red">*</font></small>Province:</label>
+                    <label for="province" style="color: #102958;" >Province:</label>
                 </div>
                 <div class="col">
-                    <select id="province" name="province_id" style="border-color:#102958;" class="remove-example form-control selectpicker" data-live-search="true" required>
+                    <select id="province" name="province_id" style="border-color:#102958; color: #000;" class="remove-example form-control selectpicker" data-live-search="true" disabled >
                             <div id="row_option" >
                             <option value="" selected>Select Province</option>
                             <?php foreach($results_2 as $result_add){  ?>
                                 <option value="<?php echo $result_add->code;?>" ><?php echo $result_add->name_en;?></option>
                             <?php } ?>
-                            <div>
+                            </div>
                     </select>
                     <!-- </div> -->
                 </div>
+				
 
                 <div class="col-sm-2 label_left">
                     <label for="district" style="color: #102958;" ><small><font color="red">*</font></small>District:</label>
                 </div>
                 <div class="col">
-                    <select id="district" name="district_id" style="border-color:#102958;" class="form-control selectpicker" data-live-search="true" required>
+                    <select id="district" name="district_id" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true" disabled="true" >
                         <option value="0" >Select district</option>
                     </select>
                 </div>
@@ -1469,7 +1530,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                     <label for="sub_district" style="color: #102958;" ><small><font color="red">*</font></small>Sub-district:</label>
                 </div>
                 <div class="col">
-                    <select id="sub_district" name="sub_district_id" style="border-color:#102958;" class="form-control selectpicker" data-live-search="true" required>
+                    <select id="sub_district" name="sub_district_id" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true" disabled="true" >
                         <option value="0" selected>Select sub-district</option>
                     </select>
                 </div>
@@ -1478,7 +1539,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                     <label style="color: #102958;" ><small><font color="red">*</font></small>Post Code:</label>
                 </div> 
                 <div class="col">
-                    <select id="postcode" name="postcode_id" style="border-color:#102958;" class="form-control selectpicker" data-live-search="true" required>
+                    <select id="postcode" name="postcode_id" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true" disabled="true">
                         <option value="0" selected>Select post code</option>
                     </select>
                 </div>
@@ -1506,8 +1567,8 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
 
             <div class="form-check" style="top:20px;">
                 <!-- disabled="true" -->
-                <input  id="same_co" name="same_co[]" class="form-check-input" type="checkbox" value="false" onclick="same_customer()" >
-                <label  style="color: #0C1830;" class="form-check-label" >
+                <input hidden="true" id="same_co" name="same_co[]" class="form-check-input" type="checkbox" value="false" onclick="same_customer()" >
+                <label hidden="true" style="color: #000;" class="form-check-label" >
                     &nbsp;&nbsp;&nbsp;&nbsp; Same Customer Name
                 </label>
             </div>
@@ -1522,12 +1583,13 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
 
         <div class="panel-body">
             <div class="form-group row mb-20 col-md-10 col-md-offset-1">
-                <input id="id_co" name="id_co[]" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  hidden="true">
+            	<!-- hidden="true" -->
+                <input hidden="true" id="id_co" name="id_co[]" type="text" >
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Title:</label>
                 </div>
-                <div  class="col-2 label_left">
-                     <select id="title_co" name="title_co[]" style="border-color:#102958;" class="form-control" >
+                <div  class="col-3 label_left">
+                     <select id="title_co" name="title_co[]" style="border-color:#102958; color: #000;" class="form-control" disabled="true">
                         <option value="" selected>Select Title </option>
                         <?php  if($name_title=="Mr."){ ?>
                             <option value="Mr." selected>Mr.</option>
@@ -1548,25 +1610,37 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                         <?php } ?>
                     </select>    
                 </div>
-                <div class="col-sm-2 label_left" >
+                
+                <div class="col-sm-1">
+                    <button style="background-color: #0275d8;color: #F9FAFA;" type="button" class="btn " data-toggle="modal" data-target="#ModalContact">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>&nbsp;
+                    </button>
+
+                    <!-- <button style="background-color: #0275d8;color: #F9FAFA;" type="button" class="btn" onclick="clear_customer()" >Clear</button> -->
                 </div>
-                <div class="col" >
-                </div>
+				<div class="col ">
+					<label style="color: red; font-size: 12px;" >
+						<I>Please utilize the search icon if you wish to modify other contacts associated with this customer.</I>
+					</label>
+				</div>
             </div>
+			
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" ><small><font color="red">*</font></small>First name:</label>
+                    <label style="color: #102958;" >First name:</label>
                 </div>
                 <div class="col">
-                    <input id="first_co" name="first_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  required>
+                    <input id="first_co" name="first_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
 
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" >Last name:</label>
                 </div>
                 <div class="col">
-                    <input id="last_co" name="last_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
+                    <input id="last_co" name="last_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
 
             </div>
@@ -1576,7 +1650,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                     <label style="color: #102958;" >Nickname:</label>
                 </div>
                 <div class="col">
-                    <input id="nick_co" name="nick_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  >
+                    <input id="nick_co" name="nick_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
 
                 <div class="col-sm-2 label_left" >
@@ -1590,7 +1664,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                     <label style="color: #102958;" >Mobile:</label>
                 </div>
                 <div class="col">
-                    <input id="mobile_co" name="mobile_co[]" minlength="10" maxlength="12" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" pattern="\d{3}-\d{3}-\d{4}">
+                    <input id="mobile_co" name="mobile_co[]" minlength="10" maxlength="12" style="color: #000;border-color:#102958;" type="text" class="form-control" pattern="\d{3}-\d{3}-\d{4}" readOnly>
                 </div>
                 <script>
                     document.getElementById('mobile_co').addEventListener('input', function (e) {
@@ -1603,7 +1677,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                     <label style="color: #102958;" >Tel:</label>
                 </div>  
                 <div class="col">
-                    <input id="tel_co" name="tel_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control"  >
+                    <input id="tel_co" name="tel_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
             </div>
 
@@ -1612,13 +1686,13 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                     <label style="color: #102958;" >Email:</label>
                 </div>
                 <div class="col">
-                    <input id="email_co" name="email_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="email" class="form-control" >
+                    <input id="email_co" name="email_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="email" class="form-control" readOnly>
                 </div>
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" >Line ID:</label>
                 </div>
                 <div class="col">
-                    <input id="line_co" name="line_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
+                    <input id="line_co" name="line_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
                <!--  <div class="col-sm-2 label_left" >
                 </div>
@@ -1630,14 +1704,14 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                     <label style="color: #102958;" >Position:</label>
                 </div>
                 <div class="col">
-                    <input id="position_co" name="position_co[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
+                    <input id="position_co" name="position_co[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
 
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" >Department:</label>
                 </div>
                 <div class="col" class="form-control" >
-                    <input id="department" name="department[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" >
+                    <input id="department" name="department[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" readOnly>
                 </div>
                 
                 
@@ -1648,7 +1722,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                     <label style="color: #102958;" >Remark:</label>
                 </div>
                 <div class="col " class="form-control" >
-                    <textarea id="remark_co" name="remark_co[]" minlength="1"  style="color: #0C1830;border-color:#102958;" rows="2" class="form-control"  ></textarea>
+                    <textarea id="remark_co" name="remark_co[]" minlength="1"  style="color: #000;border-color:#102958;" rows="2" class="form-control" readOnly></textarea>
                 </div>
             </div> 
 
@@ -1656,7 +1730,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                 <div class="col-sm-2 label_left" >
                     </div> 
                 <div class="col" >
-                    <input id="default_co" name="default_co[]" class="form-check-input" type="radio" id="flexCheckDefault" checked>
+                    <input id="default_co" name="default_co[]" class="form-check-input" type="radio" id="flexCheckDefault" disabled="true" checked>
                     <label style="color: #102958;" class="form-check-label" for="flexCheckDefault">
                         &nbsp;&nbsp;&nbsp;&nbsp; Default Contact
                     </label>
@@ -1684,8 +1758,14 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
 
                 <div class="form-group row col-md-10 col-md-offset-1">
                 <div class="col-md-12">
-                    <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
+                    <!-- <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
+                    </button> -->
+                    <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn btn-primary">Submit <span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
                     </button>
+                    &nbsp;&nbsp;
+                   	<a href="entry-policy.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
+                        <span class="text">Cancel</span>
+                    </a> 
                 </div>
                 </div>
  
@@ -1704,9 +1784,10 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
 <script type="text/javascript" src="includes_php/select_customer.js"></script>
 <script type="text/javascript" src="includes_php/address.js"></script>
 
-<?php include('includes_php/add_insurance.php');?>
+<?php //include('includes_php/add_insurance.php');?>
 <?php include('includes_php/add_contact.php');?>
 <?php include('includes_php/popup_table_customer.php');?>
+<?php include('includes_php/popup_table_contact.php');?>
 <?php include('includes_php/popup_add_product.php');?>
 <?php include('includes_php/popup_reason.php');?>
 <?php include('includes_php/popup_renew.php');?>
@@ -1730,6 +1811,20 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
 	.bootstrap-select.btn-group .dropdown-toggle .caret {
 		margin-top: -4px !important;
 	}
+	
+	.btn-group>.btn:first-child {
+		border-color: #102958 !important;
+	}
+	
+	.btn-group>.btn:first-child.disabled {
+		border-color: #102958 !important;
+		color: #000 !important;
+		background-color: #eeeeee;
+	}
+
+	
+
+	
 </style>
 
  </div>
@@ -1917,3 +2012,42 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
     $('.corporate').hide();
     $('.personal').show();
 </script>
+
+<script type="text/javascript">
+     var input_value=0;
+     function ClickChange() {
+        var value_status = document.getElementById("status_i_input").value;
+        if(value_status=="Not renew"){
+            $('#ModalNotrenew').modal('show');
+            document.getElementById("area_not").hidden = false;
+            document.getElementById("area_not_label").hidden = false;
+        }else{
+            document.getElementById("area_not").hidden = true;
+            document.getElementById("area_not_label").hidden = true;
+        }
+
+        if(value_status=="New" || value_status=="Renew"){
+            document.getElementById("paid_date").removeAttribute("disabled");
+        }else{
+            document.getElementById("paid_date").setAttribute("disabled","disabled");
+            // document.getElementById("paid_date").value=new Date();
+        }
+
+
+        var payment_object = $('#payment_status');
+        payment_object.html('');
+        if(value_status=="New" || value_status=="Follow up"){
+            document.getElementById("payment_status").setAttribute("disabled","disabled");
+            payment_object.append($('<option></option>').val("Paid").html("Paid"));
+        }else if(value_status=="Wait" || value_status=="Not renew"){
+            document.getElementById("payment_status").setAttribute("disabled","disabled");
+            payment_object.append($('<option></option>').val("Not Paid").html("Not Paid"));
+        }else if(value_status=="Renew"){
+            document.getElementById('payment_status').removeAttribute("disabled");
+            payment_object.append($('<option></option>').val("Paid").html("Paid"));
+            payment_object.append($('<option></option>').val("Not Paid").html("Not Paid"));
+            $('#ModalRenew').modal('show');
+        }
+        
+    }
+</script> 

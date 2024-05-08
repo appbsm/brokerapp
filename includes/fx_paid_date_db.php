@@ -8,10 +8,11 @@ function get_paid_policy($conn,$status) {
 
 	$sql = " SELECT ip.insurance_company AS insurance_company_in,pr.product_name AS product_name_in,cu.mobile AS mobile_customer,cu.tel AS tel_customer,cu.email AS email_customer,insu.status AS status_insurance 
      ,CASE WHEN cu.customer_type = 'Personal'
-      THEN CONCAT(cu.title_name,' ',cu.first_name,' ',cu.last_name)
+      THEN CONCAT(cu.first_name,' ',cu.last_name)
       ELSE cu.company_name
       END as full_name
      ,ag.title_name AS title_name_agent,ag.first_name AS first_name_agent,ag.last_name AS last_name_agent 
+     ,CONCAT(ag.first_name,' ',ag.last_name) as agent_name
      ,insu.id AS id_insurance,FORMAT(start_date, 'dd-MM-yyyy') AS start_date_day 
      ,FORMAT(paid_date, 'dd-MM-yyyy') AS paid_date_day 
      ,FORMAT(end_date, 'dd-MM-yyyy') AS end_date_day
@@ -42,17 +43,25 @@ function get_paid_policy($conn,$status) {
 }
 
 function update_insurance_info($conn, $post_data) {
+
+	echo '<script>alert("percent_trade: '.$post_data['percent_trade'].'")</script>'; 
+
 	$data['id'] = $post_data['id_insurance_info'];
 	$data['table'] = 'insurance_info';
 	$data['columns'] = array(
+	'percent_trade',
+	'calculate_type',
 	'commission_status',
 	'commission_paid_date',
 	'paid_by'
 	);
 
 	$data['values'] = array(
+		floatval($post_data['percent_trade']),
+		$post_data['calculate'],
 		'Paid',
-		$post_data['commission_paid_date'],
+		date("Y-m-d", strtotime($post_data['commission_paid_date'])),
+		// $post_data['commission_paid_date'],
 		$_SESSION['id']
 	);
 	update_table ($conn, $data);
@@ -81,9 +90,10 @@ function get_insurance_info($conn,$id) {
 	 ,ip.insurance_company AS insurance_company_in,pr.product_name AS product_name_in,cu.mobile AS mobile_customer
 	 ,cu.tel AS tel_customer,cu.email AS email_customer,insu.status AS status_insurance 
      ,CASE WHEN cu.customer_type = 'Personal'
-      THEN CONCAT(cu.title_name,' ',cu.first_name,' ',cu.last_name)
+      THEN CONCAT(cu.first_name,' ',cu.last_name)
       ELSE cu.company_name
       END as full_name
+     ,CONCAT(ag.first_name,' ',ag.last_name) as agent_name
      ,ag.title_name AS title_name_agent,ag.first_name AS first_name_agent,ag.last_name AS last_name_agent 
      ,insu.id AS id_insurance,FORMAT(start_date, 'dd-MM-yyyy') AS start_date_day 
      ,FORMAT(paid_date, 'dd-MM-yyyy') AS paid_date_day 
