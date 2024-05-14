@@ -73,7 +73,8 @@ function get_partners_search_start($conn) {
 // left JOIN contact con ON con.id = re_ct.id_contact
 // WHERE con.default_contact = 1 ";
 	$sql = $sql."SELECT pr.name_en AS name_en_province,di.name_en AS name_en_district,su.name_en AS name_en_sub
-		,con.email as email_con,con.mobile as mobile_con,con.position,con.first_name,con.last_name,ip.* FROM  insurance_partner ip
+		,con.email as email_con,con.mobile as mobile_con,con.position
+		,con.first_name,con.last_name,ip.* FROM  insurance_partner ip
 		left JOIN rela_partner_to_contact re_ct ON ip.id = re_ct.id_insurance_partner
 		left JOIN contact con ON con.id = re_ct.id_contact
 		LEFT JOIN provinces pr ON ip.province = pr.code
@@ -283,25 +284,37 @@ function save_partner($conn, $post_data) {
 	}
 
 	// if (isset($post_data['agent_under'])) {
+
 		$ctr = 0;
 		$agent_id = $post_data['agent_under'];
 		$data_under['table'] = 'under';
 		do {
 			if ($post_data['agent_under'][$ctr]!="") {
+
+
 				$data_under['columns'] = array(
 		            'under_code',
 		            'id_agent',
+		            'percen_value',
+		            'net_value',
+		            'type_default',
 		            'id_partner'
 		        );
+
+				$percen = substr($_POST['agent_percent'][$ctr],0,-1);
 		        $data_under['values'] = array(
 		            $post_data['agent_code'][$ctr],
 		            $post_data['agent_under'][$ctr],
+		            $percen,
+		            $post_data['agent_net'][$ctr],
+		            $post_data["default_type".($ctr+1)],
 		            $id_partner
 		        );
 		        insert_table($conn, $data_under);
 		    }
 		$ctr++;
 		}while($ctr < count($agent_id));
+
 	// }
 
 	// if (isset($post_data['contact_first_name'])) {
@@ -370,28 +383,31 @@ function save_partner($conn, $post_data) {
 	    //$data_contact = array();
 	    $ctr = 0;
 	    $data_bank['table'] = 'bank';	   
-	    do {
-	        $data_bank['columns'] = array(
-	            'bank_name',
-	            'bank_account',
-	            'bank_type',
-	            'bank_account_name',
-	            'cdate',
-	            'id_partner'
-	           //'create_by'
-	        );
-	        
-	        $data_bank['values'] = array(
-	            (isset($post_data['bank_name'][$ctr])) ? $post_data['bank_name'][$ctr] : '',
-	            (isset($post_data['bank_account'][$ctr])) ? $post_data['bank_account'][$ctr] : '',
-	            (isset($post_data['bank_type'][$ctr])) ? $post_data['bank_type'][$ctr] : '',
-	            (isset($post_data['bank_account_name'][$ctr])) ? $post_data['bank_account_name'][$ctr] : '',	            
-	            date('Y-m-d H:i:s'),
-	            $id_partner
-	        );
-	        $bankt_id = insert_table ($conn, $data_bank);
-	        
-	       
+	    do{
+	    	if($post_data['bank_name'][$ctr]!=="" || $post_data['bank_account'][$ctr]!=="" 
+	    		|| $post_data['bank_type'][$ctr]!=="" || $post_data['bank_account_name'][$ctr]!==""){
+
+		        $data_bank['columns'] = array(
+		            'bank_name',
+		            'bank_account',
+		            'bank_type',
+		            'bank_account_name',
+		            'cdate',
+		            'id_partner'
+		           //'create_by'
+		        );
+		        
+		        $data_bank['values'] = array(
+		            (isset($post_data['bank_name'][$ctr])) ? $post_data['bank_name'][$ctr] : '',
+		            (isset($post_data['bank_account'][$ctr])) ? $post_data['bank_account'][$ctr] : '',
+		            (isset($post_data['bank_type'][$ctr])) ? $post_data['bank_type'][$ctr] : '',
+		            (isset($post_data['bank_account_name'][$ctr])) ? $post_data['bank_account_name'][$ctr] : '',	            
+		            date('Y-m-d H:i:s'),
+		            $id_partner
+		        );
+		        $bankt_id = insert_table ($conn, $data_bank);
+	        }
+
 	        $ctr++;
 	    }while($ctr < count($post_data['bank_name']));
 	// } // END OF IF CONTACTS
@@ -457,6 +473,7 @@ function update_partner ($conn, $post_data) {
 	// echo '<script>alert("id_bank: '.count($post_data['id_bank']).'")</script>'; 
 	for ($ctr=0;$ctr<count($post_data['id_bank']);$ctr++) {
 		$id_bank = $post_data['id_bank'];
+
 	    if($post_data['id_bank'][$ctr]!=""){
 	    	$data_bank=null;
 	    	$data_bank['id'] = $post_data['id_bank'][$ctr];
@@ -479,27 +496,32 @@ function update_partner ($conn, $post_data) {
 	        );
 	        update_table($conn, $data_bank);
 	    }else{
-	    	$data_bank=null;
-	    	$data_bank['table'] = 'bank';
-	    	$data_bank['columns'] = array(
-	            'bank_name',
-	            'bank_account',
-	            'bank_type',
-	            'bank_account_name',
-	            'cdate',
-	            'id_partner'
-	        );
-	        
-	        $data_bank['values'] = array(
-	            (isset($post_data['bank_name'][$ctr])) ? $post_data['bank_name'][$ctr] : '',
-	            (isset($post_data['bank_account'][$ctr])) ? $post_data['bank_account'][$ctr] : '',
-	            (isset($post_data['bank_type'][$ctr])) ? $post_data['bank_type'][$ctr] : '',
-	            (isset($post_data['bank_account_name'][$ctr])) ? $post_data['bank_account_name'][$ctr] : '',	            
-	            date('Y-m-d H:i:s'),
-	            $id_partner
-	        );
-	        $bankt_id = insert_table ($conn,$data_bank);
+	    	if($post_data['bank_name'][$ctr]!=="" || $post_data['bank_account'][$ctr]!=="" 
+	    		|| $post_data['bank_type'][$ctr]!=="" || $post_data['bank_account_name'][$ctr]!==""){
+
+		    	$data_bank=null;
+		    	$data_bank['table'] = 'bank';
+		    	$data_bank['columns'] = array(
+		            'bank_name',
+		            'bank_account',
+		            'bank_type',
+		            'bank_account_name',
+		            'cdate',
+		            'id_partner'
+		        );
+		        
+		        $data_bank['values'] = array(
+		            (isset($post_data['bank_name'][$ctr])) ? $post_data['bank_name'][$ctr] : '',
+		            (isset($post_data['bank_account'][$ctr])) ? $post_data['bank_account'][$ctr] : '',
+		            (isset($post_data['bank_type'][$ctr])) ? $post_data['bank_type'][$ctr] : '',
+		            (isset($post_data['bank_account_name'][$ctr])) ? $post_data['bank_account_name'][$ctr] : '',	            
+		            date('Y-m-d H:i:s'),
+		            $id_partner
+		        );
+		        $bankt_id = insert_table ($conn,$data_bank);
+	    	}
 	    }
+
 	}
 
 	// echo '<script>alert("id_under: '.count($post_data['id_under']).'")</script>'; 
@@ -513,27 +535,49 @@ function update_partner ($conn, $post_data) {
 				$data_under['columns'] = array(
 		            'under_code',
 		            'id_agent',
+		            'percen_value',
+		            'net_value',
+		            'type_default',
 		            'id_partner'
 		        );
+
+		        // $agent_percent_p = (float) str_replace(',', '', $_POST['convertion_value'][$i]);
+				$percen = substr($_POST['agent_percent'][$ctr],0,-1);
+
 		        $data_under['values'] = array(
 		            $post_data['agent_code'][$ctr],
 		            $post_data['agent_under'][$ctr],
+		            $percen,
+		            $post_data['agent_net'][$ctr],
+		            $post_data["default_type".($ctr+1)],
 		            $id_partner
 		        );
 		        update_table($conn, $data_under);
 		    }
 		}else{
+			echo '<script>alert("IN default_type: '.$post_data["default_type".($ctr+1)].'")</script>'; 
+			echo '<script>alert("agent_under: '.$post_data['agent_under'][$ctr].'")</script>'; 
+
 			if ($post_data['agent_under'][$ctr]!="") {
 				$data_under=null;
 				$data_under['table'] = 'under';
 				$data_under['columns'] = array(
 		            'under_code',
 		            'id_agent',
+		            'percen_value',
+		            'net_value',
+		            'type_default',
 		            'id_partner'
 		        );
+
+		        $percen = substr($_POST['agent_percent'][$ctr],0,-1);
+
 		        $data_under['values'] = array(
 		            $post_data['agent_code'][$ctr],
 		            $post_data['agent_under'][$ctr],
+		            $percen,
+		            $post_data['agent_net'][$ctr],
+		            $post_data["default_type".($ctr+1)],
 		            $id_partner
 		        );
 		        insert_table($conn, $data_under);
@@ -673,9 +717,9 @@ function update_partner ($conn, $post_data) {
 
 function get_partner_contact ($conn, $id) {
     $result = array();
-    $tsql = "select c.*,rc.id_insurance_partner as id_insurance_partner from contact c "
-        . "left join rela_partner_to_contact rc on rc.id_contact = c.id "
-            . "where rc.id_insurance_partner = ".$id;
+    $tsql = "select c.*,rc.id_insurance_partner as id_insurance_partner from contact c 
+        left join rela_partner_to_contact rc on rc.id_contact = c.id
+        where rc.id_insurance_partner = ".$id;
             //echo $tsql;
             $stmt = sqlsrv_query( $conn, $tsql);
             if( $stmt === false) {

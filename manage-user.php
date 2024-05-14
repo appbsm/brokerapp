@@ -1,7 +1,8 @@
 <?php
+
+include('includes/config.php');
 session_start();
 error_reporting(0);
-include('includes/config.php');
 if(strlen($_SESSION['alogin'])=="")
     {   
     header("Location: index.php"); 
@@ -10,19 +11,81 @@ if(strlen($_SESSION['alogin'])=="")
 
 //For Deleting the notice
 
-if($_GET['id'])
-{
+if($_GET['id']){
 // echo '<script>alert("id: '.$_GET['id'].'")</script>'; 
 // $sql="delete from user_info where id=:id";
+    $check_data_usage = "false";
 
-$sql="update user_info set status_delete=1 where id=:id_p";
-$query = $dbh->prepare($sql);
-$query->bindParam(':id_p',$_GET['id'],PDO::PARAM_STR);
-$query->execute();
+    $sql = " SELECT id,create_by,modify_by FROM insurance_info 
+            WHERE create_by='".$_GET['id']."' OR modify_by ='".$_GET['id']."'";
+    $query = $dbh->prepare($sql);
+    $query->execute();
+    $results_policy=$query->fetchAll(PDO::FETCH_OBJ);
+    if($query->rowCount() > 0){
+        $check_data_usage="true";
+    }
 
-echo '<script>alert("Success deleted.")</script>';
-echo "<script>window.location.href ='manage-user.php'</script>";
+    if($check_data_usage=="false"){
+        $sql = " SELECT id,create_by,modify_by FROM customer 
+                WHERE create_by='".$_GET['id']."' OR modify_by ='".$_GET['id']."'";
+        $query = $dbh->prepare($sql);
+        $query->execute();
+        $results_policy=$query->fetchAll(PDO::FETCH_OBJ);
+        if($query->rowCount() > 0){
+            $check_data_usage="true";
+        }
+    }
 
+    if($check_data_usage=="false"){
+        $sql = " SELECT id,create_by,modify_by FROM insurance_partner 
+                WHERE create_by='".$_GET['id']."' OR modify_by ='".$_GET['id']."'";
+        $query = $dbh->prepare($sql);
+        $query->execute();
+        $results_policy=$query->fetchAll(PDO::FETCH_OBJ);
+        if($query->rowCount() > 0){
+            $check_data_usage="true";
+        }
+    }
+
+    if($check_data_usage=="false"){
+        $sql = " SELECT id,create_by,modify_by FROM product 
+                WHERE create_by='".$_GET['id']."' OR modify_by ='".$_GET['id']."'";
+        $query = $dbh->prepare($sql);
+        $query->execute();
+        $results_policy=$query->fetchAll(PDO::FETCH_OBJ);
+        if($query->rowCount() > 0){
+            $check_data_usage="true";
+        }
+    }
+
+    if($check_data_usage=="false"){
+        $sql = " SELECT id,create_by,modify_by FROM agent 
+                WHERE create_by='".$_GET['id']."' OR modify_by ='".$_GET['id']."'";
+        $query = $dbh->prepare($sql);
+        $query->execute();
+        $results_policy=$query->fetchAll(PDO::FETCH_OBJ);
+        if($query->rowCount() > 0){
+            $check_data_usage="true";
+        }
+    }
+
+    if($check_data_usage=="false"){
+        $sql="delete from user_info where id=:id";
+        $query = $dbh->prepare($sql);
+        $query->bindParam(':id',$_GET['id'],PDO::PARAM_STR);
+        $query->execute();
+
+        echo '<script>alert("Success deleted.")</script>';
+        echo "<script>window.location.href ='manage-user.php'</script>";
+    }else{
+        echo '<script>alert("This data cannot be deleted due to its usage history in the system, but it can only be marked as inactive.")</script>';
+    }
+    // $sql="update user_info set status_delete=1 where id=:id_p";
+    // $query = $dbh->prepare($sql);
+    // $query->bindParam(':id_p',$_GET['id'],PDO::PARAM_STR);
+    // $query->execute();
+
+   
 }
 
 ?>

@@ -153,6 +153,26 @@ function get_customer_by_id($conn, $id) {
 	return $result;
 }
 
+function get_product($conn, $company_id) {
+	$result = array();
+	// $tsql = "SELECT * FROM customer "
+	// 	. "WHERE id = ".$id;
+
+	$tsql = " SELECT pr.* FROM product pr
+	JOIN rela_partner_to_product rp ON rp.id_product = pr.id
+	WHERE rp.id_partner = ".$company_id;
+	
+	$stmt = sqlsrv_query( $conn, $tsql);  
+	if( $stmt === false) {
+		die( print_r( sqlsrv_errors(), true) );
+	}
+	while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC))    
+	{    
+		$result[] = $row;
+	} 
+	return $result;
+}
+
 function get_customer_ctr($conn) {
 	$result = array();
 	$tsql = "SELECT MAX(customer_ctr) FROM customer";

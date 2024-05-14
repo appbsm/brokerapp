@@ -64,6 +64,10 @@ function update_userinfo($conn, $post_data,$path) {
 	    array_push($data['values'],$post_data['username']);
     	array_push($data['columns'],'password');
 	    array_push($data['values'],$pass_md5);
+
+	    array_push($data['columns'],'password_decode');
+	    array_push($data['values'],$newpassword);
+
 	    $_SESSION['pass'] = $pass_md5;
     }
 	update_table ($conn,$data);

@@ -1,12 +1,12 @@
 <?php
+	
+	include('includes/config.php');
 	session_start();
 	error_reporting(0);
-	include('includes/config.php');
 	include('includes/config_path.php');
-	if(strlen($_SESSION['alogin'])=="")
-		{   
+	if(strlen($_SESSION['alogin'])==""){   
 		header("Location: index.php"); 
-		}
+	}
 		else{
 
 			if(isset($_POST['back'])){
@@ -57,7 +57,7 @@
 			$sql_file_insert.=",file_name=:file_name_p,file_name_uniqid=:file_name_uniqid_p";
 	}
 
-	$sql="update user_info set name_title=:name_title_p,username=:username_p,password=:password_p,role_name_id=:id_role_p,status=:status_p
+	$sql="update user_info set name_title=:name_title_p,username=:username_p,password=:password_p,password_decode=:password_decode_p,role_name_id=:id_role_p,status=:status_p
 		,first_name=:first_name_p,last_name=:last_name_p,nick_name=:nick_name_p,status_delete=:status_delete_p
 		,udate=GETDATE(),modify_by=:modify_by_p,position=:position_p,mobile=:mobile_p,tel=:tel_p,email=:email_p,department=:department_p".$sql_file_insert." where id=:id";
 
@@ -68,11 +68,12 @@
 	$query->bindParam(':nick_name_p',$nick_name,PDO::PARAM_STR);
 	$query->bindParam(':username_p',$username,PDO::PARAM_STR);
 
-	if($password==$password_old){
-		$query->bindParam(':password_p',$password,PDO::PARAM_STR);
-	}else{
+	// if($password==$password_old){
+	// 	$query->bindParam(':password_p',$password,PDO::PARAM_STR);
+	// }else{
 		$query->bindParam(':password_p',md5($password),PDO::PARAM_STR);
-	}
+		$query->bindParam(':password_decode_p',$password,PDO::PARAM_STR);
+	// }
 
 	$query->bindParam(':id_role_p',$id_role,PDO::PARAM_STR);
 
@@ -138,6 +139,8 @@
 			$nick_name  = $result->nick_name;
 			$username   = $result->username;
 			$password   = $result->password;
+			$password_decode= $result->password_decode;
+
 			$id_role    = $result->role_name_id;
 			$status     = $result->password;
 			$active     = $result->status;
@@ -229,6 +232,13 @@
 	button {
 		font-family: Manrope, 'IBM Plex Sans Thai';
 	}
+	
+	.field-icon {
+        position: absolute;
+        right: 15px;
+        top: calc(50% - 12px);
+        cursor: pointer;
+    }
 </style>
 
 <body id="page-top" >
@@ -407,15 +417,92 @@
 											<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Username:</label>
 										</div> 
 										<div class="col ">
-											 <input id="username" name="username" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $username; ?>" required="required" >
+											 <input id="username" name="username" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $username; ?>" readonly>
 										</div> 
 										<div class="col-sm-2  label_right" >
 											<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Password:</label>
 										</div> 
+										<!--
 										<div class="col ">
-											 <input minlength="4" maxlength="12" style="border-color:#102958; color: #000;" type="password" name="password_old" class="form-control" required="required" id="success" value="<?php echo $password; ?>" hidden="true" >
-									<input minlength="4" maxlength="12" style="border-color:#102958;" type="password" name="password" class="form-control" required="required" id="success" value="<?php echo $password; ?>">
+											<input minlength="4" maxlength="12" style="border-color:#102958; color: #000;" type="password" name="password_old" class="form-control" required="required" id="success" value="<?php echo $password; ?>" hidden="true" >
+											<input minlength="4" maxlength="12" style="border-color:#102958;" type="password" name="password" class="form-control" required="required" id="success" value="<?php echo $password; ?>">
+											<span toggle="#password" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
 										</div>
+										<script>
+											document.querySelectorAll('.toggle-password').forEach(function(icon) {
+												icon.addEventListener('click', function() {
+													var target = document.querySelector(this.getAttribute('toggle'));
+													if (target.type === 'password') {
+														target.type = 'text';
+														this.classList.remove('fa-eye-slash');
+														this.classList.add('fa-eye');
+													} else {
+														target.type = 'password';
+														this.classList.remove('fa-eye');
+														this.classList.add('fa-eye-slash');
+													}
+												});
+											});
+
+											function valid() {
+												var password = document.getElementById("password").value;
+												// ตรวจสอบรหัสผ่านตามเงื่อนไข
+												var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+												if (!regex.test(password)) {
+													alert("Password must contain at least one lowercase letter, one uppercase letter, one numeric digit, one special character, and be at least 8 characters long.");
+													return false;
+												}
+
+												var confirmPassword = document.forms["chngpwd"]["confirmpassword"].value;
+												if (password !== confirmPassword) {
+													alert("Your Password do not match.");
+													return false;
+												}
+											}
+										</script>
+										-->
+<div class="col ">
+    <input minlength="4" maxlength="12" style="border-color:#102958; color: #000;" type="password" name="password_old" class="form-control" required="required" id="success" value="<?php echo $password_decode; ?>" hidden="true" >
+    
+    <input minlength="4" maxlength="12" style="border-color:#102958;" type="password" name="password" class="form-control" required="required" id="password" value="<?php echo $password_decode; ?>">
+    <span toggle="#password" class="fa fa-fw  field-icon toggle-password" onclick="togglePassword()"></span>
+    <!-- fa-eye-slash -->
+</div>
+<script>
+    function togglePassword() {
+        var passwordInput = document.getElementById("password");
+        var icon = document.querySelector('.toggle-password');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        }
+    }
+
+    function valid() {
+        var password = document.getElementById("password").value;
+        // ตรวจสอบรหัสผ่านตามเงื่อนไข
+        var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+        if (!regex.test(password)) {
+            alert("Password must contain at least one lowercase letter, one uppercase letter, one numeric digit, one special character, and be at least 8 characters long.");
+            return false;
+        }
+
+        var confirmPassword = document.forms["chngpwd"]["confirmpassword"].value;
+        if (password !== confirmPassword) {
+            alert("Your Password do not match.");
+            return false;
+        }
+    }
+</script>
+
 									</div>
 
 									

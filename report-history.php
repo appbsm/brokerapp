@@ -1,8 +1,8 @@
-
 <?php
+
+include_once('includes/connect_sql.php');
 session_start();
 error_reporting(0);
-include_once('includes/connect_sql.php');
 include_once('includes/fx_reports_history.php');
 
 if(strlen($_SESSION['alogin'])=="") {
@@ -87,7 +87,12 @@ $subcategories = get_product_subcategory($conn);
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
         <script src="js/DataTables/datatables.min.js"></script> 
         
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+		
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css">
+		
 
 </head>
 
@@ -118,12 +123,14 @@ $subcategories = get_product_subcategory($conn);
                                 <h2 class="title m-5" style="color: #102958;">Report: History Report
                             </div>
                         </div>
+						
+						
 
 <form method="post" action="report-history.php" >
     <div class="container-fluid">
             <div >
                 <br>
-                    <div class="form-group row col-md-12 ">
+                    <div class="form-group row col-md-12 " >
                         <label style="color: #102958;"  class="col-sm-2 label_left">From Date:</label>
                         <div class="col-sm-2">
                             <!-- <input  style="color: #0C1830;border-color:#102958;" type="date" name="start_date" class="form-control" id="start_date" value="<?php echo ($_POST['start_date'] != '') ? date('d-m-Y', strtotime($_POST['start_date'])) : '';?>" placeholder="dd-mm-yyyy"> -->
@@ -135,19 +142,45 @@ $subcategories = get_product_subcategory($conn);
                             <input  style="color: #000;border-color:#102958; text-align: center;" type="text" name="end_date" class="form-control" id="end_date" value="<?php echo ($_POST['end_date'] != '') ? date('d-m-Y', strtotime($_POST['end_date'])) : '';?>" placeholder="dd-mm-yyyy" >
                         </div>
                     </div>
+						
+					<script>
+						/*AA add */
+						// var currentDate = new Date();
+						// var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+						// $('#start_date, #end_date').val(formattedDate);
+						/*AA add */
 
-<script>
-  $(document).ready(function(){
-    $('#start_date').datepicker({
-      format: 'dd-mm-yyyy',
-      language: 'en'
-    });
-    $('#end_date').datepicker({
-      format: 'dd-mm-yyyy',
-      language: 'en'
-    });
-  });
-</script>
+                        var emptyPost = "<?php echo (empty($_POST) ? 'true' : 'false'); ?>";
+                        if (emptyPost === 'false') {
+                            var startDate = "<?php echo $_POST['start_date']; ?>";
+                            if(startDate === ""){
+                                var currentDate = new Date();
+                                var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+                                $('#start_date').val(formattedDate);
+                            }
+                            var endDate = "<?php echo $_POST['end_date']; ?>";
+                            if(endDate === ""){
+                                var currentDate = new Date();
+                                var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+                                $('#end_date').val(formattedDate);
+                            }
+                        }else{
+                            var currentDate = new Date();
+                                var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+                                $('#start_date, #end_date').val(formattedDate);
+                        }
+						
+						$(document).ready(function(){
+							$('#start_date').datepicker({
+							  format: 'dd-mm-yyyy',
+							  language: 'en'
+							});
+							$('#end_date').datepicker({
+							  format: 'dd-mm-yyyy',
+							  language: 'en'
+							});
+					  });
+					</script>
 
                     <div class="form-group row col-md-12 ">
                         <label style="color: #102958;" class="col-md-2 label_left">Policy no:</label>
@@ -160,7 +193,7 @@ $subcategories = get_product_subcategory($conn);
                             </select>
                         </div>
 
-                        <label style="color: #102958;" class="col-md-2 label_right">Custo. name:</label>
+                        <label style="color: #102958;" class="col-md-2 label_right">Cust. name:</label>
                         <div class="col-md-2">
                            
                             <select id="customer" name="customer" value="<?php echo $customer_select; ?>" style="border-color:#102958; color: #000;" class="remove-example form-control selectpicker" data-live-search="true" >
@@ -273,10 +306,15 @@ $subcategories = get_product_subcategory($conn);
                                             <!-- <th>Tel</th> -->
                                             <th width="90px">Start Date</th>
                                             <th width="90px">End Date</th>
-                                            <th width="100px">Premium Rate(THB)</th>
+                                            
+
                                             <?php if($status_currency=="true"){ ?>
-                                            <th width="100px"> Convert Value</th>
+                                            <th width="70px">Symbol</th>
+                                            <th width="100px">Premium Rate</th>
                                             <?php } ?>
+
+                                            <th width="100px">Premium Conv.(฿THB)</th>
+
                                             <th width="100px" >Status</th>
                                             <th width="90px">Payment Date</th>
                                             <th width="300px" >Partner company</th>
@@ -292,7 +330,7 @@ $subcategories = get_product_subcategory($conn);
 										<tr>
                                             <td class="text-center"><?php echo $ctr; ?></td>
                                             <!-- <td><?php //echo $value['insurance_company'];?></td> -->
-                                            <td><?php echo $value['first_name'].' '.$value['last_name'];?></td>
+                                            <td><?php echo $value['full_name'];?></td>
                                             <td><?php echo $value['first_name_con'].' '.$value['last_name_con'];?></td>
                                             <td><?php echo $value['position'];?></td>
                                             <td><?php echo $value['email'];?></td>
@@ -303,18 +341,46 @@ $subcategories = get_product_subcategory($conn);
                                             
                                             <td class="text-center"><?php echo $value['in_start_date'];?></td>
                                             <td class="text-center"><?php echo $value['in_end_date'];?></td>
+
+                                            <?php if($status_currency=="true"){ ?>
+                                            <td class="text-center"><?php  echo $value['currency']; ?> </td>
+                                            <td class="text-right"> 
+                                            <?php 
+                                              
+                                                // if($value['premium_rate']!="" && $value['currency'] !="฿THB" ){ 
+
+                                                // if($value['currency_value']<$value['currency_value_convert']){
+                                                //     $convert = number_format((float)($value['premium_rate']/$value['currency_value_convert']), 2, '.', ',');
+                                                //     $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
+                                                //     $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
+                                                //     echo $convert;
+                                                // }else{
+                                                //     $convert = number_format((float)($value['premium_rate']*$value['currency_value_convert']), 2, '.', ',');
+                                                //     $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
+                                                //     $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
+                                                //     echo $convert;
+                                                // }
+
+                                                // }else{ echo "0.00"; $convert=0; }; 
+                                                echo $value['convertion_value'];
+                                            ?>
+                                            </td>
+
                                             <td class="text-right"><?php if($value['premium_rate']!=""){ echo number_format((float)$value['premium_rate'], 2, '.', ','); }else{ echo "0.00"; } 
                                             $premium_rate=$premium_rate+$value['premium_rate'];
                                             $total_premium_rate+=$value['premium_rate']; ?></td>
+
+                                            <?php 
+                                            //     if($value['premium_rate']!=""){ 
+                                            // $convert = number_format((float)($value['premium_rate']/$value['currency_value']), 2, '.', ',');
+                                            // $premium_rate_convert =$premium_rate_convert+$convert;
+                                            // $total_premium_rate_convert+=$convert;
+                                            //     echo $convert; 
+                                            // }else{ echo "0.00"; }; 
+                                            // if($value['currency']!=""){ echo "(".$value['currency'].")"; } 
+                                            ?>
+                                                
                                             
-                                            <?php if($status_currency=="true"){ ?>
-                                            <td class="text-right"><?php if($value['premium_rate']!=""){ 
-                                            $convert = number_format((float)($value['premium_rate']/$value['currency_value']), 2, '.', ',');
-                                            $premium_rate_convert =$premium_rate_convert+$convert;
-                                            $total_premium_rate_convert+=$convert;
-                                                echo $convert; 
-                                            }else{ echo "0.00"; }; 
-                                            if($value['currency']!=""){ echo "(".$value['currency'].")"; } ?></td>
                                             <?php } ?>
 
                                             <td class="text-center" ><?php echo $value['status'];?></td>
@@ -408,6 +474,8 @@ $subcategories = get_product_subcategory($conn);
 		div.dataTables_wrapper div.dataTables_filter input {
 			//border-color: #102958;
 		}
+		
+		
     </style> 
 
     <script>

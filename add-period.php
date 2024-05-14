@@ -1,7 +1,7 @@
 <?php
+include('includes/config.php');
 session_start();
 error_reporting(0);
-include('includes/config.php');
 if(strlen($_SESSION['alogin'])=="")
     {   
     header("Location: index.php"); 
@@ -166,7 +166,7 @@ if($lastInsertId){
                         <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Term Code</label>
                     </div> 
                     <div class="col ">
-                         <input minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text"  required="required" class="form-control" id="period" name="period" value="<?php echo $period; ?>" >
+                         <input minlength="1" maxlength="50" style="border-color:#102958;" type="text"  required="required" class="form-control" id="period" name="period" value="<?php echo $period; ?>" >
                     </select>
                     </div> 
                     <div class="col ">
@@ -189,7 +189,7 @@ if($lastInsertId){
                         <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Term Description</label>
                     </div> 
                     <div class="col ">
-                         <input minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" name="description" id="description" value="<?php echo $description; ?>" required>
+                         <input minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" name="description" id="description" value="<?php echo $description; ?>" required>
                     </div> 
                     <div class="col ">
                     </div> 
@@ -207,7 +207,7 @@ if($lastInsertId){
                         </button>
                          &nbsp;&nbsp;
                     <a href="period.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
-                        <span class="text">Cancel</span>
+                        <span class="text">Clear</span>
                     </a>
                     </div>
                 </div>

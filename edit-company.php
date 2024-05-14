@@ -3,9 +3,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 
 <?php
+
+include('includes/config.php');
 session_start();
 error_reporting(0);
-include('includes/config.php');
 include('includes/config_path.php');
 if(strlen($_SESSION['alogin'])=="")
     {   

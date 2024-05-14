@@ -1,9 +1,11 @@
 
 <?php
 
-session_start();
-error_reporting(0);
+
 include_once('connect_sql.php');
+
+// session_start();
+// error_reporting(0);
 include_once('includes/fx_alert_date.php');
 
 // $near_to_due_list = near_to_due_list($conn);
@@ -80,7 +82,8 @@ $count_overdue = count($overdue_list);
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw" style="color: yellow;"></i>
+                                <!--<i class="fas fa-bell fa-fw " style="color: yellow;"></i>-->
+								<i class="fas fa-bell fa-fw bellIcon2"></i>
                                 <!-- Counter - Alerts -->
                                 <span class="badge badge-light badge-counter"><?php echo ($count_due > 0) ? $count_due : '';?></span>
                             </a>
@@ -149,7 +152,8 @@ $count_overdue = count($overdue_list);
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw" style="color: red;"></i>
+                                <!--<i class="fas fa-bell fa-fw" style="color: red;"></i>-->
+								<i class="fas fa-bell fa-fw bellIcon1"></i>
                                 <!-- Counter - Alerts -->
                                 <span class="badge badge-light badge-counter"><?php echo ( $count_overdue > 0 ) ? $count_overdue : '';?></span>
                             </a>
@@ -246,8 +250,8 @@ $count_overdue = count($overdue_list);
 
                         <!-- Nav Item - User Information -->
                         
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                        <li class="nav-item nav-item1 dropdown no-arrow">
+                            <a class="nav-link nav-link1 dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['name']; ?>
@@ -305,26 +309,7 @@ $count_overdue = count($overdue_list);
  <!-- End of Topbar -->
 
  <!-- Start of loading -->
-    <style>
-            #loading-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.5); /* ความโปร่งใสของสีดำ */
-                display: none; /* ก่อนที่จะแสดง */
-                justify-content: center;
-                align-items: center;
-            }
-
-            #loading-overlay img {
-                width: 50px; /* ขนาดของ Loading.gif */
-                height: 50px;
-            }
-
-        </style>
-        
+         
     <script >
         function valid() {
             // แสดง Loading overlay
@@ -361,6 +346,50 @@ $count_overdue = count($overdue_list);
 	.btn-group>.btn:first-child {
 		border-color: #102958;
 	}
+	
+	#loading-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.5); /* ความโปร่งใสของสีดำ */
+		display: none; /* ก่อนที่จะแสดง */
+		justify-content: center;
+		align-items: center;
+	}
+
+	#loading-overlay img {
+		width: 50px; /* ขนาดของ Loading.gif */
+		height: 50px;
+	}
+	
+	.nav-item1 .nav-link1 .fa-fw:hover path {
+		fill: #000 !important; 
+	}
+	
+	.nav-item1 .nav-link1:hover .fa-fw path,
+	.nav-item1 .nav-link1:hover .fa-fw,
+	.nav-item1 .nav-link1:hover span {
+		color: #000 !important;
+	}
+	
+	.bellIcon1 {
+		color: #ff0000; 
+	}
+
+	.bellIcon1:hover {
+		color: #bb0404; 
+	}
+	
+	.bellIcon2 {
+		color: #e7df09; 
+	}
+
+	.bellIcon2:hover {
+		color: #cbc40a; 
+	}
+
     </style>
 
 

@@ -1,15 +1,15 @@
 <?php
-session_start();
-error_reporting(0);
-include_once('includes/connect_sql.php');
-include_once('includes/fx_customer_db.php');
+    include_once('includes/connect_sql.php');
+    session_start();
+    error_reporting(0);
+    include_once('includes/fx_customer_db.php');
 
-if(strlen($_SESSION['alogin'])=="") {
-    header('Location: logout.php');
-}
+    if(strlen($_SESSION['alogin'])=="") {
+        header('Location: logout.php');
+    }
     
     $customers = get_customers($conn);
-
+    
 ?>
 
 <!DOCTYPE html>
@@ -103,6 +103,7 @@ if(strlen($_SESSION['alogin'])=="") {
 								<a href="#" class="dropdown-item" id="btnExcel" style="font-size: 15px;" >Excel</a>
 								<a href="#" class="dropdown-item" id="btnPdf" style="font-size: 15px;" >PDF</a>
 								<a href="#" class="dropdown-item" id="btnPrint" style="font-size: 15px;" >Print</a>
+                                <!-- <a href="#" class="dropdown-item" id="btnAll" style="font-size: 15px;" >All</a> -->
 							  </div>
 							</div>
 
@@ -228,43 +229,164 @@ if(strlen($_SESSION['alogin'])=="") {
         <!-- <script src="assets/js/custom.js"></script> -->
 
     <script>
-    $(document).ready(function(){
-    var table = $('#example').DataTable({
-        scrollX: true,
+
+    // $(document).ready(function(){
+    // var table = $('#example').DataTable({
+    //     scrollX: true,
         
-        lengthMenu: [[10, 25, 50, 100, -1], [10,25, 50, 100, "All"]],
-        "scrollCollapse": true,
-        "paging":         true,
-        buttons: [
-            { extend: 'csv',class: 'buttons-csv',className: 'btn-primary',charset: 'UTF-8',filename: 'Customer List',bom: true
-            ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} },
-            { extend: 'excel',class: 'buttons-excel', className: 'btn-primary',charset: 'UTF-8',filename: 'Customer List',bom: true 
-            ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} },
-            { extend: 'pdf',class: 'buttons-pdf',className: 'btn-primary',charset: 'UTF-8',filename: 'Customer List',bom: true 
-            ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} },
-            { extend: 'print',class: 'buttons-print',className: 'btn-primary',charset: 'UTF-8',bom: true 
-            ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} }
+    //     lengthMenu: [[10, 25, 50, 100, -1], [10,25, 50, 100, "All"]],
+    //     "scrollCollapse": true,
+    //     "paging":         true,
+    //     buttons: [
+    //         { 
+    //             extend: 'excel',
+    //             class: 'buttons-all',
+    //             className: 'btn-primary',
+    //             charset: 'UTF-8',
+    //             filename: 'Customer_List',
+    //             bom: true,
+    //             exportOptions: { 
+    //                 columns: ':not(:last-child)',
+    //                 modifier: {
+    //                     selected: null
+    //                 }
+    //             },
+    //             action: function (e, dt, button, config) {
+    //                 $.ajax({
+    //                     url: 'get_customer_all.php',
+    //                     dataType: 'json',
+    //                     success: function(data) {
+    //                         var xlsx = new $.fn.dataTable.Buttons.Api(dt).inst.buttons.excelHtml5;
+    //                         xlsx.customize(function (xlsx) {
+    //                             for (var i = 0; i < data.length; i++) {
+    //                                 xlsx['sheet1'].data.push(data[i]);
+    //                             }
+    //                         });
+    //                         xlsx.action(e, dt, button, config);
+    //                     }
+    //                 });
+    //             }
+    //         },
+    //         { extend: 'csv',class: 'buttons-csv',className: 'btn-primary',charset: 'UTF-8',filename: 'Customer List',bom: true
+    //         ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} },
+    //         { extend: 'excel',class: 'buttons-excel', className: 'btn-primary',charset: 'UTF-8',filename: 'Customer List',bom: true 
+    //         ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} },
+    //         { extend: 'pdf',class: 'buttons-pdf',className: 'btn-primary',charset: 'UTF-8',filename: 'Customer List',bom: true 
+    //         ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} },
+    //         { extend: 'print',class: 'buttons-print',className: 'btn-primary',charset: 'UTF-8',bom: true 
+    //         ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} }
+    //         ]
+    // });
+
+    // $('#btnCsv').on('click',function(){
+    //     table.button('.buttons-csv').trigger();
+    // });
+
+    // $('#btnExcel').on('click',function(){
+    //     table.button('.buttons-excel').trigger();
+    // });
+
+    // $('#btnPdf').on('click',function(){
+    //     table.button('.buttons-pdf').trigger();
+    // });
+
+    // $('#btnPrint').on('click',function(){
+    //     table.button('.buttons-print').trigger();
+    // });
+
+
+    // $('#btnAll').on('click', function(){
+    //     table.button('.buttons-all').trigger();
+    // });
+
+    //        // $.ajax({
+    //     //     url: 'get_customer_all.php', // แก้ไขเป็นชื่อไฟล์ PHP ที่ใช้สำหรับดึงข้อมูล
+    //     //     type: 'GET',
+    //     //     dataType: 'json',
+    //     //     success: function(data) {
+    //     //         // หลังจากได้ข้อมูลมาแล้ว
+    //     //         // ให้ทำการใส่ข้อมูลลงในตาราง DataTable โดยใช้ข้อมูลที่ได้รับมา
+    //     //         // table.clear().rows.add(data).draw();
+    //     //     },
+    //     //     error: function(xhr, status, error) {
+    //     //         // หากเกิดข้อผิดพลาดในการดึงข้อมูล
+    //     //         console.error(xhr.responseText);
+    //     //     }
+    //     // });
+
+    // table.buttons().container()
+    // .appendTo('#example_wrapper .col-md-6:eq(0)');
+
+    // });
+
+    //  { extend: 'csv',class: 'buttons-csv',className: 'btn-primary',charset: 'UTF-8',filename: 'Customer List',bom: true
+    //  ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} },
+</script>
+
+<script>
+    $(document).ready(function(){
+        var table = $('#example').DataTable({
+            scrollX: true,
+            
+            lengthMenu: [[10, 25, 50, 100, -1], [10,25, 50, 100, "All"]],
+            "scrollCollapse": true,
+            "paging":         true,
+            buttons: [
+                { extend: 'csv',class: 'buttons-csv',className: 'btn-primary',charset: 'UTF-8',filename: 'Customer List',bom: true
+                ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} },
+                { extend: 'excel',class: 'buttons-excel', className: 'btn-primary',charset: 'UTF-8',filename: 'Customer List',bom: true 
+                ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} },
+                { extend: 'pdf',class: 'buttons-pdf',className: 'btn-primary',charset: 'UTF-8',filename: 'Customer List',bom: true 
+                ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} },
+                { extend: 'print',class: 'buttons-print',className: 'btn-primary',charset: 'UTF-8',bom: true 
+                ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} }
             ]
-    });
+        });
 
-     $('#btnCsv').on('click',function(){
-        table.button('.buttons-csv').trigger();
-    });
 
-    $('#btnExcel').on('click',function(){
-        table.button('.buttons-excel').trigger();
-    });
+        $('#btnCsv').on('click',function(){
+            table.button('.buttons-csv').trigger();
+        });
 
-    $('#btnPdf').on('click',function(){
-        table.button('.buttons-pdf').trigger();
-    });
+        $('#btnExcel').on('click',function(){
+            table.button('.buttons-excel').trigger();
+        });
 
-    $('#btnPrint').on('click',function(){
-        table.button('.buttons-print').trigger();
-    });
+        $('#btnPdf').on('click',function(){
+            table.button('.buttons-pdf').trigger();
+        });
 
-    table.buttons().container()
-    .appendTo('#example_wrapper .col-md-6:eq(0)');
+        $('#btnPrint').on('click',function(){
+            table.button('.buttons-print').trigger();
+        });
+
+        // { 
+        //             extend: 'excel',
+        //             class: 'buttons-excel',
+        //             className: 'btn-primary',
+        //             charset: 'UTF-8',
+        //             filename: 'Customer_List',
+        //             bom: true,
+        //             exportOptions: {columns: ':not(:last-child)'},
+        //             customize: function(xlsx) {
+        //                 $.ajax({
+        //                     url: 'get_customer_all.php',
+        //                     type: 'GET',
+        //                     dataType: 'json',
+        //                     success: function(data) {
+        //                         for (var i = 0; i < data.length; i++) {
+        //                             xlsx['sheet1'].data.push(data[i]);
+        //                         }
+        //                     }
+        //                 });
+        //             },
+        //             init : function(api,node,config){ $(node).hide();}
+        //         },
+
+        // $('#btnAll').on('click', function(){
+        //     alert('btnAll Run:');
+        //     table.button('.buttons-all').trigger();
+        // });
 
     });
     </script>

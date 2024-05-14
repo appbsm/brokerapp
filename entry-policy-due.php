@@ -1,7 +1,8 @@
 <?php
+
+include_once('includes/connect_sql.php');
 session_start();
 error_reporting(0);
-include_once('includes/connect_sql.php');
 include_once('includes/fx_alert_date.php');
 
 if(strlen($_SESSION['alogin'])=="")

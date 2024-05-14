@@ -1,7 +1,8 @@
 <?php
+
+include('includes/config.php');
 session_start();
 error_reporting(0);
-include('includes/config.php');
 if(strlen($_SESSION['alogin'])==""){   
 header("Location: index.php"); 
 }else{
@@ -90,6 +91,12 @@ $results = $query -> fetchAll(PDO::FETCH_OBJ);
     button {
         font-family: Manrope, 'IBM Plex Sans Thai';
     }
+	.field-icon {
+        position: absolute;
+        right: 15px;
+        top: calc(50% - 12px);
+        cursor: pointer;
+    }
 </style>
 
 <body id="page-top" >
@@ -129,39 +136,97 @@ $results = $query -> fetchAll(PDO::FETCH_OBJ);
                                 <strong>Oh snap!</strong> <?php echo htmlentities($error); ?>
                             </div>
                             <?php } ?>
-  
+							<!--
                             <div class="panel-body">
                                 <form  name="chngpwd" method="post" onSubmit="return valid();">
-                                <!-- <div class="form-group has-success">
-                                    <label style="color: #102958;" for="success" class="control-label">Current Password</label>
-                                    <div class="">
-                                <input style="color: #0C1830;border-color:#102958;" minlength="4" maxlength="12" type="password" name="password" class="form-control" required="required" id="success">
-                                    </div>
-                                </div> -->
-                                <div class="form-group has-success row">
-                                    <label style="color: #102958;" for="success" class="control-label col-sm-3 col-form-label"><small><font color="red">*</font></small>New Password</label>
-                                    <div class="col-6">
-                                        <input style="color: #0C1830;border-color:#102958;" minlength="4" maxlength="20" type="password" name="newpassword" required="required" class="form-control" id="success">
-                                    </div>
-                                </div>
-                                <div class="form-group has-success row">
-                                    <label style="color: #102958;" for="success" class="control-label col-sm-3 col-form-label"><small><font color="red">*</font></small>Confirm Password</label>
-                                    <div class="col-6">
-                                        <input style="color: #0C1830;border-color:#102958;" minlength="4" maxlength="20" type="password" name="confirmpassword" class="form-control" required="required" id="success">
-                                    </div>
-                                </div>
-                                <div class="form-group has-success row">
-                                    <div class="col-6 offset-sm-3">
-                                        <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Change<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span></button>
-										&nbsp;&nbsp;
-										<a href="Dashboard.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
-											<span class="text">Cancel</span>
-										</a>
-                                    </div>
-                                </div>
-
+									<div class="form-group has-success row">
+										<label style="color: #102958;" for="success" class="control-label col-sm-3 col-form-label"><small><font color="red">*</font></small>New Password</label>
+										<div class="col-6">
+											<input style="color: #0C1830;border-color:#102958;" minlength="4" maxlength="20" type="password" name="newpassword" required="required" class="form-control" id="success">
+										</div>
+									</div>
+									<div class="form-group has-success row">
+										<label style="color: #102958;" for="success" class="control-label col-sm-3 col-form-label"><small><font color="red">*</font></small>Confirm Password</label>
+										<div class="col-6">
+											<input style="color: #0C1830;border-color:#102958;" minlength="4" maxlength="20" type="password" name="confirmpassword" class="form-control" required="required" id="success">
+										</div>
+									</div>
+									<div class="form-group has-success row">
+										<div class="col-6 offset-sm-3">
+											<button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Change<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span></button>
+											&nbsp;&nbsp;
+											<a href="Dashboard.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
+												<span class="text">Cancel</span>
+											</a>
+										</div>
+									</div>
                                 </form>          
                             </div>
+							-->
+							<div class="panel-body">
+								<form name="chngpwd" method="post" onsubmit="return valid();">
+									<div class="form-group has-success row">
+										<label style="color: #102958;" for="success" class="control-label col-sm-3 col-form-label"><small><font color="red">*</font></small>New Password</label>
+										<div class="col-6">
+											<input style="color: #0C1830;border-color:#102958;" minlength="8" maxlength="20" type="password" name="newpassword" required="required" class="form-control" id="newpassword">
+											<span toggle="#newpassword" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
+										</div>
+									</div>
+									<div class="form-group has-success row">
+										<label style="color: #102958;" for="success" class="control-label col-sm-3 col-form-label"><small><font color="red">*</font></small>Confirm Password</label>
+										<div class="col-6">
+											<input style="color: #0C1830;border-color:#102958;" minlength="8" maxlength="20" type="password" name="confirmpassword" class="form-control" required="required" id="confirmpassword">
+											<span toggle="#confirmpassword" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
+										</div>
+									</div>
+									<div class="form-group has-success row">
+										<div class="col-6 offset-sm-3">
+											<button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Change<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span></button>
+											&nbsp;&nbsp;
+											<a href="Dashboard.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
+												<span class="text">Cancel</span>
+											</a>
+										</div>
+									</div>
+								</form>
+							</div>
+							
+							<script>
+								document.querySelectorAll('.toggle-password').forEach(function(icon) {
+									icon.addEventListener('click', function() {
+										var target = document.querySelector(this.getAttribute('toggle'));
+										if (target.type === 'password') {
+											target.type = 'text';
+											this.classList.remove('fa-eye-slash');
+											this.classList.add('fa-eye');
+										} else {
+											target.type = 'password';
+											this.classList.remove('fa-eye');
+											this.classList.add('fa-eye-slash');
+										}
+									});
+								});
+	
+								function valid() {
+									var newPassword = document.forms["chngpwd"]["newpassword"].value;
+									var confirmPassword = document.forms["chngpwd"]["confirmpassword"].value;
+
+									// เงื่อนไขสำหรับตรวจสอบรหัสผ่าน
+									var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+									if (!regex.test(newPassword)) {
+										//alert("รหัสผ่านต้องประกอบด้วยตัวเล็ก ตัวใหญ่ ตัวเลข และอักขระพิเศษ และมีความยาวอย่างน้อย 8 ตัวอักษร");
+										alert("Password must contain at least one lowercase letter, one uppercase letter, one numeric digit, one special character, and be at least 8 characters long.");
+										return false;
+									}
+
+									if (newPassword !== confirmPassword) {
+										//alert("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
+										alert("Your Password do not match.");
+										return false;
+									}
+								}
+							</script>
                         </div>
                                     <!-- /.col-md-8 col-md-offset-2 -->
                     </div>

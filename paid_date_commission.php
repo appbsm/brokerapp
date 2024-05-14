@@ -2,9 +2,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 
 <?php
+	include_once('includes/connect_sql.php');
 	session_start();
 	error_reporting(0);
-	include_once('includes/connect_sql.php');
 	include_once('includes/fx_paid_date_db.php');
 
 	// alert('not checked');
@@ -273,7 +273,7 @@
 <?php if($_GET['status']=='Paid'){ echo "select"; } ?> 
 		<div class="card-body" >
 
-			<div class="table-responsive" style="font-size: 13px;">
+			<div class="table-responsive" style="font-size: 13px;" width="100%">
 
 				<div class="pull-right" >
 					&nbsp;&nbsp;
@@ -293,7 +293,8 @@
 				</script>
 <!-- width="100%" -->
 				<!-- </div> -->
-				<table id="example"  class="table table-bordered"  style="color: #969FA7; font-size: 13px;"   >
+				<table id="example" class="table table-bordered" width="100%" cellspacing="0" style="font-size: 13px;">
+				
 					<thead >
 						<tr style="color: #102958;" >
 							<th style="color: #102958;" width="20px" >#</th>
@@ -304,7 +305,7 @@
 
 							<th style="color: #102958;" width="70px">Premium Rate:</th>
 
-							<th style="color: #102958;" width="70px">Paid Date</th>
+							<th style="color: #102958;" width="70px">Collected</th><!--Paid Date-->
 							<th style="color: #102958;" width="70px">Comm. Rate:</th>
 
 							<th style="color: #102958;" width="70px">Comm. Receive Date</th>

@@ -1,7 +1,8 @@
 <?php
+
+include_once('includes/connect_sql.php');
 session_start();
 error_reporting(0);
-include_once('includes/connect_sql.php');
 include_once('includes/fx_profile.php');
 
 if(strlen($_SESSION['alogin'])=="") {
@@ -44,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// echo '<script>alert("user and pass: '.$_SESSION['alogin']."-".$_SESSION['pass'].'")</script>'; 
 $user_info = get_userinfo($conn,$_SESSION['alogin'],$_SESSION['pass']);
 
 if(count($user_info)>0){
@@ -143,6 +145,27 @@ if(count($user_info)>0){
 			.as-console-wrapper {
 			display: none !important;
 			}
+			
+			h1, h2, h3, h4, h5, h6, b, span, p, table, a, div, label, ul, li, div,
+			button {
+				font-family: Manrope, 'IBM Plex Sans Thai';
+			}
+				
+			.field-icon {
+				position: absolute;
+				right: 15px;
+				top: calc(50% - 12px);
+				cursor: pointer;
+			}
+			
+			@media (min-width: 1340px){
+                .label_left{
+                    max-width: 130px;
+                }
+                .label_right{
+                    max-width: 130px;
+                }
+            }
         </style>
 
 </head>
@@ -253,139 +276,192 @@ if(count($user_info)>0){
                 <!-- </div>  -->
 
             <div class="panel-body">
-                <div class="form-group row col-lg-10 col-lg-offset-1" >
-                    <input hidden="true" id="id" name="id" type="text" value="<?php echo $id; ?>" >
-                    <div class="col-sm-4  label_left" >
-                        <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Title Name:</label>
-                    </div> 
-                    <div  class="col">
-                        <select id="title_name" name="title_name" required="required" style="border-color:#102958;" class="form-control personal" required  >
-							<option value="Mr." <?php echo ($name_title=="Mr.") ? 'selected' : '';?>>Mr.</option>
-							<option value="Ms." <?php echo ($name_title=="Ms.") ? 'selected' : '';?>>Ms.</option>
-							<option value="Mrs." <?php echo ($name_title=="Mrs.") ? 'selected' : '';?>>Mrs.</option>
-                        </select>    
-                    </div>
-                </div>
-                <div class="form-group row col-lg-10 col-lg-offset-1" >
-                    <div class="col-sm-4  label_left" >
-                        <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>First name:</label>
-                    </div> 
-                    <div class="col ">
-                         <input id="first_name" name="first_name" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $first_name; ?>" required >
-                    </div> 
-                </div>
-                <div class="form-group row col-lg-10 col-lg-offset-1" >
-                     <div class="col-sm-4  label_left" >
-                        <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Last name:</label>
-                    </div> 
-                    <div class="col ">
-                         <input id="last_name" name="last_name" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $last_name; ?>" required >
-                    </div>
-                </div>
-				<div class="form-group row col-lg-10 col-lg-offset-1" >
-                    <div class="col-sm-4  label_left" >
-                        <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Nickname:</label>
-                    </div> 
-                    <div class="col ">
-                         <input name="nick_name" id="nick_name" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $nick_name; ?>" required >
-                    </div>
-                </div>
-				<div class="form-group row col-lg-10 col-lg-offset-1" >
-                    <div class="col-sm-4  label_left" >
-                        <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Email:</label>
-                    </div> 
-                    <div class="col ">
-                         <input id="email" name="email" minlength="1" maxlength="50" style="border-color:#102958;" type="email" class="form-control" value="<?php echo $email; ?>" required >
-                    </div>
-                </div>
-				<div class="form-group row col-lg-10 col-lg-offset-1" >
-                     <div class="col-sm-4  label_left" >
-                        <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Mobile:</label>
-                    </div> 
-                    <div class="col ">
-                         <input id="mobile" name="mobile" minlength="10" maxlength="12" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $mobile; ?>" pattern="\d{3}-\d{3}-\d{4}" required>
+				<form name="chngpwd" method="post" onsubmit="return valid();">
+					<div class="form-group row col-lg-10 col-lg-offset-1" >
+						<input hidden="true" id="id" name="id" type="text" value="<?php echo $id; ?>" >
+						<div class="col-4  label_left" >
+							<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Title Name:</label>
+						</div> 
+						<div  class="col">
+							<select id="title_name" name="title_name" required="required" style="border-color:#102958; color: #000;" class="form-control personal" required  >
+								<option value="Mr." <?php echo ($name_title=="Mr.") ? 'selected' : '';?>>Mr.</option>
+								<option value="Ms." <?php echo ($name_title=="Ms.") ? 'selected' : '';?>>Ms.</option>
+								<option value="Mrs." <?php echo ($name_title=="Mrs.") ? 'selected' : '';?>>Mrs.</option>
+							</select>    
+						</div>
+					</div>
+					<div class="form-group row col-lg-10 col-lg-offset-1" >
+						<div class="col-4  label_left" >
+							<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>First name:</label>
+						</div> 
+						<div class="col ">
+							 <input id="first_name" name="first_name" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $first_name; ?>" required >
+						</div> 
+					</div>
+					<div class="form-group row col-lg-10 col-lg-offset-1" >
+						 <div class="col-4  label_left" >
+							<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Last name:</label>
+						</div> 
+						<div class="col ">
+							 <input id="last_name" name="last_name" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $last_name; ?>" required >
+						</div>
+					</div>
+					<div class="form-group row col-lg-10 col-lg-offset-1" >
+						<div class="col-4  label_left" >
+							<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Nickname:</label>
+						</div> 
+						<div class="col ">
+							 <input name="nick_name" id="nick_name" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $nick_name; ?>" required >
+						</div>
+					</div>
+					<div class="form-group row col-lg-10 col-lg-offset-1" >
+						<div class="col-4  label_left" >
+							<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Email:</label>
+						</div> 
+						<div class="col ">
+							 <input id="email" name="email" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="email" class="form-control" value="<?php echo $email; ?>" required >
+						</div>
+					</div>
+					<div class="form-group row col-lg-10 col-lg-offset-1" >
+						 <div class="col-4  label_left" >
+							<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Mobile:</label>
+						</div> 
+						<div class="col ">
+							 <input id="mobile" name="mobile" minlength="10" maxlength="12" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $mobile; ?>" pattern="\d{3}-\d{3}-\d{4}" required>
 
-                    </div> 
+						</div> 
 
-                    <script>
-                    document.getElementById('mobile').addEventListener('input', function (e) {
-                        var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-                        e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
-                    });
-                    </script>
+						<script>
+						document.getElementById('mobile').addEventListener('input', function (e) {
+							var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+							e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+						});
+						</script>
 
-                </div>
-                <div class="form-group row col-lg-10 col-lg-offset-1" >
-                     <div class="col-sm-4  label_left" >
-                        <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Position:</label>
-                    </div> 
-                    <div class="col ">
-                         <input id="position" name="position" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $position; ?>" required >
-                    </div>
-                </div>
-                
-                <div class="form-group row col-lg-10 col-lg-offset-1" >
-                    <div class="col-sm-4  label_left" >
-                        <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Department:</label>
-                    </div> 
-                    <div class="col ">
-                         <input name="department" id="department" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $department; ?>" required >
-                    </div>
-                </div>
+					</div>
+					<div class="form-group row col-lg-10 col-lg-offset-1" >
+						 <div class="col-4  label_left" >
+							<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Position:</label>
+						</div> 
+						<div class="col ">
+							 <input id="position" name="position" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $position; ?>" required >
+						</div>
+					</div>
+					
+					<div class="form-group row col-lg-10 col-lg-offset-1" >
+						<div class="col-4  label_left" >
+							<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Department:</label>
+						</div> 
+						<div class="col ">
+							 <input name="department" id="department" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $department; ?>" required >
+						</div>
+					</div>
 
-                <div class="form-group row col-lg-10 col-lg-offset-1" >
-                    <div class="col-lg-12 text-center">
-                        <div class="panel-title" style="color: #102958;" >
-                            <br>
-                            <h2 class="title">User ID</h2>
-                        </div>
-                    </div>
-                </div>
+					<div class="form-group row col-lg-10 col-lg-offset-1" >
+						<div class="col-lg-12 text-center">
+							<div class="panel-title" style="color: #102958;" >
+								<br>
+								<h2 class="title">User ID</h2>
+							</div>
+						</div>
+					</div>
 
-                <div class="form-group row col-lg-10 col-lg-offset-1" >
-                     <div class="col-sm-4  label_left" >
-                        <label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Role name:</label>
-                    </div> 
-                    <div class="col ">
-                         <input id="role_name" name="role_name" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $role_name; ?>" readOnly required>
-                    </div>
-                </div>
+					<div class="form-group row col-lg-10 col-lg-offset-1" >
+						 <div class="col-4  label_left" >
+							<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Role name:</label>
+						</div> 
+						<div class="col ">
+							 <input id="role_name" name="role_name" minlength="1" maxlength="50" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $role_name; ?>" readOnly required>
+						</div>
+					</div>
 
-                <div class="form-group row col-lg-10 col-lg-offset-1" >
-                     <div class="col-sm-4  label_left" >
-                        <label style="color: #102958;" for="success" class="control-label" ><small><font color="red">*</font></small>Username:</label>
-                    </div> 
-                    <div class="col ">
-                         <input id="username" name="username" minlength="4" maxlength="20" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $username; ?>" required>
-                    </div>
-                </div>
-                <div class="form-group row col-lg-10 col-lg-offset-1" >
-                    <div class="col-sm-4  label_left" >
-                        <label style="color: #102958;" for="success" class="control-label">New Password:</label>
-                    </div> 
-                    <div class="col ">
-                         <input name="newpassword" minlength="4" maxlength="20" style="border-color:#102958;" type="password" class="form-control" value="<?php echo $period; ?>" >
-                    </div>
-                </div>
-                <div class="form-group row col-lg-10 col-lg-offset-1" >
-                     <div class="col-sm-4  label_left" >
-                        <label style="color: #102958;" for="success" class="control-label">Confirm Password:</label>
-                    </div> 
-                    <div class="col ">
-                         <input name="confirmpassword" minlength="4" maxlength="20" style="border-color:#102958;" type="password" class="form-control" value="<?php echo $period; ?>" >
-                    </div>
-                </div> 
+					<div class="form-group row col-lg-10 col-lg-offset-1" >
+						 <div class="col-4  label_left" >
+							<label style="color: #102958;" for="success" class="control-label" ><small><font color="red">*</font></small>Username:</label>
+						</div> 
+						<div class="col ">
+							 <input id="username" name="username" minlength="4" maxlength="20" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $username; ?>" readonly>
+						</div>
+					</div>
+					<div class="form-group row col-lg-10 col-lg-offset-1" >
+						<div class="col-4  label_left" >
+							<label style="color: #102958;" for="success" class="control-label">New Password:</label>
+						</div> 
+						<div class="col ">
+							<input id="newpassword" name="newpassword" minlength="4" maxlength="20" style="border-color:#102958; color: #000;" type="password" class="form-control" value="<?php echo $period; ?>" >
+							<span  id="toggle_newpassword" onclick="togglePassword('newpassword')" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
+						</div>
+					</div>
+					<div class="form-group row col-lg-10 col-lg-offset-1" >
+						 <div class="col-4  label_left" >
+							<label style="color: #102958;" for="success" class="control-label">Confirm Password:</label>
+						</div> 
+						<div class="col ">
+							<input id="confirmpassword" name="confirmpassword" minlength="4" maxlength="20" style="border-color:#102958; color: #000;" type="password" class="form-control" value="<?php echo $period; ?>" >
+							<span id="toggle_confirmpassword" onclick="togglePassword('confirmpassword')" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
+						</div>
+					</div> 
+					
 
-                <div class="form-group row col-lg-12">
-                    <div class="col-lg-12 text-center">
-                        <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
-                        </button>
-                         &nbsp;&nbsp;
-                        <a href="Dashboard.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
-                            <span class="text">Cancel</span>
-                        </a>
-                    </div>
-                </div>
+					<div class="form-group row col-lg-12">
+						<div class="col-lg-12 text-center">
+							<button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span>
+							</button>
+							 &nbsp;&nbsp;
+							<a href="Dashboard.php" class="btn btn-primary" style="background-color: #0275d8;color: #F9FAFA;" >
+								<span class="text">Clear</span>
+							</a>
+						</div>
+					</div>
+				</form>
+				
+				<script>
+					function validatePassword(password) {
+						var hasUpperCase = /[A-Z]/.test(password);
+						var hasLowerCase = /[a-z]/.test(password);
+						var hasNumber = /\d/.test(password);
+						var hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+						var isValidLength = password.length >= 8;
+
+						return hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && isValidLength;
+					}
+
+					
+					function togglePassword(elementId) {
+						var x = document.getElementById(elementId);
+						var icon = document.getElementById('toggle_' + elementId);
+						if (x.type === "password") {
+							x.type = "text";
+							icon.classList.remove('fa-eye-slash');
+							icon.classList.add('fa-eye');
+						} else {
+							x.type = "password";
+							icon.classList.remove('fa-eye');
+							icon.classList.add('fa-eye-slash');
+						}
+					}
+	
+					
+					function valid() {
+						var newPassword = document.getElementById('newpassword').value;
+						var confirmPassword = document.getElementById('confirmpassword').value;
+
+						if(newPassword!="" || confirmPassword!=""){
+							if (newPassword !== confirmPassword) {
+								alert("New password and confirm password do not match.");
+								return false;
+							}
+
+							if (!validatePassword(newPassword)) {
+								alert("Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long.");
+								return false;
+							}
+						}
+
+						return true;
+					}
+				</script>
+				
               </div>
             </div>
         </div>
@@ -502,17 +578,6 @@ if(count($user_info)>0){
         });
 
         </script>
-
-        <style>
-            @media (min-width: 1340px){
-                .label_left{
-                    max-width: 130px;
-                }
-                .label_right{
-                    max-width: 130px;
-                }
-            }
-        </style>
     
     <?php include('includes/footer.php');?>
 </body>

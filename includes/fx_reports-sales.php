@@ -4,11 +4,17 @@ include_once('fx_crud_db.php');
 
 function get_customers_sales_start($conn) {
     $result = array();
-    $sql ="SELECT info.policy_no
+    $sql ="SELECT 
+    CASE WHEN cu.customer_type = 'Personal'
+          THEN CONCAT(cu.first_name,' ',cu.last_name)
+          ELSE cu.company_name
+          END as full_name
+,info.policy_no
 ,FORMAT(info.start_date, 'dd-MM-yyyy') AS in_start_date,FORMAT(info.end_date, 'dd-MM-yyyy') AS in_end_date
 ,info.premium_rate,info.status as in_status
 ,con.first_name as first_name_con,con.last_name as last_name_con,con.position
 ,info.paid_date AS paid_date_insurance
+,info.convertion_value 
 ,cc.currency_value,cc.currency_value_convert
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list ) AS id_currency_list_v
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list_convert ) AS id_currency_list_convert_v
@@ -20,9 +26,11 @@ function get_customers_sales_start($conn) {
 LEFT JOIN rela_customer_to_insurance  recu ON cu.id = recu.id_customer
  JOIN insurance_info info ON info.id = recu.id_insurance_info
 LEFT JOIN contact con ON con.id =
+
  ( SELECT con_t.id  FROM rela_customer_to_contact rec 
  JOIN contact con_t ON con_t.id = rec.id_contact AND con_t.default_contact = 1
  WHERE rec.id_customer = cu.id)
+
 LEFT JOIN product_categories pcat ON pcat.id = info.product_category
 LEFT JOIN product_subcategories psup ON psup.id = info.sub_categories
 LEFT JOIN insurance_partner ip ON ip.id = info.insurance_company_id
@@ -35,7 +43,7 @@ LEFT JOIN currency_convertion cc ON  cc.id =
   (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id_currency_list = ip.id_currency_list
  AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1')
 
-ORDER BY cu.first_name ASC";
+ORDER BY full_name ASC";
 
  // AND  info.paid_date >= c_c.start_date and info.paid_date <= c_c.stop_date)
 
@@ -56,11 +64,15 @@ ORDER BY cu.first_name ASC";
 
 function get_customers_sales_search($conn,$post_data) {
     $result = array();
-     $sql ="SELECT info.policy_no ".
+     $sql ="SELECT CASE WHEN cu.customer_type = 'Personal'
+          THEN CONCAT(cu.first_name,' ',cu.last_name)
+          ELSE cu.company_name
+          END as full_name ,info.policy_no ".
 ",FORMAT(info.start_date, 'dd-MM-yyyy') AS in_start_date,FORMAT(info.end_date, 'dd-MM-yyyy') AS in_end_date".
 ",info.premium_rate,info.status as in_status".
 ",con.first_name as first_name_con,con.last_name as last_name_con,con.position".
 ",info.paid_date AS paid_date_insurance".
+",info.convertion_value".
 ",cc.currency_value,cc.currency_value_convert".
 ",(SELECT currency from currency_list WHERE id =cc.id_currency_list ) AS id_currency_list_v".
 ",(SELECT currency from currency_list WHERE id =cc.id_currency_list_convert ) AS id_currency_list_convert_v".
@@ -118,7 +130,7 @@ function get_customers_sales_search($conn,$post_data) {
             $sql .= " and info.sub_categories = ".$post_data['sub_cat'];
         }
 
-$sql .= " ORDER BY cu.first_name ASC ";
+$sql .= " ORDER BY full_name ASC ";
 // print_r($sql);
 // echo '<script>alert("sql search: '.$sql.'")</script>'; 
     $stmt = sqlsrv_query( $conn, $sql);  

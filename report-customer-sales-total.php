@@ -1,8 +1,8 @@
 
 <?php
+include_once('includes/connect_sql.php');
 session_start();
 error_reporting(0);
-include_once('includes/connect_sql.php');
 include_once('includes/fx_reports-sales.php');
 
 if(strlen($_SESSION['alogin'])=="") {
@@ -93,6 +93,10 @@ $subcategories = get_product_subcategory($conn);
         <script src="js/DataTables/datatables.min.js"></script> 
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css">
+
 </head>
 
 <body id="page-top" >
@@ -133,7 +137,11 @@ $subcategories = get_product_subcategory($conn);
                         <label style="color: #102958;"  class="col-sm-2 label_left">From Date:</label>
                         <div class="col-sm-2">
                             <?php //echo ($_GET['date_from'] != '') ? date('Y-m-d', strtotime($_GET['date_from'])) : '';?>
-                            <input  style="color: #000;border-color:#102958; text-align: center;" type="test" name="start_date" class="form-control" id="start_date" value="<?php echo ($_POST['start_date'] != '') ? date('d-m-Y', strtotime($_POST['start_date'])) : '';?>" placeholder="dd-mm-yyyy">
+                            <input  style="color: #000;border-color:#102958; text-align: center;" type="test" name="start_date" class="form-control" id="start_date" value="<?php 
+                                if($_POST['start_date'] != ''){
+                                    echo date('d-m-Y', strtotime($_POST['start_date']));
+                                }
+                            //echo ($_POST['start_date'] != '') ? date('d-m-Y', strtotime($_POST['start_date'])) : '';?>" placeholder="dd-mm-yyyy">
                         </div>
 
                         <label style="color: #102958;"  class="col-sm-2 label_right">End Date:</label>
@@ -143,8 +151,29 @@ $subcategories = get_product_subcategory($conn);
 
 
                     </div>
-
 <script>
+                        /*AA add */
+                        var emptyPost = "<?php echo (empty($_POST) ? 'true' : 'false'); ?>";
+                        if (emptyPost === 'false') {
+                            var startDate = "<?php echo $_POST['start_date']; ?>";
+                            if(startDate === ""){
+                                var currentDate = new Date();
+                                var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+                                $('#start_date').val(formattedDate);
+                            }
+                            var endDate = "<?php echo $_POST['end_date']; ?>";
+                            if(endDate === ""){
+                                var currentDate = new Date();
+                                var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+                                $('#end_date').val(formattedDate);
+                            }
+                        }else{
+                            var currentDate = new Date();
+                                var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+                                $('#start_date, #end_date').val(formattedDate);
+                        }
+                        /*AA add */
+
   $(document).ready(function(){
     $('#start_date').datepicker({
       format: 'dd-mm-yyyy',
@@ -244,7 +273,7 @@ $subcategories = get_product_subcategory($conn);
                             <label style="color: #102958;" >Currency Convertion:</label>
                         </div>
                     <div class="col-sm-2 " >
-                        <input id="status_currency" name="status_currency" class="form-check-input" value="true" type="checkbox" id="flexCheckDefault"  <?php if($status_currency=="true"){ echo "checked"; }?> >
+                        <input id="status_currency" name="status_currency" class="form-check-input" value="true" type="checkbox" id="flexCheckDefault"  <?php if($status_currency=="true"){ echo "checked"; } ?> >
                         <label style="color: #000;" class="form-check-label" for="flexCheckDefault">
                         <!-- &nbsp;&nbsp;&nbsp;&nbsp; Active -->
                     </div>
@@ -272,14 +301,10 @@ $subcategories = get_product_subcategory($conn);
 </form> 
 
                         <div class="card-body">
-
-
-
                             <div class="table-responsive" style="font-size: 13px;">
                                 <table class="table table-bordered" id="example"  >
                                     <thead>
                                         <tr>
-                                            <!-- <th class="text-center" width="20px" hidden="true" >No run</th> -->
                                             <th>No</th>
                                             <th width="200px">Cust. name</th>
                                             <th width="200px">Contact person</th>
@@ -289,16 +314,18 @@ $subcategories = get_product_subcategory($conn);
                                             <th width="110px">Cust. mobile</th>
                                             <th width="100px">Policy No</th>
                                             <th width="250px">Prod./Sub Categories</th>
-                                            <!-- <th>Tel</th> -->
                                             <th width="90px">Start Date</th>
                                             <th width="90px">End Date</th>
-                                            <th width="100px">Premium Rate</th>
+
                                             <?php if($status_currency=="true"){ ?>
-                                            <th class="text-center" >Convert Value</th>
                                             <th class="text-center" >Symbol</th>
+                                            <th width="100px">Premium Rate</th>
                                             <?php } ?>
+                                            
+                                            <th class="text-center" >Premium Conv.(฿THB)</th>
+
                                             <th width="100px">Status</th>
-                                            <th width="300px" >Partner company</th>
+                                            <th width="300px">Partner company</th>
                                             <th width="200px">Contact partner Company</th>
                                             <th width="200px">Underwriter department:-</th>
                                             <th width="200px">Email</th>
@@ -332,13 +359,18 @@ $subcategories = get_product_subcategory($conn);
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td style="font-weight: bold;" class="text-right" ></td>
-                                            <td style="font-weight: bold;" class="text-right" ><?php echo number_format((float)$premium_rate, 2, '.', ','); ?></td>
+                                            <td></td>
 
                                             <?php if($status_currency=="true"){ ?>
-                                            <td style="font-weight: bold;" class="text-right" ><?php echo number_format((float)$premium_rate_convert, 2, '.', ','); ?></td>
                                             <td></td>
+                                            <td style="font-weight: bold;" class="text-right" >
+                                                <?php //echo number_format((float)$premium_rate_convert, 2, '.', ','); ?>  
+                                            </td>
                                             <?php } ?>
+                                                <td style="font-weight: bold;" class="text-right" >
+                                                    <?php echo number_format((float)$premium_rate, 2, '.', ','); ?>
+                                                </td>
+                                            
 
                                             <td></td>
                                             <td></td>
@@ -354,7 +386,7 @@ $subcategories = get_product_subcategory($conn);
                                             <!-- <td class="text-center" hidden="true" ><?php //echo $ctr; ?></td> -->
 
                                             <td class="text-center"><?php echo $ctr; $ctr++; ?></td>
-                                            <td><?php echo $value['first_name'].' '.$value['last_name'];?></td>
+                                            <td><?php echo $value['full_name'];?></td>
                                             <td><?php echo $value['first_name_con'].' '.$value['last_name_con'];?></td>
                                             <td><?php echo $value['position'];?></td>
                                             <td><?php echo $value['email'];?></td>
@@ -365,39 +397,45 @@ $subcategories = get_product_subcategory($conn);
                                             
                                             <td class="text-center"><?php echo $value['in_start_date'];?></td>
                                             <td class="text-center"><?php echo $value['in_end_date'];?></td>
-                                            <td class="text-right">
-												<?php //if($value['premium_rate']!=""){ echo $value['premium_rate']; }else{ echo "0.00"; } 
-												//$premium_rate=$premium_rate+$value['premium_rate'];
-												//$total_premium_rate+=$value['premium_rate']; ?>
-												<?php 
-													if ($value['premium_rate'] != "") { 
-														echo number_format($value['premium_rate'], 2, '.', ','); 
-													} else { 
-														echo "0.00"; 
-													} 
-
-													$premium_rate += $value['premium_rate']; 
-													$total_premium_rate += $value['premium_rate']; 
-												?>
-											</td>
 
                                             <?php if($status_currency=="true"){ ?>
-                                            <td class="text-right"><?php if($value['premium_rate']!="" && $value['currency'] !="฿THB" ){ 
-                                                if($value['currency_value']<$value['currency_value_convert']){
-                                                    $convert = number_format((float)($value['premium_rate']/$value['currency_value_convert']), 2, '.', ',');
-                                                    $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
-                                                    $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
-                                                    echo $convert;
-                                                }else{
-                                                    $convert = number_format((float)($value['premium_rate']*$value['currency_value_convert']), 2, '.', ',');
-                                                    $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
-                                                    $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
-                                                    echo $convert;
-                                                }
-                                            }else{ echo "0.00"; $convert=0; }; 
-                                            ?></td>
                                             <td><?php if($value['currency']!=""){ echo "(".$value['currency'].")"; } ?></td>
+                                            <td class="text-right">
+                                            <?php 
+                                            // if($value['premium_rate']!="" && $value['currency'] !="฿THB" ){ 
+                                            //     if($value['currency_value']<$value['currency_value_convert']){
+                                            //         $convert = number_format((float)($value['premium_rate']/$value['currency_value_convert']), 2, '.', ',');
+                                            //         $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
+                                            //         $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
+                                            //         echo $convert;
+                                            //     }else{
+                                            //         $convert = number_format((float)($value['premium_rate']*$value['currency_value_convert']), 2, '.', ',');
+                                            //         $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
+                                            //         $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
+                                            //         echo $convert;
+                                            //     }
+                                            // }else{ 
+                                            //     //echo "0.00"; 
+                                            //     echo  number_format($value['convertion_value'], 2, '.', ','); 
+                                            //     $convert=0; 
+                                            // }; 
+                                                echo number_format($value['convertion_value'], 2, '.', ',');
+                                            ?> 
+                                            </td>
                                             <?php } ?>
+                                            
+                                            <td class="text-right">
+                                                <?php 
+                                                    if ($value['premium_rate'] != "") { 
+                                                        echo number_format($value['premium_rate'], 2, '.', ','); 
+                                                    } else { 
+                                                        echo "0.00"; 
+                                                    } 
+
+                                                    $premium_rate += $value['premium_rate']; 
+                                                    $total_premium_rate += $value['premium_rate']; 
+                                                ?>
+                                            </td>
 
                                             <td class="text-center" ><?php echo $value['in_status'];?></td>
                                             <td><?php echo $value['insurance_company'];?></td>
@@ -421,28 +459,41 @@ $subcategories = get_product_subcategory($conn);
                                             <td><?php echo $value['categorie']; if($value['subcategorie']!=""){ echo "/".$value['subcategorie'];} ?></td>
                                             <td class="text-center"><?php echo $value['in_start_date'];?></td>
                                             <td class="text-center"><?php echo $value['in_end_date'];?></td>
-                                            <td class="text-right"><?php if($value['premium_rate']!="" ){ 
-                                                echo number_format((float)$value['premium_rate'], 2, '.', ','); }else{ echo "0.00"; }
-                                                $premium_rate=$premium_rate+$value['premium_rate']; 
-                                                $total_premium_rate+=$value['premium_rate']; ?></td>
 
                                             <?php if($status_currency=="true"){ ?>
-                                            <td class="text-right"><?php if($value['premium_rate']!="" && $value['currency'] !="฿THB"){
-                                                if($value['currency_value']<$value['currency_value_convert']){
-                                                    $convert = number_format((float)($value['premium_rate']/$value['currency_value_convert']), 2, '.', ',');
-                                                    $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
-                                                    $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
-                                                    echo $convert; 
-                                                }else{
-                                                    $convert = number_format((float)($value['premium_rate']*$value['currency_value_convert']), 2, '.', ',');
-                                                    $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
-                                                    $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
-                                                    echo $convert; 
-                                                }
-                                            }else{ echo "0.00"; $convert=0; }; 
-                                             ?></td>
                                             <td><?php if($value['currency']!=""){ echo "(".$value['currency'].")"; } ?></td>
+                                            <td class="text-right">
+                                            <?php
+                                            // if($value['premium_rate']!="" && $value['currency'] !="฿THB"){
+                                            //     if($value['currency_value']<$value['currency_value_convert']){
+                                            //         $convert = number_format((float)($value['premium_rate']/$value['currency_value_convert']), 2, '.', ',');
+                                            //         $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
+                                            //         $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
+                                            //         echo $convert; 
+                                            //     }else{
+                                            //         $convert = number_format((float)($value['premium_rate']*$value['currency_value_convert']), 2, '.', ',');
+                                            //         $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert));
+                                            //         $total_premium_rate_convert+=((float)str_replace(',', '', $convert));
+                                            //         echo $convert; 
+                                            //     }
+                                            // }else{
+                                                echo number_format($value['convertion_value'], 2, '.', ',');
+                                                // echo "0.00";
+                                                $convert=0; 
+                                            // }; 
+                                             ?>
+                                            </td>
                                             <?php } ?>
+                                            
+                                            <td class="text-right">
+                                                <?php 
+                                                if($value['premium_rate']!="" ){ 
+                                                echo number_format((float)$value['premium_rate'], 2, '.', ','); }else{ echo "0.00"; }
+                                                $premium_rate=$premium_rate+$value['premium_rate']; 
+                                                $total_premium_rate+=$value['premium_rate']; 
+
+                                                ?>  
+                                            </td>
 
                                             <td class="text-center" ><?php echo $value['in_status'];?></td>
                                             <td><?php echo $value['insurance_company'];?></td>
@@ -471,18 +522,19 @@ $subcategories = get_product_subcategory($conn);
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td style="font-weight: bold;" class="text-right" ></td>
-                                            <td style="font-weight: bold;" class="text-right" >
-												<?php //echo $premium_rate;?>
-												<?php echo number_format((float)$premium_rate, 2, '.', ','); ?>
-											</td>
-                                            <?php if($status_currency=="true"){ ?>
-                                            <td style="font-weight: bold;" class="text-right" >
-												<?php //echo $premium_rate_convert;?>
-												<?php echo number_format((float)$premium_rate_convert, 2, '.', ','); ?>
-											</td>
                                             <td></td>
+
+                                            <?php if($status_currency=="true"){ ?>
+                                            <td></td>
+                                            <td style="font-weight: bold;" class="text-right" >
+                                                <?php //echo number_format((float)$premium_rate_convert, 2, '.', ','); ?>
+                                            </td>
                                             <?php } ?>
+
+                                            <td style="font-weight: bold;" class="text-right" >
+                                                <?php echo number_format((float)$premium_rate, 2, '.', ','); ?>
+                                            </td>
+
                                             <td></td>
                                             <td></td>
                                             <td><?php echo "";?></td>
@@ -491,29 +543,6 @@ $subcategories = get_product_subcategory($conn);
                                             <td><?php echo "";?></td>
                                             <td><?php echo "";?></td>
                                         </tr>
-                                        <!-- <tr>
-                                            <td class="text-center" ></td>
-                                            <td style="font-weight: bold;" class="text-right" >GRAND TOTAL</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td style="font-weight: bold;" class="text-right" ></td>
-                                        <td style="font-weight: bold;" class="text-right" ><?php echo number_format((float)$total_premium_rate, 2, '.', ','); ?></td>
-                                        <?php if($status_currency=="true"){ ?>
-                                        <td style="font-weight: bold;" class="text-right" ><?php echo number_format((float)$total_premium_rate_convert, 2, '.', ','); ?></td>
-                                        <?php } ?>
-                                            <td></td>
-                                            <td></td>
-                                            <td><?php echo "";?></td>
-                                            <td><?php echo "";?></td>
-                                            <td><?php echo "";?></td>
-                                            <td><?php echo "";?></td>
-                                            <td><?php echo "";?></td>
-                                        </tr> -->
                                         <?php }  ?>
                                         <!-- end value -->
                                     </tbody>
@@ -528,12 +557,19 @@ $subcategories = get_product_subcategory($conn);
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td style="font-weight: bold;" class="text-right" ></td>
-                                            <td style="font-weight: bold;" class="text-right" ><?php echo number_format((float)$total_premium_rate, 2, '.', ','); ?></td>
-                                        <?php if($status_currency=="true"){ ?>
-                                        <td style="font-weight: bold;" class="text-right" ><?php echo number_format((float)$total_premium_rate_convert, 2, '.', ','); ?></td>
-                                        <td></td>
-                                        <?php } ?>
+                                            <td></td>
+
+                                            <?php if($status_currency=="true"){ ?>
+                                            <td></td>
+                                            <td style="font-weight: bold;" class="text-right" ><?php 
+                                            //echo number_format((float)$total_premium_rate_convert, 2, '.', ','); ?>  
+                                            </td>
+                                             <?php } ?>
+
+                                            <td style="font-weight: bold;" class="text-right" ><?php echo number_format((float)$total_premium_rate, 2, '.', ','); ?>
+                                                
+                                            </td>
+                                       
                                             <td></td>
                                             <td></td>
                                             <td><?php echo "";?></td>

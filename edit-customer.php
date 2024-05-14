@@ -1,8 +1,7 @@
 <?php
-	session_start();
-	error_reporting(0);
-
 	include_once('includes/connect_sql.php');
+    session_start();
+    error_reporting(0);
 
 	include_once('includes/fx_customer_db.php');
 	include_once('includes/fx_address.php');
@@ -47,6 +46,13 @@
 		$agents = get_agents($conn);
 		$customer_level_list = get_customer_level($conn);
 		$period_list = get_period($conn);
+
+
+        foreach ($insurance_info as $value) {
+            // echo '<script>alert("insurance_company_id: '.$value['insurance_company_id'].'")</script>';
+            $product_list = get_product($conn,$value['insurance_company_id']);
+        }
+        
 	}
 ?>
 <!DOCTYPE html>
@@ -83,7 +89,10 @@
 	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 	<script src="js/DataTables/datatables.min.js"></script> 
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css">
 </head>
 
 <style>
@@ -295,7 +304,7 @@ function validateForm() {
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>First name:</label>
                 </div>
                 <div class="col-4 personal">
-                    <input id="first_name" name="first_name" minlength="1" maxlength="100" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $customer_value['first_name'];?>" required>
+                    <input id="first_name" name="first_name" minlength="1" maxlength="100" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $customer_value['first_name'];?>" >
                 </div>
 				<div class="col-sm-2   personal"  >
                     <label id="label_lname" style="color: #102958;" >Last name:</label>
@@ -379,9 +388,9 @@ function validateForm() {
 			-->
 			            
              <div class="form-group row col-md-10 col-md-offset-1">
-               <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Address No:</label>
+               <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Address No:</label>
                 <div class="col-2">
-                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="address_number"  class="form-control"  value="<?php echo $customer_value['address_number'];?>" required>
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="address_number"  class="form-control"  value="<?php echo $customer_value['address_number'];?>" >
                
                 </div>
                 
@@ -404,9 +413,10 @@ function validateForm() {
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Province:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Province:</label>
                 <div class="col-4">
-                    <select style="border-color:#102958; color: #000;" name="province" class="form-control selectpicker" id="province" data-live-search="true" required >
+                    <select style="border-color:#102958; color: #000;" name="province" class="form-control selectpicker" id="province" data-live-search="true"  >
+                        <option value="" selected>Select Province</option>
                         <?php foreach ($provinces as $province) { ?>
                         <option value="<?php echo $province['code']?>" <?php echo ($province['code'] == $customer_value['province']) ? 'selected' : '';?>><?php echo $province['name_en'];?></option>
                         <?php } ?>
@@ -414,9 +424,10 @@ function validateForm() {
                
                 </div>
                 
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>District:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">District:</label>
                 <div class="col-4">
-                     <select style="border-color:#102958; color: #000;" name="district"  class="form-control selectpicker" id="district" data-live-search="true" required >
+                     <select style="border-color:#102958; color: #000;" name="district"  class="form-control selectpicker" id="district" data-live-search="true"  >
+                        <option value="" selected>Select District</option>
                     <?php 
                         if(trim($customer_value['province'])!=""){
                            $districts = get_district_by_province($conn, $customer_value['province']);
@@ -429,11 +440,12 @@ function validateForm() {
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Sub-district:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Sub-district:</label>
                 <div class="col-4">
                     <!-- <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="name" required="required" class="form-control" id="success" value" > -->
 
-                    <select style="border-color:#102958; color: #000;" name="sub_district" class="form-control selectpicker" id="subdistrict" data-live-search="true" required >   
+                    <select style="border-color:#102958; color: #000;" name="sub_district" class="form-control selectpicker" id="subdistrict" data-live-search="true"  >   
+                        <option value="" selected>Select Subdistrict</option> 
                     <?php 
                     $subdistricts = get_subdistrict_by_district($conn, $customer_value['district']);
                  //print_r($subdistricts);
@@ -443,9 +455,9 @@ function validateForm() {
                     </select>
                 </div>
                 
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Post Code:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Post Code:</label>
                 <div class="col-4">
-                     <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control" value="<?php echo $customer_value['post_code'];?>" required>
+                     <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control" value="<?php echo $customer_value['post_code'];?>" >
                 </div>
             </div>   
 
@@ -456,18 +468,9 @@ function validateForm() {
 </div>
 
 <!-- Container Start -->
+
 <div class="container-fluid">
-        <!-- 1 Start -->
-        <div class="row">
-        <div  class="col-sm-12 text-right  ">
-            <div style="padding-top: 10px;">
-             
-             <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_contacts" class="btn  btn-labeled" id="add-con">+ Add More Contact<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
-            </div>
-        </div>
-        </div>
-        <!-- 1 End -->
-        
+
         <!-- Contact Section Start -->
         <?php 
         $start_contact = "true";
@@ -475,21 +478,6 @@ function validateForm() {
         foreach ($contacts as $c) { $x++;
         //print_r($c);
         ?>
-
-        <?php if($start_contact=="false"){  ?>
-            <div class="col text-right">
-                <button id="<?php echo $x; ?>"  type="button" class="btn btn_remove_con" name="remove" style="background-color: #0275d8;color: #F9FAFA;"  >X</button>
-            </div>&nbsp;&nbsp;
-
-            <script type="text/javascript">
-                $(document).on('click', '.btn_remove_con', function() {
-                var button_id = $(this).attr("id");
-                    $('#contact-section_' + button_id + '').remove();
-                    $('#' + button_id + '').remove();
-                });
-            </script>
-        <? } ?>
-
 
         <div class="row" id="contact-section_<?php echo $x; ?>">
             <div class="col-md-12 ">
@@ -504,7 +492,7 @@ function validateForm() {
                                 </div>
                             </div>
 
-                            <?php if($start_contact=="true"){ $start_contact = "false"; ?>
+                            <?php if($start_contact=="true"){  ?>
                             <div class="col  "  >           
                                 <div  class="form-check " style="top:15px;">
                                     <input id="same_customer" name="same_customer" class="form-check-input same_customer" type="checkbox" id="">
@@ -516,8 +504,29 @@ function validateForm() {
                             <? } ?>
 
                             </div>
+
+                            <div class="col text-right">
+                                <div class="contact-clone-cancel<? echo $x; ?>" id="contact-clone-cancel<? echo $x; ?>" ></div>
+                            </div>
+
+                             <?php if($start_contact=="false"){  ?>
+                                <div class="col text-right">
+                                    <button id="<?php echo $x; ?>"  type="button" class="btn btn_remove_con" name="remove" style="background-color: #0275d8;color: #F9FAFA;"  >X</button>
+                                </div>&nbsp;&nbsp;
+
+                                <script type="text/javascript">
+                                    $(document).on('click', '.btn_remove_con', function() {
+                                    var button_id = $(this).attr("id");
+                                        $('#contact-section_' + button_id + '').remove();
+                                        $('#' + button_id + '').remove();
+                                    });
+                                </script>
+                            <? }else{ $start_contact = "false"; } ?>
+
                         </div>
                     </div>
+
+
    
         <div class="panel-body">
             <div class="form-group row col-md-10 col-md-offset-1">
@@ -535,9 +544,9 @@ function validateForm() {
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>First name:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">First name:</label>
                 <div class="col-4">
-                    <input name="contact_first_name[]" id="contact_first_name<?php echo $x; ?>" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['first_name'];?>" required>
+                    <input name="contact_first_name[]" id="contact_first_name<?php echo $x; ?>" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['first_name'];?>" >
                 </div>
 				<label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Last name:</label>
                 <div class="col-4">
@@ -622,10 +631,169 @@ function validateForm() {
     
 </div> 
 <?php } ?>
+
+<?php if(count($contacts)==0){ $x++; ?>  
+            <?php if($start_contact=="false"){  ?>
+            <div class="col text-right">
+                <button id="<?php echo $x; ?>"  type="button" class="btn btn_remove_con" name="remove" style="background-color: #0275d8;color: #F9FAFA;"  >X</button>
+            </div>&nbsp;&nbsp;
+
+            <script type="text/javascript">
+                $(document).on('click', '.btn_remove_con', function() {
+                var button_id = $(this).attr("id");
+                    $('#contact-section_' + button_id + '').remove();
+                    $('#' + button_id + '').remove();
+                });
+            </script>
+        <? } ?>
+
+
+        <div class="row" id="contact-section_<?php echo $x; ?>">
+            <div class="col-md-12 ">
+                <div class="panel">
+                    <div class="panel-heading">
+
+                        <div class="form-group row">
+                            <div class="form-group row col-md-10 col-md-offset-1">
+                            <div class="col">
+                                <div class="panel-title" style="color: #102958;" >
+                                    <h2 class="title">Contact Person</h2>
+                                </div>
+                            </div>
+
+                            <?php if($start_contact=="true"){ $start_contact = "false"; ?>
+                            <div class="col  "  >           
+                                <div  class="form-check " style="top:15px;">
+                                    <input id="same_customer" name="same_customer" class="form-check-input same_customer" type="checkbox" id="">
+                                    <label style="color: #000;" class="form-check-label" for="SameCheck">
+                                        &nbsp;&nbsp;&nbsp;&nbsp; Same Customer Name
+                                    </label>
+                                </div>
+                            </div>  
+                            <? } ?>
+
+                            </div>
+                        </div>
+                    </div>
+   
+        <div class="panel-body">
+            <div class="form-group row col-md-10 col-md-offset-1">
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Title:</label>
+                <!-- hidden="ture" -->
+                <input hidden="ture" id="id_contact<? echo $x; ?>" name="id_contact[]" value="<?php echo $c['id'];?>" style="color: #000;border-color:#102958;" type="text" class="form-control" id="success"  >
+                </input>
+                <div class="col-3">
+                     <select name="contact_title_name[]" id="contact_title_name<?php echo $x; ?>" style="border-color:#102958; color: #000;"  class="form-control" >
+                            <option value="Mr." <?php echo (trim($c['title_name'])=="Mr.") ? 'selected' : '';?>>Mr.</option>
+                                <option value="Ms." <?php echo (trim($c['title_name'])=="Ms.") ? 'selected' : '';?>>Ms.</option>
+                                <option value="Mrs." <?php echo (trim($c['title_name'])=="Mrs.") ? 'selected' : '';?>>Mrs.</option>       
+                        </select>    
+                </div>
+            </div>
+
+            <div class="form-group row col-md-10 col-md-offset-1">
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">First name:</label>
+                <div class="col-4">
+                    <input name="contact_first_name[]" id="contact_first_name<?php echo $x; ?>" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['first_name'];?>" >
+                </div>
+                <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Last name:</label>
+                <div class="col-4">
+                    <input name="contact_last_name[]" id="contact_last_name<?php echo $x; ?>" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['last_name'];?>" >
+                </div>
+            </div>
+            
+            <div class="form-group row col-md-10 col-md-offset-1">
+                <label style="color: #102958;" class="col-sm-2 col-form-label">Nickname:</label>
+                <div class="col-4">
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="contact_nick_name[]" id="contact_nick_name<?php echo $x; ?>" class="form-control" value="<?php echo $c['nick_name'];?>">
+                </div>
+            </div>
+            
+            <div class="form-group row col-md-10 col-md-offset-1">
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Mobile:</label>
+                <div class="col-4">
+                    <input name="contact_mobile[]" id="contact_mobile<?php echo $x; ?>" minlength="10" maxlength="12" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['mobile'];?>" pattern="\d{3}-\d{3}-\d{4}" >
+                </div>
+                <script>
+                    document.getElementById('contact_mobile<?php echo $x; ?>').addEventListener('input', function (e) {
+                        var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+                        e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+                    });
+                </script>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tel:</label>
+                <div class="col-4">
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="contact_tel[]" id="contact_tel<?php echo $x; ?>" class="form-control" value="<?php echo $c['tel']?>">
+                </div>
+            </div>
+            
+            <div class="form-group row col-md-10 col-md-offset-1">
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
+                <div class="col-4">
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="email" name="contact_email[]" id="contact_email<?php echo $x; ?>" class="form-control" value="<?php echo $c['email']?>" >
+                </div>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Line ID:</label>
+                <div class="col-4">
+                    <input id="contact_line_id<?php echo $x; ?>" name="contact_line_id[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['line_id']?>" >
+                </div>
+            </div>
+            
+            <div class="form-group row col-md-10 col-md-offset-1">
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Position:</label>
+                <div class="col-4">
+                    <input id="contact_position<?php echo $x; ?>" name="contact_position[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['position'];?>" >
+                </div>
+                <label style="color: #102958;" class="col-sm-2 ">Department:</label>
+                <div class="col-4">
+                    <input id="department<?php echo $x; ?>" name="department[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $c['department'];?>" >
+                </div>
+            </div>
+
+            <div class="form-group row col-md-10 col-md-offset-1">
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label label-right">Remark:</label>
+                <div class="col-10">
+                    <textarea id="contact_remark<?php echo $x; ?>" name="contact_remark[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" class="form-control" rows="2"><?php echo $c['remark'];?></textarea>
+                </div>  
+            </div>
+
+        <div class="form-group row col-md-10 col-md-offset-1">
+            <div class="col-sm-2">
+            </div>  
+            <div class="col-4">
+                <div class="form-check" style="top:5px">
+                    <!-- hidden="true" -->
+                <input id="hid_default<? echo $x; ?>" name="hid_default[]" hidden="true" type="text" value="<? echo $x; ?>" >
+                <input id="id_default<? echo $x; ?>" name="default_contact[]" class="form-check-input" type="radio" value="<? echo $x; ?>" <?php if($c['default_contact']=='1' ){ echo "checked";} ?> >
+                        <label style="color: #000;" class="form-check-label" for="flexCheckDefault">
+                    &nbsp;&nbsp;&nbsp;&nbsp; Default Contact
+                    </label>
+                  </div>
+            </div>  
+        </div>
+
+          
+            </div>
+        </div>
+        
+        
+    </div> 
+    
+</div> 
+    
+<?php } ?>
+
 <!-- Contact Section End -->
 
-<div id="contact-section-clone" class="contact-section-clone"></div>
+    <div id="contact-section-clone" class="contact-section-clone"></div>
 
+    <div class="row">
+        <div  class="col-sm-12 text-right  ">
+            <div style="padding-top: 10px;">
+             
+             <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_contacts" class="btn  btn-labeled" id="add-con">+ Add More Contact<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
+            </div>
+        </div>
+    </div>
+    <br>
 </div> 
 
 <!-- Insurance Info Start -->
@@ -697,9 +865,9 @@ function validateForm() {
                 </div>
             </div>
 
-            <div class="form-group row col-md-10 col-md-offset-1">
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Product Category:</label>
-                <div class="col-4">
+            <div hidden="true" class="form-group row col-md-10 col-md-offset-1">
+                <!-- <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Product Category:</label>
+                <div class="col-4">true
                     <select name="product_category[]" id="product_category<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" >
                     <option value="">Select Category</option>
                     <?php foreach ($product_categories as $pc) {?>
@@ -709,16 +877,23 @@ function validateForm() {
                 </select>
                 </div>
 
-                <label style="color: #102958;"  class="col-sm-2 label_right">Sub Categories:</label>
+                <label style="color: #102958;"  class="col-sm-2 ">Sub Categories:</label>
                 <div class="col-4">
                     <select name="sub_cat[]" id="sub_cat<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" >
                     <option value="">Select Sub Categories</option>                    
                     </select>
+                </div> -->
+                <!-- hidden="true" -->
+                <div class="col-6">
+                    <input  id="product_cat" name="product_category[]" style="color: #000;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $i['product_category']; ?>" >
+                </div>
+                <div class="col-6">
+                    <input  id="sub_cat" name="sub_cat[]" style="color: #000;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $i['sub_categories']; ?>" >
                 </div>
             </div>
 
         <?php if($i['product_category']!=""){ ?>
-            <script type="text/javascript">
+           <!--  <script type="text/javascript">
                 $.ajax({
                         type:"post", 
                         url: "includes/fx_insurance_products.php", 
@@ -737,7 +912,7 @@ function validateForm() {
                     document.getElementById('sub_cat<?php echo $int_insu; ?>').value = "<?php echo $i['sub_categories']; ?>";
                     }                 
                 });
-            </script>
+            </script> -->
         <?php } ?>
 
             <script type="text/javascript">
@@ -766,7 +941,7 @@ function validateForm() {
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Partner Company:</label>
-                <div class="col-4">
+                <div class="col">
                 <select name="insurance_company[]" id="insurance_company<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" value="<?php echo $i['insurance_company'];?>">
                     <option value="">Select Partner</option>
                     <?php foreach ($insurance_company as $insurance) {?>
@@ -775,97 +950,70 @@ function validateForm() {
                 </select>
                 </div>
 
+                
+            </div>
+
+            <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Product Name:</label>
-                <div class="col-4">
+                <div class="col">
                     <select name="product_name[]" id="product_name<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control"   >
-                    <option value="">Select Product</option>                    
+                    <option value="">Select Product</option>
+                      <?php  foreach($product_list as $result){ ?>
+                        <option value="<?php echo $result['id']; ?>" 
+                            <?php if ($result['id']==$i['product_id']) { echo 'selected="selected"'; } ?>
+                            ><?php echo $result['product_name']; ?></option>
+                        <? } ?>            
                     </select>
                
                 </div>
-            </div>
+            </div> 
 
              <script type="text/javascript">
-                $.ajax({
-                        type:"post", 
-                        url: "includes/fx_insurance_products.php", 
-                        data: {
-                            action: 'get_product',
-                            id_product_categories: <?php echo $i['insurance_company_id']; ?>
-                    },
-                    success: function(result) {
-                        var obj = eval("(" + result + ")");
-                        console.log(result);
-                        $("#product_name<?php echo $int_insu; ?> option").remove();
-                        var options = $("#product_name<?php echo $int_insu; ?>");
-                        //don't forget error handling!
-                        $.each(obj, function(item) {
-                            //console.log(item);
-                            options.append($("<option />").val(obj[item].id).text(obj[item].product_name));
-                        }); 
-                    document.getElementById('product_name<?php echo $int_insu; ?>').value = "<?php echo $i['product_id']; ?>";
-                    }                 
-                });
 
-                $.ajax({
-                        type:"post", 
-                        url: "includes/fx_insurance_products.php", 
-                        data: {
-                            action: 'get_agent',
-                            id_product_categories: <?php echo $i['insurance_company_id']; ?>
-                    },
-                    success: function(result) {
-                        var obj = eval("(" + result + ")");
-                        console.log(result);
-                        $("#agent_name<?php echo $int_insu; ?> option").remove();
-                        var options = $("#agent_name<?php echo $int_insu; ?>");
-                        //don't forget error handling!
-                        $.each(obj, function(item) {
-                            //console.log(item);
-                            options.append($("<option />").val(obj[item].id).text(obj[item].agent_namefull));
-                        }); 
-                    document.getElementById('agent_name<?php echo $int_insu; ?>').value = "<?php echo $i['agent_id']; ?>";
-                    }                 
-                });
-                 
                 $('#insurance_company<?php echo $int_insu; ?>').change(function(){
-                    $.ajax({
-                        type:"post", 
-                        url: "includes/fx_insurance_products.php", 
-                        data: {
-                            action: 'get_product',
-                            id_product_categories: $(this).val()
-                    },
-                    success: function(result) {
-                        var obj = eval("(" + result + ")");
-                        $("#product_name<?php echo $int_insu; ?> option").remove();
-                        var options = $("#product_name<?php echo $int_insu; ?>");
-                        $.each(obj, function(item) {
-                            //console.log(item);
-                            options.append($("<option />").val(obj[item].id).text(obj[item].product_name));
-                        });                 
-                    }                 
+
+                    product_object.html('');
+                    $.get('get_product.php?id=' + $(this).val(),function(data){
+                        var result = JSON.parse(data);
+                        product_object.append($('<option></option>').val("").html("Select Product Name"));
+                        document.getElementById("product_cat").value = "";
+                        document.getElementById("sub_cat").value = "";
+                        $.each(result, function(index, item){
+                            product_object.append(
+                            $('<option></option>').val(item.id).html(item.product_name)
+                            );
+                        });
                     });
 
-                    $.ajax({
-                        type:"post", 
-                        url: "includes/fx_insurance_products.php", 
-                        data: {
-                            action: 'get_agent',
-                            id_product_categories: $(this).val()
-                    },
-                    success: function(result) {
-                        var obj = eval("(" + result + ")");
-                        console.log(result);
-                        $("#agent_name<?php echo $int_insu; ?> option").remove();
-                        var options = $("#agent_name<?php echo $int_insu; ?>");
-                        $.each(obj, function(item) {
-                            //console.log(item);
-                            options.append($("<option />").val(obj[item].id).text(obj[item].agent_namefull));
-                        }); 
-                    }                 
+                    var agent_name = $('#agent_name<?php echo $int_insu; ?>');
+                    agent_name.html('');
+                    $.get('get_agent.php?id=' + $(this).val(), function(data){
+                        var result = JSON.parse(data);
+                        agent_name.append($('<option></option>').val("").html("Select Agent Name"));
+                        $.each(result, function(index, item){
+                            agent_name.append(
+                                // $('<option></option>').val(item.id).html(item.title_name+" "+item.first_name+" "+item.last_name)
+                                $('<option></option>').val(item.id).html(item.agent_namefull)
+                            );
+                        });
+                        $("#agent_name<?php echo $int_insu; ?>").selectpicker('refresh');
                     });
-
                 });
+
+                var product_object = $('#product_name<?php echo $int_insu; ?>');
+                product_object.on('change', function(){
+                    var  product_id = $(this).val();
+                        document.getElementById("product_cat").value = "";
+                        document.getElementById("sub_cat").value = "";
+                        $.get('get_product_for_cat_and_sub.php?id=' + product_id, function(data){
+                            var result = JSON.parse(data);
+                            $.each(result, function(index, item){
+                                document.getElementById("product_cat").value = item.id_product_categories;
+                                document.getElementById("sub_cat").value = item.product_subcategories;
+                            });
+                        });
+                });
+
             </script>
 
 <script>
@@ -920,11 +1068,11 @@ function validateForm() {
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Agent Name:</label>
                 
 				<div class="col-4">
-					<select id="agent_name<?php echo $int_insu; ?>" name="agent_name[]" style="color: #000;border-color:#102958;"class="form-control" value="" >
+					<select id="agent_name<?php echo $int_insu; ?>" name="agent_name[]" style="color: #000;border-color:#102958;"class="form-control selectpicker" data-live-search="true" value="" >
 					   <option value="">Select Agent</option>
-						<?php //foreach ($agents  as $a) { ?>
-							<!-- <option value="<?php //echo $a['id']?>" <?php //echo ($i['agent_id'] == $a['id']) ? 'selected' :' ';?>><?php //echo $a['first_name'].' '.$a['last_name'];?></option> -->
-						<?php //} ?>      
+						<?php foreach ($agents  as $a) { ?>
+							<option value="<?php echo $a['id']?>" <?php echo ($i['agent_id'] == $a['id']) ? 'selected' :' ';?>><?php echo $a['first_name'].' '.$a['last_name'];?></option> -->
+						<?php } ?>      
 					</select>
 				</div>
 
@@ -1040,8 +1188,8 @@ function validateForm() {
                 </div>
             </div>
 
-            <div class="form-group row col-md-10 col-md-offset-1">
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Prod. Category:</label>
+            <div hidden="true" class="form-group row col-md-10 col-md-offset-1">
+                <!-- <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Prod. Category:</label>
                 <div class="col-4">
                     <select name="product_category[]" id="product_category<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" >
                     <option value="">Select Category</option>
@@ -1057,6 +1205,12 @@ function validateForm() {
                     <select name="sub_cat[]" id="sub_cat<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" >
                     <option value="">Select Sub Categories</option>                    
                     </select>
+                </div> -->
+                 <div class="col-6">
+                    <input  id="product_cat" name="product_category[]" style="color: #000;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $i['product_category']; ?>" >
+                </div>
+                <div class="col-6">
+                    <input  id="sub_cat" name="sub_cat[]" style="color: #000;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $i['sub_categories']; ?>" >
                 </div>
             </div>
         <?php if($i['product_category']!=""){ ?>
@@ -1106,8 +1260,8 @@ function validateForm() {
             </script>
 
             <div class="form-group row col-md-10 col-md-offset-1">
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Policy Company:</label>
-                <div class="col-4">
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Partner Company:</label>
+                <div class="col">
                 <select name="insurance_company[]" id="insurance_company<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" value="<?php echo $i['insurance_company'];?>">
                     <option value="">Select Partner</option>
                     <?php foreach ($insurance_company as $insurance) {?>
@@ -1115,9 +1269,11 @@ function validateForm() {
                     <?php }?>
                 </select>
                 </div>
+            </div>
 
+            <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Prod. Name:</label>
-                <div class="col-4">
+                <div class="col">
                     <select name="product_name[]" id="product_name<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control"   >
                     <option value="">Select Product</option>                    
                     </select>
@@ -1128,46 +1284,90 @@ function validateForm() {
             <script type="text/javascript">
 
                 $('#insurance_company<?php echo $int_insu; ?>').change(function(){
-                    // alert('not checked');
-                    $.ajax({
-                        type:"post", 
-                        url: "includes/fx_insurance_products.php", 
-                        data: {
-                            action: 'get_product',
-                            id_product_categories: $(this).val()
-                    },
-                    success: function(result) {
-                        var obj = eval("(" + result + ")");
-                        console.log(result);
-                        $("#product_name<?php echo $int_insu; ?> option").remove();
-                        var options = $("#product_name<?php echo $int_insu; ?>");
-                        //don't forget error handling!
-                        $.each(obj, function(item) {
-                            //console.log(item);
-                            options.append($("<option />").val(obj[item].id).text(obj[item].product_name));
-                        });                 
-                    }                 
+
+                    product_object.html('');
+                    $.get('get_product.php?id=' + $(this).val(),function(data){
+                        var result = JSON.parse(data);
+                        product_object.append($('<option></option>').val("").html("Select Product Name"));
+                        document.getElementById("product_cat").value = "";
+                        document.getElementById("sub_cat").value = "";
+                        $.each(result, function(index, item){
+                            product_object.append(
+                            $('<option></option>').val(item.id).html(item.product_name)
+                            );
+                        });
                     });
 
-                    $.ajax({
-                        type:"post", 
-                        url: "includes/fx_insurance_products.php", 
-                        data: {
-                            action: 'get_agent',
-                            id_product_categories: $(this).val()
-                        },
-                        success: function(result) {
-                            var obj = eval("(" + result + ")");
-                            console.log(result);
-                            $("#agent_name<?php echo $int_insu; ?> option").remove();
-                            var options = $("#agent_name<?php echo $int_insu; ?>");
-                            $.each(obj, function(item) {
-                                options.append($("<option />").val(obj[item].id).text(obj[item].agent_namefull));
-                            });
-                        }                 
+                    var agent_name = $('#agent_name<?php echo $int_insu; ?>');
+                    agent_name.html('');
+                    $.get('get_agent.php?id=' + $(this).val(), function(data){
+                        var result = JSON.parse(data);
+                        agent_name.append($('<option></option>').val("").html("Select Agent Name"));
+                        $.each(result, function(index, item){
+                            agent_name.append(
+                                // $('<option></option>').val(item.id).html(item.title_name+" "+item.first_name+" "+item.last_name)
+                                $('<option></option>').val(item.id).html(item.agent_namefull)
+                            );
+                        });
+                        $("#agent_name<?php echo $int_insu; ?>").selectpicker('refresh');
                     });
-
                 });
+
+                var product_object = $('#product_name<?php echo $int_insu; ?>');
+                product_object.on('change', function(){
+                    var  product_id = $(this).val();
+                        document.getElementById("product_cat").value = "";
+                        document.getElementById("sub_cat").value = "";
+                        $.get('get_product_for_cat_and_sub.php?id=' + product_id, function(data){
+                            var result = JSON.parse(data);
+                            $.each(result, function(index, item){
+                                document.getElementById("product_cat").value = item.id_product_categories;
+                                document.getElementById("sub_cat").value = item.product_subcategories;
+                            });
+                        });
+                });
+
+                // $('#insurance_company<?php echo $int_insu; ?>').change(function(){
+                //     // alert('not checked');
+                //     $.ajax({
+                //         type:"post", 
+                //         url: "includes/fx_insurance_products.php", 
+                //         data: {
+                //             action: 'get_product',
+                //             id_product_categories: $(this).val()
+                //     },
+                //     success: function(result) {
+                //         var obj = eval("(" + result + ")");
+                //         console.log(result);
+                //         $("#product_name<?php echo $int_insu; ?> option").remove();
+                //         var options = $("#product_name<?php echo $int_insu; ?>");
+                //         //don't forget error handling!
+                //         $.each(obj, function(item) {
+                //             //console.log(item);
+                //             options.append($("<option />").val(obj[item].id).text(obj[item].product_name));
+                //         });                 
+                //     }                 
+                //     });
+
+                //     $.ajax({
+                //         type:"post", 
+                //         url: "includes/fx_insurance_products.php", 
+                //         data: {
+                //             action: 'get_agent',
+                //             id_product_categories: $(this).val()
+                //         },
+                //         success: function(result) {
+                //             var obj = eval("(" + result + ")");
+                //             console.log(result);
+                //             $("#agent_name<?php echo $int_insu; ?> option").remove();
+                //             var options = $("#agent_name<?php echo $int_insu; ?>");
+                //             $.each(obj, function(item) {
+                //                 options.append($("<option />").val(obj[item].id).text(obj[item].agent_namefull));
+                //             });
+                //         }                 
+                //     });
+
+                // });
             </script>
 
 <script>
@@ -1291,16 +1491,16 @@ function validateForm() {
             if(trim($customer_value['customer_type']) == 'Personal'){
                 echo '<script>$(".corporate").hide();';
                 echo "document.getElementById('company_c_input').removeAttribute('required');";
-                echo "document.getElementById('title_name').setAttribute('required','required');";
+                // echo "document.getElementById('title_name').setAttribute('required','required');";
                 echo "document.getElementById('first_name').setAttribute('required','required');";
-                echo "document.getElementById('last_name').setAttribute('required','required');";
+                // echo "document.getElementById('last_name').setAttribute('required','required');";
                 echo '</script>';
             }else{
                 echo '<script>$(".personal").hide();';
                 echo "document.getElementById('company_c_input').setAttribute('required','required');";
-                echo "document.getElementById('title_name').removeAttribute('required');";
+                // echo "document.getElementById('title_name').removeAttribute('required');";
                 echo "document.getElementById('first_name').removeAttribute('required');";
-                echo "document.getElementById('last_name').removeAttribute('required');";
+                // echo "document.getElementById('last_name').removeAttribute('required');";
                 echo '</script>';
             }  
         ?>
@@ -1373,12 +1573,6 @@ function validateForm() {
 
                 var contact_ct = 1;
                 $('#add-con').click(function(){
-                    var body_add ='';
-                    body_add +='<div class="col text-right">';
-                    body_add +='<button type="button" class="btn btn_remove_con" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="new'+ contact_ct +'">X</button>';
-                    body_add +='</div>&nbsp;&nbsp;';
-                    $("#contact-section-clone").append(body_add);
-
                     clone = $('#contact-section_1').clone();
                     clone.find("#id_default1").attr('checked', false);
                     clone.attr('id', 'contact-section_new'+contact_ct);
@@ -1402,8 +1596,16 @@ function validateForm() {
                     clone.find("#id_default1").attr('id','id_default_new'+contact_ct).val("new"+contact_ct);
                     clone.find("#hid_default1").attr('id','hid_default_new'+contact_ct).val("new"+contact_ct);
 
+                    clone.find("#contact-clone-cancel1").attr('id','contact-clone-cancel-new'+contact_ct);
+
                     clone.appendTo(".contact-section-clone");
                     document.getElementById("id_contact_new"+contact_ct).value = "";
+
+                    var body_add ='';
+                    body_add +='<div class="col text-right">';
+                    body_add +='<button type="button" class="btn btn_remove_con" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="new'+ contact_ct +'">X</button>';
+                    body_add +='</div>&nbsp;&nbsp;';
+                    $("#contact-clone-cancel-new"+contact_ct).append(body_add);
 
                     var body_add ='<script>';
                     body_add +='document.getElementById("contact_mobile_new'+contact_ct+'").addEventListener("input", function (e) {';

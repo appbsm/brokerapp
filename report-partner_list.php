@@ -1,11 +1,8 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
-
-//mb_internal_encoding("UTF-8");
-
+include_once('includes/connect_sql.php');
 session_start();
 error_reporting(0);
-include_once('includes/connect_sql.php');
 include_once('includes/fx_partner_db.php');
 
 if(strlen($_SESSION['alogin'])=="") {

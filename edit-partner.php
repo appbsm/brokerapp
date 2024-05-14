@@ -1,7 +1,7 @@
 <?php
+include_once('includes/connect_sql.php');
 session_start();
 error_reporting(0);
-include_once('includes/connect_sql.php');
 include_once('includes/fx_partner_db.php');
 include_once('includes/fx_insurance_products.php');
 include_once('includes/fx_address.php');
@@ -259,33 +259,7 @@ if($_GET[id]){
                     </div>
                 </div>
             </div>  
-			
-			<!--
-            <div class="form-group row col-md-10 col-md-offset-1">
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Address No:</label>
-                <div class="col-sm-4">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="<?php echo $partner['address_number'];?>"  required>
-               
-                </div>
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Building Name:</label>
-                <div class="col-sm-4">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="building_name" class="form-control" id="building_name" value="<?php echo $partner['building_name'];?>"  >
-                </div>
-            </div>
 
-            <div class="form-group row col-md-10 col-md-offset-1">
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Soi:</label>
-                <div class="col-sm-4">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="soi"  class="form-control" id="soi" value="<?php echo $partner['soi'];?>"  >
-               
-                </div>
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Road:</label>
-                <div class="col-sm-4">
-                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="road"  class="form-control" id="road" value="<?php echo $partner['road'];?>"  >
-                </div>
-            </div>
-			-->
-			
 			<div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Address No:</label>
                 <div class="col-2">
@@ -362,19 +336,29 @@ if($_GET[id]){
     </div>
 </div>
 
-
-
 <div class="container-fluid">
-		<div  class="col-sm-12 text-right  ">
-			<div style="padding-top: 10px;">			 
-			 <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_banks" class="btn  btn-labeled" id="add-bank">+ Add More Bank<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
-			</div>
-		</div>
-
+		
     <?php 
     $start_bank = "true";
     $x = 0;
     foreach ($banks as $bank) { $x++; ?>  
+
+   
+    <div  id="bank_section_bank<? echo $x; ?>">
+        <div class="panel">
+
+
+			<div class="panel-heading">
+                    <div class="form-group  col-md-10 col-md-offset-1">
+                        <div class="col-sm-5">
+                            <div class="panel-title" style="color: #102958;" >
+                                <h2 class="title">Partner Bank Details</h2>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 ">
+                            <!-- style="background-color: #0275d8;color: #F9FAFA;" -->
+                        </div>
+                    </div>
 
     <?php if($start_bank=="false"){ ?>
         <div class="col text-right">
@@ -390,27 +374,16 @@ if($_GET[id]){
         </script>
     <? }else{ $start_bank = "false"; } ?>
 
-    <div  id="bank_section_bank<? echo $x; ?>">
-        <div class="panel">
- 
-				<div class="panel-heading">
-                    <div class="form-group row col-md-10 col-md-offset-1">
-                        <div class="col-sm-5">
-                            <div class="panel-title" style="color: #102958;" >
-                                <h2 class="title">Partner Bank Details</h2>
-                            </div>
-                        </div>
-                        <div class="col-sm-2 ">
-                            <!-- style="background-color: #0275d8;color: #F9FAFA;" -->
-                        </div>
-                    </div>
+                <div class=" text-right">
+                    <div class="bank-clone-cancel<? echo $x; ?>" id="bank-clone-cancel<? echo $x; ?>" ></div>
                 </div>
+            </div>
 
             <div class="panel-body">
 
     			<div class="form-group row col-md-10 col-md-offset-1" >
-                    <!-- hidden="true" -->
-                    <input hidden="true" id="id_bank<? echo $x; ?>" name="id_bank[]" type="text" class="form-control" value="<? echo $bank['id']; ?>"  required>
+
+                    <input hidden="true" id="id_bank<? echo $x; ?>" name="id_bank[]" type="text" class="form-control" value="<? echo $bank['id']; ?>"  >
                     <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Bank Name:</label>
                     <div class="col-sm-4">
                     <input id="bank_name" name="bank_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $bank['bank_name'];?>" >                    
@@ -445,7 +418,7 @@ if($_GET[id]){
 
     <div  id="bank_section_bank<? echo $x; ?>">
         <div class="panel">
- 
+
                 <div class="panel-heading">
                     <div class="form-group row col-md-10 col-md-offset-1">
                         <div class="col-sm-5">
@@ -456,6 +429,7 @@ if($_GET[id]){
                         <div class="col-sm-2 ">
                         </div>
                     </div>
+                    <div class="bank-clone-cancel<? echo $x; ?>" id="bank-clone-cancel<? echo $x; ?>" ></div>
                 </div>
 
             <div class="panel-body">
@@ -465,24 +439,24 @@ if($_GET[id]){
                     <input hidden="true" id="id_bank<? echo $x; ?>" name="id_bank[]" type="text" class="form-control" value="" >
                     <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Bank Name:</label>
                     <div class="col-sm-4">
-                    <input id="bank_name" name="bank_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $bank['bank_name'];?>"  required>                    
+                    <input id="bank_name" name="bank_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $bank['bank_name'];?>"  >                    
                     </div>
                     
                     <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Bank Account:</label>
                     <div class="col-sm-4">
-                    <input id="bank_account" name="bank_account[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $bank['bank_account'];?>" required>
+                    <input id="bank_account" name="bank_account[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control"  value="<?php echo $bank['bank_account'];?>" >
                     </div>  
                 </div>  
                 
                 <div class="form-group row col-md-10 col-md-offset-1" >
                     <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Bank Type:</label>
                     <div class="col-sm-4">
-                    <input id="bank_type" name="bank_type[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $bank['bank_type'];?>" required>                   
+                    <input id="bank_type" name="bank_type[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $bank['bank_type'];?>" >                   
                     </div>
                     
                     <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Bank Account Name:</label>
                     <div class="col-sm-4">
-                    <input id="bank_account_name" name="bank_account_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $bank['bank_account_name'];?>" required>  
+                    <input id="bank_account_name" name="bank_account_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $bank['bank_account_name'];?>" >  
                     </div>  
             
                 </div>  
@@ -494,6 +468,17 @@ if($_GET[id]){
     <?php } ?>
 
     <div class="bank-section-clone" id="bank-section-clone" ></div>  
+
+    <div class="row">
+        <div  class="col-sm-12 text-right  ">
+            <div style="padding-top: 10px;">             
+             <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_banks" class="btn" id="add-bank">+ Add More Bank<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+
 </div>
 
 
@@ -591,23 +576,28 @@ if($_GET[id]){
 </div>       
 
 <div class="container-fluid">		
-	<!--<div class="row">-->
-		<div  class="col-sm-12 text-right  ">
-			<div style="padding-top: 10px;">
-			 
-			 <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_under" class="btn  btn-labeled" id="add-under">+ Add More Under Code<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
-			</div>
-		</div>
-    <!--</div>-->
-
+	
     <?php 
     $start_under = "true";
-    $x = 0;
-    foreach ($under as $data_under) { $x++; ?>
+    $index_under = 0;
+    foreach ($under as $data_under) { $index_under++; ?>
+
+		<div id="under_section_under<? echo $index_under; ?>">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div class="form-group row col-md-10 col-md-offset-1">
+                            <div class="col-sm-4">
+                                <div class="panel-title" style="color: #102958;" >
+                                    <h2 class="title">Under Code</h2>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 ">
+                            </div>
+                    </div>
 
     <?php if($start_under=="false"){ ?>
         <div class="col text-right">
-            <button id="under<?php echo $x; ?>"  type="button" class="btn btn_remove_under" name="remove" style="background-color: #0275d8;color: #F9FAFA;"  >X</button>
+            <button id="under<?php echo $index_under; ?>"  type="button" class="btn btn_remove_under" name="remove" style="background-color: #0275d8;color: #F9FAFA;"  >X</button>
         </div>&nbsp;&nbsp;
 
         <script type="text/javascript">
@@ -617,38 +607,29 @@ if($_GET[id]){
                     $('#' + button_id + '').remove();
                 });
         </script>
-    <? }else{ $start_under = "false"; } ?>
+    <? }else{ $start_under = "false"; } ?>    
 
-
-		<div id="under_section_under<? echo $x; ?>">
-            <div class="panel">
-                <div class="panel-heading">
-                <div class="form-group row col-md-10 col-md-offset-1">
-                        <div class="col-sm-4">
-                            <div class="panel-title" style="color: #102958;" >
-                                <h2 class="title">Under Code</h2>
-                            </div>
-                        </div>
-                        <div class="col-sm-4 ">
-                        </div>
+                    <div class=" text-right">
+                        <div class="under-clone-cancel<? echo $index_under; ?>" id="under-clone-cancel<? echo $index_under; ?>" ></div>
+                    </div>
                 </div>
-            </div>
+
 
             <div class="panel-body"> 
 
                 <div class="form-group row col-md-10 col-md-offset-1">
                     <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Under Code:</label>
                     <div class="col-sm-4">
-                        <input id="agent_code<?php echo $x; ?>" name="agent_code[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $data_under['under_code']; ?>" readonly>
+                        <input id="agent_code<?php echo $index_under; ?>" name="agent_code[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $data_under['under_code']; ?>" readonly>
                     </div>
 
 
-                    <input hidden="true" id="id_under<? echo $x; ?>" name="id_under[]" type="text" class="form-control" value="<? echo $data_under['id']; ?>" >
+                    <input hidden="true" id="id_under<? echo $index_under; ?>" name="id_under[]" type="text" class="form-control" value="<? echo $data_under['id']; ?>" >
                     <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Under Name:</label>
                     <div class="col-sm-4">
                         <!-- data-live-search="true" selectpicker -->
 
-                        <select id="agent_under<?php echo $x; ?>" name="agent_under[]" style="color: #000;border-color:#102958;"  class="form-control " >
+                        <select id="agent_under<?php echo $index_under; ?>" name="agent_under[]" style="color: #000;border-color:#102958;"  class="form-control " >
                             <option value="" selected>Select Agent</option>
                             <?php foreach ($agents as $a) { ?>
                             <option value="<?php echo $a['id']?>" 
@@ -658,14 +639,71 @@ if($_GET[id]){
                         </select> 
 
                     </div>
-
                 </div>
+
+                <div class="form-group row col-md-10 col-md-offset-1">
+                    <div class="col-sm-2 " >
+                         <label style="color: #102958;" for="staticEmail" >Percentage Value:</label>
+                    </div>
+
+                    <div class="col-sm-4">
+                    <input id="agent_percent1" name="agent_percent[]" type="text" value="<?php echo number_format((float)$data_under['percen_value'], 2, '.', ',').'%'; ?>" class="form-control" style="border-color:#102958;" onchange="
+                        var num = $(this).val().replace(/,/g,'');
+                        // if (/^\d*\.?\d+$/.test(num)) {
+                        if (parseFloat(num)) {
+                            if (parseFloat(num)>100){
+                                this.value=parseFloat(100.00).toFixed(2)+'%';
+                            }else{
+                                this.value=parseFloat(num).toFixed(2)+'%';
+                            } 
+                        }else{
+                            this.value='';
+                        }
+                    " />
+                    </div>
+
+                    <div class="col-sm-4">
+                        <input id="default_type_per1" name="default_type<? echo $index_under; ?>" value="Percentage" class="form-check-input" type="radio" 
+                        <?php if($data_under['type_default']=='Percentage'){ echo "checked"; } ?> >
+                        <label style="color: #102958;" class="form-check-label" for="flexCheckDefault">
+                            &nbsp;&nbsp;&nbsp;&nbsp; Default Percentage
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group row col-md-10 col-md-offset-1">
+                    <div class="col-sm-2 " >
+                         <label style="color: #102958;" for="staticEmail" >Net Value:</label>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <input id="agent_net1" name="agent_net[]" type="text" value="<?php echo number_format((float)$data_under['net_value'], 2, '.', ','); ?>" class="form-control" style="border-color:#102958;" onchange="
+                            var num = $(this).val().replace(/,/g,'');
+                            // if (parseFloat(num)) {
+                            if (/^\d*\.?\d+$/.test(num)) {
+                                 var value_con  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
+                                this.value=value_con;
+                            }else{
+                                this.value='';
+                            }
+                        "/>
+                    </div>
+                    <div class="col-sm-4">
+                        <input id="default_type_net1" name="default_type<? echo $index_under; ?>" value="Net Value" class="form-check-input" type="radio"
+                        <?php if($data_under['type_default']=='Net Value'){ echo "checked"; } ?> >
+                        <label style="color: #102958;" class="form-check-label" for="flexCheckDefault">
+                            &nbsp;&nbsp;&nbsp;&nbsp; Default Net Value
+                        </label>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
     <?php } ?>
 
 	<?php if($check_null=="true"){ ?>
+
 		<div class="row " id="under_section_clone">
 		<div class="col-md-12 ">
 			<div class="panel">
@@ -704,13 +742,17 @@ if($_GET[id]){
 						</div>
 						
 					</div>
-				</div>
+
+
+
+			</div>
 
 		   </div> 
 
 		   </div>
 		</div>
 		</div>
+
 	<?php } ?>
 
     <?php if(count($under)==0){ $x=1; ?> 
@@ -720,7 +762,7 @@ if($_GET[id]){
                 <div class="form-group row col-md-10 col-md-offset-1">
                         <div class="col-sm-4">
                             <div class="panel-title" style="color: #102958;" >
-                                <h2 class="title">Under</h2>
+                                <h2 class="title">Under Code</h2>
                             </div>
                         </div>
                         <div class="col-sm-4 ">
@@ -750,13 +792,81 @@ if($_GET[id]){
                     </div>
 
                 </div>
+
+                <div class="form-group row col-md-10 col-md-offset-1">
+                    <div class="col-sm-2 " >
+                         <label style="color: #102958;" for="staticEmail" >Percentage Value:</label>
+                    </div>
+
+                    <div class="col-sm-4">
+                    <input id="agent_percent1" name="agent_percent[]" type="text" value="<?php echo number_format((float)$data_under['percen_value'], 2, '.', ',').'%'; ?>" class="form-control" style="border-color:#102958;" onchange="
+                        var num = $(this).val().replace(/,/g,'');
+                        // if (/^\d*\.?\d+$/.test(num)) {
+                        if (parseFloat(num)) {
+                            if (parseFloat(num)>100){
+                                this.value=parseFloat(100.00).toFixed(2)+'%';
+                            }else{
+                                this.value=parseFloat(num).toFixed(2)+'%';
+                            } 
+                        }else{
+                            this.value='';
+                        }
+                    " />
+                    </div>
+
+                    <div class="col-sm-4">
+                        <input id="default_type_per1" name="default_type<? echo $x; ?>" value="Percentage" class="form-check-input" type="radio" checked>
+                        <label style="color: #102958;" class="form-check-label" for="flexCheckDefault">
+                            &nbsp;&nbsp;&nbsp;&nbsp; Default Percentage
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group row col-md-10 col-md-offset-1">
+                    <div class="col-sm-2 " >
+                         <label style="color: #102958;" for="staticEmail" >Net Value:</label>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <input id="agent_net1" name="agent_net[]" type="text" value="<?php echo number_format((float)$data_under['net_value'], 2, '.', ','); ?>" class="form-control" style="border-color:#102958;" onchange="
+                            var num = $(this).val().replace(/,/g,'');
+                            // if (parseFloat(num)) {
+                            if (/^\d*\.?\d+$/.test(num)) {
+                                 var value_con  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
+                                this.value=value_con;
+                            }else{
+                                this.value='';
+                            }
+                        "/>
+                    </div>
+                    <div class="col-sm-4">
+                        <input id="default_type_net1" name="default_type<? echo $x; ?>" value="Net Value" class="form-check-input" type="radio"
+                        <?php if($data_under['type_default']=='Net Value'){ echo "checked"; } ?> >
+                        <label style="color: #102958;" class="form-check-label" for="flexCheckDefault">
+                            &nbsp;&nbsp;&nbsp;&nbsp; Default Net Value
+                        </label>
+                    </div>
+                </div>
+
+
             </div>
 
         </div>
     </div>
     <?php } ?>
+
 	<div class="under-section-clone" id="under-section-clone" ></div>
-	</div>
+
+    <div class="row">
+        <div  class="col-sm-12 text-right  ">
+            <div style="padding-top: 10px;">
+             <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_under" class="btn" id="add-under">+ Add More Under Code<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
+            </div>
+        </div>
+    </div>
+    <br/>
+
+</div>
 
 	<?php $x=0; foreach ($under as $data_under) { $x++; ?>
 			<script>
@@ -780,21 +890,24 @@ if($_GET[id]){
 
        
 <div class="container-fluid">            
-	<!--<div class="row">-->
-		<div  class="col-sm-12 text-right  ">
-			<div style="padding-top: 10px;">
-			 
-			 <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_contacts" class="btn  btn-labeled" id="add-con">+ Add More Contact<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
-			</div>
-		</div>
-	<!--</div>-->
 		
 	<?php 
     $start_contact = "true";
     $x = 0;
     if (count($contacts) > 0) {?>
         <?php foreach ($contacts as $contact) { $x++; ?>
-
+    
+       <div class="row " id="contact-section_con<? echo $x; ?>">
+            <div class="col-md-12 ">
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div class="form-group row col-md-10 col-md-offset-1" >
+                            <div class="col-sm-5 ">
+                                <div class="panel-title" style="color: #102958;" >
+                                    <h2 class="title">Contact Person</h2>
+                                </div>
+                            </div>
+                        </div>
 
     <?php if($start_contact=="false"){ ?>
         <div class="col text-right">
@@ -809,16 +922,9 @@ if($_GET[id]){
                 });
         </script>
     <? }else{ $start_contact = "false"; } ?>
-       <div class="row " id="contact-section_con<? echo $x; ?>">
-            <div class="col-md-12 ">
-                <div class="panel">
-                    <div class="panel-heading">
-                        <div class="form-group row col-md-10 col-md-offset-1" >
-                            <div class="col-sm-5 ">
-                                <div class="panel-title" style="color: #102958;" >
-                                    <h2 class="title">Contact Person</h2>
-                                </div>
-                            </div>
+
+                        <div class=" text-right">
+                             <div class="contact-clone-cancel<? echo $x; ?>" id="contact-clone-cancel<? echo $x; ?>" ></div>
                         </div>
                     </div>
    
@@ -837,9 +943,9 @@ if($_GET[id]){
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1" >
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>First name:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">First name:</label>
                 <div class="col-4">
-                    <input id="contact_first_name" name="contact_first_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $contact['first_name']; ?>" required>
+                    <input id="contact_first_name" name="contact_first_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $contact['first_name']; ?>" >
                 </div>
 
                 <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Last name:</label>
@@ -1054,7 +1160,18 @@ if($_GET[id]){
 </div>
 
 <?php } ?>
+
     <div class="contact-section-clone" id="contact-section-clone" ></div>	
+
+    <div class="row">
+        <div  class="col-sm-12 text-right  ">
+            <div style="padding-top: 10px;">
+             
+             <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_contacts" class="btn" id="add-con">+ Add More Contact<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
+            </div>
+        </div>
+    </div>
+    <br/>
 </div>
  
 
@@ -1198,12 +1315,7 @@ if($_GET[id]){
 				
 				var contact_ct = 1;
 				$('#add-con').click(function(){	
-                    var body_add ='<div id="'+ contact_ct +'" >';
-                    body_add +='<div class="col text-right">';
-                    body_add +='<button type="button" class="btn btn_remove_con_new" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="'+ contact_ct +'">X</button>';
-                    body_add +='</div>&nbsp;&nbsp;';
-                    $("#contact-section-clone").append(body_add);
-
+                  
 					// $("#contact-section_con1").clone().attr('id', 'contact-section_'+contact_ct).appendTo(".contact-section-clone");
                     clone = $('#contact-section_con1').clone();
                     clone.attr('id', 'contact-section_'+contact_ct);
@@ -1228,6 +1340,9 @@ if($_GET[id]){
                     clone.find("#contact_position").val("");
                     clone.find("#contact_remark").val("");
                     clone.find("#department").val("");
+
+                    clone.find("#contact-clone-cancel1").attr('id','contact-clone-cancel-new'+contact_ct);
+
                     clone.appendTo(".contact-section-clone");
                     document.getElementById("id_contact_new"+contact_ct).value = "";
 
@@ -1238,6 +1353,12 @@ if($_GET[id]){
                     body_add +='});';
                     body_add +='</'+'script>';
                     $("#contact-section-clone").append(body_add);
+
+                      var body_add ='<div id="'+ contact_ct +'" >';
+                    body_add +='<div class="col text-right">';
+                    body_add +='<button type="button" class="btn btn_remove_con_new" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="'+ contact_ct +'">X</button>';
+                    body_add +='</div>&nbsp;&nbsp;';
+                    $("#contact-clone-cancel-new"+contact_ct).append(body_add);
 
 					contact_ct++;
 				});
@@ -1250,12 +1371,7 @@ if($_GET[id]){
 
 				var bank_ct = 1;
 				$('#add-bank').click(function(){
-                    var body_add ='<div id="new'+ bank_ct +'" >';
-                    body_add +='<div class="col text-right">';
-                    body_add +='<button type="button" class="btn btn_remove_bank_new" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="new'+ bank_ct +'">X</button>';
-                    body_add +='</div>&nbsp;&nbsp;';
-                    $("#bank-section-clone").append(body_add);	
-
+                    
 					// $("#bank_section_bank1").clone().attr('id', 'bank-section_new'+bank_ct).appendTo(".bank-section-clone");
                     clone = $('#bank_section_bank1').clone();
                     clone.attr('id', 'bank-section_new'+bank_ct);
@@ -1266,8 +1382,16 @@ if($_GET[id]){
                     clone.find("#bank_type").val("");
                     clone.find("#bank_account_name").val("");
 
+                    clone.find("#bank-clone-cancel1").attr('id','bank-clone-cancel-new'+bank_ct);
+
                     clone.appendTo(".bank-section-clone");
                     document.getElementById("id_bank_new"+bank_ct).value = "";
+
+                    var body_add ='<div id="new'+ bank_ct +'" >';
+                    body_add +='<div class="col text-right">';
+                    body_add +='<button type="button" class="btn btn_remove_bank_new" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="new'+ bank_ct +'">X</button>';
+                    body_add +='</div>&nbsp;&nbsp;';
+                    $("#bank-clone-cancel-new"+bank_ct).append(body_add);  
 
 					bank_ct++;
 				});
@@ -1277,23 +1401,29 @@ if($_GET[id]){
                     $('#' + button_id + '').remove();
                 });
 				
-				var under_ct = 1;
-				$('#add-under').click(function(){		
-                    var body_add ='<div id="new'+ under_ct +'" >';
-                    body_add +='<div class="col text-right">';
-                    body_add +='<button type="button" class="btn btn_remove_under_new" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="new'+ under_ct +'">X</button>';
-                    body_add +='</div>&nbsp;&nbsp;';
-                    $("#under-section-clone").append(body_add);
-
+				// var under_ct = 1;
+                var under_ct = <?php echo $index_under; ?>;
+                if(under_ct==''){
+                    under_ct = 1;
+                }
+                // alert('under_ct:'+under_ct);
+				$('#add-under').click(function(){	
 					// $("#under_section_under1").clone().attr('id', 'under-section_new'+under_ct).appendTo(".under-section-clone");
-
                     clone = $('#under_section_under1').clone();
+
 
                     clone.attr('id', 'under-section_new'+under_ct);
                     clone.find("#id_under1").attr('id','id_under_new'+under_ct);
 
                     clone.find("#agent_under1").attr('id','agent_under_new'+under_ct).val("");
                     clone.find("#agent_code1").attr('id','agent_code_new'+under_ct).val("");
+
+                    clone.find("#default_type_per1").prop('checked', true).attr('name','default_type'+(under_ct+1));
+                    clone.find("#default_type_net1").removeAttr('checked').attr('name','default_type'+(under_ct+1));
+                    // clone.find("#default_type1").attr('name','default_type'+(under_ct+1));
+
+                    clone.find("#agent_percent1").attr('id','agent_percent_new'+under_ct).val("");
+                    clone.find("#agent_net1").attr('id','agent_net_new'+under_ct).val("");
 
                     clone.appendTo(".under-section-clone");
 
@@ -1325,7 +1455,16 @@ if($_GET[id]){
                     body_add +='        });';
                     body_add +='    });';
                     body_add +='</'+'script>';
+
+                    clone.find("#under-clone-cancel1").attr('id','under-clone-cancel-new'+under_ct);
+
                     $("#under-section-clone").append(body_add);
+
+                    var body_add ='<div id="new'+ under_ct +'" >';
+                    body_add +='<div class="col text-right">';
+                    body_add +='<button type="button" class="btn btn_remove_under_new" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="new'+ under_ct +'">X</button>';
+                    body_add +='</div>&nbsp;&nbsp;';
+                    $("#under-clone-cancel-new"+under_ct).append(body_add);
 
                     // alert('not checked');
 					under_ct++;

@@ -1,4 +1,5 @@
 <?php
+
     ini_set('mssql.charset', 'UTF-8');
 	$serverName = "192.168.20.211,1433"; //serverName ???? Server
 	$connectionInfo = array( "Database"=>"brokerapp", "UID"=>"sa", "PWD"=>"bsm@2015", "CharacterSet" => "UTF-8");
@@ -11,3 +12,8 @@
 		echo "Connection could not be established.<br />";
 		die( print_r( sqlsrv_errors(), true));
 	}
+
+	session_name("broker");
+	session_start();
+
+	// session_name("broker");

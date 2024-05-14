@@ -6,9 +6,18 @@ if ($_GET['action'] == 'del') {
 
 	$insurance_list = check_insurance_agent($conn,$_GET['id']);
 	if(count($insurance_list)==0){
+		
+		$under = get_partner_under($conn,$_GET['id']);
+		foreach ($under as $value) {
+			$data['id'] = $value['id'];
+		 	$data['table'] = 'under';	
+		 	delete_table ($conn, $data);
+		}
+
 		$data['id'] = $_GET['id'];
 		$data['table'] = 'agent';	
 		delete_table ($conn, $data);
+
 		echo '<script>alert("Deleted Success.")</script>';
 		echo "<script>window.location.href ='../agent-management.php'</script>";
 		// header('Location: ../agent-management.php');
@@ -188,12 +197,21 @@ function save_agent ($conn, $post_data) {
 	    		$data_rel['columns'] = array(
 	    		    'id_agent',
 	    		    'id_partner', 
+	    		    'percen_value',
+		            'net_value',
+		            'type_default',
 	    		    'under_code'
 	    		);
+
+	    		$percen = substr($_POST['agent_percent'][$ctr],0,-1);
+
 	    		$data_rel['table'] = 'under';
 	    		$data_rel['values'] = array(
 	    		    $agent_id,
 	    		    $post_data['insurance_company'][$ctr],
+	    		    $percen,
+		            $post_data['agent_net'][$ctr],
+		            $post_data["default_type".($ctr+1)],
 	    		    $post_data['agent_code'][$ctr]
 	    		);
 	    		insert_table ($conn, $data_rel);
@@ -276,15 +294,23 @@ function update_agent ($conn, $post_data) {
     		//     $post_data['agent_code'][$ctr]
     		// );
 
+    		$percen = substr($_POST['agent_percent'][$ctr],0,-1);
+
     		if($post_data['insurance_company'][$ctr]!=""){
 	    		$data_rel['table'] = 'under';
 
 				$data_rel['columns'] = array(
-	    		    'id_partner', 
+	    		    'id_partner',
+	    		    'percen_value',
+		            'net_value',
+		            'type_default',
 	    		    'under_code'
 	    		);
 	    		$data_rel['values'] = array(
 	    		    $post_data['insurance_company'][$ctr],
+	    		    $percen,
+		            $post_data['agent_net'][$ctr],
+		            $post_data["default_type".($ctr+1)],
 	    		    $post_data['agent_code'][$ctr]
 	    		);
     		}
@@ -311,11 +337,19 @@ function update_agent ($conn, $post_data) {
 				$data_rel['columns'] = array(
 	    		    'id_agent',
 	    		    'id_partner', 
+	    		    'percen_value',
+		            'net_value',
+		            'type_default',
 	    		    'under_code'
 	    		);
+
+	    		$percen = substr($_POST['agent_percent'][$ctr],0,-1);
 	    		$data_rel['values'] = array(
 	    		    $agent_id,
 	    		    $post_data['insurance_company'][$ctr],
+	    		    $percen,
+		            $post_data['agent_net'][$ctr],
+		            $post_data["default_type".($ctr+1)],
 	    		    $post_data['agent_code'][$ctr]
 	    		);
     		}
@@ -357,6 +391,36 @@ function delete_insurance_list_data($conn, $post_data,$insu) {
 		$data['table'] = 'rela_agent_to_insurance';	
 		delete_table ($conn, $data);
 	}
+}
+
+function get_partner_under($conn, $id) {
+	$result = array();
+	$sql = "SELECT * FROM under WHERE id_agent = '".$id."'";
+        $stmt = sqlsrv_query( $conn, $sql);
+        if($stmt === false) {
+            die( print_r( sqlsrv_errors(), true) );
+        }while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC)){
+            $result[] = $row;
+        }
+	return $result;
+}
+
+
+function delete_partner_under_list($conn, $post_data,$under) {
+	$array_delete=array();
+	foreach ($under as $data) {
+		if (!in_array($data['id'],$post_data['id_insurance'])) { 
+        	array_push($array_delete,$data['id']);
+    	}
+	}
+	foreach($array_delete as $value) {
+		// echo '<script>alert("value: '.$value.'")</script>'; 
+	// 	// $data['id'] = $_GET['id'];
+		$data['id'] = $value;
+		$data['table'] = 'under';	
+		delete_table ($conn, $data);
+	}
+	// sqlsrv_close($conn);
 }
 
 

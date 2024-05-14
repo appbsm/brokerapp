@@ -1,7 +1,7 @@
 <?php
+include_once('includes/connect_sql.php');
 session_start();
 error_reporting(0);
-include_once('includes/connect_sql.php');
 include_once('includes/fx_reports.php');
 
 
@@ -81,6 +81,9 @@ if(strlen($_SESSION['alogin'])==""){
         <script src="js/DataTables/datatables.min.js"></script>
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css">
 
 </head>
 
@@ -130,6 +133,31 @@ if(strlen($_SESSION['alogin'])==""){
                     </div>
 
 <script>
+
+    // var currentDate = new Date();
+    // var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+    //  $('#date_from,#date_to').val(formattedDate);
+
+                        var emptyPost = "<?php echo (empty($_GET) ? 'true' : 'false'); ?>";
+                        if (emptyPost === 'false') {
+                            var startDate = "<?php echo $_GET['date_from']; ?>";
+                            if(startDate === ""){
+                                var currentDate = new Date();
+                                var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+                                $('#date_from').val(formattedDate);
+                            }
+                            var endDate = "<?php echo $_GET['date_to']; ?>";
+                            if(endDate === ""){
+                                var currentDate = new Date();
+                                var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+                                $('#date_to').val(formattedDate);
+                            }
+                        }else{
+                            var currentDate = new Date();
+                                var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+                                $('#date_from, #date_to').val(formattedDate);
+                        }
+
   $(document).ready(function(){
     $('#date_from').datepicker({
       format: 'dd-mm-yyyy',
@@ -231,11 +259,13 @@ if(strlen($_SESSION['alogin'])==""){
                                             <th>Agent Name</th>
                                             <th>Prod. Name</th>
                                             
-                                            <th>Premium Rate</th>
+                                            
                                             <?php if($_GET['currency_conversion']=="true"){ ?>
-                                            <th class="text-center converted">Converted Value</th>
                                             <th class="text-center converted">Symbol</th>
+                                            <th class="text-center converted">Converted Value</th>
                                             <?php } ?>
+                                            <th>Premium Rate</th>
+
                                             <th>Paid Date</th>
                                             <th>Comm. Paid</th>                                
                                         </tr>
@@ -289,18 +319,21 @@ if(strlen($_SESSION['alogin'])==""){
 											<td><?php echo $s['insurance_company'];?></td>
 											<td><?php echo $s['customer_name'];?></td>
 
-                                            <td><?php echo $s['agent_name'];?></td>                                                                                           
-                                            <td><?php echo $s['product_name'];?></td>
-                                            
-                                            <td class="text-right"><?php echo number_format( $s['premium_rate'], 2);?></td> 
+                                            <td><?php echo $s['agent_name'];?></td> 
+                                            <td><?php echo $s['product_name']; ?></td>
 
                                             <?php if($_GET['currency_conversion']=="true"){ ?>
-
-                                            <td class="converted text-right"><?php echo number_format($converted_value, 2); ?></td>
                                             <td class="converted text-center">
                                             <?php echo (isset($acurrency['currency_value_convert'])) ? $acurrency['currency']:'฿THB';?>
                                             </td>
+                                            <td class="converted text-right">
+                                                <?php //echo number_format($converted_value, 2);
+                                                echo number_format($s['convertion_value'], 2); ?>
+                                            </td>
+
                                             <?php } ?>
+
+                                            <td class="text-right"><?php echo number_format( $s['premium_rate'], 2);?></td> 
                                             
                                             <td class="text-center"><?php echo $paid_date; ?></td>
                                             <td class="text-right">
@@ -328,12 +361,13 @@ if(strlen($_SESSION['alogin'])==""){
 											<th></th>
 											<th></th>
                                             <th></th>                                                   
-                                            <th style="text-align: right !important;"><?php echo number_format($total_premium_rate, 2)?></th> 
+                                           
 
                                             <?php if($_GET['currency_conversion']=="true"){ ?>
-                                            <th class="converted" style="text-align: right !important;"><?php echo number_format($total_converted_value, 2)?></th>       
                                             <th class="converted"></td> 
+                                            <th class="converted" style="text-align: right !important;"><?php //echo number_format($total_converted_value, 2)?></th>       
                                             <?php } ?>
+                                             <th style="text-align: right !important;"><?php echo number_format($total_premium_rate, 2)?></th> 
 
 											<th></th> 
 											<th style="text-align: right !important;"><?php echo number_format($total_commission, 2)?></th>                                                   

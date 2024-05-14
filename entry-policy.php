@@ -1,9 +1,13 @@
 <?php
+	include('includes/config.php');
+	
 	session_start();
 	error_reporting(0);
-	include('includes/config.php');
+    
+    
 	if(strlen($_SESSION['alogin'])==""){   
 		header("Location: index.php"); 
+		exit; // หยุดการทำงานของสคริปต์
 	}else{
 	//For Deleting the notice
 
@@ -65,7 +69,9 @@
 
 		 ,ag.title_name AS title_name_agent,ag.first_name AS first_name_agent,ag.last_name AS last_name_agent 
 		 ,insu.id AS id_insurance,FORMAT(start_date, 'dd-MM-yyyy') AS start_date_day 
-		 ,FORMAT(end_date, 'dd-MM-yyyy') AS end_date_day,insu.* 
+		 ,FORMAT(end_date, 'dd-MM-yyyy') AS end_date_day
+         ,FORMAT(paid_date, 'dd-MM-yyyy') AS paid_date_day
+         ,insu.* 
 		  from insurance_info insu 
 		 left JOIN  rela_customer_to_insurance re_ci ON re_ci.id_insurance_info = insu.id 
 		 left JOIN customer cu ON cu.id = re_ci.id_customer 
@@ -80,6 +86,12 @@
 	$query = $dbh->prepare($sql);
 	$query->execute();
 	$results = $query->fetchAll(PDO::FETCH_OBJ);
+	
+	
+	
+	/*ck policy*/
+	
+
 
 ?>
 
@@ -218,9 +230,12 @@
                                             <th width="50px" style="color: #102958;">Status</th>
                                             <th width="70px" style="color: #102958;">Start Date</th>
                                             <th width="70px" style="color: #102958;">End Date</th>
-                                            <th width="100px" style="color: #102958;">Amount of premium</th>
-                                            <th width="100px" style="color: #102958;">Convert Value</th>
+
                                             <th width="50px" style="color: #102958;">Symbol</th>
+                                            <th width="100px" style="color: #102958;">Amount of premium</th>
+                                            <th width="100px" style="color: #102958;">Premium Conv.(฿THB)</th>
+
+                                            <th width="70px" style="color: #102958;">Paid Date</th>
                                             
                                             <th width="150px" style="color: #102958;" >Agent/Customer</th>
                                             
@@ -248,25 +263,33 @@
         <td class="text-center"><?php echo $result->status_insurance;?></td>
         <td class="text-center"><?php echo $result->start_date_day;?></td>
         <td class="text-center"><?php echo $result->end_date_day;?></td>
-        <td class="text-right" ><?php echo number_format((float)$result->premium_rate, 2, '.', ',');?></td>
+        
+        <td class="text-center"><?php echo $result->currency;?></td>
         <td class="text-right" >
-            <?php   if($result->currency !="฿THB" && $result->currency !="THB"){
-                        echo number_format((float)$result->convertion_value, 2, '.', ',');
-                    }else{
-                        echo "0.00";
-                    }
+            <?php   
+            // if($result->currency !="฿THB" && $result->currency !="THB"){
+                echo number_format((float)$result->convertion_value, 2, '.', ',');
+                    // }else{
+                    //     echo "0.00";
+                    // }
             ?>
         </td>
-        <td class="text-center"><?php echo $result->currency;?></td>
+        <td class="text-right" ><?php echo number_format((float)$result->premium_rate, 2, '.', ',');?></td>
+        
+        <td class="text-center"><?php echo $result->paid_date_day;?></td>
+
         <!-- $result->title_name_agent." ". -->
         <td><?php echo $result->first_name_agent." ".$result->last_name_agent;?></td>
         
         
         <td class="text-center">
-        <i title="Edit Record"><a href="edit-policy.php?id=<?php echo $result->id_insurance;?>">
- <svg width="20" height="20" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
-  <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
-</svg>
+        <i title="Edit Record">
+			<!--<a href="edit-policy.php?id=<?php echo $result->id_insurance;?>">-->
+			<!--<a href="edit-policy.php?id=<?php echo $result->id_insurance;?>" onclick="return checkAndAlert();">-->
+			<a href="edit-policy.php?id=<?php echo $result->id_insurance;?>" onclick="return checkAndAlert(<?php echo $isLinkAvailable ? 'true' : 'false'; ?>);">
+			 <svg width="20" height="20" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+			  <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+			</svg>
                                                 <!-- </a></i> &nbsp;&nbsp;
                                                  <i class="fa " title="Delete this Record" ><a href="entry-policy.php?id=<?php echo $result->id_insurance;?>" onclick="return confirm('Do you really want to delete the notice?');">
     <svg width="20" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -275,6 +298,22 @@
 </svg>
     </i> </a> -->
                                         </td>
+										<script>
+											/*function checkAndAlert() {
+												
+												var isLinkAvailable = <?php echo $isLinkAvailable ? 'true' : 'false'; ?>;
+
+												if (!isLinkAvailable) {
+													alert("มีผู้ใช้งานอื่นกำลังใช้งานอยู่");
+													return false; 
+												}
+
+												return true;
+											}*/
+											
+										</script>
+
+										
 <?php $cnt++;}} ?>                       
 
 

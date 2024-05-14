@@ -2,9 +2,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 
 <?php
-	session_start();
-	error_reporting(0);
 	include_once('includes/connect_sql.php');
+    session_start();
+    error_reporting(0);
 	include_once('includes/fx_customer_db.php');
 	include_once('includes/fx_address.php');
 	include_once('includes/fx_agent_db.php');
@@ -80,7 +80,10 @@
 	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 	<script src="js/DataTables/datatables.min.js"></script> 
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css">
 </head>
 
 <body id="page-top" >
@@ -284,7 +287,7 @@ function validateForm() {
                         <label style="color: #102958;" ><small><font color="red">*</font></small>First name:</label>
                     </div>
                     <div  class="col-4 personal">
-                        <input id="first_name" name="first_name" minlength="1" maxlength="100" style="color: #000;border-color:#102958;" type="text"  class="form-control"  required>
+                        <input id="first_name" name="first_name" minlength="1" maxlength="100" style="color: #000;border-color:#102958;" type="text"  class="form-control" >
                     </div>
 					<div class="col-2  label_left personal"  >
                         <label  style="color: #102958;" >Last name:</label>
@@ -384,10 +387,10 @@ function validateForm() {
 				-->
 				<div class="form-group row col-md-10 col-md-offset-1">
 					<div class="col-sm-2 label_left">
-						<label style="color: #102958;"><small><font color="red">*</font></small>Address No:</label>
+						<label style="color: #102958;">Address No:</label>
 					</div>
 					<div class="col-2">
-						<input name="address_number" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" required>
+						<input name="address_number" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" >
 					</div>
 				<div class="col-sm-1 label_left">
 						<label style="color: #102958;">Soi:</label>
@@ -413,11 +416,11 @@ function validateForm() {
 
                 <div class="form-group row col-md-10 col-md-offset-1" >
                     <div class="col-sm-2  label_left"  >
-                        <label style="color: #102958;" ><small><font color="red">*</font></small>Province:</label>
+                        <label style="color: #102958;" >Province:</label>
                     </div>
                     <div class="col-4 ">
                         <!-- class="remove-example form-control selectpicker" data-live-search="true" -->
-                         <select style="border-color:#102958; color: #000;" name="province" class="form-control selectpicker" id="province" data-live-search="true"  required>
+                         <select style="border-color:#102958; color: #000;" name="province" class="form-control selectpicker" id="province" data-live-search="true"  >
                             <option value="" selected>Select Province</option>
                         <?php foreach ($provinces as $province) { ?>
                         <option value="<?php echo $province['code']?>"><?php echo $province['name_en'];?></option>
@@ -425,10 +428,10 @@ function validateForm() {
                     </select>
                     </div>
                     <div class="col-sm-2 label_left" >
-                        <label style="color: #102958;" ><small><font color="red">*</font></small>District:</label>
+                        <label style="color: #102958;" >District:</label>
                     </div>
                     <div class="col-4 ">
-                        <select style="border-color:#102958; color: #000;" name="district" class="form-control selectpicker" id="district" data-live-search="true"   required>
+                        <select style="border-color:#102958; color: #000;" name="district" class="form-control selectpicker" id="district" data-live-search="true"  >
                             <option value="" selected>Select District</option>
                     <?php foreach ($districts as $district) { ?>
                         <option value="<?php echo $district['code']?>"><?php echo $district['name_en'];?></option>
@@ -438,10 +441,10 @@ function validateForm() {
                 </div>
                 <div class="form-group row col-md-10 col-md-offset-1" >
                     <div class="col-sm-2  label_left"  >
-                        <label style="color: #102958;" ><small><font color="red">*</font></small>Sub-district:</label>
+                        <label style="color: #102958;" >Sub-district:</label>
                     </div>
                     <div class="col-4 ">
-                        <select id="subdistrict" name="sub_district" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true"   required>  
+                        <select id="subdistrict" name="sub_district" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true"  >  
                         <option value="" selected>Select Subdistrict</option> 
                     <?php foreach ($subdistricts as $sub) { ?>
                         <option value="<?php echo $sub['code']?>"><?php echo $sub['name_en'];?></option>
@@ -449,10 +452,10 @@ function validateForm() {
                     </select>
                     </div>
                     <div class="col-sm-2 label_left" >
-                        <label style="color: #102958;" ><small><font color="red">*</font></small>Post Code:</label>
+                        <label style="color: #102958;" >Post Code:</label>
                     </div>
                     <div class="col-4 ">
-                        <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control"  required>
+                        <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control"  >
                     </div>
                 </div>
 
@@ -465,17 +468,9 @@ function validateForm() {
 
 
 <div class="container-fluid">
-	<div class="row">
-		<div  class="col-sm-12 text-right  ">
-			<div style="padding-top: 10px;">
-			 
-			<button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_contacts" class="btn  btn-labeled" id="add-con">+ Add More Contact<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
-			</div>
-		</div>
-	</div>
+	
 		<!-- 1 End -->
 		
-
 <!-- Contact Section Start -->
 <div class="row " id="contact-section">
 
@@ -493,21 +488,26 @@ function validateForm() {
                     </div>
                 </div>
 
-        <div class="col">     
-            <div class="form-check" style="top:20px;">
-                <!-- disabled="true" -->
-                <input name="same_customer" id="same_customer" class="form-check-input same_customer" type="checkbox" >
-                <label style="color: #000;" class="form-check-label" for="SameCheck">
-                        &nbsp;&nbsp;&nbsp;&nbsp; Same Customer Name
-                </label>
-            </div>
-        </div>  
+            <div class="col">     
+                <div class="form-check" style="top:20px;">
+                    <!-- disabled="true" -->
+                    <input name="same_customer" id="same_customer" class="form-check-input same_customer" type="checkbox" >
+                    <label style="color: #000;" class="form-check-label" for="SameCheck">
+                            &nbsp;&nbsp;&nbsp;&nbsp; Same Customer Name
+                    </label>
+                </div>
+            </div>  
 
-            <div class="col text-right">
+                   
+
+            <!-- <div class="col text-right"> -->
                 <!-- <button id="button_remove" hidden="true" type="button" class="btn btn_remove_con button_remove" style="background-color: #0275d8;color: #F9FAFA;" >X</button>
             </div>&nbsp;&nbsp; -->
 
-                        </div>
+                        <!-- </div> -->
+                    </div>
+                     <div class="col text-right">
+                        <div class="contact-clone-cancel1" id="contact-clone-cancel1" ></div>
                     </div>
                 </div>
    
@@ -527,9 +527,9 @@ function validateForm() {
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1" >
-                <label style="color: #102958;" class="col-sm-2 label_left"><small><font color="red">*</font></small>First name:</label>
+                <label style="color: #102958;" class="col-sm-2 label_left">First name:</label>
                 <div class="col-4">
-                    <input id="contact_first_name" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="contact_first_name[]" class="form-control"  required>
+                    <input id="contact_first_name" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="contact_first_name[]" class="form-control" >
                 </div>
 				<label  style="color: #102958;" class="col-sm-2 label_left">Last name:</label>
                 <div class="col-4">
@@ -610,17 +610,29 @@ function validateForm() {
 			</div>
         </div>
     </div> 
-</div></div> 
+</div>
+
+</div> 
 <!-- Contact Section End -->
 
 <div id="contact-section-clone" class="contact-section-clone"></div>	
+
+    <div class="row">
+        <div  class="col-sm-12 text-right  ">
+            <div style="padding-top: 10px;">
+             
+            <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_contacts" class="btn" id="add-con">+ Add More Contact<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
+            </div>
+        </div>
+    </div>
+    <br>
 
 <!-- Insurance Info Start -->
 <!-- class="container-fluid" -->
 
 <div >
     <!-- 1 Start -->
-    <div class="row">
+    <!-- <div class="row">
         <div  class="col-sm-12 text-right  ">
 
             <div style="padding-top: 10px;">
@@ -628,7 +640,7 @@ function validateForm() {
              <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_insurance" class="btn  btn-labeled" id="add-insur">+ Add More Policy<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
             </div>
         </div>
-    </div>
+    </div> -->
         <!-- 1 End -->
 
     <div class="row" id="insurance-section">
@@ -661,8 +673,8 @@ function validateForm() {
                 </div>
             </div>
 
-            <div class="form-group row col-md-10 col-md-offset-1" >
-                <label style="color: #102958;"  class="col-sm-2 label_left">Prod.Category:</label>
+            <div hidden="" class="form-group row col-md-10 col-md-offset-1" >
+                <!-- <label style="color: #102958;"  class="col-sm-2 label_left">Prod.Category:</label>
                 <div class="col-4">
                     <select name="product_category[]" id="product_category" style="color: #000;border-color:#102958;"class="form-control" >
 						<option value="">Select Category</option>
@@ -676,14 +688,22 @@ function validateForm() {
                     <select name="sub_cat[]" id="sub_cat" style="color: #000;border-color:#102958;"class="form-control sub_cat" >
                     <option value="">Select Sub Categories</option>                    
                     </select>
+                </div> -->
+
+                <div class="col-6">
+                    <input  id="product_cat" name="product_category[]" style="color: #000;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $i['product_category']; ?>" >
                 </div>
+                <div class="col-6">
+                    <input  id="sub_cat" name="sub_cat[]" style="color: #000;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $i['sub_categories']; ?>" >
+                </div>
+
             </div>
 			
 			<div class="form-group row col-md-10 col-md-offset-1" >
 				<div class="col-sm-2 label_left">
                     <label style="color: #102958;" >Partner Company:</label>
                 </div>  
-                <div class="col-10">
+                <div class="col">
                     <select name="insurance_company[]" id="insurance_company" style="color: #000;border-color:#102958;"class="form-control" >
                     <option value="">Select Partner</option>
                     <?php foreach ($insurance_company as $insurance) {?>
@@ -695,7 +715,7 @@ function validateForm() {
 
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;"  class="col-sm-2 label_left">Prod. Name:</label>
-                <div class="col-10">
+                <div class="col">
                     <select name="product_name[]" id="product_name" style="color: #000;border-color:#102958;"class="form-control" >
                     <option value="">Select Product</option>                    
                     </select>
@@ -971,12 +991,7 @@ function validateForm() {
 				
 				var contact_ct = 1;
 				$('#add-con').click(function(){		
-                    var body_add ='';
-                    body_add +='<div class="col text-right">';
-                    body_add +='<button type="button" class="btn btn_remove_con" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="'+ contact_ct +'">X</button>';
-                    body_add +='</div>&nbsp;&nbsp;';
-                    $("#contact-section-clone").append(body_add);
-
+                   
 					// $("#contact-section").clone().attr('id', 'contact-section_'+contact_ct).appendTo(".contact-section-clone");
 
                     clone = $('#contact-section').clone();
@@ -999,6 +1014,8 @@ function validateForm() {
                     clone.find("#contact_remark").val("");
                     clone.find("#department").val("");
 
+                    clone.find("#contact-clone-cancel1").attr('id','contact-clone-cancel-new'+contact_ct);
+
                     clone.appendTo(".contact-section-clone");
 
                     document.getElementById("id_default"+(contact_ct+1)).value = (contact_ct+1);
@@ -1011,6 +1028,12 @@ function validateForm() {
                     body_add +='});';
                     body_add +='</'+'script>';
                     $("#contact-section-clone").append(body_add);
+
+                    var body_add ='';
+                    body_add +='<div class="col text-right">';
+                    body_add +='<button type="button" class="btn btn_remove_con" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="'+ contact_ct +'">X</button>';
+                    body_add +='</div>&nbsp;&nbsp;';
+                    $("#contact-clone-cancel-new"+contact_ct).append(body_add);
 
 					contact_ct++
 					$('.same_customer').each(function( index ) {                  
@@ -1236,43 +1259,87 @@ function validateForm() {
 				});
 
                 $('#insurance_company').change(function(){
-                    $.ajax({
-                        type:"post", 
-                        url: "includes/fx_insurance_products.php", 
-                        data: {
-                            action: 'get_product',
-                            id_product_categories: $(this).val()
-                    },
-                    success: function(result) {
-                        var obj = eval("(" + result + ")");
-                        $("#product_name option").remove();
-                        var options = $("#product_name");
-                        //don't forget error handling!
-                        $.each(obj, function(item) {
-                            options.append($("<option />").val(obj[item].id).text(obj[item].product_name));
-                        });                 
-                    }                 
+
+                    product_object.html('');
+                    $.get('get_product.php?id=' + $(this).val(),function(data){
+                        var result = JSON.parse(data);
+                        product_object.append($('<option></option>').val("").html("Select Product Name"));
+                        document.getElementById("product_cat").value = "";
+                        document.getElementById("sub_cat").value = "";
+                        $.each(result, function(index, item){
+                            product_object.append(
+                            $('<option></option>').val(item.id).html(item.product_name)
+                            );
+                        });
                     });
 
-                    $.ajax({
-                        type:"post", 
-                        url: "includes/fx_insurance_products.php", 
-                        data: {
-                            action: 'get_agent',
-                            id_product_categories: $(this).val()
-                    },
-                    success: function(result) {
-                        var obj = eval("(" + result + ")");
-                        $("#agent_name option").remove();
-                        var options = $("#agent_name");
-                        //don't forget error handling!
-                        $.each(obj, function(item) {
-                            options.append($("<option />").val(obj[item].id).text(obj[item].agent_namefull));
-                        });                 
-                    }                 
+                    var agent_name = $('#agent_name');
+                    agent_name.html('');
+                    $.get('get_agent.php?id=' + $(this).val(), function(data){
+                        var result = JSON.parse(data);
+                        agent_name.append($('<option></option>').val("").html("Select Agent Name"));
+                        $.each(result, function(index, item){
+                            agent_name.append(
+                                // $('<option></option>').val(item.id).html(item.title_name+" "+item.first_name+" "+item.last_name)
+                                $('<option></option>').val(item.id).html(item.agent_namefull)
+                            );
+                        });
+                        $("#agent_name").selectpicker('refresh');
                     });
-
                 });
+
+                var product_object = $('#product_name');
+                product_object.on('change', function(){
+                    var  product_id = $(this).val();
+                        document.getElementById("product_cat").value = "";
+                        document.getElementById("sub_cat").value = "";
+                        $.get('get_product_for_cat_and_sub.php?id=' + product_id, function(data){
+                            var result = JSON.parse(data);
+                            $.each(result, function(index, item){
+                                document.getElementById("product_cat").value = item.id_product_categories;
+                                document.getElementById("sub_cat").value = item.product_subcategories;
+                            });
+                        });
+                });
+
+                // $('#insurance_company').change(function(){
+                //     $.ajax({
+                //         type:"post", 
+                //         url: "includes/fx_insurance_products.php", 
+                //         data: {
+                //             action: 'get_product',
+                //             id_product_categories: $(this).val()
+                //     },
+                //     success: function(result) {
+                //         var obj = eval("(" + result + ")");
+                //         $("#product_name option").remove();
+                //         var options = $("#product_name");
+                //         //don't forget error handling!
+                //         $.each(obj, function(item) {
+                //             options.append($("<option />").val(obj[item].id).text(obj[item].product_name));
+                //         });                 
+                //     }                 
+                //     });
+
+                //     $.ajax({
+                //         type:"post", 
+                //         url: "includes/fx_insurance_products.php", 
+                //         data: {
+                //             action: 'get_agent',
+                //             id_product_categories: $(this).val()
+                //     },
+                //     success: function(result) {
+                //         var obj = eval("(" + result + ")");
+                //         $("#agent_name option").remove();
+                //         var options = $("#agent_name");
+                //         //don't forget error handling!
+                //         $.each(obj, function(item) {
+                //             options.append($("<option />").val(obj[item].id).text(obj[item].agent_namefull));
+                //         });                 
+                //     }                 
+                //     });
+
+                // });
 
 				
 				$('.corporate').hide();
@@ -1284,18 +1351,18 @@ function validateForm() {
 						$('.corporate').hide();
 						$('.personal').show();
                         document.getElementById('company_c_input').removeAttribute('required');
-                        document.getElementById('title_name').setAttribute("required","required");
+                        // document.getElementById('title_name').setAttribute("required","required");
                         document.getElementById('first_name').setAttribute("required","required");
-                        document.getElementById('last_name').setAttribute("required","required");
+                        // document.getElementById('last_name').setAttribute("required","required");
                         
 					}
 					if (val == 'Corporate') {
 						$('.corporate').show();
 						$('.personal').hide();
                         document.getElementById('company_c_input').setAttribute("required","required");
-                        document.getElementById('title_name').removeAttribute('required');
+                        // document.getElementById('title_name').removeAttribute('required');
                         document.getElementById('first_name').removeAttribute('required');
-                        document.getElementById('last_name').removeAttribute('required');
+                        // document.getElementById('last_name').removeAttribute('required');
                         
 					}
 				});

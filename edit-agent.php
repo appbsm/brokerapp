@@ -2,9 +2,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 
 <?php
-	session_start();
-	error_reporting(0);
 	include_once('includes/connect_sql.php');
+    session_start();
+    error_reporting(0);
 	include_once('includes/fx_insurance_products.php');
 	include_once('includes/fx_agent_db.php');
 	include_once('includes/fx_address.php');
@@ -19,6 +19,10 @@
 			if(count($agent_insurances)>0){
 				delete_insurance_list_data($conn,$_POST,$agent_insurances);
 			}
+
+            $under = get_partner_under($conn,$_POST['id']);
+            delete_partner_under_list($conn,$_POST,$under);
+
 			update_agent($conn, $_POST);
 			//print_r($_POST);
 		}
@@ -122,7 +126,7 @@
 
              <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Agent ID:</label>
-                <div class="col-2 label_left">
+                <div class="col-sm-2 label_left">
                     <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="agent_id" required="required" class="form-control" id="success" value="<?php echo $agent_id;?>" readOnly>
                
                 </div>
@@ -140,17 +144,17 @@
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Title:</label>
-                <div id="col_title" class="col-2 label_left ">
+                <div id="col_title" class="col-sm-2 label_left ">
                      <select id="input_title" style="border-color:#102958; color: #000;" name="title_name" class="form-control" id="default" >
                             <option value="Mr." <?php echo (trim($agent['title_name'])=="Mr.") ? 'selected' : '';?>>Mr.</option>
 							<option value="Ms." <?php echo (trim($agent['title_name'])=="Ms.") ? 'selected' : '';?>>Ms.</option>
 							<option value="Mrs." <?php echo (trim($agent['title_name'])=="Mrs.") ? 'selected' : '';?>>Mrs.</option>       
                         </select>    
                 </div>
-				<div class="col label_left">
+				<div class="col ">
 				</div>
 				<label style="color: #102958;" for="agent_type" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Agent Type:</label>
-                <div id="col_title" class="col-4 ">
+                <div id="col_title" class="col-sm-4 ">
                      <select id="agent_type" style="border-color:#102958; color: #000;" name="agent_type" class="form-control" id="default" required>
 						<option value="Primary" <?php echo (trim($agent['agent_type'])=="Primary") ? 'selected' : '';?> >Primary</option>
 						<option value="Sub-agent" <?php echo (trim($agent['agent_type'])=="Sub-agent") ? 'selected' : '';?> >Sub-agent</option>							    
@@ -160,22 +164,22 @@
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="first_name" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>First name:</label>
-                <div class="col-4">
+                <div class="col-sm-4">
                     <input id="input_fname" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="first_name" class="form-control" id="first_name"  value="<?php echo $agent['first_name'];?>" required>
                 </div>
 				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Last name:</label>
-                <div class="col-4">
+                <div class="col-sm-4">
                     <input id="input_lname" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="last_name" class="form-control" value="<?php echo $agent['last_name'];?>" required>
                 </div>
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
                	<label style="color: #102958;" for="nick_name" class="col-sm-2 col-form-label">Nickname:</label>
-                <div class="col-4">
+                <div class="col-sm-4">
                     <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="nick_name" class="form-control" value=<?php echo  $agent['nick_name'];?>>
                 </div>
 				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tax ID / Passport ID:</label>
-                <div class="col-4">
+                <div class="col-sm-4">
                     <!--<input minlength="13" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" name="tax_id"  class="form-control" id="tax_id" value="<?php echo $agent['tax_id'];?>" required pattern="\d{13}">-->
 					<input minlength="1" maxlength="13" style="color: #000;border-color:#102958;" type="text" name="tax_id"  class="form-control" id="tax_id" value="<?php echo $agent['tax_id'];?>"  >
                 </div>
@@ -184,13 +188,13 @@
 			<div class="form-group row col-md-10 col-md-offset-1">
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tel:</label>
-                <div class="col-4">
+                <div class="col-sm-4">
                     <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="tel" class="form-control" id="success" value="<?php echo $agent['tel'];?>" >
                 </div>
                
                 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Mobile:</label>
-                <div class="col-4">
+                <div class="col-sm-4">
                     <input minlength="10" maxlength="12" style="color: #000;border-color:#102958;" type="text" name="mobile" class="form-control" id="mobile" value="<?php echo $agent['mobile'];?>"  pattern="\d{3}-\d{3}-\d{4}">
                 </div>
 				<script>
@@ -203,7 +207,7 @@
 
             <div class="form-group row col-md-10 col-md-offset-1">
                  <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
-                <div class="col-4">
+                <div class="col-sm-4">
                     <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="email" name="email" class="form-control" id="success" value="<?php echo $agent['email'];?>" >
                 </div>
             </div>
@@ -243,7 +247,7 @@
 			
 			<div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Address No:</label>
-                <div class="col-2">
+                <div class="col-sm-2">
                     <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="<?php echo $agent['address_number'];?>" >
                 </div>
 				
@@ -312,15 +316,7 @@
 
             
 
-			<!-- 1 Start -->
-			<div class="form-group row col-md-10 col-md-offset-1">
-				<div  class="col-sm-12 text-right  ">
-					<div style="padding-top: 10px;">
-					 
-					 <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_insur" class="btn  btn-labeled" id="add-insurance">+ Add More Partner<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
-					</div>
-				</div>
-			</div>
+			
 
 		<!-- 1 End -->
                 <div class="panel-heading">
@@ -333,39 +329,25 @@
                 </div>
 
 
-	<?php $x=0;
+	<?php $index_under=0;
     $start_contact = "true";
     if (count($agent_insurances) > 0) { ?>
-        <?php foreach ($agent_insurances as $insu) { $x++; ?>
+        <?php foreach ($agent_insurances as $insu) { $index_under++; ?>
 
-         <?php if($start_contact=="false"){ ?>
-        <div id="con<?php echo $x; ?>" class="form-group row col-md-10 col-md-offset-1">
-            <div class="col text-right">
-                <button id="insu<?php echo $x; ?>"  type="button" class="btn btn_remove_insu" name="remove" style="background-color: #0275d8;color: #F9FAFA;"  >X</button>
-        </div></div>&nbsp;&nbsp;
+        <div id="insurance_section_insu<? echo $index_under; ?>">
+            <input hidden="true" id="id_insurance<? echo $index_under; ?>" name="id_insurance[]" type="text" value="<? echo $insu['id']; ?>" >
 
-        <script type="text/javascript">
-                $(document).on('click', '.btn_remove_insu', function() {
-                var button_id = $(this).attr("id");
-                    $('#insurance_section_' + button_id + '').remove();
-                    $('#' + button_id + '').remove();
-                });
-        </script>
-        <? }else{ $start_contact = "false"; } ?>
-
-        <div id="insurance_section_insu<? echo $x; ?>">
-            <input hidden="true" id="id_insurance<? echo $x; ?>" name="id_insurance[]" type="text" value="<? echo $insu['id']; ?>" >
-            <div class="form-group row col-md-10 col-md-offset-1">
+            <div class="form-group row col-md-11 col-md-offset-1">
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Under Code:</label>
-                <div class="col-sm-4">
-                    <input id="agent_code<?php echo $x; ?>" name="agent_code[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" id="agent_code" value="<?php echo $insu['under_code'];?>" >
+                <div class="col-sm-3">
+                    <input id="agent_code<?php echo $index_under; ?>" name="agent_code[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" id="agent_code" value="<?php echo $insu['under_code'];?>" >
                 </div>
 
                 <!-- hidden="true" -->
 				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Partner Name:</label>
                 <div class="col-sm-4">
-                    <select id="insurance_company<?php echo $x; ?>" name="insurance_company[]" style="color:#000;border-color:#102958;" class="form-control" value="" >
+                    <select id="insurance_company<?php echo $index_under; ?>" name="insurance_company[]" style="color:#000;border-color:#102958;" class="form-control" value="" >
                     <option value="" selected>Select Partner</option>
                     <?php foreach ($insurance as $i) {
                     
@@ -375,24 +357,109 @@
                     </select>
                 </div>
 
+                <?php if($start_contact=="false"){ ?>
+                <div class="col-1">
+                <div id="con<?php echo $index_under; ?>" >
+                    <div >
+                        <button id="insu<?php echo $index_under; ?>"  type="button" class="btn btn_remove_insu" name="remove" style="background-color: #0275d8;color: #F9FAFA;"  >X</button>
+                </div>
+                </div>
+
+                <script type="text/javascript">
+                        $(document).on('click', '.btn_remove_insu', function() {
+                        var button_id = $(this).attr("id");
+                            $('#insurance_section_' + button_id + '').remove();
+                            $('#' + button_id + '').remove();
+                        });
+                </script>
+                </div>
+                <? }else{ $start_contact = "false"; } ?>
+
+                <div class="col-1">
+                     <div class="under-clone-cancel<? echo $index_under; ?>" id="under-clone-cancel<? echo $index_under; ?>" ></div>
+                </div>
+
             </div>
+
+                <div class="form-group row col-md-11 col-md-offset-1">
+
+                    <div class="col-sm-2">
+                         <label style="color: #102958;" class="col-form-label" >Percentage Value:</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input id="agent_percent1" name="agent_percent[]" type="text" value="<?php echo number_format((float)$insu['percen_value'], 2, '.', ',').'%'; ?>" class="form-control" style="border-color:#102958;" onchange="
+                        var num = $(this).val().replace(/,/g,'');
+                        // if (/^\d*\.?\d+$/.test(num)) {
+                        if (parseFloat(num)) {
+                            if (parseFloat(num)>100){
+                                this.value=parseFloat(100.00).toFixed(2)+'%';
+                            }else{
+                                this.value=parseFloat(num).toFixed(2)+'%';
+                            } 
+                        }else{
+                            this.value='';
+                        }
+                    " />
+                    </div>
+
+                    <div class="col-sm-4">
+                        <input id="default_type_per1" name="default_type<? echo $index_under; ?>" value="Percentage" class="form-check-input" type="radio" 
+                        <?php if($insu['type_default']=='Percentage'){ echo "checked"; } ?> >
+                        <label style="color: #102958;" class="form-check-label" >
+                            &nbsp;&nbsp;&nbsp;&nbsp; Default Percentage
+                        </label>
+                    </div>
+
+                    <div class="col-1">
+                        <label></label>
+                    </div> 
+                </div>
+
+                <div class="form-group row col-md-11 col-md-offset-1">
+                    <div class="col-sm-2 " >
+                         <label style="color: #102958;" for="staticEmail" >Net Value:</label>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <input id="agent_net1" name="agent_net[]" type="text" value="<?php echo number_format((float)$insu['net_value'], 2, '.', ','); ?>" class="form-control" style="border-color:#102958;" onchange="
+                            var num = $(this).val().replace(/,/g,'');
+                            // if (parseFloat(num)) {
+                            if (/^\d*\.?\d+$/.test(num)) {
+                                 var value_con  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
+                                this.value=value_con;
+                            }else{
+                                this.value='';
+                            }
+                        "/>
+                    </div>
+                    <div class="col-sm-4">
+                        <input id="default_type_net1" name="default_type<? echo $index_under; ?>" value="Net Value" class="form-check-input" type="radio"
+                        <?php if($insu['type_default']=='Net Value'){ echo "checked"; } ?> >
+                        <label style="color: #102958;" class="form-check-label" >
+                            &nbsp;&nbsp;&nbsp;&nbsp; Default Net Value
+                        </label>
+                    </div>
+                    <div class="col-1">
+                    </div> 
+                </div>
+
         </div>
 
             <?php }
         }else{ ?>
-        <?php  $x++; ?>
+        <?php  $index_under++; ?>
 
-        <div id="insurance_section_insu<? echo $x; ?>">
-            <input hidden="true" id="id_insurance<? echo $x; ?>" name="id_insurance[]" type="text" value="" >
+        <div id="insurance_section_insu<? echo $index_under; ?>">
+            <input hidden="true" id="id_insurance<? echo $index_under; ?>" name="id_insurance[]" type="text" value="" >
             <div class="form-group row col-md-10 col-md-offset-1">
                 <!-- hidden="true" -->
 				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Agent Code:</label>
-                <div class="col-sm-4">
+                <div class="col-4">
                     <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="agent_code[]"  class="form-control" id="agent_code" value=""  required>
                 </div>
                 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Partner Company:</label>
-                <div class="col-sm-4">
+                <div class="col-4">
                     <select name="insurance_company[]" style="color:#000;border-color:#102958;" class="form-control" id="insurance_company" value="" required>
                     <option value="" selected>Select Partner</option>
                     <?php foreach ($insurance as $i) {
@@ -406,7 +473,17 @@
            </div>
         <?php } ?>
 
-			<div class="insurance-section-clone" id="insurance-section-clone" ></div>	
+			<div class="insurance-section-clone" id="insurance-section-clone" ></div>
+
+            <div class="form-group row col-md-12 ">
+                <div  class="col-sm-12 text-right  ">
+                    <div style="padding-top: 10px;">
+                     
+                     <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_insur" class="btn  " id="add-insurance">+ Add More Partner<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
+                    </div>
+                </div>
+            </div>
+
 			
             <div class="form-group row col-md-10 col-md-offset-1">
                 <div class="col-md-12">
@@ -543,14 +620,10 @@
 					console.log(selected);
 					$('#post_code').val(selected);
 				});
-                var insur_ct = 1;
-				$('#add-insurance').click(function(){			
-                    var body_add ='<div id="'+ insur_ct +'" class="form-group row col-md-10 col-md-offset-1">';
-                    body_add +='<div class="col text-right">';
-                    body_add +='<button type="button" class="btn btn_remove_insu_new" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="'+ insur_ct +'">X</button>';
-                    body_add +='</div></div>&nbsp;&nbsp;';
-                    $("#insurance-section-clone").append(body_add);  
-
+                // var insur_ct = 1;
+                var insur_ct = <?php echo $index_under; ?>;
+				$('#add-insurance').click(function(){
+                
                     clone = $('#insurance_section_insu1').clone();
                     clone.attr('id', 'insurance-section_new'+insur_ct);
                     clone.find("#id_insurance1").attr('id','id_insurance_new'+insur_ct);
@@ -558,9 +631,18 @@
                     clone.find("#agent_code1").val("");
                     clone.find("#insurance_company1").val("");
 
+                    clone.find("#under-clone-cancel1").attr('id','under-clone-cancel-new'+insur_ct);
+                    clone.find("#default_type_per1").prop('checked', true).attr('name','default_type'+(insur_ct+1));
+                    clone.find("#default_type_net1").removeAttr('checked').attr('name','default_type'+(insur_ct+1));
+                    clone.find("#agent_percent1").attr('id','agent_percent_new'+insur_ct).val("");
+                    clone.find("#agent_net1").attr('id','agent_net_new'+insur_ct).val("");
+
                     clone.appendTo(".insurance-section-clone");
                     document.getElementById("id_insurance_new"+insur_ct).value = "";
 
+                    var body_add ='<button type="button" class="btn btn_remove_insu_new" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="'+ insur_ct +'">X</button>';
+                    body_add +='';
+                    $("#under-clone-cancel-new"+insur_ct).append(body_add);
 
 
 				// $("#insurance_section_insu1").clone().attr('id', 'insurance-section_'+insur_ct).appendTo(".insurance-section-clone");

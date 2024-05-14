@@ -1,10 +1,9 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
 <?php
+include_once('includes/connect_sql.php');
 session_start();
 error_reporting(0);
-
-include_once('includes/connect_sql.php');
 include_once('includes/fx_partner_db.php');
 include_once('includes/fx_insurance_products.php');
 include_once('includes/fx_address.php');
@@ -28,9 +27,10 @@ $districts = get_district_by_province($conn, $provinces[0]['code']);
 $subdistricts = get_subdistrict_by_district($conn, $districts[0]['code']);
 $insurance_id = generate_partner_id($conn);
 $products = get_products($conn);
-// $agents = get_agents_under($conn);
 $agents = get_agents($conn);
 $currency = get_currency($conn);
+
+// $agents = get_agents_under($conn);
 ?>
 
 <!DOCTYPE html>
@@ -171,8 +171,7 @@ $currency = get_currency($conn);
                             <option value="2" >USD(ดอลลาร์สหรัฐ)</option>
                             <option value="3" >EUR(ยูโร)</option> -->
                         </select>
-                </div>
-				    
+                </div>    
 			</div>
 <!-- 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Email:</label>
@@ -326,15 +325,6 @@ $currency = get_currency($conn);
 </div>
 
 <div class="container-fluid">       
-    <div class="row">
-        <div  class="col-sm-12 text-right  ">
-			<div style="padding-top: 10px;">
-			 <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_banks" class="btn  btn-labeled" id="add-bank">+ Add More Bank<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
-			</div>
-		</div>
-
-    </div>
-
     <div  id="bank_section">
         <div class="panel">  
 
@@ -350,6 +340,8 @@ $currency = get_currency($conn);
                         </div>
                     </div>
                 </div>
+
+                <div class="bank-clone-cancel1" id="bank-clone-cancel1" ></div>
 
                 <div class="panel-body">
     			 <div class="form-group row col-md-10 col-md-offset-1" >
@@ -382,14 +374,26 @@ $currency = get_currency($conn);
         	</div> <!-- BANK SECTION --> 
 
             </div>
-        </div>
-    </div>
     </div>
 
     <div class="bank-section-clone" id="bank-section-clone" ></div>
+
+    <div class="row">
+        <div  class="col-sm-12 text-right  ">
+            <div style="padding-top: 10px;">
+                <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_banks" class="btn" id="add-bank">+ Add More Bank<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
+            </div>
+        </div>
+    </div>
+    <br/>
+
+</div>
+
+</div>
 </div>
 
 
+    
 
 <div class="container-fluid">
     <div class="row">
@@ -435,15 +439,6 @@ $currency = get_currency($conn);
                     </div>
 
                     <script>
-
-
-
-                    </script>
-
-                  
-
-
-                    <script>
                         document.getElementById("product_id").addEventListener("change", function() {
                             var value_period = $(this).val();
                             var selectedOptions = Array.from(this.selectedOptions).map(option => option.textContent);
@@ -485,15 +480,7 @@ $currency = get_currency($conn);
 
 
 <div class="container-fluid">
-    <div class="row">
-        <div  class="col-sm-12 text-right  ">
-            <div style="padding-top: 10px;">
-             
-             <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_under" class="btn  btn-labeled" id="add-under">+ Add More Under Code<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
-            </div>
-        </div>
-    </div> 
-
+     
     <div class="row " id="under_section">
     <div class="col-md-12 ">
         <div class="panel">
@@ -509,6 +496,11 @@ $currency = get_currency($conn);
                         </div>
                         
                 </div>
+
+                <div class=" text-right">
+                     <div class="under-clone-cancel1" id="under-clone-cancel1" ></div>
+                </div>
+
             </div>
 
             <div class="panel-body">
@@ -521,26 +513,70 @@ $currency = get_currency($conn);
 
 					<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Under Name:</label>
 					<div class="col-sm-4">
-                        <!-- data-live-search="true" selectpicker -->
-						<select style="color: #000;border-color:#102958;" name="agent_under[]" id="agent_under"  class="form-control " >
+						<select style="color: #000;border-color:#102958;" name="agent_under[]" id="agent_under" class="form-control " >
 							<option value="" selected>Select Agent</option>
     						<?php foreach ($agents  as $a) { ?>
     							<option value="<?php echo $a['id']?>"><?php echo $a['first_name'].' '.$a['last_name'];?></option>
-    						<?php } ?>	
-						</select>                    
-
+    						<?php } ?>
+						</select>
 					</div>
 					
 				</div>
-            </div>
+
+
+                <div class="form-group row col-md-10 col-md-offset-1">
+                    <div class="col-sm-2 " >
+                         <label style="color: #102958;" for="staticEmail" >Percentage Value:</label>
+                    </div>
+
+                    <div class="col-sm-4">
+                    <input id="agent_percent1" name="agent_percent[]" type="text" class="form-control" style="border-color:#102958;" />
+                    </div>
+
+                    <div class="col-sm-4">
+                        <input id="default_type_per1" name="default_type1" value="Percentage" class="form-check-input" type="radio" checked>
+                        <label style="color: #102958;" class="form-check-label" >
+                            &nbsp;&nbsp;&nbsp;&nbsp; Default Percentage
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group row col-md-10 col-md-offset-1">
+                    <div class="col-sm-2 " >
+                         <label style="color: #102958;" for="staticEmail" >Net Value:</label>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <input id="agent_net1" name="agent_net[]" type="text" class="form-control" style="border-color:#102958;" checked/>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <input id="default_type_net1" name="default_type1" value="Net Value" class="form-check-input" type="radio" >
+                        <label style="color: #102958;" class="form-check-label" >
+                            &nbsp;&nbsp;&nbsp;&nbsp; Default Net Value
+                        </label>
+                    </div>
+                </div>
+        </div>
        </div> 
 
        </div>
     </div>
     </div>
 
-    <div class="under-section-clone" id="under-section-clone" ></div>  
+    <div class="under-section-clone" id="under-section-clone" ></div> 
+
+    <div class="row">
+            <div  class="col-sm-12 text-right  ">
+                <div style="padding-top: 10px;">
+                 
+                 <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_under" class="btn " id="add-under">+ Add More Under Code<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
+                </div>
+            </div>
+    </div> 
+    <br/>
 </div>
+
 
         <script>
             // var selectElement = document.getElementById("agent_under");
@@ -562,26 +598,23 @@ $currency = get_currency($conn);
 
 
 <div class="container-fluid">            
-	<div class="row">
-		<div  class="col-sm-12 text-right  ">
-			<div style="padding-top: 10px;">
-			<button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_contacts" class="btn  btn-labeled" id="add-con">+ Add More Contact<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
-			</div>
-		</div>
-	</div>
-		
+
         <div class="row " id="contact-section">
             <div class="col-md-12 ">
                 <div class="panel">
                     <div class="panel-heading">
 
-                    <div class="form-group row col-md-10 col-md-offset-1" >
-                        <div class="col-sm-5 ">
-                            <div class="panel-title" style="color: #102958;" >
-                                <h2 class="title">Contact Person</h2>
+                        <div class="form-group row col-md-10 col-md-offset-1" >
+                            <div class="col-sm-5 ">
+                                <div class="panel-title" style="color: #102958;" >
+                                    <h2 class="title">Contact Person</h2>
+                                </div>
                             </div>
                         </div>
-                    </div>
+
+                        <div class=" text-right">
+                             <div class="contact-clone-cancel1" id="contact-clone-cancel1" ></div>
+                        </div>
 
                     </div>
    
@@ -603,9 +636,9 @@ $currency = get_currency($conn);
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1" >
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>First name:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">First name:</label>
                 <div class="col-4">
-                    <input id="contact_first_name" name="contact_first_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" required>
+                    <input id="contact_first_name" name="contact_first_name[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" >
                 </div>
 
                 <label  style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Last name:</label>
@@ -701,6 +734,15 @@ $currency = get_currency($conn);
 <!-- Contact Section Start -->
 
 <div class="contact-section-clone" id="contact-section-clone" ></div>	
+    
+    <div class="row">
+        <div  class="col-sm-12 text-right  ">
+            <div style="padding-top: 10px;">
+            <button style="background-color: #0275d8;color: #F9FAFA;" type="button" name="add_more_contacts" class="btn  " id="add-con">+ Add More Contact<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
+            </div>
+        </div>
+    </div>
+    <br/>
 
 </div>
            <!--  <div class="form-group row">
@@ -852,12 +894,6 @@ $currency = get_currency($conn);
 				
 				var bank_ct = 1;
 				$('#add-bank').click(function(){
-                    var body_add ='<div id="'+ bank_ct +'" >';
-                    body_add +='<div class="col text-right">';
-                    body_add +='<button type="button" class="btn btn_remove_bank" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="'+ bank_ct +'">X</button>';
-                    body_add +='</div></div>&nbsp;&nbsp;';
-                    $("#bank-section-clone").append(body_add);		
-
                     // clone.find("#contact_title_name").val("Mr.");
                     // clone.find("#contact_first_name").val("");
 
@@ -870,7 +906,14 @@ $currency = get_currency($conn);
                     clone.find("#bank_type").val("");
                     clone.find("#bank_account_name").val("");
 
+                    clone.find("#bank-clone-cancel1").attr('id','bank-clone-cancel-new'+bank_ct);
                     clone.appendTo(".bank-section-clone");
+
+                    var body_add ='<div id="'+ bank_ct +'" >';
+                    body_add +='<div class="col text-right">';
+                    body_add +='<button type="button" class="btn btn_remove_bank" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="'+ bank_ct +'">X</button>';
+                    body_add +='</div></div>&nbsp;&nbsp;';
+                    $("#bank-clone-cancel-new"+bank_ct).append(body_add);
 
 					bank_ct++;
 				});
@@ -882,21 +925,30 @@ $currency = get_currency($conn);
 				
 				var under_ct = 1;
 				$('#add-under').click(function(){	
-                    var body_add ='<div id="'+ under_ct +'" >';
-                    body_add +='<div class="col text-right">';
-                    body_add +='<button type="button" class="btn btn_remove_under" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="'+ under_ct +'">X</button>';
-                    body_add +='</div></div>&nbsp;&nbsp;';
-                    $("#under-section-clone").append(body_add);
-
-					// $("#under_section").clone().attr('id', 'under-section_'+under_ct).appendTo(".under-section-clone");
-
+                   
                     clone = $('#under_section').clone();
                     clone.attr('id','under-section_'+under_ct);
                     clone.find("#id_under").attr('id','id_under'+under_ct);
                     clone.find("#agent_code").attr('id','agent_code'+under_ct);
+
+                    // clone.find("#default_type1").attr('name','default_type'+(under_ct+1));
+                    clone.find("#default_type_per1").prop('checked', true).attr('name','default_type'+(under_ct+1));
+                    clone.find("#default_type_net1").removeAttr('checked').attr('name','default_type'+(under_ct+1));
+
+                    clone.find("#agent_percent1").attr('id','agent_percent_new'+under_ct).val("");
+                    clone.find("#agent_net1").attr('id','agent_net_new'+under_ct).val("");
+
+                    clone.find("#under-clone-cancel1").attr('id','under-clone-cancel-new'+under_ct);
                     clone.appendTo(".under-section-clone");
-                    document.getElementById("id_under"+under_ct).value = 0;
+
+                    // document.getElementById("id_under"+under_ct).value = "";
                     document.getElementById("agent_code"+under_ct).value = "";
+
+                    var body_add ='<div id="'+ under_ct +'" >';
+                    body_add +='<div class="col text-right">';
+                    body_add +='<button type="button" class="btn btn_remove_under" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="'+ under_ct +'">X</button>';
+                    body_add +='</div></div>&nbsp;&nbsp;';
+                    $("#under-clone-cancel-new"+under_ct).append(body_add);
 
 					under_ct++;
 				});
@@ -908,12 +960,6 @@ $currency = get_currency($conn);
 
                 var contact_ct = 1;
                 $('#add-con').click(function(){  
-                    var body_add ='<div id="'+ contact_ct +'" >';
-                    body_add +='<div class="col text-right">';
-                    body_add +='<button type="button" class="btn btn_remove_con" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="'+ contact_ct +'">X</button>';
-                    body_add +='</div></div>&nbsp;&nbsp;';
-                    $("#contact-section-clone").append(body_add);
-
                     // $("#contact-section").clone().attr('id', 'contact-section_'+contact_ct).appendTo(".contact-section-clone");
 
                     clone = $('#contact-section').clone();
@@ -927,6 +973,7 @@ $currency = get_currency($conn);
                     clone.find("#id_default1").attr('id','id_default'+(contact_ct+1));
                     clone.find("#hid_default1").attr('id','hid_default'+(contact_ct+1));
 
+                    clone.find("#contact_mobile").val("");
                     clone.find("#contact_mobile").attr('id','contact_mobile'+contact_ct);
 
                     clone.find("#contact_title_name").val("Mr.");
@@ -934,12 +981,14 @@ $currency = get_currency($conn);
                     clone.find("#contact_last_name").val("");
                     clone.find("#contact_nick_name").val("");
                     clone.find("#contact_tel").val("");
-                    clone.find("#contact_mobile").val("");
+                    
                     clone.find("#contact_email").val("");
                     clone.find("#contact_line_id").val("");
                     clone.find("#contact_position").val("");
                     clone.find("#contact_remark").val("");
                     clone.find("#department").val("");
+
+                    clone.find("#contact-clone-cancel1").attr('id','contact-clone-cancel-new'+contact_ct);
 
                     clone.appendTo(".contact-section-clone");
 
@@ -950,6 +999,14 @@ $currency = get_currency($conn);
                     body_add +='});';
                     body_add +='</'+'script>';
                     $("#contact-section-clone").append(body_add);
+
+                    var body_add ='<div id="'+ contact_ct +'" >';
+                    body_add +='<div class="col text-right">';
+                    body_add +='<button type="button" class="btn btn_remove_con" name="remove" style="background-color: #0275d8;color: #F9FAFA;" id="'+ contact_ct +'">X</button>';
+                    body_add +='</div></div>&nbsp;&nbsp;';
+                    $("#contact-clone-cancel-new"+contact_ct).append(body_add);
+
+
 
                     // document.getElementById("id_default"+(contact_ct+1)).checked = false;
                     // document.getElementById("id_default1").checked = true;

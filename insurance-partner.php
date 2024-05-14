@@ -1,18 +1,18 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
-
 //mb_internal_encoding("UTF-8");
-
+include_once('includes/connect_sql.php');
 session_start();
 error_reporting(0);
-include_once('includes/connect_sql.php');
 include_once('includes/fx_partner_db.php');
 
 if(strlen($_SESSION['alogin'])=="") {
     header('Location: logout.php');
 }
 
-$partners = get_partners($conn);
+// $partners = get_partners($conn);
+$partners = get_partners_search_start($conn);
+
 //print_r($partners);
 
 ?>
@@ -129,7 +129,7 @@ $partners = get_partners($conn);
 											<th>Contact Person</th>       
                                             <th>Contact Email</th>
                                             <!-- <th>Tel</th> -->
-                                            <th>Contact Mobile</th>
+                                            <th>Contact Tel</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -138,17 +138,17 @@ $partners = get_partners($conn);
                                         <?php 
 										$ctr = 1; 
 										foreach ($partners as $p) {
-										    $contact = get_partner_contact ($conn, $p['id']);
+										    // $contact = get_partner_contact ($conn, $p['id']);
 										?>
 										<tr>
                                             <!--<td class="text-center"><?php echo $ctr;?></td>-->
 											<td class="text-center"><?php echo $p['insurance_id'];?></td>
                                             <td><?php echo $p['insurance_company'];?></td>
                                             <td class="text-center"><?php echo $p['short_name_partner'];?></td>
-                                            <td> <?php echo $contact[0]['first_name'].' '.$contact[0]['last_name'];?></td>
+                                            <td> <?php echo $p['first_name'].' '.$p['last_name'];?></td>
 
-                                            <td><?php echo $p['email'];?></td>
-                                            <td class="text-center"><?php echo $p['phone'];?></td>
+                                            <td><?php echo $p['email_con'];?></td>
+                                            <td class="text-center"><?php echo $p['tel'];?></td>
                                             <td class="text-center"><?php echo ($p['status'] == 1) ? 'Active' : 'Inactive';?></td>
                                             <td class="text-center">
                                                 <a href="edit-partner.php?id=<?php echo $p['id'];?>"><i class="fa " title="Edit Record"></i>

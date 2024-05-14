@@ -1,21 +1,15 @@
 
 <?php
+	include('includes/config.php');
 	session_start();
 	error_reporting(0);
-	include('includes/config.php');
-	if(strlen($_SESSION['alogin'])=="")
-		{   
+	if(strlen($_SESSION['alogin'])==""){   
 		header("Location: index.php"); 
+	}else{
+		if(isset($_POST['back'])){
+			header("Location: manage-user.php"); 
 		}
-		else{
-
-			if(isset($_POST['back'])){
-				header("Location: manage-user.php"); 
-			}
-
-
-	if(isset($_POST['submit']))
-	{
+	if(isset($_POST['submit'])){
 
 	$product_name=$_POST['product_name'];
 	$product_note=$_POST['product_note'];

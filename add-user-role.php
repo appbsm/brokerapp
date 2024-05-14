@@ -1,7 +1,7 @@
 <?php
-	session_start();
-	error_reporting(0);
 	include('includes/config.php');
+	// session_start();
+	// error_reporting(0);
 	include('includes/config_path.php');
 	if(strlen($_SESSION['alogin'])=="")
 		{   
@@ -58,12 +58,12 @@
 	if(is_null($active)){
 		 $active=0;
 	}
-	$sql="INSERT INTO  user_info(name_title,username,password,role_name_id,status
+	$sql="INSERT INTO  user_info(name_title,username,password,password_decode,role_name_id,status
 		,first_name,last_name,nick_name,status_delete
-		,cdate,udate,create_by,position,mobile,tel,email,department".$sql_file_colume.")";
-	$sql.=" VALUES(:name_title_p,:username_p,:password_p,:id_role_p,:status_p
+		,cdate,udate,create_by,position,mobile,tel,email,id_company,department".$sql_file_colume.")";
+	$sql.=" VALUES(:name_title_p,:username_p,:password_p,:password_decode_p,:id_role_p,:status_p
 		,:first_name_p,:last_name_p,:nick_name_p,:status_delete_p
-		,GETDATE(),GETDATE(),:create_by_p,:position_p,:mobile_p,:tel_p,:email_p,:department_p".$sql_file_insert.")";
+		,GETDATE(),GETDATE(),:create_by_p,:position_p,:mobile_p,:tel_p,:email_p,:id_company_p,:department_p".$sql_file_insert.")";
 	echo '<script>alert("sql: '.$sql.'")</script>'; 
 	$query = $dbh->prepare($sql); 
 	$query->bindParam(':name_title_p',$name_title,PDO::PARAM_STR);
@@ -72,6 +72,8 @@
 	$query->bindParam(':nick_name_p',$nick_name,PDO::PARAM_STR);
 	$query->bindParam(':username_p',$username,PDO::PARAM_STR);
 	$query->bindParam(':password_p',md5($password),PDO::PARAM_STR);
+	$query->bindParam(':password_decode_p',$password,PDO::PARAM_STR);
+
 	$query->bindParam(':id_role_p',$id_role,PDO::PARAM_STR);
 	$query->bindParam(':position_p',$position,PDO::PARAM_STR);
 
@@ -79,6 +81,9 @@
 	$query->bindParam(':tel_p',$tel,PDO::PARAM_STR);
 	$query->bindParam(':email_p',$email,PDO::PARAM_STR);
 	$query->bindParam(':department_p',$department,PDO::PARAM_STR);
+
+	$id_company_p ="1";
+	$query->bindParam(':id_company_p',$id_company_p,PDO::PARAM_STR);
 
 	if($active==""){
 		$active="0";
@@ -125,6 +130,39 @@
 		// $id_role=3;
 		$name_title="Mr.";
 	}
+
+	/////////////////////////// gen id user
+	$sql = "SELECT TOP(1) * FROM user_info order BY id desc ";
+	$query = $dbh->prepare($sql);
+	$query->execute();
+	$results=$query->fetchAll(PDO::FETCH_OBJ);
+	// $id_username="1000";
+	// echo '<script>alert("results: '.count($results).'")</script>';
+	if(count($results)>0){
+		foreach($results as $result){
+			$number="";
+			$number_str = ltrim(substr($result->username, -4), '0');
+			if ($number_str === '') {
+				$id_username = "S"."001"."0001";
+			}else{
+				$number = intval($number_str+1);
+				// echo '<script>alert("number: '.$number.'")</script>';
+				if(strlen((string)$number) == 1) {
+					$number = "000".$number;
+				}else if(strlen((string)$number) == 2){
+					$number = "00".$number;
+				}else if(strlen((string)$number) == 3){
+					$number = "0".$number;
+				}else{
+					$number = $number;
+				}
+				$id_username = "S"."001".$number;
+			}
+		}
+	}else{
+		$id_username = "S"."001"."0001";
+	}
+	///////////////////////////
 
 ?>
 <!DOCTYPE html>
@@ -200,6 +238,22 @@
 	button {
 		font-family: Manrope, 'IBM Plex Sans Thai';
 	}
+	
+	@media (min-width: 1340px){
+		.label_left{
+			max-width: 130px;
+		}
+		.label_right{
+			max-width: 130px;
+		}
+	}
+	
+	.field-icon {
+        position: absolute;
+        right: 15px;
+        top: calc(50% - 12px);
+        cursor: pointer;
+    }
 	
 </style>
 
@@ -385,17 +439,52 @@
 
 									<div class="form-group row col-md-10 col-md-offset-1">
 										<div class="col-sm-2  label_left" >
-											<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Username:</label>
+											<label style="color: #102958;" for="success" class="control-label">Username:</label>
 										</div> 
 										<div class="col ">
-											 <input id="username" name="username" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $username; ?>" required="required" >
+											 <input id="username" name="username" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $id_username;
+											 //$username; ?>" readonly>
 										</div> 
 										<div class="col-sm-2  label_right" >
 											<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Password:</label>
 										</div> 
 										<div class="col ">
-											 <input id="password" name="password" minlength="4" maxlength="12" style="border-color:#102958;" type="password" class="form-control" value="" required="required" >
+											<input id="password" name="password" minlength="4" maxlength="12" style="border-color:#102958;" type="password" class="form-control" value="" required="required" >
+											<span toggle="#password" class="fa fa-fw fa-eye-slash field-icon toggle-password"></span>
 										</div>
+										<script>
+											document.querySelectorAll('.toggle-password').forEach(function(icon) {
+												icon.addEventListener('click', function() {
+													var target = document.querySelector(this.getAttribute('toggle'));
+													if (target.type === 'password') {
+														target.type = 'text';
+														this.classList.remove('fa-eye-slash');
+														this.classList.add('fa-eye');
+													} else {
+														target.type = 'password';
+														this.classList.remove('fa-eye');
+														this.classList.add('fa-eye-slash');
+													}
+												});
+											});
+
+											function valid() {
+												var password = document.getElementById("password").value;
+												// ตรวจสอบรหัสผ่านตามเงื่อนไข
+												var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+												if (!regex.test(password)) {
+													alert("Password must contain at least one lowercase letter, one uppercase letter, one numeric digit, one special character, and be at least 8 characters long.");
+													return false;
+												}
+
+												var confirmPassword = document.forms["chngpwd"]["confirmpassword"].value;
+												if (password !== confirmPassword) {
+													alert("Your Password do not match.");
+													return false;
+												}
+											}
+										</script>
 									</div>
 
 									<div class="form-group row col-md-10 col-md-offset-1">
@@ -588,17 +677,7 @@
 </html>
 <?php } ?>
 
-<style>
-@media (min-width: 1340px){
-    .label_left{
-        max-width: 130px;
-    }
-    .label_right{
-        max-width: 130px;
-    }
-}
 
-</style>
 
 <div id="loading-overlay">
     <img src="loading.gif" alt="Loading...">

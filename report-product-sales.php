@@ -1,7 +1,8 @@
 <?php
+
+include_once('includes/connect_sql.php');
 session_start();
 error_reporting(0);
-include_once('includes/connect_sql.php');
 // include_once('includes/fx_reports.php');
 include_once('includes/fx_reports-sales-product.php');
 
@@ -81,6 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <script src="js/DataTables/datatables.min.js"></script>
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css">
 
 </head>
 
@@ -129,6 +133,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <script>
+                        /*AA add */
+                        // var currentDate = new Date();
+                        // var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+                        // $('#date_from, #date_to').val(formattedDate);
+                        /*AA add */
+                        var emptyPost = "<?php echo (empty($_POST) ? 'true' : 'false'); ?>";
+                        if (emptyPost === 'false') {
+                            var startDate = "<?php echo $_POST['date_from']; ?>";
+                            if(startDate === ""){
+                                var currentDate = new Date();
+                                var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+                                $('#date_from').val(formattedDate);
+                            }
+                            var endDate = "<?php echo $_POST['date_to']; ?>";
+                            if(endDate === ""){
+                                var currentDate = new Date();
+                                var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+                                $('#date_to').val(formattedDate);
+                            }
+                        }else{
+                            var currentDate = new Date();
+                                var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+                                $('#date_from, #date_to').val(formattedDate);
+                        }
+                        /*AA add */
+
+
+                        /*AA add */
+
                       $(document).ready(function(){
                         $('#date_from').datepicker({
                           format: 'dd-mm-yyyy',
@@ -252,11 +285,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <th width="200px">Cust. Name</th>
                                             <th width="90px">Start Date</th>
                                             <th width="90px">End Date</th>
-                                            <th width="100px">Premium Amount</th>
+                                            
                                             <?php if($_POST['currency_conversion']=="true"){ ?>
-                                            <th class="converted" width="100px">Converted Value</th>
                                             <th class="converted" width="100px">Symbol</th>
+                                            <th class="converted" width="100px">Premium Rate</th>
                                             <?php }?>
+                                            <th width="100px">Premium Conv.(฿THB)</th>
+
                                             <th width="300px">Partner Company</th>
                                             <th width="200px">Agent</th>
                                             <th width="100px">Subagent</th>
@@ -302,11 +337,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <td></td>     
                                             <td></td>  
                                             <td></td>   
-                                             <td class="converted text-right"><?php echo number_format($total_primary_premium_rate, 2)?></td>
-                                             <?php if($_POST['currency_conversion']=="true"){ ?>
-                                             <td class="converted text-right"><?php echo number_format($total_converted_value, 2)?></td>       
-                                             <td ></td> 
-                                             <?php }?>
+                                            
+                                            <?php if($_POST['currency_conversion']=="true"){ ?>
+                                        <td ></td> 
+                                        <td class="converted text-right"><?php //echo number_format($total_converted_value, 2)?></td>       
+                                            <?php }?>
+                                        <td class="converted text-right"><?php echo number_format($total_primary_premium_rate, 2)?></td>
+
                                              <td></td> 
                                              <td></td>        
                                              <td class="text-right"><?php echo number_format($total_subagent_premium_rate, 2)?></td>     
@@ -327,44 +364,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <tr>
 
                                         <?php if($start_product=="true"){ $start_product="false"; ?>
-                                                <td class="text-center"><?php echo $ctr; $ctr++; ?></td>
-                                             <td><?php echo $s['product_name'];  ?></td> 
+                                            <td class="text-center"><?php echo $ctr; $ctr++; ?></td>
+                                            <td><?php echo $s['product_name'];  ?></td> 
+
                                         <?php }else{ ?> 
-                                        <?php if($id_product!=$s['product_name']){ ?>   
+
+                                        <?php if($id_product!=$s['product_name']){ ?>
+
                                             <td><?php echo $ctr; $ctr++; ?></td>
-                                            <td><?php echo $s['product_name']; ?></td> 
+                                            <td><?php echo $s['product_name']; ?></td>
+
                                         <?php }else{ ?>
+
                                             <td></td>
                                             <td></td>
+
                                         <?php } ?>
+
                                         <?php }//else start product ?> 
                                             <td><?php echo $s['policy_no']; ?></td>
                                             <td><?php echo $s['customer_name']; ?></td>
                                             <td class="text-center"><?php echo $s['in_start_date']; ?></td> 
                                             <td class="text-center"><?php echo $s['in_end_date']; ?></td>
-                                            <td class="text-right"><?php echo ($s['agent_type']!= 'Sub-agent') ? number_format( $s['premium_rate'], 2) : '';?></td>
+                                            
                                             <?php if($_POST['currency_conversion']=="true"){ ?>
-                                        
-                                            <td class="converted text-right"><?php 
-                                            if($s['premium_rate']!="" && $s['currency'] !="฿THB"  ){
-                                                if($s['currency_value']<$s['currency_value_convert']){
-                                                    $convert_f = number_format((float)($s['premium_rate']/$s['currency_value_convert']), 2, '.', ',');
-                                                    $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert_f));
-                                                    // $total_premium_rate_convert+=$convert_f;
-                                                    echo $convert_f;
-                                                }else{
-                                                    $convert_f = number_format((float)($s['premium_rate']*$s['currency_value']), 2, '.', ',');
-                                                    $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert_f));
-                                                    // $total_premium_rate_convert+=$convert_f;
-                                                    echo $convert_f;
-                                                }
-                                            }else{ echo "0.00"; $convert_f=0; }; 
-                                             ?></td>
                                             <td class="converted text-center"><?php echo $s['currency'];?></td>
+                                            <td class="converted text-right">
+                                            <?php 
+                                            // if($s['premium_rate']!="" && $s['currency'] !="฿THB"  ){
+                                            //     if($s['currency_value']<$s['currency_value_convert']){
+                                            //         $convert_f = number_format((float)($s['premium_rate']/$s['currency_value_convert']), 2, '.', ',');
+                                            //         $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert_f));
+                                            //         // $total_premium_rate_convert+=$convert_f;
+                                            //         echo $convert_f;
+                                            //     }else{
+                                            //         $convert_f = number_format((float)($s['premium_rate']*$s['currency_value']), 2, '.', ',');
+                                            //         $premium_rate_convert =$premium_rate_convert+((float)str_replace(',', '', $convert_f));
+                                            //         echo $convert_f;
+                                            //     }
+                                            // }else{ echo "0.00"; $convert_f=0; }; 
+                                            echo number_format($s['convertion_value'], 2, '.', ',');
+                                            ?>   
+                                            </td>
+                                            
                                             <?php } ?>
+
+                                            <td class="text-right">
+                                                <?php echo ($s['agent_type']!= 'Sub-agent') ? number_format( $s['premium_rate'], 2) : '';?>
+                                            </td>
+
                                             <td><?php echo $s['insurance_company'];?></td>
                                             <td><?php echo $s['agent_name']; ?></td>
+
                                             <td class="text-right"><?php echo ($s['agent_type']=='Sub-agent') ? number_format( $s['premium_rate'], 2) : '';?></td>
+                                            
                                              <td><?php echo $s['mobile_co'];?></td>
                                              <td><?php echo $s['email_co'];?></td>                                              
                                             <td><?php echo $s['remark_co'];?></td>                                                                                                     
@@ -409,17 +462,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <td></td>     
                                             <td></td>  
                                             <td></td>   
-                                             <td class="text-right"><?php echo number_format($total_primary_premium_rate, 2)?></td>     
-                                             <?php if($_POST['currency_conversion']=="true"){ ?>
-                                             <td class="converted text-right"><?php echo number_format($total_converted_value, 2)?></td>       
-                                             <td class="converted"></td> 
-                                             <?php }?>
-                                             <td></td> 
-                                             <td></td>        
-                                             <td class="text-right"><?php echo number_format($total_subagent_premium_rate, 2)?></td>     
-                                              <td></td>
-                                              <td></td> 
-                                              <td></td>                                                 
+                                            
+                                            <?php if($_POST['currency_conversion']=="true"){ ?>
+                                            <td class="converted"></td> 
+                                            <td class="converted text-right"><?php //echo number_format($total_converted_value, 2)?></td>
+                                            <?php }?>
+
+                                            <td class="text-right"><?php echo number_format($total_primary_premium_rate, 2)?></td> 
+
+                                            <td></td> 
+                                            <td></td>        
+                                            <td class="text-right"><?php echo number_format($total_subagent_premium_rate, 2)?></td>     
+                                            <td></td>
+                                            <td></td> 
+                                            <td></td>                                                 
                                         </tr>                                          
                                     <?php     
                                     $grand_total_primary_premium_rate += $total_primary_premium_rate;
@@ -439,11 +495,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <th></th>     
                                             <th></th>  
                                             <th></th>   
-                                            <th ><?php echo number_format($grand_total_primary_premium_rate, 2)?></th>     
+                                              
                                             <?php if($_POST['currency_conversion']=="true"){ ?>
-                                            <th class="converted"><?php echo number_format($grand_total_converted_value, 2)?></th>       
                                             <th class="converted"></th> 
+                                            <th class="converted"><?php //echo number_format($grand_total_converted_value, 2)?></th>       
                                             <?php }?>
+
+                                            <th ><?php echo number_format($grand_total_primary_premium_rate, 2)?></th>
+
                                             <th></th> 
                                             <th></th>        
                                             <th><?php echo number_format($grand_total_subagent_premium_rate, 2)?></th>     

@@ -127,13 +127,13 @@
 				",premium_rate".
 				",convertion_value".
 				",percent_trade,commission_rate,agent_id,file_name".
-				",file_name_uniqid,default_insurance,calculate_type,payment_status,paid_date,commission_status,cdate,create_by,reason)";
+				",file_name_uniqid,default_insurance,calculate_type,payment_status,paid_date,commission_status,cdate,create_by,reason,remark)";
 			$sql=$sql." VALUES (:insurance_company_p,:policy_no_p,:status_p,:product_category_p,:sub_categories_p".
 					",:insurance_company_id_p,:product_id_p,:period_p,:period_type_p,:period_day_p,:start_date_p,:end_date_p".
 					",:premium_rate_p".
 					",:convertion_value_p".
 					",:percent_trade_p,:commission_rate_p,:agent_id_p,:file_name_p".
-					",:file_name_uniqid_p,:default_insurance_p,:calculate_type_p,:payment_status_p,:paid_date_p,:commission_status_p,GETDATE(),:create_by_p,:reason_p)";
+					",:file_name_uniqid_p,:default_insurance_p,:calculate_type_p,:payment_status_p,:paid_date_p,:commission_status_p,GETDATE(),:create_by_p,:reason_p,:remark_p)";
 				$query = $dbh->prepare($sql); 
 
 				$query->bindParam(':insurance_company_p',$_POST['insurance_company'][$i],PDO::PARAM_STR);
@@ -185,6 +185,8 @@
 
 				$query->bindParam(':reason_p',$_POST['textarea_detail'][$i],PDO::PARAM_STR);
 				$query->bindParam(':create_by_p',$_SESSION['id'],PDO::PARAM_STR);
+
+				$query->bindParam(':remark_p',$_POST['remark'][$i],PDO::PARAM_STR);
 				 
 				if($start_policy=="true"){
 					$value=1;
@@ -474,8 +476,11 @@
 	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 	<script src="js/DataTables/datatables.min.js"></script>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-
+	 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css">
+	
 </head>
 
 <body id="page-top" >
@@ -498,8 +503,15 @@
         </div>
 
 <script>
+
 	function validateForm() {
-		// var tax_id_value = document.getElementById("tax_id").value;
+
+		if (policy_check=="false") {
+	        // document.getElementById("loading-overlay").style.display = "flex";
+	        alert("This policy already exist.");
+	        return false;
+	    }
+		
 		if (document.getElementById("name_c_input").value!="") {
 	        document.getElementById("loading-overlay").style.display = "flex";
 	        return true;
@@ -508,13 +520,14 @@
 	        return false;
 	    }	
 	}
+
 </script>
 
 <!-- <form method="post" onSubmit="return valid();" action = "validate.php" > -->
 <form method="post" action = "add-policy.php" enctype="multipart/form-data" onsubmit="
+return validateForm();
 $(this).find('select').prop('disabled', false);
 $(this).find('input').prop('disabled', false);
-return validateForm();
 " >
 <!-- <section class="section"> -->
 
@@ -544,6 +557,26 @@ return validateForm();
                     </div>
                 </div> 
 
+<script>
+var policy_check = "true";
+$(function(){
+    var policy_object = $('#policy');
+    policy_object.on('change', function(){
+        var policy_value = $(this).val();
+            $.get('get_policy.php?policy=' + policy_value, function(data){
+                var result = JSON.parse(data);
+                policy_check = "true";
+                $.each(result, function(index,item){
+                    if(item.id!=""){
+                        alert("This policy already exist.");
+                        policy_check="false";
+                    }
+                });
+            });
+    });
+});
+</script>        
+
         <div class="panel-body">
 
             <div class="form-group row col-md-10 col-md-offset-1" >
@@ -562,34 +595,6 @@ return validateForm();
                 <div class="col">
                 </div>
             </div>
-
-            <div class="form-group row mb-20 col-md-10 col-md-offset-1">
-                <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Policy Status:</label>
-                </div>
-                <div class="col-2">
-					<select id="status_i_input" name="status[]" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" required>
-						<!-- <option value="" selected>Select Status</option> -->
-						<option value="New">New</option>
-						<option value="Follow up">Follow up</option>
-						<option value="Renew">Renew</option>
-						<option value="Wait">Wait</option>
-						<option value="Not renew">Not renew</option>
-					</select>
-                </div>
-
-                <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" >Payment Status:</label>
-                </div> 
-                <div class="col-2 " >
-                     <select disabled="true" id="payment_status" name="payment_status[]" style="color: #000;border-color:#102958;" class="form-control"   >
-                        <option value="Paid" >Paid</option>
-                        <option value="Not Paid" >Not Paid</option>
-                    </select>
-                </div>
-                <div class="col-2" >
-                </div>
-            </div> 
 
             <div class="form-group row mb-20 col-md-10 col-md-offset-1">
                 <div class="col-sm-2  label_left" >
@@ -656,6 +661,21 @@ return validateForm();
 
             </div>
 
+            <div class="form-group row mb-20 col-md-10 col-md-offset-1">
+                <div class="col-sm-2 label_left" >
+                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Agent Name:</label>
+                </div>
+
+	            <div class="col-sm-4">
+	                <select id="agent_name" name="agent[]" style="color:#000;border-color:#102958;" class="form-control selectpicker" data-live-search="true" required>
+	                    <option value="" selected>Select Agent Name</option>
+	                    <?php  //foreach($results_agent as $result){ ?>
+	                        <!-- <option value="<?php //echo $result->id; ?>" ><?php //echo $result->title_name." ".$result->first_name." ".$result->last_name."(".$result->nick_name.")"; ?></option> -->
+	                    <? //} ?>
+	                </select>
+	            </div>
+	        </div>    
+
             <script>
 				function checkProductName() {
 				    var productName = document.getElementById("insurance_com").value;
@@ -668,8 +688,188 @@ return validateForm();
 				}
 			</script>
 
-            <!-- hidden="true" -->
-            <div class="form-group row mb-20 col-md-10 col-md-offset-1">
+			<script>
+				$(function(){
+					var percen_value = '';
+					var net_value = '';
+
+					var agent_name = $('#agent_name');
+					agent_name.on('change', function(){
+
+					    var id_agent = $(this).val();
+					    // alert('id_agent' + id_agent);
+					    var id_partner = document.getElementById("insurance_com").value;
+					    percen_value = '';
+						net_value = '';
+						document.getElementById("calculate").value = "";
+						document.getElementById("percent_trade").value = "";
+						document.getElementById("commission").value = "";
+
+						document.getElementById("calculate_popup").value = "";
+						document.getElementById("percent_trade_popup").value = "";
+						document.getElementById("commission_popup").value = "";
+
+						// alert('get_under.php?id_agent=' + id_agent + '&id_partner=' + id_partner);
+						$.get('get_under.php?id_agent=' + id_agent + '&id_partner=' + id_partner, function(data){
+						    var result = JSON.parse(data);
+						    $.each(result, function(index, item){
+						    	percen_value = item.percen_value;
+						    	net_value = item.net_value;
+						    	if(item.type_default=="Percentage"){
+						    	  document.getElementById("calculate").value = item.type_default;
+						          document.getElementById("percent_trade").value = parseFloat(item.percen_value).toFixed(2)+'%';
+						        	
+						          document.getElementById("calculate_popup").value = item.type_default;
+						          document.getElementById("percent_trade_popup").value = parseFloat(item.percen_value).toFixed(2)+'%';
+						          chang_commission_type();
+							    }else{
+							    	document.getElementById("calculate").value = item.type_default;
+						        	document.getElementById("percent_trade").value = parseFloat(item.net_value).toFixed(2);
+
+						        	document.getElementById("calculate_popup").value = item.type_default;
+						        	document.getElementById("percent_trade_popup").value = parseFloat(item.net_value).toFixed(2);
+						        	chang_commission_type();
+							    } 
+						    });
+						    
+						});
+
+					});
+
+					var calculate = $('#calculate');
+					calculate.on('change', function(){
+						if($(this).val()=="Percentage"){
+							document.getElementById("calculate").value = 'Percentage';
+						    document.getElementById("percent_trade").value = parseFloat(percen_value).toFixed(2)+'%';
+						        	
+						    document.getElementById("calculate_popup").value = 'Percentage';
+						    document.getElementById("percent_trade_popup").value = parseFloat(percen_value).toFixed(2)+'%';
+						    chang_commission_type();
+						}else{
+							document.getElementById("calculate").value = 'Net Value';
+						    document.getElementById("percent_trade").value = parseFloat(net_value).toFixed(2);
+						        	
+						    document.getElementById("calculate_popup").value = 'Net Value';
+						    document.getElementById("percent_trade_popup").value = parseFloat(net_value).toFixed(2);
+						    chang_commission_type();
+						}
+
+					}); 
+
+					function chang_commission_type() {
+						var commission = '';
+	                    if(document.getElementById('percent_trade').value!=''){
+	                    	var premiumInput = document.getElementById('convertion_value').value.replace(/,/g,'');
+	                        var premium = parseFloat(premiumInput).toFixed(2);
+
+	                        var percent = parseFloat(document.getElementById('percent_trade').value).toFixed(2);
+
+	                        if(document.getElementById('calculate').value=='Percentage'){
+
+	                        	if(document.getElementById('premium_rate').value!=''){
+		                            if (parseFloat(percent)>100){
+		                                document.getElementById('percent_trade').value=parseFloat(100.00).toFixed(2)+'%';
+		                            }else{
+		                                document.getElementById('percent_trade').value=parseFloat(percent).toFixed(2)+'%';
+		                            } 
+		                            var percent = parseFloat(document.getElementById('percent_trade').value).toFixed(2);
+		                            commission = ((percent / 100) * premium);
+	                        	}
+
+	                        }else if(document.getElementById('calculate').value=='Net Value'){
+	                            document.getElementById('percent_trade').value = percent;
+	                            // var commission = premium-percent;
+	                            commission = percent;
+	                        }
+	                        if(commission != ''){
+		                        var commissionNumber  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(commission);
+		                        document.getElementById('commission').value =commissionNumber;
+	                    	}else{
+	                    		document.getElementById('commission').value ='';
+	                    	}
+
+	                    }
+					}
+
+					var calculate = $('#calculate_popup');
+					calculate.on('change', function(){
+						if($(this).val()=="Percentage"){
+							document.getElementById("calculate").value = 'Percentage';
+						    document.getElementById("percent_trade").value = parseFloat(percen_value).toFixed(2)+'%';
+						        	
+						    document.getElementById("calculate_popup").value = 'Percentage';
+						    document.getElementById("percent_trade_popup").value = parseFloat(percen_value).toFixed(2)+'%';
+						    chang_commission_type_popup();
+						}else{
+							document.getElementById("calculate").value = 'Net Value';
+						    document.getElementById("percent_trade").value = parseFloat(net_value).toFixed(2);
+						        	
+						    document.getElementById("calculate_popup").value = 'Net Value';
+						    document.getElementById("percent_trade_popup").value = parseFloat(net_value).toFixed(2);
+						    chang_commission_type_popup();
+						}
+
+					}); 
+
+					function chang_commission_type_popup() {
+						if(document.getElementById('percent_trade_popup').value!=''){
+                        var premiumInput = document.getElementById('convertion_value_popup').value.replace(/,/g,'');
+                        var premium = parseFloat(premiumInput).toFixed(2);
+
+                        var percent = parseFloat(document.getElementById('percent_trade_popup').value).toFixed(2);
+
+                        if(document.getElementById('calculate_popup').value=='Percentage'){
+                            if (parseFloat(percent)>100){
+                                document.getElementById('percent_trade_popup').value=parseFloat(100.00).toFixed(2)+'%';
+                            }else{
+                                document.getElementById('percent_trade_popup').value=parseFloat(percent).toFixed(2)+'%';
+                            } 
+                            var percent = parseFloat(document.getElementById('percent_trade_popup').value).toFixed(2);
+                            var commission = ((percent / 100) * premium);
+
+                        }else if(document.getElementById('calculate_popup').value=='Net Value'){
+                            document.getElementById('percent_trade_popup').value = percent;
+                            var commission = percent;
+                        }
+                        if(commission!='NaN'){
+                            var commissionNumber  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(commission);
+                            document.getElementById('commission_popup').value =commissionNumber;
+                        }
+                    	}
+					}
+
+				}); 
+			</script>
+
+			<div class="form-group row mb-20 col-md-10 col-md-offset-1">
+                <div class="col-sm-2 label_left" >
+                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Policy Status:</label>
+                </div>
+                <div class="col-sm-2">
+					<select id="status_i_input" name="status[]" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" required>
+						<!-- <option value="" selected>Select Status</option> -->
+						<option value="New">New</option>
+						<option value="Follow up">Follow up</option>
+						<option value="Renew">Renew</option>
+						<option value="Wait">Wait</option>
+						<option value="Not renew">Not renew</option>
+					</select>
+                </div>
+
+                <div class="col-sm-2 label_left" >
+                    <label style="color: #102958;" >Payment Status:</label>
+                </div> 
+                <div class="col-sm-2" >
+                     <select disabled="true" id="payment_status" name="payment_status[]" style="color: #000;border-color:#102958;" class="form-control"   >
+                        <option value="Paid" >Paid</option>
+                        <option value="Not Paid" >Not Paid</option>
+                    </select>
+                </div>
+                <!-- <div class="col-2" >
+                </div> -->
+            </div> 
+
+            <div hidden="true" class="form-group row mb-20 col-md-10 col-md-offset-1">
             	<div class="col-6">
             		<input hidden="true" id="product_cat" name="product_cat[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control input_text" >
             	</div>
@@ -682,7 +882,7 @@ return validateForm();
                 <div class="col-sm-2  label_left" >
                     <label style="color: #102958;" >Currency:</label>
                 </div>
-                <div class="col-2">
+                <div class="col-sm-2">
                     <input type="text" id="currency" name="currency[]" style="border-color:#102958; color: #000;  text-align: center;" class="form-control"
                      value="<?php echo $currency_name; ?>" readOnly/>
                 </div>
@@ -690,7 +890,7 @@ return validateForm();
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Period type:</label>
                 </div>
-                <div class="col-2">
+                <div class="col-sm-2">
                     <select id="period_type" name="period_type[]"  style="color: #000;border-color:#102958;"class="form-control" required>
                         <option value="" selected>Select Period type</option>
                         <option value="Day" >Day</option>
@@ -701,7 +901,7 @@ return validateForm();
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Period:</label>
                 </div>
-                <div class="col-2">
+                <div class="col-sm-2">
                     <select hidden="true" id="period_month" name="period_month[]"  style="color: #000;border-color:#102958;"class="form-control" value="" required>
                         <option value="" selected>Select Period</option>
                         <?php  foreach($results_period as $result){ ?>
@@ -716,45 +916,44 @@ return validateForm();
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" id="datepicker" ><small><font color="red">*</font></small>Start Date:</label>
                 </div> 
-                <div class="col-2">
+                <div class="col-sm-2">
                     <input id="start_date" name="start_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control" value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" required>
                 </div>
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>End Date:</label>
                 </div> 
-                <div class="col-2">
+                <div class="col-sm-2">
                     <input id="end_date" name="end_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control" 
-                    value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" disabled required>
+                    value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" required>
                 </div>
-				<div class="col ">
-					<label style="color: red; font-size: 12px;" >
-						<I>Upon selecting the period, the system will automatically compute the end date.</I>
-					</label>
-				</div>
             </div>
 
 			<script>
 			  $(document).ready(function(){
+				// $('#start_date').datepicker({
+				//   format: 'dd-mm-yyyy',
+				//   language: 'en'
+				// });
+
 				$('#start_date').datepicker({
 				  format: 'dd-mm-yyyy',
 				  language: 'en'
-				});
+				}).on('changeDate', function(e) {
+                	updateEndDate();
+            	});
+
 				$('#end_date').datepicker({
 				  format: 'dd-mm-yyyy',
 				  language: 'en'
 				});
+
 				$('#paid_date').datepicker({
 				  format: 'dd-mm-yyyy',
 				  language: 'en'
 				});
-			  });
-			</script>
 
-			<script>
                 $('#period_type').change(function(){
-                    // var value_period = document.getElementById("period_type").value;
                     var value_period = $(this).val();
-                    // alert("value_period:"+value_period);
                     if(value_period == 'Day'){
                         document.getElementById("period_day").hidden = false;
                         document.getElementById("period_day").readOnly = false;
@@ -774,11 +973,16 @@ return validateForm();
                     }
                 });
 
-				  document.getElementById('period_day').addEventListener('input', updateEndDate);
-				  document.getElementById('period_month').addEventListener('input', updateEndDate);
-				  $('#start_date').on('change', function() { updateEndDate(); });
+				document.getElementById('period_day').addEventListener('input', updateEndDate);
+				document.getElementById('period_month').addEventListener('input', updateEndDate);
+
+				document.getElementById('start_date').addEventListener('input', updateEndDate);
+
+				// $('#start_date').on('change', function() { updateEndDate(); });
 
 			function updateEndDate() {
+				
+
 				var periodDayInput = document.getElementById('period_day');
 				var periodMonthInput = document.getElementById('period_month');
 				var startDateInput = document.getElementById('start_date');
@@ -803,6 +1007,7 @@ return validateForm();
 					  // แสดงวันที่ใน input end_date
 					  var formattedEndDate = endDate.getDate().toString().padStart(2, '0') + '-' + (endDate.getMonth() + 1).toString().padStart(2, '0') + '-' + endDate.getFullYear();
 					  endDateInput.value = formattedEndDate;
+					  $('#end_date').datepicker('update', formattedEndDate);
 					} else {
 					  // หากไม่มีค่าใน period_day หรือ start_date ก็เคลียร์ค่าใน input end_date
 					  endDateInput.value = '';
@@ -815,6 +1020,7 @@ return validateForm();
 						var formattedEndDate = endDate.getDate().toString().padStart(2, '0') + '-' + (endDate.getMonth() + 1).toString().padStart(2, '0') + '-' + endDate.getFullYear();
 						// endDateInput.value = addMonths(startDate, periodMonthInput.value);
 						endDateInput.value = formattedEndDate;
+					    $('#end_date').datepicker('update', formattedEndDate);
 					}else {
 					  // หากไม่มีค่าใน period_day หรือ start_date ก็เคลียร์ค่าใน input end_date
 					  endDateInput.value = '';
@@ -829,13 +1035,15 @@ return validateForm();
 					// currentDate.setMonth(currentDate.getMonth() + 3); // เพิ่ม 3 เดือน
 					return d;
 				  }
+
+			});
 			</script>
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Premium Rate:</label>
                 </div>
-                <div class="col-2">
+                <div class="col-sm-2">
                     <input id="premium_rate" name="premium_rate[]" type="test"  style="border-color:#102958;text-align: right; color: #000;" step="0.01" min="0" class="form-control text-end" 
                         onchange="
             //             var premium = parseFloat(this.value).toFixed(2);
@@ -877,7 +1085,7 @@ return validateForm();
            		<div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Conversion Value:</label>
                 </div> 
-                <div class="col-2">
+                <div class="col-sm-2">
                     <input id="convertion_value" name="convertion_value[]"  style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control" 
                     value="<?php //echo $paid_date; ?>"  readOnly>
                 </div>
@@ -885,11 +1093,14 @@ return validateForm();
                  <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Paid Date:</label>
                 </div>
-                <div class="col-2">
+                <div class="col-sm-2">
                     <input id="paid_date" name="paid_date[]"  style="color: #000;border-color:#102958; text-align: center;" type="test"  class="form-control" 
                     value="<?php echo $paid_date; ?>" placeholder="dd-mm-yyyy" required>
                 </div>
             </div>
+
+            <input hidden="true" id="partner_currency"  type="text" value="<?php echo $currency_value; ?>" >
+        <input hidden="true" id="partner_currency_value"  type="text" value="<?php echo $currency_value_convert; ?>" >
 
             <script>
         	$(function(){
@@ -963,38 +1174,46 @@ return validateForm();
             <div class="form-group row col-md-10 col-md-offset-1">    
 
                 <div class="col-sm-2 label_left" >
-                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Commission Type:</label>
+                    <label style="color: #102958;" for="staticEmail" >Commission Type:</label>
                 </div>
-                <div class="col-4 " >
+
+                <div class="col-sm-4 " >
                     <select id="calculate" name="calculate[]" value="<?php echo $result->product_category; ?>" style="color: #000;border-color:#102958;" class="form-control" 
                         onchange="
-                    if(document.getElementById('percent_trade').value!=''){
-                    	var premiumInput = document.getElementById('convertion_value').value.replace(/,/g,'');
-                        var premium = parseFloat(premiumInput).toFixed(2);
+                   	// var commission = '';
+                    // if(document.getElementById('percent_trade').value!=''){
+                    // 	var premiumInput = document.getElementById('convertion_value').value.replace(/,/g,'');
+                    //     var premium = parseFloat(premiumInput).toFixed(2);
 
-                        var percent = parseFloat(document.getElementById('percent_trade').value).toFixed(2);
+                    //     var percent = parseFloat(document.getElementById('percent_trade').value).toFixed(2);
 
-                        if(document.getElementById('calculate').value=='Percentage'){
-                            if (parseFloat(percent)>100){
-                                document.getElementById('percent_trade').value=parseFloat(100.00).toFixed(2)+'%';
-                            }else{
-                                document.getElementById('percent_trade').value=parseFloat(percent).toFixed(2)+'%';
-                            } 
-                            var percent = parseFloat(document.getElementById('percent_trade').value).toFixed(2);
-                            var commission = ((percent / 100) * premium);
+                    //     if(document.getElementById('calculate').value=='Percentage'){
 
-                        }else if(document.getElementById('calculate').value=='Net Value'){
-                            document.getElementById('percent_trade').value = percent;
-                            // var commission = premium-percent;
-                            var commission = percent;
-                        }
-                        if(commission!='NaN'){
-	                        var commissionNumber  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(commission);
-	                        document.getElementById('commission').value =commissionNumber;
-                    	}
-                    }
+                    //     	if(document.getElementById('premium_rate').value!=''){
+	                //             if (parseFloat(percent)>100){
+	                //                 document.getElementById('percent_trade').value=parseFloat(100.00).toFixed(2)+'%';
+	                //             }else{
+	                //                 document.getElementById('percent_trade').value=parseFloat(percent).toFixed(2)+'%';
+	                //             } 
+	                //             var percent = parseFloat(document.getElementById('percent_trade').value).toFixed(2);
+	                //             commission = ((percent / 100) * premium);
+                    //     	}
 
-                        " required/>
+                    //     }else if(document.getElementById('calculate').value=='Net Value'){
+                    //         document.getElementById('percent_trade').value = percent;
+                    //         // var commission = premium-percent;
+                    //         commission = percent;
+                    //     }
+                    //     if(commission != ''){
+	                //         var commissionNumber  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(commission);
+	                //         document.getElementById('commission').value =commissionNumber;
+                    // 	}else{
+                    // 		document.getElementById('commission').value ='';
+                    // 	}
+
+                    // }
+
+                        " />
                         <option value="" selected>Select Calculate by</option>
                         <option value="Percentage" >Percentage</option>
                         <option value="Net Value" >Net Value</option>
@@ -1006,55 +1225,63 @@ return validateForm();
 
         <div class="form-group row col-md-10 col-md-offset-1">
             <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Commission Value:</label>
+                    <label style="color: #102958;" for="staticEmail" >Commission Value:</label>
                 </div> 
-                <div class="col-2 " >
+                <div class="col-sm-2 " >
                     <input id="percent_trade" name="percent_trade[]" type="text" class="form-control" style="border-color:#102958;text-align: right; color: #000;" onchange="
-                        // var num = parseInt(parseFloat(this.value).toFixed(0));
-                         var num = $(this).val().replace(/,/g,'');
+                        var num = $(this).val().replace(/,/g,'');
+                        var commission ='';
 
-                        // if(Number.isInteger(num)){
                         if (parseFloat(num)) {
                         	var premiumInput = document.getElementById('convertion_value').value.replace(/,/g,'');
 							var premium = parseFloat(premiumInput).toFixed(2);
-                        // var premium = parseFloat(document.getElementById('convertion_value').value).toFixed(2);
-                        
                         if(document.getElementById('calculate').value=='Percentage'){
-                            if (parseFloat(num)>100){
-                                this.value=parseFloat(100.00).toFixed(2)+'%';
-                            }else{
-                                this.value=parseFloat(num).toFixed(2)+'%';
-                            } 
-                            var percent = parseFloat(this.value).toFixed(2);
-                            var commission = ((percent / 100) * premium);
+
+                        	if(document.getElementById('premium_rate').value!=''){
+	                        	num = num.replace('%', '');
+	                            if (parseFloat(num)>100){
+	                                this.value=parseFloat(100.00).toFixed(2)+'%';
+	                            }else{
+	                                this.value=parseFloat(num).toFixed(2)+'%';
+	                            }
+	                            var percent = parseFloat(this.value).toFixed(2);
+	                            commission = ((percent / 100) * premium);
+	                        }else{
+	                        	this.value=parseFloat(num).toFixed(2)+'%';
+	                        }
+
                         }else{
+                        	num = num.replace('%', '');
                         	document.getElementById('percent_trade').value = num;
                             var value_con  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
                         	this.value=value_con;
-                            var commission = num;
+                             commission = num;
                         }
                             // document.getElementById('commission').value =parseFloat(commission).toFixed(2);
-                        	if(commissionNumber!=''){
+                        	if(commission!=''){
 	                        	var commissionNumber  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(commission);
 	                        	document.getElementById('commission').value =commissionNumber;
+                        	}else{
+                        		document.getElementById('commission').value ='';
                         	}
+
                         }else{
                             this.value='';
                             document.getElementById('commission').value ='';
                         }
-                        " required/>
+                        " />
                 </div> 
                  <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Commission Rate:</label>
                 </div> 
-                <div class="col-2 " >
+                <div class="col-sm-2 " >
                     <input type="text" id="commission" name="commission[]" style="border-color:#102958;text-align: right; color: #000;" class="form-control" readOnly/>
                 </div>
 
-                <div class="col-2 label_left" >
+                <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Commission Status:</label>
                 </div> 
-                <div class="col-2 " >
+                <div class="col-sm-2 " >
                      <select disabled="true" id="commission_status" name="commission_status[]" style="color: #000;border-color:#102958;" class="form-control"   >
                         <!-- <option value="Paid" >Paid</option> -->
                         <option value="Not Paid" >Not Paid</option>
@@ -1064,30 +1291,27 @@ return validateForm();
 
        
         <div class="form-group row col-md-10 col-md-offset-1">
-                <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" >Agent Name:</label>
-                </div>
-
-            <div class="col-4">
-                <select id="agent_name" name="agent[]" style="color:#000;border-color:#102958;" class="form-control selectpicker" data-live-search="true" >
-                    <option value="" selected>Select Agent Name</option>
-                    <?php  //foreach($results_agent as $result){ ?>
-                        <!-- <option value="<?php //echo $result->id; ?>" ><?php //echo $result->title_name." ".$result->first_name." ".$result->last_name."(".$result->nick_name.")"; ?></option> -->
-                    <? //} ?>
-                </select>
-            </div>
-
+            
             <!-- <label style="color: #102958;" class="col-sm-12" >Upload Image File Size width:994 height:634</label> -->
 
             <div class="col-sm-2 label_left" >
-
                 <label style="color: #102958;" for="staticEmail"  >Upload Documents:</label>
             </div>
+
             <div class="col">
                 <div > 
                 	<!-- required -->
                     <input name="file_d[]" id="imgInp" type="file" style="width: 100%;" accept="application/pdf" >
                 </div>
+            </div>
+        </div>
+
+        <div  class="form-group row col-md-10 col-md-offset-1"  >
+        	<div class="col-sm-2 label_left" >
+                <label style="color: #102958;" >Remark:</label>
+            </div>
+            <div class="col " class="form-control" >
+                <textarea id="remark" name="remark[]" minlength="1"  style="color: #000;border-color:#102958;" rows="3" class="form-control" ></textarea>
             </div>
         </div>
 
@@ -1220,7 +1444,7 @@ return validateForm();
             <label style="color: #102958;" for="staticEmail" >Cust. Type:</label>
         </div>
 
-        <div class="col-3">
+        <div class="col-sm-3">
             <select id="type_c_input" name="type_c_input" type="hidden" onchange="ClickChange_personal()" style="border-color:#102958; color: #000;" class="form-control" disabled="true" >
                 <option value="" selected>Select Customer Type</option>
                 <option value="Personal">Personal</option>
@@ -1229,7 +1453,7 @@ return validateForm();
         </div>
         <!-- <input type="hidden" for="type_c_input"   /> -->
 
-        <div class="col-2 label_left" >
+        <div class="col-sm-2 label_left" >
             <input id="status_c_input" name="status_c_input"  class="form-check-input" type="checkbox" value="true" checked>
             <label style="color: #102958;" class="form-check-label" for="flexCheckDefault">
                         &nbsp;&nbsp;&nbsp;&nbsp; Active
@@ -1279,14 +1503,15 @@ return validateForm();
         <div class="col-sm-2 label_left" >
             <label style="color: #102958;" >Cust. ID:</label>
         </div>
-        <div class="col-3">
+        <div class="col-sm-3">
             <input id="customer_c_input" name="customer_c_input" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="" readOnly>
             
         </div>
             <div class="col-sm-1 label_left">
                 <label style="color: #102958;" >Cust. Level:</label>
-            </div>   
-            <div class="col">
+            </div>  
+
+            <div class="col-sm-2">
                 <select id="level_c_input" name="level_c_input" style="border-color:#102958; color: #000;" class="form-control" data-description="<?php echo $result->description;?>" disabled="true" >
                     <option value="0" selected>Select Cust. Level</option>
                     <?php  foreach($results_c_level as $result){ ?>
@@ -1295,7 +1520,7 @@ return validateForm();
                 </select>
             </div>
 
-            <div class="col-4 ">
+            <div class="col-sm-4 ">
                 <input id="customer_de" name="customer_de" style="color: #000;border-color:#102958;" type="text" class="form-control"  readOnly> 
             </div>
 
@@ -1326,7 +1551,7 @@ return validateForm();
     		<div class="col-sm-2 label_left personal" id="title_c_label" >
                 <label  style="color: #102958;" for="staticEmail" >Title:</label>
             </div>
-            <div id="title_input" class="col-3 personal"  >
+            <div id="title_input" class="col-sm-3 personal"  >
                 <select id="title_c_input" name="title_c_input" style="border-color:#102958;" class="form-control" disabled="true" >
                     <option value="" selected>Select Title</option>
                     <?php  if($name_title=="Mr."){ ?>
@@ -1593,7 +1818,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Title:</label>
                 </div>
-                <div  class="col-3 label_left">
+                <div  class="col-sm-3 label_left">
                      <select id="title_co" name="title_co[]" style="border-color:#102958; color: #000;" class="form-control" disabled="true">
                         <option value="" selected>Select Title </option>
                         <?php  if($name_title=="Mr."){ ?>
@@ -1857,16 +2082,33 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
             var currency_id = $(this).val();
             partner_currency="";
          	partner_currency_value="";
+
+         	// alert('currency_id:'+currency_id);
             $.get('get_currency_list.php?id=' + currency_id, function(data){
                 var result = JSON.parse(data);
-                $.each(result, function(index, item){
-                    document.getElementById("currency_id").value = item.id;
-                    document.getElementById("currency").value = item.currency;
-                    partner_currency = item.currency_value;
-                    partner_currency_value = item.currency_value_convert;
-                    document.getElementById("premium_rate").value = '';
-                    document.getElementById("convertion_value").value = '';
-                });
+                document.getElementById("partner_currency").value = "";
+                document.getElementById("partner_currency_value").value = "";
+
+	                $.each(result, function(index, item){
+	                	if(item.currency!="฿THB"&& item.currency!="THB" ){
+	                    	if(item.currency_value==null || item.currency_value_convert==null ){
+	                    		alert('Your currency conversion rate has expired. Kindly assess and update it accordingly.');
+	        					window.location.href ='currency_convertion.php';
+	                    	}
+	                    	// return false;
+	                    }
+	                    document.getElementById("currency_id").value = item.id;
+	                    document.getElementById("currency").value = item.currency;
+	                    document.getElementById("currency_popup").value = item.currency;
+	                    partner_currency = item.currency_value;
+		                partner_currency_value = item.currency_value_convert;
+
+		                document.getElementById("partner_currency").value = item.currency_value;
+                		document.getElementById("partner_currency_value").value = item.currency_value_convert;
+
+		                document.getElementById("premium_rate").value = '';
+		                document.getElementById("convertion_value").value = '';
+	                });
             });
 
             product_object.html('');
@@ -1942,8 +2184,11 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
 	                document.getElementById("sub_cat").value = item.product_subcategories;
 	            });
 	        });
-    	});	
+    	});
+
 </script>
+
+
 
  <script type="text/javascript">
     // $(function(){
