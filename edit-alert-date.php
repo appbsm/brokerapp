@@ -6,6 +6,7 @@ error_reporting(0);
 include_once('includes/fx_alert.php');
 if(strlen($_SESSION['alogin'])=="")
     {   
+	$dbh = null;
     header("Location: index.php"); 
     }
     $id = $_GET['id'];
@@ -15,6 +16,7 @@ if(strlen($_SESSION['alogin'])=="")
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_POST)) {
             update_alert($conn, $_POST);
+			$dbh = null;
             echo "<script>
 			window.location.href='alert-date-settings.php';
 			</script>";
@@ -79,10 +81,11 @@ if(strlen($_SESSION['alogin'])=="")
 </div>
 
 <?php if($msg){
-echo "<script>
-alert('Edit alert successfully!');
-window.location.href='alert-date-settings.php';
-</script>";
+	$dbh = null;
+	echo "<script>
+	alert('Edit alert successfully!');
+	window.location.href='alert-date-settings.php';
+	</script>";
 ?>
 <!--<div class="alert alert-success left-icon-alert" role="alert">
  <strong>Well done!</strong><?php echo htmlentities($msg); ?>
@@ -223,3 +226,5 @@ window.location.href='alert-date-settings.php';
 }
 
 </style>
+
+<?php $dbh = null;?>

@@ -24,3 +24,4 @@ foreach($results as $result){
 // }
 
 echo json_encode($json);
+$dbh = null;

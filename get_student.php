@@ -68,7 +68,7 @@ echo "<span style='color:red'> Result Already Declare .</span>";
  ?></p>
 <?php }
 
-
+$dbh = null;
   }?>
 
 

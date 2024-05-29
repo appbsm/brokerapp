@@ -10,3 +10,4 @@ foreach($results as $result){
     array_push($json, $result);
 }
 echo json_encode($json);
+$dbh = null;

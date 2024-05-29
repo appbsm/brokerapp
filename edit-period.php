@@ -2,10 +2,12 @@
 include('includes/config.php');
 session_start();
 error_reporting(0);
-if(strlen($_SESSION['alogin'])==""){   
+if(strlen($_SESSION['alogin'])==""){  
+	$dbh = null;
     header("Location: index.php"); 
 }else{
     if(isset($_POST['back'])){
+		$dbh = null;
         header("Location: manage-user.php"); 
     }
 
@@ -43,6 +45,7 @@ $query->execute();
 // if($lastInsertId){
 $msg="Class Created successfully";
 // echo '<script>alert("Successfully edited information.")</script>';
+$dbh = null;
 echo "<script>window.location.href ='period.php'</script>";
 }else{
     // $error="Repeated period data. Please try again";
@@ -287,3 +290,6 @@ if($_GET['id']){
 <div id="loading-overlay">
     <img src="loading.gif" alt="Loading...">
 </div>
+
+
+<?php $dbh = null;?>

@@ -6,8 +6,26 @@ error_reporting(0);
 include_once('includes/fx_reports-sales.php');
 
 if(strlen($_SESSION['alogin'])=="") {
+	$dbh = null;
     header('Location: logout.php');
 }
+
+    $status_view ='0';
+    $status_add ='0';
+    $status_edit ='0';
+    $status_delete ='0';
+    foreach ($_SESSION["application_page_status"] as $page_id) {
+        if($page_id["page_id"]=="11"){
+            $status_view =$page_id["page_view"];
+            $status_add =$page_id["page_add"];
+            $status_edit =$page_id["page_edit"];
+            $status_delete =$page_id["page_delete"];
+        }
+    }
+    if($status_view==0) {
+        $dbh = null;
+        header('Location: logout.php');
+    }
 
 $contacts=null;
 
@@ -118,6 +136,7 @@ $subcategories = get_product_subcategory($conn);
                             </div>
         </div>
 
+
             <div class="container-fluid">
                     <div class="card shadow mb-4">
                         <div class="card-header">
@@ -126,11 +145,11 @@ $subcategories = get_product_subcategory($conn);
                                 <h2 class="title m-5" style="color: #102958;">Report: Sales By Customer
                             </div>  
 
-                         
                         </div>
 
+
 <form method="post" action="report-customer-sales-total.php" >
-<div class="container-fluid">
+    <div class="container-fluid">
             <div >
                 <br>
                     <div class="form-group row col-md-12 ">
@@ -151,6 +170,7 @@ $subcategories = get_product_subcategory($conn);
 
 
                     </div>
+                    
 <script>
                         /*AA add */
                         var emptyPost = "<?php echo (empty($_POST) ? 'true' : 'false'); ?>";
@@ -192,7 +212,7 @@ $subcategories = get_product_subcategory($conn);
                             <select id="policy_no" name="policy_no" value="<?php echo $policy; ?>" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true" >
                                  <option value="all">All</option>
                                 <?php foreach ($insurance_policy as $p) { ?>
-                                <option value="<?php echo $p['id'];?>" <?php echo  ($policy == $p['id']) ? 'selected' : '';?>><?php echo $p['policy_no'];?></option>
+                                <option value="<?php echo $p['policy_no'];?>" <?php echo  ($policy == $p['policy_no']) ? 'selected' : '';?>><?php echo $p['policy_no'];?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -306,31 +326,35 @@ $subcategories = get_product_subcategory($conn);
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th width="200px">Cust. name</th>
-                                            <th width="200px">Contact person</th>
-                                            <th width="130px">Position</th>
-                                            <th width="200px">Email</th>
+                                            <th width="200px">Cust. Name</th>
+                                            <th width="200px">Cust. Email</th>
+                                            <th width="110px">Cust. Mobile</th>
 
-                                            <th width="110px">Cust. mobile</th>
                                             <th width="100px">Policy No</th>
                                             <th width="250px">Prod./Sub Categories</th>
+                                            <th width="100px">Status</th>
+
                                             <th width="90px">Start Date</th>
                                             <th width="90px">End Date</th>
 
                                             <?php if($status_currency=="true"){ ?>
-                                            <th class="text-center" >Symbol</th>
-                                            <th width="100px">Premium Rate</th>
+                                                <th class="text-center" >Symbol</th>
+                                                <th width="100px">Premium Rate</th>
                                             <?php } ?>
                                             
                                             <th class="text-center" >Premium Conv.(฿THB)</th>
 
-                                            <th width="100px">Status</th>
-                                            <th width="300px">Partner company</th>
-                                            <th width="200px">Contact partner Company</th>
-                                            <th width="200px">Underwriter department:-</th>
-                                            <th width="200px">Email</th>
-                                            <th width="110px">Mobile</th>
-                                            <th width="150px">Remark</th>
+                                            <th width="200px">Contact Person</th>
+                                            <th width="130px">Contact Position</th>
+                                            
+
+                                            
+                                            <th width="300px">Partner Company</th>
+                                            <th width="200px">Contact Partner Company</th>
+                                            <th width="200px">Underwriter Department:-</th>
+                                            <th width="200px">Contact Partner Email</th>
+                                            <th width="110px">Contact Partner Mobile</th>
+                                            <th width="150px">Contact Partner Remark</th>
                                         </tr>
                                     </thead>
                                     <tbody style="font-size: 13px;">
@@ -349,13 +373,10 @@ $subcategories = get_product_subcategory($conn);
                                         <tr>
                                             <!-- <td class="text-center" hidden="true" ><?php //echo $ctr; ?></td> -->
                                             <td class="text-center" ></td>
-                                            <!-- colspan="8" -->
                                             <td style="font-weight: bold;" class="text-right">Total</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
-                                            
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -370,7 +391,10 @@ $subcategories = get_product_subcategory($conn);
                                                 <td style="font-weight: bold;" class="text-right" >
                                                     <?php echo number_format((float)$premium_rate, 2, '.', ','); ?>
                                                 </td>
+
                                             
+                                            
+                                            <td></td>
 
                                             <td></td>
                                             <td></td>
@@ -383,18 +407,15 @@ $subcategories = get_product_subcategory($conn);
                                         <?php  }else{ $start="false"; } ?>
                                         <?php $id_customer=$value['id']; $premium_rate=0; $premium_rate_convert=0;  ?>
 										<tr>
-                                            <!-- <td class="text-center" hidden="true" ><?php //echo $ctr; ?></td> -->
-
                                             <td class="text-center"><?php echo $ctr; $ctr++; ?></td>
                                             <td><?php echo $value['full_name'];?></td>
-                                            <td><?php echo $value['first_name_con'].' '.$value['last_name_con'];?></td>
-                                            <td><?php echo $value['position'];?></td>
                                             <td><?php echo $value['email'];?></td>
                                             <td class="text-center"><?php echo $value['mobile'];?></td>
-                                            
+
                                             <td><?php echo $value['policy_no'];?></td>
                                             <td><?php echo $value['categorie']; if($value['subcategorie']!=""){ echo "/".$value['subcategorie'];} ?></td>
                                             
+                                            <td class="text-center" ><?php echo $value['in_status'];?></td>
                                             <td class="text-center"><?php echo $value['in_start_date'];?></td>
                                             <td class="text-center"><?php echo $value['in_end_date'];?></td>
 
@@ -437,7 +458,9 @@ $subcategories = get_product_subcategory($conn);
                                                 ?>
                                             </td>
 
-                                            <td class="text-center" ><?php echo $value['in_status'];?></td>
+                                            <td><?php echo $value['first_name_con'].' '.$value['last_name_con'];?></td>
+                                            <td><?php echo $value['position'];?></td>
+
                                             <td><?php echo $value['insurance_company'];?></td>
                                             <td><?php echo $value['first_name_p']." ".$value['last_name_p'];?>
                                             <td><?php echo $value['department_p'];?></td>
@@ -447,16 +470,16 @@ $subcategories = get_product_subcategory($conn);
 										</tr>
                                         <? }else{ ?>
                                         <tr>
-                                            <!-- <td class="text-center" hidden="true" ><?php //echo $ctr; ?></td> -->
                                             <td class="text-center" ><?php //echo $ctr; ?></td>
                                             <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            
+
+                                            <td><?php echo $value['email'];?></td>
+                                            <td class="text-center"><?php echo $value['mobile'];?></td>
+
                                             <td><?php echo $value['policy_no'];?></td>
                                             <td><?php echo $value['categorie']; if($value['subcategorie']!=""){ echo "/".$value['subcategorie'];} ?></td>
+
+                                            <td class="text-center" ><?php echo $value['in_status'];?></td>
                                             <td class="text-center"><?php echo $value['in_start_date'];?></td>
                                             <td class="text-center"><?php echo $value['in_end_date'];?></td>
 
@@ -495,7 +518,9 @@ $subcategories = get_product_subcategory($conn);
                                                 ?>  
                                             </td>
 
-                                            <td class="text-center" ><?php echo $value['in_status'];?></td>
+                                            <td><?php echo $value['first_name_con'].' '.$value['last_name_con'];?></td>
+                                            <td><?php echo $value['position'];?></td>
+
                                             <td><?php echo $value['insurance_company'];?></td>
                                             <td><?php echo $value['first_name_p']." ".$value['last_name_p'];?></td>
                                             <td><?php echo $value['department_p'];?></td>
@@ -511,11 +536,8 @@ $subcategories = get_product_subcategory($conn);
                                         <!-- end value -->
                                         <?php if(count($customers) > 0){  ?>
                                         <tr>
-                                            <!-- <td class="text-center" hidden="true" ><?php //echo $ctr; ?></td> -->
                                             <td class="text-center" ></td>
-                                            <!-- colspan="8" -->
                                             <td style="font-weight: bold;" class="text-right">Total</td>
-                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -535,6 +557,9 @@ $subcategories = get_product_subcategory($conn);
                                                 <?php echo number_format((float)$premium_rate, 2, '.', ','); ?>
                                             </td>
 
+                                            
+                                            <td></td>
+
                                             <td></td>
                                             <td></td>
                                             <td><?php echo "";?></td>
@@ -548,9 +573,8 @@ $subcategories = get_product_subcategory($conn);
                                     </tbody>
                                     <tfoot>
                                         <tr style="font-weight: bold;"> 
-                                             <td class="text-center" ></td>
+                                            <td class="text-center" ></td>
                                             <td style="font-weight: bold;" class="text-right" >GRAND TOTAL</td>
-                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -567,9 +591,12 @@ $subcategories = get_product_subcategory($conn);
                                              <?php } ?>
 
                                             <td style="font-weight: bold;" class="text-right" ><?php echo number_format((float)$total_premium_rate, 2, '.', ','); ?>
-                                                
                                             </td>
-                                       
+
+                                            
+                                           
+                                            <td></td>
+
                                             <td></td>
                                             <td></td>
                                             <td><?php echo "";?></td>
@@ -656,9 +683,36 @@ $subcategories = get_product_subcategory($conn);
         }
     </style>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
     $(document).ready(function(){
+
+        jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            "date-dd-mmm-yyyy-pre": function(a) {
+                return moment(a, 'DD-MM-YYYY').unix();
+            },
+            "date-dd-mmm-yyyy-asc": function(a, b) {
+                return a - b;
+            },
+            "date-dd-mmm-yyyy-desc": function(a, b) {
+                return b - a;
+            }
+        });
+
         var table = $('#example').DataTable({
+            "columnDefs": [
+                { 
+                    "targets": [7,8],
+                    "type": "date-dd-mmm-yyyy"
+                }
+            ],
+            scrollY: 400, // ตั้งค่าความสูงที่คุณต้องการให้แถวแรก freeze
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            fixedColumns: {
+                leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+            },
         "order": [], //Initial no order.
         "aaSorting": [], 
         "ordering": false,
@@ -738,3 +792,5 @@ $subcategories = get_product_subcategory($conn);
 
 </html>
 
+<?php sqlsrv_close($conn); ?>
+<?php $dbh = null;?>

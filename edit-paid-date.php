@@ -19,8 +19,9 @@
 			// delete_contact_list($conn,$_POST,$contacts);
 			// $insurance_info = get_customer_insurance ($conn,$_POST['id']);
 			// delete_insurance_list_data($conn,$_POST,$insurance_info);
-			// update_customer($conn, $_POST,$sourceFilePath);  
+			// update_customer($conn, $_POST,$sourceFilePath); 
             update_insurance_info($conn, $_POST);         
+			
 		}
 		// echo '<script>alert("Successfully edited information.")</script>';
 		$dbh = null;
@@ -89,10 +90,7 @@
 	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 	<script src="js/DataTables/datatables.min.js"></script> 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">  
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css">
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 </head>
 
 <style>
@@ -318,13 +316,13 @@
                 </div> 
 
                 <div class="col-2">
-                    <input  name="start_date[]" style="color: #0C1830;border-color:#102958; text-align: center;" type="text" class="form-control" value="<?php echo $result['start_date_day']; ?>" placeholder="dd-mm-yyyy" readOnly>
+                    <input id="start_date" name="start_date[]" style="color: #0C1830;border-color:#102958; text-align: center;" type="text" class="form-control" value="<?php echo $result['start_date_day']; ?>" placeholder="dd-mm-yyyy" readOnly>
                 </div>
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >End Date:</label>
                 </div> 
                 <div class="col-2">
-                    <input  name="end_date[]" style="color: #0C1830;border-color:#102958; text-align: center;" type="text"  class="form-control" 
+                    <input id="end_date" name="end_date[]" style="color: #0C1830;border-color:#102958; text-align: center;" type="text"  class="form-control" 
                     value="<?php echo $result['end_date_day']; ?>" placeholder="dd-mm-yyyy" readOnly>
                 </div>
             </div>
@@ -341,7 +339,7 @@
                 </div>
 
                 <div class="col-sm-2">
-                    <input id="premium_rate" name="premium_rate" type="text" value="<?php echo number_format((float)$result['convertion_value'], 2, '.', ','); ?>" style="border-color:#102958;text-align: right; color: #000;" step="0.01" min="0" class="form-control" />
+                    <input id="premium_rate" name="premium_rate[]" type="text" value="<?php echo number_format((float)$result['convertion_value'], 2, '.', ','); ?>" style="border-color:#102958;text-align: right; color: #000;" step="0.01" min="0" class="form-control" />
                 </div>      
 
                 <div class="col-sm-2 label_left" >
@@ -349,14 +347,14 @@
                 </div>
 
                 <div class="col-2"> 
-                    <input id="convertion_value" name="convertion_value" type="text" value="<?php echo number_format((float)$result['premium_rate'], 2, '.',','); ?>" style="border-color:#102958;text-align: right;" step="0.01" min="0" class="form-control"  readOnly />
+                    <input id="convertion_value" name="convertion_value[]" type="text" value="<?php echo number_format((float)$result['premium_rate'], 2, '.',','); ?>" style="border-color:#102958;text-align: right;" step="0.01" min="0" class="form-control"  readOnly />
                 </div>
                 
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Paid Date:</label>
                 </div> 
                 <div class="col-2">
-                    <input name="paid_date[]" style="color: #0C1830;border-color:#102958; text-align: center;" type="text"  class="form-control" 
+                    <input id="paid_date" name="paid_date[]" style="color: #0C1830;border-color:#102958; text-align: center;" type="text"  class="form-control" 
                     value="<?php echo $result['paid_date_day']; ?>" placeholder="dd-mm-yyyy" readOnly>
                 </div>
         </div>
@@ -548,7 +546,7 @@
                     <label style="color: #102958;" for="staticEmail" >Comm. Rate:</label>
                 </div> 
                 <div class="col-2 " >
-                    <input type="text" id="commission" name="commission" value="<?php echo number_format((float)$result['commission_rate'], 2, '.', ','); ?>" style="border-color:#102958;text-align: right;" class="form-control" readOnly/>
+                    <input type="text" id="commission" name="commission[]" value="<?php echo number_format((float)$result['commission_rate'], 2, '.', ','); ?>" style="border-color:#102958;text-align: right;" class="form-control" readOnly/>
                 </div>
 
                 

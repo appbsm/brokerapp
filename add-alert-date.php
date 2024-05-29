@@ -5,11 +5,13 @@ session_start();
 error_reporting(0);
 if(strlen($_SESSION['alogin'])=="")
     {   
+	$dbh = null;
     header("Location: index.php"); 
     }
     else{
 
         if(isset($_POST['back'])){
+			$dbh = null;
             header("Location: manage-user.php"); 
         }
 
@@ -137,10 +139,11 @@ $error="Something went wrong. Please try again";
 
 
 <?php if($msg){
-echo "<script>
-window.location.href='alert-date-settings.php';
-</script>";
-// alert('Added alert successfully!');
+	$dbh = null;
+	echo "<script>
+	window.location.href='alert-date-settings.php';
+	</script>";
+	// alert('Added alert successfully!');
 ?>
 <!--
 <div class="alert alert-success left-icon-alert" role="alert">
@@ -283,3 +286,5 @@ window.location.href='alert-date-settings.php';
 }
 
 </style>
+
+<?php $dbh = null;?>

@@ -4,9 +4,11 @@ include('includes/config.php');
 session_start();
 error_reporting(0);
 if(strlen($_SESSION['alogin'])==""){   
+	$dbh = null;
     header("Location: index.php"); 
 }else{
     if(isset($_POST['back'])){
+		$dbh = null;
         header("Location: manage-user.php"); 
     }
 
@@ -43,6 +45,7 @@ $query->execute();
 // $lastInsertId = $dbh->lastInsertId();
 // if($lastInsertId){
 $msg="Class Created successfully";
+$dbh = null;
 echo '<script>alert("Successfully edited information.")</script>';
 echo "<script>window.location.href ='currency_list.php'</script>";
 }else{
@@ -285,3 +288,5 @@ if($_GET['id']){
 <div id="loading-overlay">
     <img src="loading.gif" alt="Loading...">
 </div>
+
+<?php $dbh = null;?>

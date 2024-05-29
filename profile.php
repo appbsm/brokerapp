@@ -380,7 +380,7 @@ if(count($user_info)>0){
 							<label style="color: #102958;" for="success" class="control-label" ><small><font color="red">*</font></small>Username:</label>
 						</div> 
 						<div class="col ">
-							 <input id="username" name="username" minlength="4" maxlength="20" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $username; ?>" readonly>
+							 <input id="username" name="username" minlength="4" maxlength="20" style="border-color:#102958; color: #000;" type="text" class="form-control" value="<?php echo $username; ?>" >
 						</div>
 					</div>
 					<div class="form-group row col-lg-10 col-lg-offset-1" >
@@ -453,7 +453,14 @@ if(count($user_info)>0){
 							}
 
 							if (!validatePassword(newPassword)) {
-								alert("Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long.");
+								// alert("Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long.");
+								var text = "Your password is not strong, please using the following criteria:\n"+
+									"1.The password must have a minimum of 8 characters.\n"+
+									"2.It must include at least 1 uppercase letter.\n"+
+									"3.It must include at least 1 lowercase letter.\n"+
+									"4.It must include at least 1 digit.\n"+
+									"5.It must include at least 1 special character (e.g., @, !, #, $).";
+								alert(text);
 								return false;
 							}
 						}
@@ -590,3 +597,4 @@ if(count($user_info)>0){
     <img src="loading.gif" alt="Loading...">
 </div>
 
+<?php sqlsrv_close($conn); ?>

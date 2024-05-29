@@ -1,5 +1,5 @@
 <?php
-include_once('connect_sql.php');
+// include_once('connect_sql.php');
 include_once('fx_crud_db.php');
 
 function get_customers_sales_start($conn) {
@@ -45,6 +45,15 @@ LEFT JOIN currency_convertion cc ON  cc.id =
 
 ORDER BY full_name ASC";
 
+//   INNER JOIN (
+//     SELECT 
+//         policy_primary, MAX(cdate) AS max_cdate
+//     FROM 
+//         insurance_info where policy_no != ''
+//     GROUP BY 
+//         policy_primary
+// ) latest ON info.policy_primary = latest.policy_primary AND info.cdate = latest.max_cdate
+
  // AND  info.paid_date >= c_c.start_date and info.paid_date <= c_c.stop_date)
 
 // (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id = ip.id_currency_list
@@ -63,6 +72,16 @@ ORDER BY full_name ASC";
 }    
 
 function get_customers_sales_search($conn,$post_data) {
+
+    $sql_join_date = "";
+
+    if (isset($post_data['start_date']) && $post_data['start_date'] != '') {
+        $sql_join_date = " and start_date >= '".date("Y-m-d", strtotime($post_data['start_date']))."' ";
+    }
+    if (isset($post_data['end_date']) && $post_data['end_date'] != '') {
+        $sql_join_date = " and start_date <= '".date("Y-m-d", strtotime($post_data['end_date']))."' ";
+    }
+
     $result = array();
      $sql ="SELECT CASE WHEN cu.customer_type = 'Personal'
           THEN CONCAT(cu.first_name,' ',cu.last_name)
@@ -100,10 +119,20 @@ function get_customers_sales_search($conn,$post_data) {
 " AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1') ".
 " where info.policy_no != '' " ;
 
+//  INNER JOIN (
+//     SELECT 
+//         policy_primary, MAX(cdate) AS max_cdate
+//     FROM 
+//         insurance_info where policy_no != '' ".$sql_join_date.
+//    " GROUP BY 
+//         policy_primary
+// ) latest ON info.policy_primary = latest.policy_primary AND info.cdate = latest.max_cdate 
+
 // AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1'
 
 // " (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id = ip.id_currency_list ".
 // " OR cc.id_currency_list_convert    = cl.id ".
+
     if (isset($post_data['start_date']) && $post_data['start_date'] != '') {
         $sql .= " and info.start_date >= '".date("Y-m-d", strtotime($post_data['start_date']))."' ";
     }
@@ -118,7 +147,7 @@ function get_customers_sales_search($conn,$post_data) {
             $sql .= " and ip.id = ".$post_data['partner'];
         }
         if ($post_data['policy_no'] != 'all') {
-            $sql .= " and info.id = '".$post_data['policy_no']."' ";
+            $sql .= " and info.policy_no = '".$post_data['policy_no']."' ";
         }
         if ($post_data['status'] != 'all') {
             $sql .= " and info.status = '".$post_data['status']."' ";
@@ -195,11 +224,11 @@ function get_products($conn) {
 
 function get_policy_no ($conn) {
     $result = array();
-    $tsql = "select ii.id, ii.policy_no "
-        . "from insurance_info ii "
-        . "where policy_no IS NOT NULL AND  policy_no != ''"
-            . "order by policy_no "
-                        ;
+    $tsql = "SELECT max(ii.id), ii.policy_no 
+        from insurance_info ii 
+        where policy_no IS NOT NULL AND  policy_no != ''
+        GROUP BY policy_no
+        order by policy_no ";
     //echo $tsql;
     $stmt = sqlsrv_query( $conn, $tsql);
     if( $stmt === false) {

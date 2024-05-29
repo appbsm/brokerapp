@@ -63,6 +63,57 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <link rel="stylesheet" href="css/main.css" media="screen" >
         <script src="js/modernizr/modernizr.min.js"></script>
     </head>
+	
+	<style>
+		h1, h2, h3, h4, h5, h6, b, span, p, table, a, div, label, ul, li,
+		button {
+			font-family: Manrope, 'IBM Plex Sans Thai';
+		}
+		
+		body {
+		font-family: sans-serif;
+		margin: 0;
+		padding: 0;
+		/*background-color: #f4f4f4;
+		background-color: #0008ff6b;
+		background-color: #10295880;*/
+		/*background-color: #102958;*/
+		}
+
+		
+		
+		h4 {
+			text-align: center;
+			margin-bottom: 20px;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 5px;
+		}
+
+		input[type="text"],
+		input[type="password"] {
+			width: 100%;
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			margin-bottom: 20px;
+		}
+
+		
+		.btn {
+			padding: 10px 16px !important;
+		}
+		.btn:hover {
+			background-color: #102958 !important;
+		}
+		
+		.form-control {
+			height: 40px !important;
+		}
+	</style>
+	
     <body class="">
         <div class="main-wrapper">
 
@@ -74,28 +125,31 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                          <div class="col-lg-3">
                          </div>
                             <div class="col-lg-6">
-                                <section class="section">
-                                    <div class="text-center">
-                                <img src="images/logo_small.png" width="200" class="logo">
-                            </a>
-                            <h1 align="center">Smart Broker System</h1>
+                               
                             <div class="row mt-1">
-                                <!-- <div class="col-md-10 col-md-offset-1 pt-50"> -->
                                 <div class="col-md-10 col-md-offset-1 pt-1">
 
                                     <div class="row mt-30 "  >
                                         <div class="col-md-11" >
-                                            <div class="panel" >
+                                            <div class="panel"  style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); ">
+												<div class="panel-heading">
+													<div class="panel-title text-center row img-center " style="margin: 20px;">
+														<img src="images/logo_small.png" width="200" class="logo">
+													</div>
+													<div class="panel-title text-center ">
+														<h1 align="center" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Smart Broker System</h1>
+													</div>
+												</div>
                                                 <div class="panel-heading">
-                                                    <div class="panel-title text-center">
-                                                        <!-- <h4>Admin Login</h4> -->
+                                                    <div class="panel-title text-center" style="margin-top: 20px;">
+														<h4>Please enter your new password</h4>
                                                     </div>
                                                 </div>
                                                 <div class="panel-body p-20" >
 
                                                     <form class="form-horizontal" method="post">
                                                           <div class="col-sm-12 text-center"  >
-                                             <label>Please enter your new password</label><br>
+                                             <!--<label>Please enter your new password</label><br>-->
                                             </div> 
                                                     	<div class="form-group">
                                                     		<label class="col-sm-3 control-label">New Password</label>

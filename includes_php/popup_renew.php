@@ -2,11 +2,20 @@
     <div class="modal-dialog modal-lg" >
         <div class="modal-content">
             <div class="modal-header">
-            <div class="col-sm-12 px-3" class="text-left">
-                Please enter new information. 
+                <div class="col-sm-12 px-3" class="text-left">
+                    Please enter new information. 
+                </div>
             </div>
-            </div>  
             <div class="modal-body">
+
+            <div class="form-group row col-md-12">
+                <div class="col-sm-2  label_left"  >
+                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Policy No:</label>
+                </div>
+                <div class="col-sm-4 ">
+                    <input id="policy_popup"  minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $policy_no; ?>" required>
+                </div>
+            </div>
 
             <div class="form-group row col-md-12">
                 <!-- <div class="col-sm-2 " >
@@ -23,7 +32,7 @@
                 <div class="col-sm-2  label_left" >
                     <label style="color: #102958;" >Currency:</label>
                 </div>
-                <div class="col-2">
+                <div class="col-sm-2">
                     <input type="text" id="currency_popup" style="border-color:#102958; color: #000;  text-align: center;" class="form-control"
                      value="<?php echo $currency_name; ?>" readOnly/>
                 </div>
@@ -31,7 +40,7 @@
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Period type:</label>
                 </div>
-                <div class="col-2">
+                <div class="col-sm-2">
                     <select id="period_type_popup" style="color: #0C1830;border-color:#102958;"class="form-control" >
                         <!-- <option value="" selected>Select Period</option> -->
                         <option value="Day" <?php if($period_type=="Day"){ echo "selected";} ?> >Day</option>
@@ -42,7 +51,7 @@
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;"  ><small><font color="red">*</font></small>Period:</label>
                 </div>
-                <div class="col-2">
+                <div class="col-sm-2">
                     <?php if($period_type==""){ $period_type = "Day";} ?>
                     <select <?php if($period_type=="Day"){echo 'hidden="true"';} ?>  id="period_month_popup" style="color: #0C1830;border-color:#102958;"class="form-control" value="0"  >
                         <!-- <option value="" selected>Select Period</option> -->
@@ -82,18 +91,18 @@
             </script>
 
             <div class="form-group row col-md-12">
-                <div class="col-sm-2" >
+                <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" ><small><font color="red">*</font></small>Start date:</label>
                 </div> 
-                <div class="col-sm-4">
+                <div class="col-sm-2">
                     <input id="start_date_popup"  required="required" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" 
                     value="" placeholder="dd-mm-yyyy" >
                     <?php //echo $start_date; ?>
                 </div>
-                <div class="col-sm-2 " >
+                <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>End date:</label>
                 </div> 
-                <div class="col-sm-4">
+                <div class="col-sm-2">
                     <input id="end_date_popup"  required="required" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" 
                     value="" placeholder="dd-mm-yyyy" >
                     <?php //echo $stop_date; ?>
@@ -133,7 +142,7 @@
                         value="<?php echo number_format((float)$premium_rate, 2, '.', ''); ?>" readOnly/>
                 </div>  
 
-                <div class="col-sm-2 " >
+                <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Paid Date:</label>
                 </div> 
                 <div class="col-sm-2">
@@ -143,10 +152,10 @@
             </div>
 
             <div class="form-group row col-md-12">
-                <div class="col-sm-2 " >
+                <div class="col-sm-2 label_left" >
                      <label style="color: #102958;" for="staticEmail" >Commission Type:</label>
                 </div>
-                <div class="col-sm-4 " >
+                <div class="col-sm-2 " >
                     <select id="calculate_popup" value="<?php echo $result->product_category; ?>" style="color: #0C1830;border-color:#102958;" class="form-control" 
                         onchange="
                     // if(document.getElementById('percent_trade_popup').value!=''){
@@ -182,7 +191,7 @@
             </div> 
 
             <div class="form-group row col-md-12">
-                <div class="col-sm-2 " >
+                <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Commission Value:</label>
                 </div> 
                 <div class="col-sm-2 " >
@@ -217,13 +226,13 @@
                         }
                         " />
                 </div> 
-                 <div class="col-sm-2 " >
+                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Commission rate:</label>
                 </div> 
                 <div class="col-sm-2 " >
                     <input type="text" id="commission_popup" style="border-color:#102958;" class="form-control" value="<?php echo number_format((float)$commission_rate, 2, '.', ''); ?>" readOnly/>
                 </div>
-                 <div class="col-sm-2 " >
+                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Commission Status:</label>
                 </div> 
                 <div class="col-sm-2 " >
@@ -426,6 +435,8 @@
 <script >
     function click_payment() {
 
+        var value_policy_popup = document.getElementById("policy_popup").value;
+
         var value_start = document.getElementById("start_date_popup").value;
         var value_end = document.getElementById("end_date_popup").value;
         
@@ -436,7 +447,7 @@
         var commission = document.getElementById("commission_popup").value;
 
         
-        if(value_start=="" || value_end=="" || paid_date=="" || period_type=="" || premium_rate_pop=="" || commission=="" ){
+        if(value_start=="" || value_end=="" || paid_date=="" || period_type=="" || premium_rate_pop=="" || commission=="" || value_policy_popup=="" ){
             alert('Please enter complete information.');
         }else{
             
@@ -451,7 +462,7 @@
                     document.getElementById("period_month").hidden = true;
                     document.getElementById("period_month").removeAttribute('required');
                     document.getElementById("period_day").value = document.getElementById("period_day_popup").value;
-                }else if(period_type == "Month"){ 
+                }else if(period_type == "Month"){
                     document.getElementById("period_day").hidden = true;
                     document.getElementById("period_day").removeAttribute('required');
                     document.getElementById("period_month").hidden = false;
@@ -465,16 +476,25 @@
             var payment_status = document.getElementById("payment_status_popup").value;
 
             $("#period").selectpicker('refresh');
+
+            document.getElementById("policy").value = value_policy_popup;
             document.getElementById("period_type").value = period_type;
+
+            $('#start_date').datepicker('update', value_start);
+            $('#end_date').datepicker('update', value_end);
+            $('#paid_date').datepicker('update', paid_date);
+
             document.getElementById("start_date").value  = value_start;
             document.getElementById("end_date").value    = value_end;
+            document.getElementById("paid_date").value = paid_date;
+
             document.getElementById("premium_rate").value = value_premium;
             document.getElementById("percent_trade").value = value_percent;
 
             document.getElementById("calculate").value = calculate;
             document.getElementById("commission").value = commission;
             document.getElementById("payment_status").value = payment_status;
-            document.getElementById("paid_date").value = paid_date;
+            
 
 
             convertion_value_funtion();

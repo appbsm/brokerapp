@@ -4,7 +4,8 @@
 	session_start();
 	error_reporting(0);
 	if(strlen($_SESSION['alogin'])=="")
-		{   
+		{ 
+		$dbh = null;
 		header("Location: index.php"); 
 		}
 		else{
@@ -442,3 +443,7 @@ foreach($results_table as $result)
 <div id="loading-overlay">
     <img src="loading.gif" alt="Loading...">
 </div>
+
+
+
+<?php $dbh = null;?>

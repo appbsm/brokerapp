@@ -34,6 +34,7 @@ if($uname!="" and $password!=""){
         $_SESSION['role_name_id']= $result->role_name_id;
         $id_user = $result->role_name_id;
         $path_web = $result->path_web;
+       $_SESSION["system_admin"] = $result->system_admin;
     }
    
     if($query->rowCount() > 0){
@@ -44,6 +45,7 @@ if($uname!="" and $password!=""){
         $id_user = $result->role_name_id;
         // echo '<script>alert("alogin: '.$_SESSION['alogin'].'")</script>'; 
         if($id_user != ""){
+
         $sql_table = "SELECT ap.id AS page_id,rn.id,rn.role_name,rn.status,ur.id,ur.page_view ".
         " ,ur.page_add,ur.page_edit,ur.page_delete ".
         " ,ap.application_name,ap.type ".
@@ -51,15 +53,26 @@ if($uname!="" and $password!=""){
         " join user_role ur on rn.id = ur.id_role_name ".
         " JOIN application_page ap ON ap.id = ur.id_application ".
         " WHERE ur.status = 1 and ur.page_view = 1  AND rn.id = ".$id_user." ORDER BY ap.sort asc";
-        // echo '<script>alert("sql role: '.$sql_table.'")</script>'; 
+        
         // print($sql_table);
         $query_table = $dbh->prepare($sql_table);
         $query_table->execute();
         $results_table=$query_table->fetchAll(PDO::FETCH_OBJ);
         $role_name ="";
             $_SESSION["application_page"] = null;
-        $id_page = 0;
+            $id_page = 0;
             foreach($results_table as $result){ 
+
+                $page_data = array(
+                    "page_id" => $result->page_id,
+                    "page_view" => $result->page_view,
+                    "page_add" => $result->page_add,
+                    "page_edit" => $result->page_edit,
+                    "page_delete" => $result->page_delete,
+                    "status" => $result->status
+                );
+                $_SESSION["application_page_status"][$id_page] = $page_data;
+
                 $_SESSION["application_page"][$id_page] = $result->page_id;
 
                 if($result->type == "entry"){
@@ -78,17 +91,17 @@ if($uname!="" and $password!=""){
 
                 $id_page++;
             }
+            $dbh = null; 
         }
-
         echo "<script>window.location.href ='Dashboard.php'</script>";
     }else{
+        $dbh = null; 
         echo "<script>window.location.href ='index.php'</script>";
     }
 
-    
-
 }else{
-     echo "<script>window.location.href ='index.php'</script>";
+    $dbh = null; 
+    echo "<script>window.location.href ='index.php'</script>";
 }
-   
+  $dbh = null; 
 ?>

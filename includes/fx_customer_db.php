@@ -1,22 +1,22 @@
 <?php
-include_once('connect_sql.php');
+// include_once('connect_sql.php');
 include_once('fx_crud_db.php');
 
-if ($_GET['action'] == 'del') {
-	$policy_list = check_policy($conn,$_GET['id']);
-	if(count($policy_list)==0){
-		$data['id'] = $_GET['id'];
-		$data['table'] = 'customer';
-		delete_table($conn, $data);
-		echo '<script>alert("Success deleted.")</script>';
-		echo "<script>window.location.href ='../customer-information.php'</script>";
-		// header('Location: ../customer-information.php');
-	}else{
-        // echo '<script>alert("There is already information in the Entry Policy. The information cannot be deleted.")</script>';
-        echo '<script>alert("This data cannot be deleted due to its usage history in the system, but it can only be marked as inactive.")</script>';
-        echo "<script>window.location.href ='../customer-information.php'</script>";
-    }
-}
+// if ($_GET['action'] == 'del') {
+// 	$policy_list = check_policy($conn,$_GET['id']);
+// 	if(count($policy_list)==0){
+// 		$data['id'] = $_GET['id'];
+// 		$data['table'] = 'customer';
+// 		delete_table($conn, $data);
+// 		echo '<script>alert("Success deleted.")</script>';
+// 		echo "<script>window.location.href ='../customer-information.php'</script>";
+// 		// header('Location: ../customer-information.php');
+// 	}else{
+//         // echo '<script>alert("There is already information in the Entry Policy. The information cannot be deleted.")</script>';
+//         echo '<script>alert("This data cannot be deleted due to its usage history in the system, but it can only be marked as inactive.")</script>';
+//         echo "<script>window.location.href ='../customer-information.php'</script>";
+//     }
+// }
 
 function check_policy($conn,$id) {
 	$result = array();
@@ -54,6 +54,79 @@ function get_customers($conn) {
 	return $result;
 }
 
+function get_customers_contact_search_start($conn) {
+	$result = array();
+	$sql = "SELECT pr.name_en AS name_en_province,di.name_en AS name_en_district,su.name_en AS name_en_sub
+	,con.email AS con_email,con.mobile AS con_mobile
+	,CASE WHEN ct.customer_type = 'Personal'
+      THEN CONCAT(ct.first_name,' ',ct.last_name)
+      ELSE ct.company_name
+      END as full_name
+     ,CONCAT(con.first_name,' ',con.last_name) as full_name_con
+	,con.position,cl.level_name,ct.* FROM customer ct 
+	LEFT JOIN customer_level cl ON ct.customer_level = cl.id
+	LEFT JOIN rela_customer_to_contact re ON re.id_customer = ct.id
+ 	 JOIN contact con ON con.id = re.id_contact
+ 	LEFT JOIN provinces pr ON ct.province = pr.code
+ LEFT JOIN district di ON ct.district = di.code
+ LEFT JOIN subdistrict su ON ct.sub_district = su.code
+ 	 ";
+ 	 // WHERE con.default_contact =1
+	$sql = $sql." order by ct.customer_id asc ";
+	$stmt = sqlsrv_query( $conn, $sql);  
+	if( $stmt === false) {
+		die( print_r( sqlsrv_errors(), true) );
+	}
+	while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC))    
+	{    
+		$result[] = $row;
+	} 
+
+	return $result;
+}
+
+function get_customers_contact_search($conn,$post_data) {
+	$result = array();
+	$sql = "SELECT pr.name_en AS name_en_province,di.name_en AS name_en_district,su.name_en AS name_en_sub
+	,con.email AS con_email,con.mobile AS con_mobile
+	,CASE WHEN ct.customer_type = 'Personal'
+      THEN CONCAT(ct.first_name,' ',ct.last_name)
+      ELSE ct.company_name
+      END as full_name
+      ,CONCAT(con.first_name,' ',con.last_name) as full_name_con
+	,con.position,cl.level_name,ct.* FROM customer ct 
+	LEFT JOIN customer_level cl ON ct.customer_level = cl.id
+	LEFT JOIN rela_customer_to_contact re ON re.id_customer = ct.id
+ 	JOIN contact con ON con.id = re.id_contact
+ 	LEFT JOIN provinces pr ON ct.province = pr.code
+ 	LEFT JOIN district di ON ct.district = di.code
+ 	LEFT JOIN subdistrict su ON ct.sub_district = su.code
+ 	 WHERE ct.customer_id !='' ";
+			// echo '<script>alert("Sql : '.$sql.'")</script>'; 
+
+	if($post_data['status']!="all"){
+		$sql = $sql." and ct.status = '".$post_data['status']."' ";
+	}
+
+	if($post_data['customer']!="all"){
+		// $sql = $sql." and CONCAT(ct.first_name,' ',ct.last_name) = '".$post_data['customer']."'";
+		$sql = $sql." and ct.id = '".$post_data['customer']."' ";
+	}
+
+	$sql = $sql." order by ct.customer_id asc ";
+	// echo '<script>alert("Sql : '.$sql.'")</script>'; 
+	$stmt = sqlsrv_query( $conn, $sql);  
+	if( $stmt === false) {
+		die( print_r( sqlsrv_errors(), true) );
+	}
+	while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC))    
+	{    
+		$result[] = $row;
+	} 
+
+	return $result;
+}
+
 function get_customers_search_start($conn) {
 	$result = array();
 // 	$sql = "SELECT pr.name_th AS name_th_province,di.name_th AS name_th_district,su.name_th AS name_th_sub
@@ -73,6 +146,7 @@ function get_customers_search_start($conn) {
       THEN CONCAT(ct.first_name,' ',ct.last_name)
       ELSE ct.company_name
       END as full_name
+     ,CONCAT(con.first_name,' ',con.last_name) as full_name_con
 	,con.position,cl.level_name,ct.* FROM customer ct 
 	LEFT JOIN customer_level cl ON ct.customer_level = cl.id
 	LEFT JOIN rela_customer_to_contact re ON re.id_customer = ct.id
@@ -81,7 +155,7 @@ function get_customers_search_start($conn) {
  LEFT JOIN district di ON ct.district = di.code
  LEFT JOIN subdistrict su ON ct.sub_district = su.code
  	WHERE con.default_contact =1 ";
-	$sql = $sql." order by LTRIM(ct.first_name) asc ";
+	$sql = $sql." order by ct.customer_id asc ";
 	$stmt = sqlsrv_query( $conn, $sql);  
 	if( $stmt === false) {
 		die( print_r( sqlsrv_errors(), true) );
@@ -105,6 +179,7 @@ function get_customers_search($conn,$post_data) {
       THEN CONCAT(ct.first_name,' ',ct.last_name)
       ELSE ct.company_name
       END as full_name
+      ,CONCAT(con.first_name,' ',con.last_name) as full_name_con
 	,con.position,cl.level_name,ct.* FROM customer ct 
 	LEFT JOIN customer_level cl ON ct.customer_level = cl.id
 	LEFT JOIN rela_customer_to_contact re ON re.id_customer = ct.id
@@ -123,7 +198,7 @@ function get_customers_search($conn,$post_data) {
 		$sql = $sql." and ct.id = '".$post_data['customer']."'";
 	}
 
-	$sql = $sql." order by LTRIM(ct.first_name) asc ";
+	$sql = $sql." order by ct.customer_id asc ";
 	echo '<script>alert("Sql : '.$sql.'")</script>'; 
 	$stmt = sqlsrv_query( $conn, $sql);  
 	if( $stmt === false) {

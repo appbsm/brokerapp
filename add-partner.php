@@ -10,6 +10,7 @@ include_once('includes/fx_address.php');
 include_once('includes/fx_agent_db.php');
 
 if(strlen($_SESSION['alogin'])=="") {
+	$dbh = null;
     header('Location: logout.php');
 }
 
@@ -18,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		save_partner($conn, $_POST);	
 	}
     // echo '<script>alert("Successfully added information.")</script>';
+	$dbh = null;
     echo "<script>window.location.href ='insurance-partner.php'</script>";
 	// header('Location: insurance-partner.php');
 }
@@ -1036,3 +1038,5 @@ $currency = get_currency($conn);
 <div id="loading-overlay">
     <img src="loading.gif" alt="Loading...">
 </div>
+<?php sqlsrv_close($conn); ?>
+<?php $dbh = null;?>

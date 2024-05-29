@@ -4,11 +4,13 @@ error_reporting(0);
 include('includes/config.php');
 if(strlen($_SESSION['alogin'])=="")
     {   
+	$dbh = null;
     header("Location: index.php"); 
     }
     else{
 
         if(isset($_POST['back'])){
+			$dbh = null;
             header("Location: manage-user.php"); 
         }
 
@@ -269,3 +271,5 @@ $error="Something went wrong. Please try again";
 }
 
 </style>
+
+<?php $dbh = null;?>

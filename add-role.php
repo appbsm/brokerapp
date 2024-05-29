@@ -4,7 +4,8 @@ include('includes/config.php');
 session_start();
 error_reporting(0);
 if(strlen($_SESSION['alogin'])=="")
-    {   
+    {  
+	$dbh = null;
     header("Location: index.php"); 
     }
     else{
@@ -436,3 +437,6 @@ if(isset($_POST['submit'])){
 <div id="loading-overlay">
     <img src="loading.gif" alt="Loading...">
 </div>
+
+
+<?php $dbh = null; ?>

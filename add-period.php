@@ -4,11 +4,13 @@ session_start();
 error_reporting(0);
 if(strlen($_SESSION['alogin'])=="")
     {   
+	$dbh = null;
     header("Location: index.php"); 
     }
     else{
 
         if(isset($_POST['back'])){
+			$dbh = null;
             header("Location: manage-user.php"); 
         }
 
@@ -51,7 +53,8 @@ if($status==""){
 
 if($lastInsertId){
     // echo '<script>alert("Successfully added information.")</script>';
-    echo "<script>window.location.href ='period.php'</script>";
+    $dbh = null;
+	echo "<script>window.location.href ='period.php'</script>";
     $msg=" Period Created successfully";
     $period="";
     $active=1;
@@ -282,3 +285,5 @@ if($lastInsertId){
 <div id="loading-overlay">
     <img src="loading.gif" alt="Loading...">
 </div>
+
+<?php $dbh = null;?>

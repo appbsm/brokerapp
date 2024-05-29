@@ -1,5 +1,5 @@
 <?php
-include_once('connect_sql.php');
+// include_once('connect_sql.php');
 include_once('fx_crud_db.php');
 
 function get_reports_history_start($conn) {
@@ -11,6 +11,7 @@ function get_reports_history_start($conn) {
           ELSE cu.company_name
           END as full_name
  ,CONCAT(u_up.name_title,' ',u_up.first_name,' ',u_up.last_name) AS modify_by_user
+,hist.convertion_value
  ,(SELECT TOP 1 CONCAT(ui.name_title,' ',ui.first_name,' ',ui.last_name) FROM report_history_policy re
   LEFT JOIN user_info ui ON re.create_by = ui.id WHERE re.policy_no = hist.policy_no AND re.type ='insert' ) AS create_by_user
  ,(SELECT FORMAT(MIN(re.cdate),'dd-MM-yyyy') FROM report_history_policy re WHERE re.policy_no = hist.policy_no ) AS mindate
@@ -26,11 +27,13 @@ function get_reports_history_start($conn) {
  ,cu.first_name,cu.last_name
  ,con.first_name AS first_name_con,con.last_name AS last_name_con,con.position,con.remark
  ,con.email AS email_con,con.mobile AS mobile_con
+ ,info.remark
  ,hist.* FROM report_history_policy hist
  JOIN (SELECT MAX(rehi.id) AS id_last,rehi.id_insurance_info,rehi.status
  ,MAX(rehi.start_date) AS start_date
  FROM report_history_policy rehi 
- GROUP BY rehi.policy_no,rehi.id_insurance_info,rehi.status) rea ON hist.id = rea.id_last
+ GROUP BY rehi.policy_no,rehi.start_date,rehi.end_date
+ ,rehi.id_insurance_info,rehi.status) rea ON hist.id = rea.id_last
  LEFT JOIN customer cu ON cu.id = hist.customer_id
 
  LEFT JOIN contact con ON con.id = 
@@ -72,6 +75,7 @@ function get_reports_history_search($conn,$post_data) {
           ELSE cu.company_name
           END as full_name
  ,CONCAT(u_up.name_title,' ',u_up.first_name,' ',u_up.last_name) AS modify_by_user
+ ,hist.convertion_value
  ,(SELECT TOP 1 CONCAT(ui.name_title,' ',ui.first_name,' ',ui.last_name) FROM report_history_policy re
   LEFT JOIN user_info ui ON re.create_by = ui.id WHERE re.policy_no = hist.policy_no AND re.type ='insert' ) AS create_by_user
  ,(SELECT FORMAT(MIN(re.cdate),'dd-MM-yyyy') FROM report_history_policy re WHERE re.policy_no = hist.policy_no ) AS mindate
@@ -91,7 +95,8 @@ function get_reports_history_search($conn,$post_data) {
  JOIN (SELECT MAX(rehi.id) AS id_last,rehi.id_insurance_info,rehi.status
  ,MAX(rehi.start_date) AS start_date
  FROM report_history_policy rehi 
- GROUP BY rehi.policy_no,rehi.id_insurance_info,rehi.status) rea ON hist.id = rea.id_last
+ GROUP BY rehi.policy_no,rehi.start_date,rehi.end_date
+ ,rehi.id_insurance_info,rehi.status) rea ON hist.id = rea.id_last
  LEFT JOIN customer cu ON cu.id = hist.customer_id
  LEFT JOIN contact con ON con.id = 
 

@@ -1,35 +1,6 @@
 <?php
-include_once('connect_sql.php');
+// include_once('connect_sql.php');
 include_once('fx_crud_db.php');
-
-if ($_GET['action'] == 'del') {
-
-	$insurance_list = check_insurance($conn,$_GET['id']);
-
-	if(count($insurance_list)==0){
-		$data['id'] = $_GET['id'];
-		$data['table'] = 'insurance_partner';	
-		delete_table ($conn, $data);
-		echo '<script>alert("Deleted Success.")</script>';
-		echo "<script>window.location.href ='../insurance-partner.php'</script>";
-	}else{
-        echo '<script>alert("This data cannot be deleted due to its usage history in the system, but it can only be marked as inactive.")</script>';
-        echo "<script>window.location.href ='../insurance-partner.php'</script>";
-    }
-
-	// $sql="delete from bank where id_partner=:id";
-    // $query = $dbh->prepare($sql);
-    // $query->bindParam(':id',$_GET['id'],PDO::PARAM_STR);
-    // $query->execute();
-    // print_r($query->errorInfo());
-
-    // $sql="delete from rela_partner_to_contact where id_insurance_partner=:id";
-    // $query = $dbh->prepare($sql);
-    // $query->bindParam(':id',$_GET['id'],PDO::PARAM_STR);
-    // $query->execute();
-    
-	// header('Location: ../insurance-partner.php');
-}
 
 function check_insurance($conn,$id) {
 	$result = array();
@@ -61,17 +32,70 @@ function get_partners($conn) {
 	return $result;
 }
 
+function get_partners_contact_search_start($conn) {
+	$result = array();
+
+	$sql = $sql."SELECT pr.name_en AS name_en_province,di.name_en AS name_en_district,su.name_en AS name_en_sub
+		,con.email as email_con,con.mobile as mobile_con,con.position
+		,con.first_name,con.last_name,ip.* FROM  insurance_partner ip
+		left JOIN rela_partner_to_contact re_ct ON ip.id = re_ct.id_insurance_partner
+		left JOIN contact con ON con.id = re_ct.id_contact
+		LEFT JOIN provinces pr ON ip.province = pr.code
+		LEFT JOIN district di ON ip.district = di.code
+		LEFT JOIN subdistrict su ON ip.sub_district = su.code
+		";
+		// WHERE con.default_contact = 1
+	$sql = $sql." order by ip.insurance_id asc ";
+	// $sql = $sql." order by LTRIM(ip.insurance_company) asc ";
+	$stmt = sqlsrv_query( $conn, $sql);  
+	if( $stmt === false) {
+		die( print_r( sqlsrv_errors(), true) );
+	}
+	while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC))    
+	{    
+		$result[] = $row;
+	} 
+
+	return $result;
+}
+
+function get_partners_contact_search($conn,$post_data) {
+	$result = array();
+	$sql = $sql."SELECT pr.name_en AS name_en_province,di.name_en AS name_en_district,su.name_en AS name_en_sub
+		,con.email as email_con,con.mobile,con.position,con.first_name,con.last_name,ip.* 
+		FROM  insurance_partner ip
+		left JOIN rela_partner_to_contact re_ct ON ip.id = re_ct.id_insurance_partner
+		left JOIN contact con ON con.id = re_ct.id_contact
+		LEFT JOIN provinces pr ON ip.province = pr.code
+		LEFT JOIN district di ON ip.district = di.code
+		LEFT JOIN subdistrict su ON ip.sub_district = su.code
+		WHERE ip.insurance_id != ''  ";
+
+	if($post_data['status']!="all"){
+		$sql = $sql." and ip.status = '".$post_data['status']."'";
+	}
+
+	if($post_data['partner']!="all"){
+		$sql = $sql." and ip.insurance_company = '".$post_data['partner']."'";
+	}
+	$sql = $sql." order by ip.insurance_id asc ";
+
+	// $sql = $sql." order by LTRIM(ip.insurance_company) asc ";
+	// echo '<script>alert("sql: '.$sql.'")</script>'; 
+	$stmt = sqlsrv_query( $conn, $sql);  
+	if( $stmt === false) {
+		die( print_r( sqlsrv_errors(), true) );
+	}
+	while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC))    
+	{    
+		$result[] = $row;
+	} 
+	return $result;
+}
+
 function get_partners_search_start($conn) {
 	$result = array();
-// 	$sql = $sql." SELECT ip.insurance_company,con.position,con.first_name AS first_name_con,con.last_name AS last_name_con
 
-// 	,cu.* FROM  insurance_partner ip
-// left JOIN insurance_info info ON ip.id = info.insurance_company_id
-// left JOIN rela_customer_to_insurance re_cu ON re_cu.id_insurance_info = info.id AND re_cu.id_insurance_info = re_cu.id_default_insurance
-// left JOIN customer cu ON cu.id = re_cu.id_customer
-// left JOIN rela_customer_to_contact re_ct ON cu.id = re_ct.id_customer
-// left JOIN contact con ON con.id = re_ct.id_contact
-// WHERE con.default_contact = 1 ";
 	$sql = $sql."SELECT pr.name_en AS name_en_province,di.name_en AS name_en_district,su.name_en AS name_en_sub
 		,con.email as email_con,con.mobile as mobile_con,con.position
 		,con.first_name,con.last_name,ip.* FROM  insurance_partner ip
@@ -81,8 +105,8 @@ function get_partners_search_start($conn) {
 		LEFT JOIN district di ON ip.district = di.code
 		LEFT JOIN subdistrict su ON ip.sub_district = su.code
 		WHERE con.default_contact = 1";
-
-	$sql = $sql." order by LTRIM(ip.insurance_company) asc ";
+	$sql = $sql." order by ip.insurance_id asc ";
+	// $sql = $sql." order by LTRIM(ip.insurance_company) asc ";
 	$stmt = sqlsrv_query( $conn, $sql);  
 	if( $stmt === false) {
 		die( print_r( sqlsrv_errors(), true) );
@@ -97,14 +121,6 @@ function get_partners_search_start($conn) {
 
 function get_partners_search($conn,$post_data) {
 	$result = array();
-	// $sql = $sql." SELECT ip.insurance_company,con.position,con.first_name AS first_name_con,con.last_name AS last_name_con,cu.* "
-	// ." FROM insurance_partner ip "
-	// ." left JOIN insurance_info info ON ip.id = info.insurance_company_id "
-	// ." left JOIN rela_customer_to_insurance re_cu ON re_cu.id_insurance_info = info.id AND re_cu.id_insurance_info = re_cu.id_default_insurance "
-	// ." left JOIN customer cu ON cu.id = re_cu.id_customer "
-	// ." left JOIN rela_customer_to_contact re_ct ON cu.id = re_ct.id_customer "
-	// ." left JOIN contact con ON con.id = re_ct.id_contact WHERE con.default_contact = 1 ";
-
 	$sql = $sql."SELECT pr.name_en AS name_en_province,di.name_en AS name_en_district,su.name_en AS name_en_sub
 		,con.email as email_con,con.mobile,con.position,con.first_name,con.last_name,ip.* FROM  insurance_partner ip
 		left JOIN rela_partner_to_contact re_ct ON ip.id = re_ct.id_insurance_partner
@@ -121,8 +137,8 @@ function get_partners_search($conn,$post_data) {
 	if($post_data['partner']!="all"){
 		$sql = $sql." and ip.insurance_company = '".$post_data['partner']."'";
 	}
-
-	$sql = $sql." order by LTRIM(ip.insurance_company) asc ";
+	$sql = $sql." order by ip.insurance_id asc ";
+	// $sql = $sql." order by LTRIM(ip.insurance_company) asc ";
 	// echo '<script>alert("sql: '.$sql.'")</script>'; 
 	$stmt = sqlsrv_query( $conn, $sql);  
 	if( $stmt === false) {

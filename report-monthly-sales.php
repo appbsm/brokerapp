@@ -270,7 +270,6 @@ if(strlen($_SESSION['alogin'])==""){
                                         <tr>
                                             <th>#</th>
                                             <th>Month</th>
-                                            <th>New</th>
                                             <th>Renew</th>
                                             <th>Not Renew</th>
                                             <th>Subagent Work</th>
@@ -292,7 +291,6 @@ if(strlen($_SESSION['alogin'])==""){
                                        $year = $_GET['year']; 
                                     }
                                     // echo ":year:".$year;
-                                    $total_new = 0;
                                     $total_renew = 0;
                                     $total_not_renew = 0;
                                     $total_subagent = 0;
@@ -300,17 +298,15 @@ if(strlen($_SESSION['alogin'])==""){
                                     foreach ($months as $m) {
                                         // echo "m:".$m;
                                         $pos = array_search($m, $def_months);
-                                        $new = get_sales_monthly_new ($conn, $data, $pos, $year);
                                         $renew = get_sales_monthly ($conn, $data, $pos, $year);
                                         $not_renew = get_not_renew_monthly ($conn, $data, $ctr, $year);
                                         $subagent = get_subagent_monthly($conn, $data, $ctr, $year);
-                                        $total = $new[0]['total_sales'] + $renew[0]['total_sales'] + $subagent[0]['total_sales'];
-                                        $accumurate += $new[0]['total_sales'] + $renew[0]['total_sales'];
+                                        $total = $renew[0]['total_sales'] + $subagent[0]['total_sales'];
+                                        $accumurate += $renew[0]['total_sales'];
                                         ?>
                                         <tr>
                                             <td class="text-center"><?php echo $ctr;?></td>
                                             <td><?php echo $m;?></td>
-                                            <td class="text-right"><?php echo number_format($new[0]['total_sales'], 2);?></td>
                                             <td class="text-right"><?php echo number_format($renew[0]['total_sales'], 2);?></td>
                                             <td class="text-right"><?php echo number_format($not_renew[0]['total_sales'], 2);?></td>     
                                             <td class="text-right"><?php echo number_format($subagent[0]['total_sales'], 2);?></td>  
@@ -319,7 +315,6 @@ if(strlen($_SESSION['alogin'])==""){
                                                                                                         
                                         </tr>  
 										<?php
-                                        $total_new += $new[0]['total_sales'];
 										$total_renew += $renew[0]['total_sales'];
 										$total_not_renew += $not_renew[0]['total_sales'];
 										$total_subagent += $subagent[0]['total_sales'];
@@ -331,7 +326,6 @@ if(strlen($_SESSION['alogin'])==""){
                                             <td class="text-center" >TOTAL</td>
                                             <td ></td>
 
-                                            <td class="text-right"><?php echo number_format($total_new, 2);?></td>
                                             <td class="text-right"><?php echo number_format($total_renew, 2);?></td>
                                             <td class="text-right"><?php echo number_format($total_not_renew, 2);?></td>     
                                             <td class="text-right"><?php echo number_format($total_subagent, 2);?></td>  

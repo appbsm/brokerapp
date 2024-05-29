@@ -1,65 +1,30 @@
 <?php
 	include('includes/config.php');
-	
-	session_start();
-	error_reporting(0);
     
-    
-	if(strlen($_SESSION['alogin'])==""){   
+	if(strlen($_SESSION['alogin'])==""){
+        $dbh = null;
 		header("Location: index.php"); 
-		exit; // หยุดการทำงานของสคริปต์
 	}else{
 	//For Deleting the notice
 
-	// if($_GET['id']){
+    $status_view ='0';
+    $status_add ='0';
+    $status_edit ='0';
+    $status_delete ='0';
+    foreach ($_SESSION["application_page_status"] as $page_id) {
+        // echo "page_view:".$page_id["page_id"]."page_view:".$page_id["page_add"]. "<br>";
+        if($page_id["page_id"]=="1"){
+            $status_view =$page_id["page_view"];
+            $status_add =$page_id["page_add"];
+            $status_edit =$page_id["page_edit"];
+            $status_delete =$page_id["page_delete"];
+        }
+    }
 
-	//     $sql = "SELECT * FROM rela_customer_to_insurance WHERE id_insurance_info =".$_GET['id']." and id_default_insurance =".$_GET['id'];
-	//     // echo '<script>alert("sql: '.$sql.'")</script>'; 
-	//     $query = $dbh->prepare($sql);
-	//     $query->execute();
-	//     $results = $query->fetchAll(PDO::FETCH_OBJ);
-	//     foreach($results as $value){
-	//         $id = $value->id;
-	//     }
-
-	//     $sql="delete from rela_customer_to_insurance where id_insurance_info=:id";
-	//     $query = $dbh->prepare($sql);
-	//     $query->bindParam(':id',$_GET['id'],PDO::PARAM_STR);
-	//     $query->execute();
-
-	//     if($id!=""){
-	//         $sql = "SELECT MIN(id_insurance_info) as id_min FROM rela_customer_to_insurance WHERE id_default_insurance =".$_GET['id'];
-	//         // echo '<script>alert("sql MIN: '.$sql.'")</script>';
-	//         $query = $dbh->prepare($sql);
-	//         $query->execute();
-	//         $results = $query->fetchAll(PDO::FETCH_OBJ);
-	//         foreach($results as $value){
-	//             $id_min = $value->id_min;
-	//         }
-
-	//         if($id_min!=""){
-	//             $sql="update rela_customer_to_insurance set id_default_insurance=".$id_min." where id_default_insurance =".$_GET['id'];
-	//             // echo '<script>alert("sql rela_customer_to_insurance: '.$sql.'")</script>';
-	//             $query = $dbh->prepare($sql);
-	//             $query->execute();
-	//         }
-
-	//         $sql="delete from insurance_info where id=".$_GET['id'];
-	//         echo '<script>alert("sql delete: '.$sql.'")</script>';
-	//         $query = $dbh->prepare($sql);
-	//         // $query->bindParam(':id',$_GET['id'],PDO::PARAM_STR);
-	//         $query->execute();
-	//     }else{
-	//         $sql="delete from insurance_info where id=".$_GET['id'];
-	//         $query = $dbh->prepare($sql);
-	//         $query->execute();
-	//     }
-
-
-	// echo '<script>alert("Success deleted.")</script>';
-	// echo "<script>window.location.href ='entry-policy.php'</script>";
-
-	// }
+    if($status_view==0) {
+        $dbh = null;
+        header('Location: logout.php');
+    }
 
 	$sql = " SELECT cl.currency,ip.insurance_company AS insurance_company_in,pr.product_name AS product_name_in,cu.mobile AS mobile_customer,cu.tel AS tel_customer,cu.email AS email_customer,insu.status AS status_insurance 
 		 ,CASE WHEN cu.customer_type = 'Personal'
@@ -79,19 +44,25 @@
 		 LEFT JOIN product pr ON pr.id = insu.product_id
 		 LEFT JOIN insurance_partner ip ON ip.id = insu.insurance_company_id
          LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
+
+    INNER JOIN (
+    SELECT 
+        policy_primary, MAX(cdate) AS max_cdate
+    FROM 
+        insurance_info
+    GROUP BY 
+        policy_primary
+    ) latest ON insu.policy_primary = latest.policy_primary AND insu.cdate = latest.max_cdate
+
 		 ORDER BY insu.cdate desc ";
+
+
 
         // ORDER BY LTRIM(insu.policy_no) asc ";
 		   // WHERE insu.default_insurance = 1
 	$query = $dbh->prepare($sql);
 	$query->execute();
 	$results = $query->fetchAll(PDO::FETCH_OBJ);
-	
-	
-	
-	/*ck policy*/
-	
-
 
 ?>
 
@@ -174,6 +145,7 @@
                             <div class="text-right" style="margin: 5px;">
 
                                 <div class="row">
+                                    <?php if($status_add==1){ ?>
                                     <a href="add-policy.php" class="btn btn-primary" style="color:#F9FAFA;" >
                                         <svg  width="16" height="16" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
       <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
@@ -182,6 +154,8 @@
                                         <span class="text">Add New Policy</span>
                                     </a>  
                                      &nbsp;&nbsp;
+
+                                    <?php } ?>
 
                                     <div class="dropdown pl-1 pr-3">
                                       <button class="btn btn-primary mr-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -214,9 +188,7 @@
 
                         <div class="card-body" >
                             <div class="table-responsive" style="font-size: 13px;">
-                                <!-- width="2000px"  -->
-                                <!-- style="width:300%;" table-striped width="2500px-->
-                                <table id="example"  class="table table-bordered "  style="color: #969FA7;" >
+                                <table id="example"  class="table table-bordered "  style="color: #969FA7;"  >
                                     <thead >
                                         <tr style="color: #102958;" >
                                             <th width="20px" style="color: #102958;">#</th>
@@ -228,18 +200,22 @@
                                            <!--  <th width="110px" style="color: #102958;" >Cust. Mobile</th>
                                             <th width="200px" style="color: #102958;">Cust. Email</th> -->
                                             <th width="50px" style="color: #102958;">Status</th>
-                                            <th width="70px" style="color: #102958;">Start Date</th>
-                                            <th width="70px" style="color: #102958;">End Date</th>
+
+                                            <th width="70px" style="color: #102958;" data-field="date" data-sortable="true" data-sorter="dateSorter">Start Date</th>
+                                            <th width="70px" style="color: #102958;" data-field="date" data-sortable="true" data-sorter="dateSorter">End Date</th>
 
                                             <th width="50px" style="color: #102958;">Symbol</th>
                                             <th width="100px" style="color: #102958;">Amount of premium</th>
                                             <th width="100px" style="color: #102958;">Premium Conv.(฿THB)</th>
 
                                             <th width="70px" style="color: #102958;">Paid Date</th>
-                                            
                                             <th width="150px" style="color: #102958;" >Agent/Customer</th>
                                             
-                                            <th width="50px" style="color: #102958;">Action</th>
+                                            <?php if($status_edit==1){ ?>
+                                                <th width="50px" style="color: #102958;">Action</th>
+                                            <?php }else{ ?>
+                                                <th hidden="true" ></th>
+                                            <?php } ?>
                                         </tr>
                                     </thead>
                                     <tbody style="color: #494949; font-size: 13px;" >
@@ -275,45 +251,22 @@
             ?>
         </td>
         <td class="text-right" ><?php echo number_format((float)$result->premium_rate, 2, '.', ',');?></td>
-        
         <td class="text-center"><?php echo $result->paid_date_day;?></td>
 
-        <!-- $result->title_name_agent." ". -->
+    
         <td><?php echo $result->first_name_agent." ".$result->last_name_agent;?></td>
         
-        
-        <td class="text-center">
-        <i title="Edit Record">
-			<!--<a href="edit-policy.php?id=<?php echo $result->id_insurance;?>">-->
-			<!--<a href="edit-policy.php?id=<?php echo $result->id_insurance;?>" onclick="return checkAndAlert();">-->
-			<a href="edit-policy.php?id=<?php echo $result->id_insurance;?>" onclick="return checkAndAlert(<?php echo $isLinkAvailable ? 'true' : 'false'; ?>);">
-			 <svg width="20" height="20" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
-			  <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
-			</svg>
-                                                <!-- </a></i> &nbsp;&nbsp;
-                                                 <i class="fa " title="Delete this Record" ><a href="entry-policy.php?id=<?php echo $result->id_insurance;?>" onclick="return confirm('Do you really want to delete the notice?');">
-    <svg width="20" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
-  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
-</svg>
-    </i> </a> -->
-                                        </td>
-										<script>
-											/*function checkAndAlert() {
-												
-												var isLinkAvailable = <?php echo $isLinkAvailable ? 'true' : 'false'; ?>;
+        <?php if($status_edit==1){ ?>
+            <td class="text-center">
+            <i title="Edit Record"><a href="edit-policy.php?id=<?php echo $result->id_insurance;?>">
+                 <svg width="20" height="20" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                  <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                </svg>                                
+            </td>
+        <?php }else{ ?>
+            <th hidden="true" ></th>
+        <?php } ?>
 
-												if (!isLinkAvailable) {
-													alert("มีผู้ใช้งานอื่นกำลังใช้งานอยู่");
-													return false; 
-												}
-
-												return true;
-											}*/
-											
-										</script>
-
-										
 <?php $cnt++;}} ?>                       
 
 
@@ -335,51 +288,62 @@
         <i class="fas fa-angle-up"></i>
     </a>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-    <!-- <script src="vendor/jquery/jquery.min.js"></script> -->
-     <!-- //////////////// เอาออกเพราะมีปัญหาเรื่อง popup -->
-    <!-- <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
-    <!-- /////////////////// -->
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+    <script src="js/pace/pace.min.js"></script>
+    <script src="js/lobipanel/lobipanel.min.js"></script>
+    <script src="js/iscroll/iscroll.js"></script>
 
-     <!-- <script src="js/jquery/jquery-2.2.4.min.js"></script> -->
-        <!-- <script src="js/bootstrap/bootstrap.min.js"></script> -->
-
-        <script src="js/pace/pace.min.js"></script>
-        <script src="js/lobipanel/lobipanel.min.js"></script>
-        <script src="js/iscroll/iscroll.js"></script>
-
-        <!-- ========== PAGE JS FILES ========== -->
-        <script src="js/prism/prism.js"></script>
-        <!-- <script src="js/DataTables/datatables.min.js"></script> -->
-
-        <!-- ========== THEME JS ========== -->
-        <!-- <script src="js/main.js"></script> -->
-
-        <!-- ========== Address Search ========== -->
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" /> -->
+    <!-- ========== PAGE JS FILES ========== -->
+    <script src="js/prism/prism.js"></script>
 
     <script src="assets/js/datatables.min.js"></script>
     <script src="assets/js/pdfmake.min.js"></script>
     <script src="assets/js/vfs_fonts.js"></script>
     <!-- <script src="assets/js/custom.js"></script> -->
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 	<script>
 		$(document).ready(function(){
+
+        jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            "date-dd-mmm-yyyy-pre": function(a) {
+                return moment(a, 'DD-MM-YYYY').unix();
+            },
+            "date-dd-mmm-yyyy-asc": function(a, b) {
+                return a - b;
+            },
+            "date-dd-mmm-yyyy-desc": function(a, b) {
+                return b - a;
+            }
+        });
+
 		var table = $('#example').DataTable({
-			scrollX: true,
+            "columnDefs": [
+                { 
+                    "targets": [6,7,11],
+                    "type": "date-dd-mmm-yyyy"
+                }
+            ],
+            scrollY: 400, // ตั้งค่าความสูงที่คุณต้องการให้แถวแรก freeze
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            fixedColumns: {
+                leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+            },
+			// scrollX: true,
 			lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 			"scrollCollapse": true,
 			"paging": true,
@@ -478,3 +442,5 @@
 
 </html>
 <?php } ?>
+
+<?php $dbh = null; ?>

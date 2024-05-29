@@ -1,5 +1,5 @@
 <?php
-include_once('connect_sql.php');
+// include_once('connect_sql.php');
 include_once('fx_crud_db.php');
 
 function get_sales_by_product_start($conn){
@@ -17,6 +17,7 @@ THEN CONCAT(cu.title_name,' ',cu.first_name,' ',cu.last_name)
 ,cu.customer_type
 ,FORMAT(info.start_date, 'dd-MM-yyyy') AS in_start_date,FORMAT(info.end_date, 'dd-MM-yyyy') AS in_end_date
 ,info.policy_no,info.start_date,info.end_date,info.premium_rate
+,info.convertion_value 
 ,ip.insurance_company,ip.phone,ip.email
 ,co.first_name as first_name_co,ag.mobile as mobile_co,co.remark as remark_co,ag.email as email_co
 ,pr.* FROM product pr
@@ -28,10 +29,21 @@ left join rela_customer_to_contact recon on recon.id_customer = cu.id
 join contact co on co.id = recon.id_contact AND co.default_contact=1
 LEFT JOIN agent ag ON ag.id = info.agent_id
 LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
+
  LEFT JOIN currency_convertion cc ON  cc.id = 
  (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id_currency_list = ip.id_currency_list 
  AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1')
 ORDER BY pr.id";
+
+// INNER JOIN (
+//     SELECT 
+//         policy_primary, MAX(cdate) AS max_cdate
+//     FROM 
+//         insurance_info where policy_no != ''
+//     GROUP BY 
+//         policy_primary
+// ) latest ON info.policy_primary = latest.policy_primary AND info.cdate = latest.max_cdate
+
  // (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id = ip.id_currency_list 
  // OR cc.id_currency_list_convert    = cl.id 
 	$stmt = sqlsrv_query( $conn, $sql);
@@ -46,6 +58,17 @@ ORDER BY pr.id";
 }
 
 function get_sales_by_product_search($conn,$post_data){
+
+
+    $sql_join_date = "";
+    if (isset($post_data['date_from']) && $post_data['date_from'] != '') {
+        $sql_join_date = " and start_date >= '".date("Y-m-d", strtotime($post_data['date_from']))."' ";
+    }
+    if (isset($post_data['date_to']) && $post_data['date_to'] != '') {
+        $sql_join_date = " and start_date <= '".date("Y-m-d", strtotime($post_data['date_to']))."' ";
+    }
+
+
     $result = array();
     $sql ="SELECT 
 cc.currency_value,cc.currency_value_convert
@@ -60,6 +83,7 @@ THEN CONCAT(cu.title_name,' ',cu.first_name,' ',cu.last_name)
 ,cu.customer_type
 ,FORMAT(info.start_date, 'dd-MM-yyyy') AS in_start_date,FORMAT(info.end_date, 'dd-MM-yyyy') AS in_end_date
 ,info.policy_no,info.start_date,info.end_date,info.premium_rate
+,info.convertion_value 
 ,ip.insurance_company,ip.phone,ip.email
 ,co.first_name as first_name_co,ag.mobile as mobile_co,co.remark as remark_co,ag.email as email_co
 ,pr.* FROM product pr
@@ -71,10 +95,20 @@ left join rela_customer_to_contact recon on recon.id_customer = cu.id
 join contact co on co.id = recon.id_contact AND co.default_contact=1
 LEFT JOIN agent ag ON ag.id = info.agent_id
 LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
+
  LEFT JOIN currency_convertion cc ON  cc.id = 
  (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id_currency_list = ip.id_currency_list 
  AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1')
  WHERE info.policy_no !='' ";
+
+//  INNER JOIN (
+//     SELECT 
+//         policy_primary, MAX(cdate) AS max_cdate
+//     FROM 
+//         insurance_info where policy_no != '' ".$sql_join_date."
+//     GROUP BY 
+//         policy_primary
+// ) latest ON info.policy_primary = latest.policy_primary AND info.cdate = latest.max_cdate
 
 
  // AND  info.paid_date >= c_c.start_date and info.paid_date <= c_c.stop_date)
@@ -183,11 +217,11 @@ function get_partners ($conn) {
 
 function get_policy_no ($conn) {
     $result = array();
-    $tsql = "select ii.id, ii.policy_no "
-        . "from insurance_info ii "
-        . "where policy_no IS NOT NULL AND  policy_no != ''"
-            . "order by policy_no "
-                        ;
+    $tsql = "select max(ii.id), ii.policy_no 
+        from insurance_info ii 
+        where policy_no IS NOT NULL AND  policy_no != '' 
+        GROUP BY ii.policy_no 
+            order by policy_no ";
     //echo $tsql;
     $stmt = sqlsrv_query( $conn, $tsql);
     if( $stmt === false) {

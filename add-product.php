@@ -4,12 +4,14 @@
 	session_start();
 	error_reporting(0);
 	if(strlen($_SESSION['alogin'])=="")
-		{   
+		{  
+		$dbh = null;
 		header("Location: index.php"); 
 		}
 		else{
 
 			if(isset($_POST['back'])){
+				$dbh = null;
 				header("Location: manage-user.php"); 
 			}
 
@@ -49,6 +51,7 @@
 	if($lastInsertId)
 	{
 	// echo '<script>alert("Successfully added information.")</script>';
+	$dbh = null;
 	echo "<script>window.location.href ='product-management.php'</script>";
 	$msg="Class Created successfully";
 
@@ -403,3 +406,6 @@
 <div id="loading-overlay">
     <img src="loading.gif" alt="Loading...">
 </div>
+
+
+<?php $dbh = null;?>

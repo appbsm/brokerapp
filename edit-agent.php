@@ -7,9 +7,12 @@
     error_reporting(0);
 	include_once('includes/fx_insurance_products.php');
 	include_once('includes/fx_agent_db.php');
-	include_once('includes/fx_address.php');
+	// include_once('includes/fx_address.php');
+    include_once('includes/fx_address_function.php');
 
 	if(strlen($_SESSION['alogin'])=="") {
+        sqlsrv_close($conn);
+		$dbh = null;
 		header('Location: logout.php');
 	}
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -27,6 +30,8 @@
 			//print_r($_POST);
 		}
 		// echo '<script>alert("Successfully edited information.")</script>';
+        sqlsrv_close($conn);
+		$dbh = null;
 		echo "<script>window.location.href ='agent-management.php'</script>";
 
 	   // header('Location: agent-management.php');
@@ -694,3 +699,5 @@
 <div id="loading-overlay">
     <img src="loading.gif" alt="Loading...">
 </div>
+<?php sqlsrv_close($conn); ?>
+<?php $dbh = null;?>

@@ -19,18 +19,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // echo '<script>alert("results: '.count($results).'")</script>'; 
     if(count($results)){
 
-    $sender = "thanawat@buildersmart.com";
+    // $sender = "thanawat@buildersmart.com";
     // $smtp_user = 'smbooking@smresorts.asia';
     // $smtp_pass = 'Bsm@2023';
     // $smtp_user = 'helpdesk@buildersmart.com';
     // $smtp_pass = 'Hor93452';
-    $smtp_user = 'info@installdirect.asia';
-    $smtp_pass = 'Install@2024';
+    $sender = $_POST['email'];
+    //$smtp_user = 'info@installdirect.asia';
+    //$smtp_pass = 'Install@2024';
+    $smtp_user   = "helpdesk@buildersmart.com";
+    $smtp_pass   = "Hor93452";
      
      
 
         $key=md5(time()+123456789% rand(4000, 55000000));
-        $msg = "Please click link as below for create new password in SmartBroker system.". "\r\n"."http://brokerapp.installdirect.asia:8742/forgot_password_reset.php?key=".$key."&email=".$_POST['email'];
+        // $msg = "Please click link as below for create new password in SmartBroker system.". "\r\n"."http://brokerapp.installdirect.asia:8742/forgot_password_reset.php?key=".$key."&email=".$_POST['email'];
+        $msg = "Please click link as below for create new password in SmartBroker system.". "\r\n"."http://www.brokerapp.asia/forgot_password_reset.php?key=".$key."&email=".$_POST['email'];
 
         $sql = "INSERT INTO forget_password (email,temp_key,created) values (:email_p,:temp_key_p,GETDATE()) ";
         $query = $dbh->prepare($sql); 
@@ -48,9 +52,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $mail->Host        = "smtp-legacy.office365.com";
         $mail->Mailer      = "smtp";
         $mail->Port        = "587";
-        $mail->Username    = "info@installdirect.asia";
-        $mail->Password    = "Install@2024";
-        $mail->SetFrom('info@installdirect.asia', 'installdirect');
+        $mail->Username    = $smtp_user;
+        $mail->Password    = $smtp_pass;
+        // $mail->SetFrom('info@installdirect.asia', 'installdirect');
+        $mail->SetFrom('helpdesk@buildersmart.com', 'Helpdesk');
         $mail->isHTML(true);
         $mail->CharSet = "utf-8";
         $mail->Subject = "Request change password for SmartBroker system.";
@@ -62,9 +67,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         
         $mail->Body = $msg; 
         if (!$mail->send()) {
-            // echo 'Mailer Error: ' . $mail->ErrorInfo;
+             //echo 'Mailer Error: ' . $mail->ErrorInfo;
         } else {
-            // echo 'successfully';
+             //echo 'successfully';
         }
 
         $message_success="Please check your email inbox.";
@@ -89,44 +94,96 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <link rel="stylesheet" href="css/main.css" media="screen" >
         <script src="js/modernizr/modernizr.min.js"></script>
     </head>
-    <body class="">
-        <div class="main-wrapper">
+	<style>
+		h1, h2, h3, h4, h5, h6, b, span, p, table, a, div, label, ul, li,
+		button {
+			font-family: Manrope, 'IBM Plex Sans Thai';
+		}
+		
+		body {
+		font-family: sans-serif;
+		margin: 0;
+		padding: 0;
+		/*background-color: #f4f4f4;
+		background-color: #0008ff6b;
+		background-color: #10295880;*/
+		/*background-color: #102958;*/
+	}
 
+	
+	
+	h4 {
+		text-align: center;
+		margin-bottom: 20px;
+	}
+
+	label {
+		display: block;
+		margin-bottom: 5px;
+	}
+
+	input[type="text"],
+	input[type="password"] {
+		width: 100%;
+		padding: 10px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		margin-bottom: 20px;
+	}
+
+	
+	.btn {
+		padding: 10px 16px !important;
+	}
+	.btn:hover {
+		background-color: #102958 !important;
+	}
+	
+	.form-control {
+		height: 40px !important;
+	}
+	</style>
+
+    <body class="">
+        <div class="main-wrapper ">
             <div class="">
                 <div class="row">
-                    
-                    <!-- <h1 align="center">Insurance Broker Management System</h1> -->
-                        
-                         <div class="col-lg-3">
-                         </div>
-                            <div class="col-lg-6">
-                                <section class="section">
-                                    <div class="text-center">
-                                <img src="images/logo_small.png" width="200" class="logo">
-                            </a>
-                            <h1 align="center">Smart Broker System</h1>
-                            <div class="row mt-1">
-                                <!-- <div class="col-md-10 col-md-offset-1 pt-50"> -->
-                                <div class="col-md-10 col-md-offset-1 pt-1">
+                    <div class="col-lg-3"></div>
 
-                                    <div class="row mt-30 "  >
-                                        <div class="col-md-11" >
-                                            <div class="panel" >
+                        <div class="col-lg-6">
+                            <div class="row mt-1">
+
+                                <div class="col-md-10 col-md-offset-1 pt-1">
+                                    <div class="row mt-30 " >
+                                        <div class="col-md-12" >
+                                            <div class="panel" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); " >
+
+												<div class="panel-heading">
+													<div class="panel-title text-center row img-center " style="margin: 20px;">
+														<img src="images/logo_small.png" width="200" class="logo">
+													</div>
+													<div class="panel-title text-center ">
+														<h1 align="center" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);">Smart Broker System</h1>
+													</div>
+												</div>
+
                                                 <div class="panel-heading">
-                                                    <div class="panel-title text-center">
-                                                        <!-- <h4>Admin Login</h4> -->
+                                                    <div class="panel-title text-center" style="margin-top: 20px;">
+														<h4>Please enter your email to recover your password</h4>
                                                     </div>
                                                 </div>
+
                                                 <div class="panel-body p-20" >
 
                                                     <form class="form-horizontal" method="post">
                                                           <div class="col-sm-12 text-center"  >
-                                             <label>Please enter your email to recover your password</label><br>
-                                            </div> 
+															 <!--<label>Please enter your email to recover your password</label><br>-->
+															 
+															</div> 
                                                     	<div class="form-group">
                                                     		<label for="inputEmail3" class="col-sm-2 control-label">Email</label>
                                                     		<div class="col-sm-10">
-                                                    			<input id="email" name="email" type="text" class="form-control"  placeholder="Email">
+                                                    			<input id="email" name="email" type="text" class="form-control"  placeholder="Email" required>
                                                     		</div>
                                                     	</div>
 
@@ -154,7 +211,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                                 </div> 
             
                                 <div class="col-sm-6 text-right"  >
-                                    <button type="submit" style="background-color: #0275d8;color: #F9FAFA;text-left" name="login" class="btn">Send Email<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
+                                    <button type="submit" style="background-color: #0275d8;color: #F9FAFA;text-left" name="login" class="btn button">Send Email<span class="btn-label btn-label-right"><i class="fa "></i></span></button>
                                 </div>
 
                                                         </div> 
@@ -177,7 +234,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                                 <!-- /.col-md-12 -->
                             </div>
                             <!-- /.row -->
-                        </section>
+                       
 
                     </div>
                     <!-- /.col-md-6 -->
@@ -211,3 +268,4 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <!-- ========== ADD custom.js FILE BELOW WITH YOUR CHANGES ========== -->
     </body>
 </html>
+

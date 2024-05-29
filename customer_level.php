@@ -3,13 +3,27 @@
 	include('includes/config.php');
 	session_start();
 	error_reporting(0);
-	if(strlen($_SESSION['alogin'])=="")
-		{   
+	if(strlen($_SESSION['alogin'])==""){   
+		$dbh = null;
 		header("Location: index.php"); 
-		}
-		else{
+	}else{
 
-	//For Deleting the notice
+	$status_view ='0';
+    $status_add ='0';
+    $status_edit ='0';
+    $status_delete ='0';
+    foreach ($_SESSION["application_page_status"] as $page_id) {
+        if($page_id["page_id"]=="25"){
+        	$status_view =$page_id["page_view"];
+            $status_add =$page_id["page_add"];
+            $status_edit =$page_id["page_edit"];
+            $status_delete =$page_id["page_delete"];
+        }
+    }
+    if($status_view==0) {
+		$dbh = null;
+		header('Location: logout.php');
+	}
 
 	if($_GET['id']){
 		$sql = "SELECT TOP 1 * from customer WHERE customer_level = '".$_GET['id']."'";
@@ -22,9 +36,11 @@
 			$query = $dbh->prepare($sql);
 			$query->bindParam(':id',$_GET['id'],PDO::PARAM_STR);
 			$query->execute();
+			$dbh = null;
 			echo '<script>alert("Deleted Success.")</script>';
 			echo "<script>window.location.href ='customer_level.php'</script>";
 		}else{
+			$dbh = null;
 			echo '<script>alert("This data cannot be deleted due to its usage history in the system, but it can only be marked as inactive.")</script>';
 			echo "<script>window.location.href ='customer_level.php'</script>";
 		}
@@ -103,6 +119,7 @@
 					<div class="row pull-right" style="display: inline-block;">
 						<div class="text-right m-5">
 							<div class="row">
+								<?php if($status_add==1){ ?>
 								<a href="add-customer_level.php" class="btn btn-primary" style="color:#F9FAFA;" >
 									<svg  width="16" height="16" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
 										<path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
@@ -110,6 +127,8 @@
 									</svg>
 									<span class="text">Add Customer Level</span>
 								</a> 
+								<?php } ?>
+
 								<div class="dropdown pl-3 pr-3">
 									<button class="btn btn-primary mr-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 										Export
@@ -160,12 +179,18 @@
 									<td class="text-center"><?php echo $result->description;?></td>
 									<!-- <td class="text-center">Active</td> -->
 									<td class="text-center"><?php if($result->status==1){ echo "Active"; }else{ echo "InActive"; } ?></td>
+
+									<?php if($status_edit==1 or $status_delete ==1){ ?>
 									<td class="text-center">
+										<?php if($status_edit==1){ ?>
 										<a href="edit-customer_level.php?id=<?php echo $result->id; ?>"><i class="fa " title="Edit Record"></i>
 											<svg width="20" height="20" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
 											  <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
 											</svg>
                                         </a> &nbsp;&nbsp;
+                                        <?php } ?>
+
+                                        <?php if($status_delete==1){ ?>
                                         <a href="customer_level.php?id=<?php echo $result->id; ?>" onclick="return confirm('Do you really want to delete data?');">
 											<svg width="20" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
 												<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
@@ -173,7 +198,13 @@
 											</svg>
 											<i class="fa " title="Delete this Record" ></i> 
 										</a>
+										<?php } ?>
+										
 									</td>
+									<?php }else{ ?>
+									<td hidden="true" ></td>
+									<?php } ?>
+
 								</tr> 
                                 <?php $cnt++;}} ?>  
 
@@ -236,7 +267,14 @@
     <script>
         $(document).ready(function(){
     var table = $('#example').DataTable({
-        scrollX: true,
+    	scrollY: 400, // ตั้งค่าความสูงที่คุณต้องการให้แถวแรก freeze
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            fixedColumns: {
+                leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+            },
+        // scrollX: true,
         lengthMenu: [[10, 25, 50, 100, -1], [10,25, 50, 100, "All"]],
         "scrollCollapse": true,
         "paging":         true,
@@ -279,3 +317,6 @@
 
 </html>
 <?php } ?>
+
+
+<?php $dbh = null;?>

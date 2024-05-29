@@ -5,13 +5,30 @@ session_start();
 error_reporting(0);
 include_once('includes/fx_alert_date.php');
 
-if(strlen($_SESSION['alogin'])=="")
-    {   
+if(strlen($_SESSION['alogin'])==""){  
+    sqlsrv_close($conn);
     header("Location: index.php"); 
-    }
+}
     
     $list = near_to_due_list($conn);
     
+    $status_view ='0';
+    $status_add ='0';
+    $status_edit ='0';
+    $status_delete ='0';
+    foreach ($_SESSION["application_page_status"] as $page_id) {
+        if($page_id["page_id"]=="2"){
+            $status_view =$page_id["page_view"];
+            $status_add =$page_id["page_add"];
+            $status_edit =$page_id["page_edit"];
+            $status_delete =$page_id["page_delete"];
+        }
+    }
+    
+    if($status_view==0) {
+        $dbh = null;
+        header('Location: logout.php');
+    } 
 ?>
 
 <!DOCTYPE html>
@@ -128,26 +145,34 @@ if(strlen($_SESSION['alogin'])=="")
 
                         <div class="card-body" >
                             <div class="table-responsive" style="font-size: 13px;">
-                                <!-- width="2000px"  -->
-                                <!-- style="width:300%;" table-striped width="2500px-->
                                 <table id="example"  class="table table-bordered "  style="color: #969FA7;" >
                                     <thead >
                                         <tr style="color: #102958;" >
-                                            <th width="20px" style="color: #102958;">#</th>
-                                            <th width="100px" style="color: #102958;">Policy no.</th>
-                                            <th width="250px" style="color: #102958;">Prod.</th>
+                                           <th width="20px" style="color: #102958;">#</th>
+                                            <th width="150px" style="color: #102958;">Policy no.</th>
                                             <th width="200px" style="color: #102958;">Cust. name</th>
-                                            <th width="110px" style="color: #102958;" >Cust. Mobile</th>
-                                            <th width="200px" style="color: #102958;">Cust. Email</th>
-                                            <th width="90px" style="color: #102958;">Start Date</th>
-                                            <th width="90px" style="color: #102958;">End Date</th>
-                                            <th width="100px" style="color: #102958;">Amount of premium</th>
-                                            <th width="100px" style="color: #102958;">Convert Value</th>
-                                            <th width="50px" style="color: #102958;">Symbol</th>
                                             <th width="200px" style="color: #102958;">Partner company</th>
-                                            <th width="200px" style="color: #102958;" >Agent/Customer</th>
-                                            <th width="70px" style="color: #102958;">Status</th>
+                                            <th width="250px" style="color: #102958;">Prod.</th>
+                                            
+                                           <!--  <th width="110px" style="color: #102958;" >Cust. Mobile</th>
+                                            <th width="200px" style="color: #102958;">Cust. Email</th> -->
+                                            <th width="50px" style="color: #102958;">Status</th>
+
+                                            <th width="70px" style="color: #102958;" data-field="date" data-sortable="true" data-sorter="dateSorter">Start Date</th>
+                                            <th width="70px" style="color: #102958;" data-field="date" data-sortable="true" data-sorter="dateSorter">End Date</th>
+
+                                            <th width="50px" style="color: #102958;">Symbol</th>
+                                            <th width="100px" style="color: #102958;">Amount of premium</th>
+                                            <th width="100px" style="color: #102958;">Premium Conv.(฿THB)</th>
+
+                                            <th width="70px" style="color: #102958;">Paid Date</th>
+                                            <th width="150px" style="color: #102958;" >Agent/Customer</th>
+                                            
+                                            <?php if($status_edit==1){ ?>
                                             <th width="50px" style="color: #102958;">Action</th>
+                                            <?php }else{ ?>
+                                            <th hidden="true" ></th>
+                                            <?php } ?>
                                         </tr>
                                     </thead>
                                     <tbody style="color: #494949; font-size: 13px;" >
@@ -156,50 +181,61 @@ if(strlen($_SESSION['alogin'])=="")
     if($list > 0){
        foreach($list as $result){ 
            $s_date = $result['start_date'];
-           $start_date = $s_date->format('d/m/Y');
+           $start_date = $s_date->format('d-m-Y');
            $e_date = $result['end_date'];
-           $end_date = $e_date->format('d/m/Y');
-           $a_date = $result['alert_date'];
-           $alert_date = $e_date->format('d/m/Y');
+           $end_date = $e_date->format('d-m-Y');
+           $a_date = $result['paid_date_policy'];
+           $alert_date = $a_date->format('d-m-Y');
 ?> 
     <tr>
         <td class="text-center"><?php echo $cnt;?></td>
         <td><?php echo $result['policy_no'];?></td>
-        <td><?php echo $result['product_name_in'];?></td>
         <td><?php echo ($result['customer_type']=="Corporate") ? $result['company_name'] : $result['customer_name']; ?></td>
-        <td class="text-center"><?php echo $result['mobile'];?></td>
-        <td><?php echo $result['email_cus'];?></td>
+        <td><?php echo $result['insurance_company'];?></td>
+        <td><?php echo $result['product_name_in'];?></td>
+        <td class="text-center"><?php echo $result['insurance_status'];?></td>
+
         <td class="text-center"><?php echo $start_date;?></td>
         <td class="text-center"><?php echo $end_date;?></td>
-        <td class="text-right" ><?php echo number_format($result['premium_rate'], 2);?></td>
 
+        <td class="text-center"><?php echo $result['currency'];?></td>
         <td class="text-right" >
-            <?php   if($result['currency'] !="฿THB" && $result['currency'] !="THB"){
-                        echo number_format((float)$result['convertion_value'], 2, '.', ',');
-                    }else{
-                        echo "0.00";
-                    }
+            <?php   
+                echo number_format((float)$result['convertion_value'], 2, '.', ',');
+                    // if($result['currency'] !="฿THB" && $result['currency'] !="THB"){
+                    //     echo number_format((float)$result['convertion_value'], 2, '.', ',');
+                    // }else{
+                    //     echo "0.00";
+                    // }
             ?>
         </td>
-        <td class="text-center"><?php echo $result['currency'];?></td>
-
-        <td><?php echo $result['insurance_company'];?></td>
+        <td class="text-right" ><?php echo number_format((float)$result['premium_rate'], 2, '.', ',');?></td>
+        
+       <!--  <td class="text-center"><?php echo $result['mobile'];?></td>
+        <td><?php echo $result['email_cus'];?></td> -->
+        
+        <td class="text-center"><?php echo $alert_date;?></td>
         <td><?php echo trim($result['agent_name']);?></td>
         
-        <td class="text-center"><?php echo $result['insurance_status'];?></td>
+        <?php  if($status_edit==1){ ?>
         <td class="text-center">
         <i title="Edit Record"><a href="edit-policy.php?id=<?php echo $result['id_insurance'];?>">
  <svg width="20" height="20" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
   <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
 </svg>
                                                 </a></i> &nbsp;&nbsp;
-                                                 <i class="fa " title="Delete this Record" ><a href="entry-policy.php?id=<?php echo $result['id_insurance'];?>" onclick="return confirm('Do you really want to delete the notice?');">
+                                                 <!-- <i class="fa " title="Delete this Record" ><a href="entry-policy.php?id=<?php echo $result['id_insurance'];?>" onclick="return confirm('Do you really want to delete the notice?');">
     <svg width="20" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
   <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
   <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
 </svg>
-    </i> </a>
-                                        </td>
+    </i>  -->
+
+        </td>
+        <?php }else{ ?>
+        <td hidden="true">
+        <?php } ?>   
+
 <?php $cnt++;}} ?>                       
                                     </tbody>
                                 </table>
@@ -207,23 +243,20 @@ if(strlen($_SESSION['alogin'])=="")
                         </div>
                     </div>
             </div>
-            </div>
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
+        </div>
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-    <!-- <script src="vendor/jquery/jquery.min.js"></script> -->
-     <!-- //////////////// เอาออกเพราะมีปัญหาเรื่อง popup -->
-    <!-- <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
-    <!-- /////////////////// -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
 
     <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -231,23 +264,12 @@ if(strlen($_SESSION['alogin'])=="")
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
-     <!-- <script src="js/jquery/jquery-2.2.4.min.js"></script> -->
-        <!-- <script src="js/bootstrap/bootstrap.min.js"></script> -->
+    <script src="js/pace/pace.min.js"></script>
+    <script src="js/lobipanel/lobipanel.min.js"></script>
+    <script src="js/iscroll/iscroll.js"></script>
 
-        <script src="js/pace/pace.min.js"></script>
-        <script src="js/lobipanel/lobipanel.min.js"></script>
-        <script src="js/iscroll/iscroll.js"></script>
-
-        <!-- ========== PAGE JS FILES ========== -->
-        <script src="js/prism/prism.js"></script>
-        <!-- <script src="js/DataTables/datatables.min.js"></script> -->
-
-        <!-- ========== THEME JS ========== -->
-        <!-- <script src="js/main.js"></script> -->
-
-        <!-- ========== Address Search ========== -->
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" /> -->
+    <!-- ========== PAGE JS FILES ========== -->
+    <script src="js/prism/prism.js"></script>
 
 
     <script src="assets/js/datatables.min.js"></script>
@@ -255,10 +277,38 @@ if(strlen($_SESSION['alogin'])=="")
     <script src="assets/js/vfs_fonts.js"></script>
     <!-- <script src="assets/js/custom.js"></script> -->
        
-    <script>
-            $(document).ready(function(){
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+
+        jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            "date-dd-mmm-yyyy-pre": function(a) {
+                return moment(a, 'DD-MM-YYYY').unix();
+            },
+            "date-dd-mmm-yyyy-asc": function(a, b) {
+                return a - b;
+            },
+            "date-dd-mmm-yyyy-desc": function(a, b) {
+                return b - a;
+            }
+        });
+
     var table = $('#example').DataTable({
-        scrollX: true,
+        "columnDefs": [
+                { 
+                    "targets": [6,7,11],
+                    "type": "date-dd-mmm-yyyy"
+                }
+            ],
+        scrollY: 400, // ตั้งค่าความสูงที่คุณต้องการให้แถวแรก freeze
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            fixedColumns: {
+                leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+            },
+        // scrollX: true,
         lengthMenu: [[10, 25, 50, 100, -1], [10,25, 50, 100, "All"]],
         "scrollCollapse": true,
         "paging":         true,
@@ -315,3 +365,4 @@ if(strlen($_SESSION['alogin'])=="")
 </body>
     
 </html>
+<?php sqlsrv_close($conn); ?>

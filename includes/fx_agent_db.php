@@ -1,31 +1,7 @@
 <?php
-include_once('connect_sql.php');
+// include_once('connect_sql.php');
 include_once('fx_crud_db.php');
 
-if ($_GET['action'] == 'del') {
-
-	$insurance_list = check_insurance_agent($conn,$_GET['id']);
-	if(count($insurance_list)==0){
-		
-		$under = get_partner_under($conn,$_GET['id']);
-		foreach ($under as $value) {
-			$data['id'] = $value['id'];
-		 	$data['table'] = 'under';	
-		 	delete_table ($conn, $data);
-		}
-
-		$data['id'] = $_GET['id'];
-		$data['table'] = 'agent';	
-		delete_table ($conn, $data);
-
-		echo '<script>alert("Deleted Success.")</script>';
-		echo "<script>window.location.href ='../agent-management.php'</script>";
-		// header('Location: ../agent-management.php');
-	}else{
-		echo '<script>alert("This data cannot be deleted due to its usage history in the system, but it can only be marked as inactive.")</script>';
-        echo "<script>window.location.href ='../agent-management.php'</script>";
-	}
-}
 
 function check_insurance_agent($conn,$id) {
 	$result = array();

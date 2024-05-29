@@ -6,8 +6,26 @@ include_once('includes/fx_reports.php');
 
 
 if(strlen($_SESSION['alogin'])==""){   
+	$dbh = null;
     header("Location: index.php"); 
 }
+
+    $status_view ='0';
+    $status_add ='0';
+    $status_edit ='0';
+    $status_delete ='0';
+    foreach ($_SESSION["application_page_status"] as $page_id) {
+        if($page_id["page_id"]=="14"){
+            $status_view =$page_id["page_view"];
+            $status_add =$page_id["page_add"];
+            $status_edit =$page_id["page_edit"];
+            $status_delete =$page_id["page_delete"];
+        }
+    }
+    if($status_view==0) {
+        $dbh = null;
+        header('Location: logout.php');
+    }
 
     $customers = get_customers ($conn);
     $products = get_products($conn);
@@ -252,7 +270,7 @@ if(strlen($_SESSION['alogin'])==""){
                             <table id="example"  class="table table-bordered " width="100%"  >
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                            <th width="5%">#</th>
 											<th>Policy No.</th>
 											<th>Partner Name</th>
 											<th>Cust. Name</th>
@@ -266,8 +284,8 @@ if(strlen($_SESSION['alogin'])==""){
                                             <?php } ?>
                                             <th>Premium Rate</th>
 
-                                            <th>Paid Date</th>
-                                            <th>Comm. Paid</th>                                
+                                            <th width="10%">Paid Date</th>
+                                            <th width="7%">Comm. Paid</th>                                
                                         </tr>
                                     </thead>
                                     <tbody style="font-size: 13px;">
@@ -441,6 +459,13 @@ if(strlen($_SESSION['alogin'])==""){
 	<script>
 		$(document).ready(function(){
 			var table = $('#example').DataTable({
+                scrollY: 400, // ตั้งค่าความสูงที่คุณต้องการให้แถวแรก freeze
+                scrollX: true,
+                scrollCollapse: true,
+                paging: true,
+                fixedColumns: {
+                    leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+                },
 				"order": [], //Initial no order.
 				"aaSorting": [], 
 				"ordering": false,
@@ -524,3 +549,5 @@ if(strlen($_SESSION['alogin'])==""){
 
 </html>
 
+<?php sqlsrv_close($conn); ?>
+<?php $dbh = null;?>

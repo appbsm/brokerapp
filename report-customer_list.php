@@ -6,8 +6,27 @@ error_reporting(0);
 include_once('includes/fx_customer_db.php');
 
 if(strlen($_SESSION['alogin'])=="") {
+	$dbh = null;
     header('Location: logout.php');
 }
+
+    $status_view ='0';
+    $status_add ='0';
+    $status_edit ='0';
+    $status_delete ='0';
+    foreach ($_SESSION["application_page_status"] as $page_id) {
+        if($page_id["page_id"]=="9"){
+            $status_view =$page_id["page_view"];
+            $status_add =$page_id["page_add"];
+            $status_edit =$page_id["page_edit"];
+            $status_delete =$page_id["page_delete"];
+        }
+    }
+    if($status_view==0) {
+        $dbh = null;
+        header('Location: logout.php');
+    }
+
 $customer="all";
 $status="all";
 $contacts=null;
@@ -103,13 +122,12 @@ $customers_list = get_customers_search_start($conn);
                         <label style="color: #102958;"  class="col-sm-3 label_left">Cust. Name:</label>
 
                         <div class="col-sm-3">
-                  
                             <select id="customer" name="customer" style="border-color:#102958; color: #000;" class="remove-example form-control selectpicker" data-live-search="true" value="<?php echo $customer; ?>" >
                                 <option value="all">All</option>
                                 <?php //echo $value['id']; ?>
                                 <?php foreach ($customers_list as $value) { ?>
                                     <option value="<?php echo trim($value['id']); ?>" 
-                                    <?php if ($value['full_name']==$customer) { echo 'selected="selected"'; } ?>
+                                    <?php if ($value['id']==$_POST['customer']) { echo 'selected="selected"'; } ?>
                                         ><?php echo $value['full_name']; ?>
                                     </option>
                                 <?php } ?>    
@@ -159,20 +177,22 @@ $customers_list = get_customers_search_start($conn);
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th width="200px">Cust. name</th>
-                                            <th width="100px">Status</th>
+                                            <th width="60px">Cust. ID</th>
+                                            <th width="200px">Cust. Name</th>
+                                            <th width="70px">Cust. Type</th>
                                             <th>Level</th>
                                             <th width="400px">Address</th>
-                                            <th width="200px">Cust. email</th>
-                                            <th width="100px">Cust. mobile</th>
+                                            <th width="100px">Cust. Mobile</th>
+                                            <th width="100px">Cust. Tel</th>
+                                            <th width="200px">Cust. Email</th>
 
-                                            <th width="150px">Contact person</th>
-                                            <th width="130px">Position</th>
+                                            <th width="150px">Contact Person</th>
+                                            <th width="120px">Contact Position</th>
                                             
-                                            <th width="200px">Email</th>
-                                            <th width="100px">Mobile</th>
+                                            <th width="200px">Contact Email</th>
+                                            <th width="100px">Contact Mobile</th>
                                            
-                                            
+                                            <th width="100px">Status</th>
                                         </tr>
                                     </thead>
                                     <tbody style="font-size: 13px;">
@@ -183,20 +203,50 @@ $customers_list = get_customers_search_start($conn);
 										    ?>
 										<tr>
                                             <td class="text-center"><?php echo $ctr;?></td>
+
+                                            <td><?php echo $c['customer_id']; ?></td>
                                             <td><?php echo $c['full_name']; ?></td>
-                                            <td class="text-center"><?php echo ($c['status'] == 1) ? 'Active' : 'Inactive';?></td>
+                                            <td class="text-center"><?php echo $c['customer_type']; ?></td>
 
 <!-- .$c['sub_district']." ".$c['district']." ".$c['name_th_province']." ".$c['name_th_district']." ".$c['name_th_sub']." " -->
 
                                             <td class="text-center"><?php echo $c['level_name'];?></td>
-                                            <td><?php echo $c['address_number']." ".$c['building_name']." ".$c['soi']." ".$c['road']." ".$c['name_en_province']." ".$c['name_en_district']." ".$c['name_en_sub']." "." ".$c['post_code'];?></td>
-                                            <td><?php echo $c['email'];?></td>
+                                            <td>
+                                                <?php echo $c['address_number']." ".$c['building_name']." ";
+                                                    if($c['soi'] != ''){
+                                                        echo "Soi. ".$c['soi']." ";
+                                                    }
+                                                    if($c['road'] != ''){
+                                                        echo " Road. ".$c['road']." ";
+                                                    }
+                                                    if($c['name_en_sub'] != ''){
+                                                        echo " Sub district. ".$c['name_en_sub']." ";
+                                                    }
+                                                    if($c['name_en_district'] != ''){
+                                                        echo " District. ".$c['name_en_district']." ";
+                                                    }
+                                                    if($c['name_en_province'] != ''){
+                                                        echo " Province. ".$c['name_en_province'];
+                                                    }
+                                                    if($c['post_code'] != ''){
+                                                        echo " Post code. ".$c['post_code'];
+                                                    }
+
+                                                  // echo $c['name_en_sub']." ".$c['name_en_district']." ".$c['name_en_province']." ".$c['post_code'];
+                                                ?> 
+                                            </td>
+
+                                            
                                             <td class="text-center"><?php echo $c['mobile'];?></td>
-                                            <td><?php echo $c['con_first_name'].' '.$c['con_last_name'];?></td>
+                                            <td class="text-center"><?php echo $c['tel'];?></td>
+                                            <td><?php echo $c['email'];?></td>
+                                            <td><?php echo $c['full_name_con'];?></td>
                                             <td><?php echo $c['position'];?></td>
                                             
                                             <td><?php echo $c['con_email'];?></td>
                                             <td class="text-center"><?php echo $c['con_mobile'];?></td>
+
+                                             <td class="text-center"><?php echo ($c['status'] == 1) ? 'Active' : 'Inactive';?></td>
 										</tr>
 										<?php 
 										$ctr++;
@@ -292,9 +342,16 @@ $customers_list = get_customers_search_start($conn);
     // "aLengthMenu": [[25,50,100,200,-1],[25,50,100,200,"ALL"]],
     
     var table = $('#example').DataTable({
-        scrollX: true,
-        "scrollCollapse": true,
-        "paging":         true,
+        scrollY: 400, // ตั้งค่าความสูงที่คุณต้องการให้แถวแรก freeze
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            fixedColumns: {
+                leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+            },
+        // scrollX: true,
+        // "scrollCollapse": true,
+        // "paging":         true,
         buttons: [
             { extend: 'csv',class: 'buttons-csv',className: 'btn-primary',charset: 'UTF-8',filename: 'Report customer list',bom: true
             ,init : function(api,node,config){ $(node).hide();} },
@@ -334,3 +391,5 @@ $customers_list = get_customers_search_start($conn);
 
 </html>
 
+<?php sqlsrv_close($conn); ?>
+<?php $dbh = null;?>

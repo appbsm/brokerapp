@@ -6,8 +6,26 @@ error_reporting(0);
 include_once('includes/fx_partner_db.php');
 
 if(strlen($_SESSION['alogin'])=="") {
+	$dbh = null;
     header('Location: logout.php');
 }
+
+    $status_view ='0';
+    $status_add ='0';
+    $status_edit ='0';
+    $status_delete ='0';
+    foreach ($_SESSION["application_page_status"] as $page_id) {
+        if($page_id["page_id"]=="10"){
+            $status_view =$page_id["page_view"];
+            $status_add =$page_id["page_add"];
+            $status_edit =$page_id["page_edit"];
+            $status_delete =$page_id["page_delete"];
+        }
+    }
+    if($status_view==0) {
+        $dbh = null;
+        header('Location: logout.php');
+    }
 
 $partner="all";
 $status="all";
@@ -146,16 +164,20 @@ $partners_list = get_partners($conn);
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th width="200px" >Partner name</th>
-                                            <th>Status</th>
+                                            <th width="70px" >Partner ID</th>
+                                            <th width="200px" >Partner Name</th>
+                                            
                                             <th width="400px" >Address</th>  
-                                            <th width="200px" >Partner email</th>
-                                            <th width="100px" >Mobile</th>
-                                            <th width="150px" >Contact person</th>
-                                            <th width="130px" >Position</th>
+                                            <th width="100px" >Partner Mobile</th>
+                                            <th width="100px" >Partner Tel</th>
+                                            <th width="200px" >Partner Email</th>
+           
+                                            <th width="150px" >Contact Person</th>
+                                            <th width="130px" >Contact Position</th>
                                                  
-                                            <th width="200px" >Email</th>
-                                            <th width="100px" >Mobile</th>
+                                            <th width="200px" >Contact Email</th>
+                                            <th width="100px" >Contact Mobile</th>
+											<th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody style="font-size: 13px;">
@@ -166,18 +188,45 @@ $partners_list = get_partners($conn);
 										?>
 										<tr>
                                             <td class="text-center"><?php echo $ctr;?></td>
+                                            <td><?php echo $p['insurance_id'];?></td>
                                             <td><?php echo $p['insurance_company'];?></td>
                                            <!-- <td> <?php //echo $p['first_name'].' '.$p['last_name'];?></td> -->
-                                            <td class="text-center"><?php echo ($p['status'] == 1) ? 'Active' : 'Inactive';?></td>
-                                            <td><?php echo $p['address_number']." ".$p['building_name']." ".$p['soi']." ".$p['road']." ".$p['name_en_province']." ".$p['name_en_district']." ".$p['name_en_sub']." ".$p['post_code'];?></td>
-                                            <td><?php echo $p['email'];?></td>
+                                           
+                                            <td><?php echo $p['address_number']." ".$p['building_name']." ";
+
+                                                    if($p['soi'] != ''){
+                                                        echo "Soi. ".$p['soi']." ";
+                                                    }
+                                                    if($p['road'] != ''){
+                                                        echo " Road. ".$p['road']." ";
+                                                    }
+                                                    if($p['name_en_sub'] != ''){
+                                                        echo " Sub district. ".$p['name_en_sub']." ";
+                                                    }
+                                                    if($p['name_en_district'] != ''){
+                                                        echo " District. ".$p['name_en_district']." ";
+                                                    }
+                                                    if($p['name_en_province'] != ''){
+                                                        echo " Province. ".$p['name_en_province'];
+                                                    }
+                                                    if($p['post_code'] != ''){
+                                                        echo " Post code. ".$p['post_code'];
+                                                    }
+
+                                            // echo $p['name_en_sub']." ".$p['name_en_district']." ".$p['name_en_province']." ".$p['post_code'];
+                                            ?>
+                                            </td>
+                                            
                                             <td><?php echo $p['phone'];?></td>
+                                            <td><?php echo $p['tel'];?></td>
+                                            <td><?php echo $p['email'];?></td>
 
                                             <td> <?php echo $p['first_name'].' '.$p['last_name'];?></td>
                                             <td><?php echo $p['position'];?></td>
                                             
                                             <td class="text-left" ><?php echo $p['email_con'];?></td>
                                             <td class="text-center"><?php echo $p['mobile_con'];?></td>
+											<td class="text-center"><?php echo ($p['status'] == 1) ? 'Active' : 'Inactive';?></td>
 
 										</tr>
 										<?php 
@@ -267,9 +316,16 @@ $partners_list = get_partners($conn);
     <script>
     $(document).ready(function(){
     var table = $('#example').DataTable({
-        scrollX: true,
-        "scrollCollapse": true,
-        "paging":         true,
+        scrollY: 400, // ตั้งค่าความสูงที่คุณต้องการให้แถวแรก freeze
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            fixedColumns: {
+                leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+            },
+        // scrollX: true,
+        // "scrollCollapse": true,
+        // "paging":         true,
         buttons: [
             { extend: 'csv',class: 'buttons-csv',className: 'btn-primary',charset: 'UTF-8',filename: 'Report partner list',bom: true
             ,init : function(api,node,config){ $(node).hide();} },
@@ -308,4 +364,5 @@ $partners_list = get_partners($conn);
 </body>
 
 </html>
-
+<?php sqlsrv_close($conn); ?>
+<?php $dbh = null;?>

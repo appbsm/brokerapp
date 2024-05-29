@@ -5,11 +5,28 @@
 	error_reporting(0);
 	if(strlen($_SESSION['alogin'])=="")
 		{   
+		$dbh = null;
 		header("Location: index.php"); 
 		}
 		else{
 
-	//For Deleting the notice
+	$status_view ='0';
+    $status_add ='0';
+    $status_edit ='0';
+    $status_delete ='0';
+    foreach ($_SESSION["application_page_status"] as $page_id) {
+        if($page_id["page_id"]=="18"){
+        	$status_view =$page_id["page_view"];
+            $status_add =$page_id["page_add"];
+            $status_edit =$page_id["page_edit"];
+            $status_delete =$page_id["page_delete"];
+        }
+    }
+    if($status_view==0) {
+		$dbh = null;
+		header('Location: logout.php');
+	}
+
 
 	if($_GET['id']){
 
@@ -29,7 +46,8 @@
 	$query = $dbh->prepare($sql);
 	$query->bindParam(':id',$id,PDO::PARAM_STR);
 	$query->execute();
-
+	
+	$dbh = null;
 	echo '<script>alert("Deleted Success.")</script>';
 	echo "<script>window.location.href ='companylist.php'</script>";
 
@@ -167,7 +185,11 @@
 									<!-- <th>Tel</th> -->
 									<th>Phone</th>
 									<th>Status</th>
+									<?php if($status_edit==1){ ?>
 									<th>Action</th>
+									<?php }else{ ?>
+									<th hidden="true" ></th>
+									<?php } ?>
 							</thead>
 							<tbody style="color: #0C1830; font-size: 13px;" >
 								<?php 
@@ -186,7 +208,9 @@
 										<td><?php echo $result->email;?></td>
 										<td><?php echo $result->mobile;?></td>
 										<td class="text-center"><?php if($result->status==1){ echo "Active"; }else{ echo "InActive"; } ?></td>
-										<td class="text-center">
+
+							<?php if($status_edit==1){ ?>
+							<td class="text-center">
 										<i title="Edit Record"><a href="edit-company.php?id=<?php echo $result->id;?>">
 								 <svg width="20" height="20" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
 								  <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
@@ -200,8 +224,10 @@
 								</svg>
 								</i>  -->
 								</a>
-
 							</td>
+							<?php }else{ ?>
+							<td hidden="true" ></td>
+							<?php } ?>
 
 								<?php $cnt++;}} ?>                       
                                     </tbody>
@@ -267,8 +293,14 @@
     // "aLengthMenu": [[25,50,100,200,-1],[25,50,100,200,"ALL"]],
     
     var table = $('#example').DataTable({
-        scrollX: true,
-       
+    	scrollY: 400, // ตั้งค่าความสูงที่คุณต้องการให้แถวแรก freeze
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            fixedColumns: {
+                leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+            },
+        // scrollX: true,
         "scrollCollapse": true,
         "paging":         true,
         buttons: [
@@ -310,3 +342,5 @@
 
 </html>
 <?php } ?>
+
+<?php $dbh = null;?>

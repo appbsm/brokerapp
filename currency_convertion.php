@@ -6,13 +6,27 @@
 	include('includes/config.php');
 	session_start();
 	error_reporting(0);
-	if(strlen($_SESSION['alogin'])=="")
-		{   
+	if(strlen($_SESSION['alogin'])==""){   
+		$dbh = null;
 		header("Location: index.php"); 
-		}
-		else{
+	}else{
 
-	//For Deleting the notice
+	$status_view ='0';
+    $status_add ='0';
+    $status_edit ='0';
+    $status_delete ='0';
+    foreach ($_SESSION["application_page_status"] as $page_id) {
+        if($page_id["page_id"]=="24"){
+        	$status_view =$page_id["page_view"];
+            $status_add =$page_id["page_add"];
+            $status_edit =$page_id["page_edit"];
+            $status_delete =$page_id["page_delete"];
+        }
+    }
+    if($status_view==0) {
+		$dbh = null;
+		header('Location: logout.php');
+	}
 
 	if($_GET['id']){
 		// $id=$_GET['id'];'; 
@@ -20,6 +34,7 @@
 		$query = $dbh->prepare($sql);
 		$query->bindParam(':id',$_GET['id'],PDO::PARAM_STR);
 		$query->execute();
+		$dbh = null;
 		echo '<script>alert("Deleted Success.")</script>';
 		echo "<script>window.location.href ='currency_convertion.php'</script>";
 	}
@@ -254,9 +269,12 @@
 					<div class="row pull-right" style="display: inline-block;">
 						<div class="text-right m-5">
 							<div class="row">
+								<?php if($status_add==1){ ?>
 								<a href="add-currency_convertion.php" class="btn btn-primary" style="color:#F9FAFA;" >
 									<span class="text">Add Currency Conversion</span>
 								</a> 
+								<?php } ?>
+
 								<div class="dropdown pl-3 pr-3">
 									<button class="btn btn-primary mr-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 										Export
@@ -499,8 +517,10 @@ document.getElementById('status').addEventListener('change', function() {
 //         form.submit();
 //     }
     if (this.checked) {
+		$dbh = null;
         window.location.href = 'currency_convertion.php?status=true'; // Replace with your desired URL
     }else{
+		$dbh = null;
         window.location.href = 'currency_convertion.php?status=false';
     }
 });
@@ -521,7 +541,11 @@ document.getElementById('status').addEventListener('change', function() {
 							<th style="color: #102958;" width="100px">Start Date</th>
 							<th style="color: #102958;" width="100px">End Date</th>
 							<th style="color: #102958;">Status</th>
+							<?php if($status_edit==1 or $status_delete ==1){ ?>
 							<th style="color: #102958;">Action</th>
+							<?php }else{ ?>
+							<th hidden="true" ></th>
+							<?php } ?>
 						</tr>
 					</thead>
 					<tbody style="color: #0C1830; font-size: 13px;" >
@@ -543,14 +567,18 @@ document.getElementById('status').addEventListener('change', function() {
 						<td class="text-center" class="stop_date_table" ><?php echo $result->stop_date_f;?></td>
 						
 						<td class="text-center" class="stauts_table" ><?php if($result->status==1){ echo "Active"; }else{ echo "InActive"; } ?></td>
-						<td class="text-center">
 
+						<?php if($status_edit==1 or $status_delete ==1){ ?>
+						<td class="text-center">
+							<?php if($status_edit==1){ ?>
 							<a href="edit-currency_convertion.php?id=<?php echo $result->id; ?>"><i class="fa " title="Edit Record"></i>
 								<svg width="20" height="20" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
 								  <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
 								</svg>
-							</a>
-
+							</a>&nbsp;&nbsp;
+							<?php } ?>
+							
+							<?php if($status_delete==1){ ?>
 							<i class="fa " title="Delete this Record" >
 								<a href="currency_convertion.php?id=<?php echo $result->id; ?>" onclick="return confirm('Do you really want to delete data?');">
 									<svg width="20" height="20" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -559,7 +587,12 @@ document.getElementById('status').addEventListener('change', function() {
 									</svg>
 								</a>
 							</i> 
+							<?php } ?>
 						</td>
+						<?php }else{ ?>
+						<td hidden="true" ></td>
+						<?php } ?>
+
 					</tr> 
 					<?php $cnt++;}} ?>  
 
@@ -638,10 +671,37 @@ document.getElementById('status').addEventListener('change', function() {
     <script src="assets/js/vfs_fonts.js"></script>
     <!-- <script src="assets/js/custom.js"></script> -->
        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
-        $(document).ready(function(){
+    $(document).ready(function(){
+
+    	jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            "date-dd-mmm-yyyy-pre": function(a) {
+                return moment(a, 'DD-MM-YYYY').unix();
+            },
+            "date-dd-mmm-yyyy-asc": function(a, b) {
+                return a - b;
+            },
+            "date-dd-mmm-yyyy-desc": function(a, b) {
+                return b - a;
+            }
+        });
+
     var table = $('#example').DataTable({
-        scrollX: true,
+    	"columnDefs": [
+                { 
+                    "targets": [5,6],
+                    "type": "date-dd-mmm-yyyy"
+                }
+            ],
+    	scrollY: 400, // ตั้งค่าความสูงที่คุณต้องการให้แถวแรก freeze
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            fixedColumns: {
+                leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+            },
+        // scrollX: true,
         lengthMenu: [[10, 25, 50, 100, -1], [10,25, 50, 100, "All"]],
         "scrollCollapse": true,
         "paging":         true,
@@ -684,3 +744,6 @@ document.getElementById('status').addEventListener('change', function() {
 
 </html>
 <?php } ?>
+
+
+<?php $dbh = null;?>

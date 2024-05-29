@@ -6,9 +6,26 @@ error_reporting(0);
 include_once('includes/fx_reports_history.php');
 
 if(strlen($_SESSION['alogin'])=="") {
+	$dbh = null;
     header('Location: logout.php');
 }
 
+    $status_view ='0';
+    $status_add ='0';
+    $status_edit ='0';
+    $status_delete ='0';
+    foreach ($_SESSION["application_page_status"] as $page_id) {
+        if($page_id["page_id"]=="15"){
+            $status_view =$page_id["page_view"];
+            $status_add =$page_id["page_add"];
+            $status_edit =$page_id["page_edit"];
+            $status_delete =$page_id["page_delete"];
+        }
+    }
+    if($status_view==0) {
+        $dbh = null;
+        header('Location: logout.php');
+    }
 
 $contacts=null;
 
@@ -295,12 +312,12 @@ $subcategories = get_product_subcategory($conn);
                                         <tr>
                                             <!-- <th class="text-center" width="20px" hidden="true" >No run</th> -->
                                             <th>No</th>
-                                            <th width="200px">Cust. name</th>
-                                            <th width="200px">Contact person</th>
+                                            <th width="200px">Cust. Name</th>
+                                            <th width="200px">Contact Person</th>
                                             <th width="130px">Position</th>
                                             <th width="200px">Email</th>
 
-                                            <th width="100px">Mobile phone</th>
+                                            <th width="100px">Mobile Phone</th>
                                             <th width="100px">Policy No</th>
                                             <th width="250px">Prod./Sub Categories</th>
                                             <!-- <th>Tel</th> -->
@@ -317,12 +334,12 @@ $subcategories = get_product_subcategory($conn);
 
                                             <th width="100px" >Status</th>
                                             <th width="90px">Payment Date</th>
-                                            <th width="300px" >Partner company</th>
+                                            <th width="300px" >Partner Company</th>
                                             <th width="150px">Remark</th>
                                             <th width="100px">Created Date</th>
-                                            <th width="100px">Created by</th>
+                                            <th width="100px">Created By</th>
                                             <th width="100px">Modify Date</th>
-                                            <th width="100px">Modify by</th>
+                                            <th width="100px">Modify By</th>
                                         </tr>
                                     </thead>
                                     <tbody style="font-size: 13px;">
@@ -344,6 +361,7 @@ $subcategories = get_product_subcategory($conn);
 
                                             <?php if($status_currency=="true"){ ?>
                                             <td class="text-center"><?php  echo $value['currency']; ?> </td>
+
                                             <td class="text-right"> 
                                             <?php 
                                               
@@ -366,9 +384,7 @@ $subcategories = get_product_subcategory($conn);
                                             ?>
                                             </td>
 
-                                            <td class="text-right"><?php if($value['premium_rate']!=""){ echo number_format((float)$value['premium_rate'], 2, '.', ','); }else{ echo "0.00"; } 
-                                            $premium_rate=$premium_rate+$value['premium_rate'];
-                                            $total_premium_rate+=$value['premium_rate']; ?></td>
+                                           
 
                                             <?php 
                                             //     if($value['premium_rate']!=""){ 
@@ -379,9 +395,16 @@ $subcategories = get_product_subcategory($conn);
                                             // }else{ echo "0.00"; }; 
                                             // if($value['currency']!=""){ echo "(".$value['currency'].")"; } 
                                             ?>
-                                                
                                             
                                             <?php } ?>
+
+                                             <td class="text-right">
+                                            <?php 
+                                            if($value['premium_rate']!=""){ echo number_format((float)$value['premium_rate'], 2, '.', ','); }else{ echo "0.00"; } 
+                                            $premium_rate=$premium_rate+$value['premium_rate'];
+                                            $total_premium_rate+=$value['premium_rate']; 
+                                            ?>
+                                            </td>
 
                                             <td class="text-center" ><?php echo $value['status'];?></td>
                                             <td class="text-center"><?php echo $value['in_paid_date'];?></td>
@@ -390,7 +413,9 @@ $subcategories = get_product_subcategory($conn);
                                             <td class="text-center"><?php echo $value['mindate'];?></td>
                                             <td><?php echo $value['create_by_user'];?></td>
                                             <td class="text-center"><?php echo $value['maxdate'];?></td>
+
                                             <td><?php echo $value['modify_by_user'];?></td>
+
 										</tr>
 										<?php $ctr++; } ?>  
 
@@ -481,8 +506,14 @@ $subcategories = get_product_subcategory($conn);
     <script>
     $(document).ready(function(){
     var table = $('#example').DataTable({
-        scrollX: true,
-       
+        scrollY: 400, // ตั้งค่าความสูงที่คุณต้องการให้แถวแรก freeze
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            fixedColumns: {
+                leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+            },
+        // scrollX: true,
         "scrollCollapse": true,
         "paging":         true,
         buttons: [
@@ -542,3 +573,4 @@ $subcategories = get_product_subcategory($conn);
 
 </html>
 
+<?php $dbh = null;?>

@@ -10,20 +10,14 @@ define('DB_NAME','broker_company');
 //Test@123
 
 
-try
-{
+try{
 // $dbh = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME,DB_USER, DB_PASS,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
 	$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME,DB_USER,DB_PASS,array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
 	$dbh->exec("SET CHARACTER SET utf8"); 
-}
-catch (PDOException $e)
-{
+}catch (PDOException $e){
 	echo "<br>"."Error ".$e."<br>";
-exit("Error: " . $e->getMessage());
+	exit("Error: " . $e->getMessage());
 }
-
-session_name("broker");
-session_start();
 
 // ini_set('display_errors', 1);
 // 	error_reporting(~0);

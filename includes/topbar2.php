@@ -6,6 +6,9 @@ include_once('connect_sql.php');
 
 // session_start();
 // error_reporting(0);
+session_name("broker");
+session_start();
+
 include_once('includes/fx_alert_date.php');
 
 // $near_to_due_list = near_to_due_list($conn);
@@ -33,7 +36,13 @@ $count_overdue = count($overdue_list);
                 <nav class="navbar navbar-expand navbar-light bg-white topbar  static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+
+
+                  <!--   <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" style="margin-left: 500px;">
+                        <i class="fa fa-bars"></i>
+                    </button> -->
+                    <!-- style="margin-left: 10px;" -->
+                     <button id="sidebarToggleTop" class="btn btn-link  " style="margin-left: 10px;" >
                         <i class="fa fa-bars"></i>
                     </button>
 
@@ -49,9 +58,10 @@ $count_overdue = count($overdue_list);
                                 </button>
                             </div>
                         </div>
-                    </form> -->
+                    </form>
 
                     <!-- Topbar Navbar -->
+
                     <ul class="navbar-nav ml-auto">
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->

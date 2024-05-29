@@ -1,43 +1,44 @@
 <?php
 
-include('includes/config.php');
-session_start();
-error_reporting(0);
-if(strlen($_SESSION['alogin'])==""){   
-header("Location: index.php"); 
-}else{
+	include('includes/config.php');
+	session_start();
+	error_reporting(0);
+	if(strlen($_SESSION['alogin'])==""){ 
+		$dbh = null;  
+	header("Location: index.php"); 
+	}else{
 
-// $password=md5($_POST['password']);
-$newpassword=md5($_POST['newpassword']);
-$confirmpassword=md5($_POST['confirmpassword']);
-$username=$_SESSION['alogin'];
+	// $password=md5($_POST['password']);
+	$newpassword=md5($_POST['newpassword']);
+	$confirmpassword=md5($_POST['confirmpassword']);
+	$username=$_SESSION['alogin'];
 
-if(isset($_POST['submit'])){
+	if(isset($_POST['submit'])){
 
-    if($newpassword==$confirmpassword){
+		if($newpassword==$confirmpassword){
 
-// $sql ="SELECT Password FROM user_info WHERE username=:username and password=:password";
-$sql ="SELECT Password FROM user_info WHERE username=:username";
-$query= $dbh -> prepare($sql);
-$query-> bindParam(':username', $username, PDO::PARAM_STR);
-$query-> bindParam(':password', $newpassword, PDO::PARAM_STR);
-$query-> execute();
-$results = $query -> fetchAll(PDO::FETCH_OBJ);
+	// $sql ="SELECT Password FROM user_info WHERE username=:username and password=:password";
+	$sql ="SELECT Password FROM user_info WHERE username=:username";
+	$query= $dbh -> prepare($sql);
+	$query-> bindParam(':username', $username, PDO::PARAM_STR);
+	$query-> bindParam(':password', $newpassword, PDO::PARAM_STR);
+	$query-> execute();
+	$results = $query -> fetchAll(PDO::FETCH_OBJ);
 
-    // if($query -> rowCount() > 0){
-        $con="update user_info set password=:newpassword where username=:username";
-        $chngpwd1 = $dbh->prepare($con);
-        $chngpwd1-> bindParam(':username', $username, PDO::PARAM_STR);
-        $chngpwd1-> bindParam(':newpassword', $newpassword, PDO::PARAM_STR);
-        $chngpwd1->execute();
-        $msg="Your Password succesfully changed";
-    // }else {
-    //     $error="Your current password is wrong";    
-    // }
-    }else{
-        $error="Your new password and confirm password do not match.";
-    }
-}
+		// if($query -> rowCount() > 0){
+			$con="update user_info set password=:newpassword where username=:username";
+			$chngpwd1 = $dbh->prepare($con);
+			$chngpwd1-> bindParam(':username', $username, PDO::PARAM_STR);
+			$chngpwd1-> bindParam(':newpassword', $newpassword, PDO::PARAM_STR);
+			$chngpwd1->execute();
+			$msg="Your Password succesfully changed";
+		// }else {
+		//     $error="Your current password is wrong";    
+		// }
+		}else{
+			$error="Your new password and confirm password do not match.";
+		}
+	}
 ?>
 
 <!DOCTYPE html>
@@ -216,7 +217,14 @@ $results = $query -> fetchAll(PDO::FETCH_OBJ);
 
 									if (!regex.test(newPassword)) {
 										//alert("รหัสผ่านต้องประกอบด้วยตัวเล็ก ตัวใหญ่ ตัวเลข และอักขระพิเศษ และมีความยาวอย่างน้อย 8 ตัวอักษร");
-										alert("Password must contain at least one lowercase letter, one uppercase letter, one numeric digit, one special character, and be at least 8 characters long.");
+										// alert("Password must contain at least one lowercase letter, one uppercase letter, one numeric digit, one special character, and be at least 8 characters long.");
+										var text = "Your password is not strong, please using the following criteria:\n"+
+											"1.The password must have a minimum of 8 characters.\n"+
+											"2.It must include at least 1 uppercase letter.\n"+
+											"3.It must include at least 1 lowercase letter.\n"+
+											"4.It must include at least 1 digit.\n"+
+											"5.It must include at least 1 special character (e.g., @, !, #, $).";
+										alert(text);
 										return false;
 									}
 
@@ -288,4 +296,6 @@ $results = $query -> fetchAll(PDO::FETCH_OBJ);
 <div id="loading-overlay">
     <img src="loading.gif" alt="Loading...">
 </div>  
+
+<?php $dbh = null; ?>
         

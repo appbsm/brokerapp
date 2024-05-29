@@ -5,17 +5,21 @@
 
 <?php
 	include('includes/config.php');
+	include('includes/fx_policy_db.php');
 	session_start();
 	error_reporting(0);
 	include('includes/config_path.php');
-	if(strlen($_SESSION['alogin'])==""){   
+
+	if(strlen($_SESSION['alogin'])==""){  
+	 	$dbh = null;
 		header("Location: index.php"); 
 	}else{
 		if(isset($_POST['back'])){
+			$dbh = null;
 			header("Location: manage-user.php"); 
 		}
 
-		if(isset($_POST['submit'])){  
+	if(isset($_POST['submit'])){ 
 
 		$id_customer_input  = $_POST['id_customer_input'];
 		$name_c_input       = $_POST['name_c_input'];
@@ -53,7 +57,7 @@
 
 		// echo "_SESSION id :".$_SESSION['id'];
 		
-		if(count($_POST["policy"])>0){
+if(count($_POST["policy"])>0){
 			
 	$array_delete=array();
 	$sql_rela = "SELECT * from rela_customer_to_insurance WHERE id_default_insurance = ".$_POST['id_insurance_info'][0];
@@ -82,71 +86,73 @@
 
 	$lastInsertId_customer="";
 	$lastInsertId_contact_default=0;
-	if($id_customer_input==""){ // insert sql customer
-				$sql="INSERT INTO customer (customer_name,customer_id,title_name,first_name,last_name".
-			   ",nick_name,company_name,tel,mobile,email".
-			   ",address_number,building_name,soi,road,sub_district".
-			   ",district,province,post_code,status,cdate".
-			   ",udate,create_by".
-			   ",customer_type,tax_id,customer_level)";
-				// ,[modify_by],[id_rela_contact],[id_rela_insurance_info]
 
-	$sql=$sql." VALUES(:customer_name_p,:customer_id_p,:title_name_p,:first_name_p,:last_name_p".
-			   ",:nick_name_p,:company_name_p,:tel_p,:mobile_p,:email_p".
-			   ",:address_number_p,:building_name_p,:soi_p,:road_p,:sub_district_p".
-			   ",:district_p,:province_p,:post_code_p,:status_p,GETDATE()".
-			   ",GETDATE(),:create_by_p".
-			   ",:customer_type_p,:tax_id_p,:customer_level_p) ";
+	// if($id_customer_input==""){ // insert sql customer
+	// 			$sql="INSERT INTO customer (customer_name,customer_id,title_name,first_name,last_name".
+	// 		   ",nick_name,company_name,tel,mobile,email".
+	// 		   ",address_number,building_name,soi,road,sub_district".
+	// 		   ",district,province,post_code,status,cdate".
+	// 		   ",udate,create_by".
+	// 		   ",customer_type,tax_id,customer_level)";
+	// 			// ,[modify_by],[id_rela_contact],[id_rela_insurance_info]
 
-		$query = $dbh->prepare($sql); 
-		$query->bindParam(':customer_name_p',$name_c_input,PDO::PARAM_STR);
-		$query->bindParam(':customer_id_p',$customer_c_input,PDO::PARAM_STR);
+	// $sql=$sql." VALUES(:customer_name_p,:customer_id_p,:title_name_p,:first_name_p,:last_name_p".
+	// 		   ",:nick_name_p,:company_name_p,:tel_p,:mobile_p,:email_p".
+	// 		   ",:address_number_p,:building_name_p,:soi_p,:road_p,:sub_district_p".
+	// 		   ",:district_p,:province_p,:post_code_p,:status_p,GETDATE()".
+	// 		   ",GETDATE(),:create_by_p".
+	// 		   ",:customer_type_p,:tax_id_p,:customer_level_p) ";
 
-		$query->bindParam(':title_name_p',$title_c_input,PDO::PARAM_STR);
-		$query->bindParam(':first_name_p',$first_c_input,PDO::PARAM_STR);
-		$query->bindParam(':last_name_p',$last_c_input,PDO::PARAM_STR);
-		$query->bindParam(':nick_name_p',$nick_c_input,PDO::PARAM_STR);
+	// 	$query = $dbh->prepare($sql); 
+	// 	$query->bindParam(':customer_name_p',$name_c_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':customer_id_p',$customer_c_input,PDO::PARAM_STR);
 
-		$query->bindParam(':company_name_p',$company_n_c_input,PDO::PARAM_STR);
-		$query->bindParam(':tel_p',$tel_c_input,PDO::PARAM_STR);
-		$query->bindParam(':mobile_p',$mobile_c_input,PDO::PARAM_STR);
-		$query->bindParam(':email_p',$email_c_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':title_name_p',$title_c_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':first_name_p',$first_c_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':last_name_p',$last_c_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':nick_name_p',$nick_c_input,PDO::PARAM_STR);
 
-		$query->bindParam(':address_number_p',$address_number_input,PDO::PARAM_STR);
-		$query->bindParam(':building_name_p',$building_input,PDO::PARAM_STR);
-		$query->bindParam(':soi_p',$soi_input,PDO::PARAM_STR);
-		$query->bindParam(':road_p',$road_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':company_name_p',$company_n_c_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':tel_p',$tel_c_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':mobile_p',$mobile_c_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':email_p',$email_c_input,PDO::PARAM_STR);
 
-		$query->bindParam(':sub_district_p',$sub_district_id,PDO::PARAM_STR);
-		$query->bindParam(':district_p',$district_id,PDO::PARAM_STR);
-		$query->bindParam(':province_p',$province_id,PDO::PARAM_STR);
-		$query->bindParam(':post_code_p',$postcode_id,PDO::PARAM_STR);
-		if($status_c_input==""){
-			$status_c_input="0";
-		}else{
-			$status_c_input="1";
-		}
-		$query->bindParam(':status_p',$status_c_input,PDO::PARAM_STR);
-		$query->bindParam(':create_by_p',$_SESSION['id'],PDO::PARAM_STR);
+	// 	$query->bindParam(':address_number_p',$address_number_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':building_name_p',$building_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':soi_p',$soi_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':road_p',$road_input,PDO::PARAM_STR);
 
-		// $query->bindParam(':modify_by_p','1',PDO::PARAM_STR);
+	// 	$query->bindParam(':sub_district_p',$sub_district_id,PDO::PARAM_STR);
+	// 	$query->bindParam(':district_p',$district_id,PDO::PARAM_STR);
+	// 	$query->bindParam(':province_p',$province_id,PDO::PARAM_STR);
+	// 	$query->bindParam(':post_code_p',$postcode_id,PDO::PARAM_STR);
+	// 	if($status_c_input==""){
+	// 		$status_c_input="0";
+	// 	}else{
+	// 		$status_c_input="1";
+	// 	}
+	// 	$query->bindParam(':status_p',$status_c_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':create_by_p',$_SESSION['id'],PDO::PARAM_STR);
 
-		// $query->bindParam(':id_rela_contact_p',"",PDO::PARAM_STR);
-		// $query->bindParam(':id_rela_insurance_info_p',"",PDO::PARAM_STR);
+	// 	// $query->bindParam(':modify_by_p','1',PDO::PARAM_STR);
 
-		$query->bindParam(':customer_type_p',$type_c_input,PDO::PARAM_STR);
-		$query->bindParam(':tax_id_p',$personal_c_input,PDO::PARAM_STR);
-		$query->bindParam(':customer_level_p',$level_c_input,PDO::PARAM_STR);
+	// 	// $query->bindParam(':id_rela_contact_p',"",PDO::PARAM_STR);
+	// 	// $query->bindParam(':id_rela_insurance_info_p',"",PDO::PARAM_STR);
 
-		$query->execute();
-		// print_r($query->errorInfo());
+	// 	$query->bindParam(':customer_type_p',$type_c_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':tax_id_p',$personal_c_input,PDO::PARAM_STR);
+	// 	$query->bindParam(':customer_level_p',$level_c_input,PDO::PARAM_STR);
+
+	// 	$query->execute();
+	// 	// print_r($query->errorInfo());
 
 
-		$lastInsertId_customer = $dbh->lastInsertId();
-	}else{ //update contact
-		$lastInsertId_customer = $id_customer_input;
-	}///////////////////////// end contact
+	// 	$lastInsertId_customer = $dbh->lastInsertId();
+	// }else{ //update contact
+	// 	$lastInsertId_customer = $id_customer_input;
+	// }///////////////////////// end contact
 
+	$lastInsertId_customer = $id_customer_input;
 
 	if($lastInsertId_customer){ //// insert insurance
 
@@ -156,425 +162,173 @@
 
 		for ($i=0;$i<count($_POST['policy']);$i++) {
 
+			// echo '<script>alert("id_insurance_info: '.$_POST['id_insurance_info'][$i].'")</script>'; 
 			if($_POST['id_insurance_info'][$i]!=""){
 
-		$new_file_name="";
-		if($_FILES['file_d']['name'][$i]!=""){
-			try {
-				$file = $_FILES['file_d']['name'][$i];
-				$file_loc = $_FILES['file_d']['tmp_name'][$i];
-				// $image=$_POST['file_d'];
-				$folder=$sourceFilePath;
-				$ext = pathinfo($file, PATHINFO_EXTENSION);
-				$new_file_name = uniqid().".".$ext;
-				$path_file = $folder."/".$new_file_name;
-				$final_file=str_replace(' ','-',$new_file_name);
-				move_uploaded_file($file_loc,$folder.$final_file);    
-				$sql_upload_file =" ,file_name=:file_name_p,file_name_uniqid=:file_name_uniqid_p ";
-			}catch(Exception $e) {
-				// echo '<script>alert("Error : '.$e.'")</script>'; 
-			}
-		}
-				// FORMAT(GETDATE(), 'MM/dd/yyyy')
-
-				// ,policy_no =:policy_no_p
-				// 		,status=:status_p,product_category=:product_category_p,sub_categories=:sub_categories_p
-				// 		,insurance_company_id=:insurance_company_id_p,product_id=:product_id_p
-				// 		,period=:period_p,period_type=:period_type_p,period_day=:period_day_p
-				// 		,start_date=:start_date_p,end_date=:end_date_p
-				// 		,premium_rate=:premium_rate_p
-				// 		,convertion_value=:convertion_value_p
-				// 		,percent_trade=:percent_trade_p,commission_rate=:commission_rate_p,agent_id=:agent_id_p
-				// 		,default_insurance=:default_insurance_p
-				// 		,calculate_type=:calculate_type_p,payment_status=:payment_status_p,paid_date=:paid_date_p
-				// 		,udate=GETDATE(),modify_by=:modify_by_p,reason=:reason_p
-				$sql ="UPDATE insurance_info set insurance_company=:insurance_company_p
-				,policy_no =:policy_no_p
-				,status=:status_p,product_category=:product_category_p,sub_categories=:sub_categories_p
-				,insurance_company_id=:insurance_company_id_p,product_id=:product_id_p
-				,period=:period_p,period_type=:period_type_p,period_day=:period_day_p
-				,start_date=:start_date_p,end_date=:end_date_p
-				,premium_rate=:premium_rate_p
-				,convertion_value=:convertion_value_p
-				,percent_trade=:percent_trade_p
-				,commission_rate=:commission_rate_p
-				,agent_id=:agent_id_p
-				,default_insurance=:default_insurance_p
-						,calculate_type=:calculate_type_p,payment_status=:payment_status_p,paid_date=:paid_date_p
-						,udate=GETDATE(),modify_by=:modify_by_p,reason=:reason_p,remark=:remark_p
-				 ".$sql_upload_file.
-						" where id ='".$_POST['id_insurance_info'][$i]."'";
-				// 		,percent_trade=:percent_trade_p
-				// ,commission_rate=:commission_rate_p
-				$query = $dbh->prepare($sql); 
-
-				$query->bindParam(':insurance_company_p',$_POST['insurance_company'][$i],PDO::PARAM_STR);
-				$query->bindParam(':policy_no_p',$_POST['policy'][$i],PDO::PARAM_STR);
-				$query->bindParam(':status_p',$_POST['status'][$i],PDO::PARAM_STR);
-				$query->bindParam(':product_category_p',$_POST['product_cat'][$i],PDO::PARAM_STR);
-				$query->bindParam(':sub_categories_p',$_POST['sub_cat'][$i],PDO::PARAM_STR);
-
-				$query->bindParam(':insurance_company_id_p',$_POST['insurance_com'][$i],PDO::PARAM_STR);
-				$query->bindParam(':product_id_p',$_POST['product_name'][$i],PDO::PARAM_STR);
-
-				$null_value;
-				if($_POST['period_type'][$i]=='Month'){
-					$query->bindParam(':period_type_p',$_POST['period_type'][$i],PDO::PARAM_STR);
-					$query->bindParam(':period_p',$_POST['period_month'][$i],PDO::PARAM_STR);
-					$query->bindParam(':period_day_p',$null_value,PDO::PARAM_STR);
-				}else{
-					$query->bindParam(':period_type_p',$_POST['period_type'][$i],PDO::PARAM_STR);
-					$query->bindParam(':period_p',$null_value,PDO::PARAM_STR);
-					$query->bindParam(':period_day_p',$_POST['period_day'][$i],PDO::PARAM_STR);
-				}
-
-				$query->bindParam(':start_date_p',date("Y-m-d", strtotime($_POST['start_date'][$i])),PDO::PARAM_STR);
-				$query->bindParam(':end_date_p',date("Y-m-d", strtotime($_POST['end_date'][$i])),PDO::PARAM_STR);
-
-				$per = substr($_POST['percent_trade'][$i],0,-1);
-
-				$premium_rate_p = (float) str_replace(',', '', $_POST['convertion_value'][$i]);
-				$query->bindParam(':premium_rate_p',$premium_rate_p,PDO::PARAM_STR);
-
-				$convertion_value_p = (float) str_replace(',', '', $_POST['premium_rate'][$i]);
-				$query->bindParam(':convertion_value_p',$convertion_value_p,PDO::PARAM_STR);
-
-				$percent_trade_p = (float) str_replace(',', '', $per);
-				$query->bindParam(':percent_trade_p',$percent_trade_p,PDO::PARAM_STR);
-
-				$commission_rate_p = (float) str_replace(',', '',$_POST['commission'][$i]);
-				$query->bindParam(':commission_rate_p',$commission_rate_p,PDO::PARAM_STR);
-					
-
-				$query->bindParam(':agent_id_p',$_POST['agent'][$i],PDO::PARAM_STR);
-				$query->bindParam(':payment_status_p',$_POST['payment_status'][$i],PDO::PARAM_STR);
-
-				$query->bindParam(':calculate_type_p',$_POST['calculate'][$i],PDO::PARAM_STR);
-				
-				$query->bindParam(':paid_date_p',date("Y-m-d", strtotime($_POST['paid_date'][$i])),PDO::PARAM_STR);
-				$query->bindParam(':reason_p',$_POST['textarea_detail'][$i],PDO::PARAM_STR);
-
-				$query->bindParam(':modify_by_p',$_SESSION['id'],PDO::PARAM_STR);
-
-				$query->bindParam(':remark_p',$_POST['remark'][$i],PDO::PARAM_STR);
-				 
-				if($start_policy=="true"){
-					$value=1;
-					$query->bindParam(':default_insurance_p',$value,PDO::PARAM_STR);
-					$start_policy="false";
-				}else{
-					$value=0;
-					$query->bindParam(':default_insurance_p',$value,PDO::PARAM_STR);
-				}
-
-				//////////// upload ////////////
+				$new_file_name="";
 				if($_FILES['file_d']['name'][$i]!=""){
-						$query->bindParam(':file_name_p',$_FILES['file_d']['name'][$i],PDO::PARAM_STR);
-						$query->bindParam(':file_name_uniqid_p',$new_file_name,PDO::PARAM_STR);
+					try {
+						$file = $_FILES['file_d']['name'][$i];
+						$file_loc = $_FILES['file_d']['tmp_name'][$i];
+						$folder=$sourceFilePath;
+						$ext = pathinfo($file, PATHINFO_EXTENSION);
+						$new_file_name = uniqid().".".$ext;
+						$path_file = $folder."/".$new_file_name;
+						$final_file=str_replace(' ','-',$new_file_name);
+						move_uploaded_file($file_loc,$folder.$final_file);    
+						$sql_upload_file =" ,file_name=:file_name_p,file_name_uniqid=:file_name_uniqid_p ";
+					}catch(Exception $e) {
+						// echo '<script>alert("Error : '.$e.'")</script>'; 
+					}
+				}	
+				// echo '<script>alert("insert_policy_renew: '.$_POST['status'][$i].'")</script>'; 
+				// echo '<script>alert("policy: '.$_POST['policy'][$i].':'.$_POST['policy_old'][$i].'")</script>'; 
+
+				// if($_POST['status'][$i] == "Renew" && ($_POST['policy'][$i] != $_POST['policy_old'][$i])){
+
+				// ($_POST['status'][$i] == "Renew" && ($_POST['status'][$i] != $_POST['status_old'][$i])) ||
+				if(
+					($_POST['status'][$i] == "Renew" && ($_POST['policy'][$i] != $_POST['policy_old'][$i]))
+				){
+					insert_policy_renew($dbh,$_POST,$_FILES,$new_file_name,$lastInsertId_customer,$i,$_FILES['file_d']);
+				}else{
+					update_policy($dbh,$_POST,$_FILES,$new_file_name,$lastInsertId_customer,$i,$_FILES['file_d']);
 				}
-				////////////////////////////////////
-				
-				$query->execute();
-				// print_r($query->errorInfo());
+				insert_history_policy($dbh,$_POST,$lastInsertId_customer,"update");
 
-				$sql_update = "update rela_customer_to_insurance set id_customer=:id_customer_p,id_default_contact=:id_default_contact_p".
-				" where id_insurance_info=".$_POST['id_insurance_info'][$i];
-				// $sql_update = "dddddddfsdfs";
+				// update_rela_customer_to_insurance($dbh,$_POST,$lastInsertId_customer,$i);
 
-				// echo '<script>alert("sql update test::'.$sql_update.'")</script>'; 
-				 // echo '<script>alert("sql update lastInsertId_customer: '.$lastInsertId_customer." lastInsertId ".$_POST['id_insurance_info'][$i].'")</script>'; 
 
-				$query = $dbh->prepare($sql_update); 
-				$query->bindParam(':id_customer_p',$lastInsertId_customer,PDO::PARAM_STR);
-				$query->bindParam(':id_default_contact_p',$_POST['id_co'][0],PDO::PARAM_STR);
+				$sql_policy_primary ="";
 
-				// $query->bindParam(':id_insurance_info_p',$_POST['id_insurance_info'][$i],PDO::PARAM_STR);
-				// $query->bindParam(':id_default_insurance',$start_lastInsertId_insurance,PDO::PARAM_STR);
-				$query->execute();
-				// print_r($query->errorInfo());
 			}else{////// else null id Insurance
 			  
 	///////////////-------------------------------------------------------------------
-				$sql = "INSERT INTO insurance_info".
-				"(insurance_company,policy_no,status,product_category,sub_categories".
-				",insurance_company_id,product_id,period,period_type,period_day,start_date,end_date".
-				",premium_rate".
-				",convertion_value".
-				",percent_trade,commission_rate,agent_id,file_name".
-				",file_name_uniqid,default_insurance,calculate_type,payment_status,paid_date,commission_status,cdate,create_by,reason,remark)";
-			$sql=$sql." VALUES (:insurance_company_p,:policy_no_p,:status_p,:product_category_p,:sub_categories_p".
-					",:insurance_company_id_p,:product_id_p,:period_p,:period_type_p,:period_day_p,:start_date_p,:end_date_p".
-					",:premium_rate_p".
-					",:convertion_value_p".
-					",:percent_trade_p,:commission_rate_p,:agent_id_p,:file_name_p".
-					",:file_name_uniqid_p,:default_insurance_p,:calculate_type_p,:payment_status_p,:paid_date_p,:commission_status_p,GETDATE(),:create_by_p,:reason_p,:remark_p)";
 
-				$query = $dbh->prepare($sql); 
+		// 		$sql = "INSERT INTO insurance_info".
+		// 		"(insurance_company,policy_no,status,product_category,sub_categories".
+		// 		",insurance_company_id,product_id,period,period_type,period_day,start_date,end_date".
+		// 		",premium_rate".
+		// 		",convertion_value".
+		// 		",percent_trade,commission_rate,agent_id,file_name".
+		// 		",file_name_uniqid,default_insurance,calculate_type,payment_status,paid_date,commission_status,cdate,create_by,reason,remark)";
+		// 	$sql=$sql." VALUES (:insurance_company_p,:policy_no_p,:status_p,:product_category_p,:sub_categories_p".
+		// 			",:insurance_company_id_p,:product_id_p,:period_p,:period_type_p,:period_day_p,:start_date_p,:end_date_p".
+		// 			",:premium_rate_p".
+		// 			",:convertion_value_p".
+		// 			",:percent_trade_p,:commission_rate_p,:agent_id_p,:file_name_p".
+		// 			",:file_name_uniqid_p,:default_insurance_p,:calculate_type_p,:payment_status_p,:paid_date_p,:commission_status_p,GETDATE(),:create_by_p,:reason_p,:remark_p)";
 
-				$query->bindParam(':insurance_company_p',$_POST['insurance_company'][$i],PDO::PARAM_STR);
-				$query->bindParam(':policy_no_p',$_POST['policy'][$i],PDO::PARAM_STR);
-				$query->bindParam(':status_p',$_POST['status'][$i],PDO::PARAM_STR);
-				$query->bindParam(':product_category_p',$_POST['product_cat'][$i],PDO::PARAM_STR);
-				$query->bindParam(':sub_categories_p',$_POST['sub_cat'][$i],PDO::PARAM_STR);
+		// 		$query = $dbh->prepare($sql); 
 
-				$query->bindParam(':insurance_company_id_p',$_POST['insurance_com'][$i],PDO::PARAM_STR);
-				$query->bindParam(':product_id_p',$_POST['product_name'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':insurance_company_p',$_POST['insurance_company'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':policy_no_p',$_POST['policy'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':status_p',$_POST['status'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':product_category_p',$_POST['product_cat'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':sub_categories_p',$_POST['sub_cat'][$i],PDO::PARAM_STR);
 
-				$null_value;
-				if($_POST['period_type'][$i]=='Month'){
-					$query->bindParam(':period_type_p',$_POST['period_type'][$i],PDO::PARAM_STR);
-					$query->bindParam(':period_p',$_POST['period_month'][$i],PDO::PARAM_STR);
-					$query->bindParam(':period_day_p',$null_value,PDO::PARAM_STR);
-				}else{
-					$query->bindParam(':period_type_p',$_POST['period_type'][$i],PDO::PARAM_STR);
-					$query->bindParam(':period_p',$null_value,PDO::PARAM_STR);
-					$query->bindParam(':period_day_p',$_POST['period_day'][$i],PDO::PARAM_STR);
-				}
-				// $query->bindParam(':period_p',$_POST['period'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':insurance_company_id_p',$_POST['insurance_com'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':product_id_p',$_POST['product_name'][$i],PDO::PARAM_STR);
 
-				$query->bindParam(':start_date_p',date("Y-m-d", strtotime($_POST['start_date'][$i])),PDO::PARAM_STR);
-				$query->bindParam(':end_date_p',date("Y-m-d", strtotime($_POST['end_date'][$i])),PDO::PARAM_STR);
+		// 		$null_value;
+		// 		if($_POST['period_type'][$i]=='Month'){
+		// 			$query->bindParam(':period_type_p',$_POST['period_type'][$i],PDO::PARAM_STR);
+		// 			$query->bindParam(':period_p',$_POST['period_month'][$i],PDO::PARAM_STR);
+		// 			$query->bindParam(':period_day_p',$null_value,PDO::PARAM_STR);
+		// 		}else{
+		// 			$query->bindParam(':period_type_p',$_POST['period_type'][$i],PDO::PARAM_STR);
+		// 			$query->bindParam(':period_p',$null_value,PDO::PARAM_STR);
+		// 			$query->bindParam(':period_day_p',$_POST['period_day'][$i],PDO::PARAM_STR);
+		// 		}
+		// 		// $query->bindParam(':period_p',$_POST['period'][$i],PDO::PARAM_STR);
 
-				$per = substr($_POST['percent_trade'][$i],0,-1);
+		// 		$query->bindParam(':start_date_p',date("Y-m-d", strtotime($_POST['start_date'][$i])),PDO::PARAM_STR);
+		// 		$query->bindParam(':end_date_p',date("Y-m-d", strtotime($_POST['end_date'][$i])),PDO::PARAM_STR);
 
-				$query->bindParam(':premium_rate_p',$_POST['convertion_value'][$i],PDO::PARAM_STR);
-				$query->bindParam(':convertion_value_p',$_POST['premium_rate'][$i],PDO::PARAM_STR);
+		// 		$per = substr($_POST['percent_trade'][$i],0,-1);
 
-				$query->bindParam(':percent_trade_p',$per,PDO::PARAM_STR);
-				$query->bindParam(':commission_rate_p',$_POST['commission'][$i],PDO::PARAM_STR);
-				$query->bindParam(':agent_id_p',$_POST['agent'][$i],PDO::PARAM_STR);
-				$query->bindParam(':payment_status_p',$_POST['payment_status'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':premium_rate_p',$_POST['convertion_value'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':convertion_value_p',$_POST['premium_rate'][$i],PDO::PARAM_STR);
 
-				$query->bindParam(':calculate_type_p',$_POST['calculate'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':percent_trade_p',$per,PDO::PARAM_STR);
+		// 		$query->bindParam(':commission_rate_p',$_POST['commission'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':agent_id_p',$_POST['agent'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':payment_status_p',$_POST['payment_status'][$i],PDO::PARAM_STR);
+
+		// 		$query->bindParam(':calculate_type_p',$_POST['calculate'][$i],PDO::PARAM_STR);
 				
-				$query->bindParam(':paid_date_p',date("Y-m-d", strtotime($_POST['paid_date'][$i])),PDO::PARAM_STR);
+		// 		$query->bindParam(':paid_date_p',date("Y-m-d", strtotime($_POST['paid_date'][$i])),PDO::PARAM_STR);
 
-				$commission_status = "Not Paid";
-				$query->bindParam(':commission_status_p',$commission_status,PDO::PARAM_STR);
+		// 		$commission_status = "Not Paid";
+		// 		$query->bindParam(':commission_status_p',$commission_status,PDO::PARAM_STR);
 
-				$query->bindParam(':reason_p',$_POST['textarea_detail'][$i],PDO::PARAM_STR);
-				$query->bindParam(':create_by_p',$_SESSION['id'],PDO::PARAM_STR);
+		// 		$query->bindParam(':reason_p',$_POST['textarea_detail'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':create_by_p',$_SESSION['id'],PDO::PARAM_STR);
 
-				$query->bindParam(':remark_p',$_POST['remark'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':remark_p',$_POST['remark'][$i],PDO::PARAM_STR);
 				 
-				if($start_policy=="true"){
-					$value=1;
-					$query->bindParam(':default_insurance_p',$value,PDO::PARAM_STR);
-					$start_policy="false";
-				}else{
-					$value=0;
-					$query->bindParam(':default_insurance_p',$value,PDO::PARAM_STR);
-				}
-		//////////// upload ////////////
-		$new_file_name="";
-		// echo '<script>alert("post file_d : '.$_FILES['file_d']['name'][$i].'")</script>'; 
-		if($_FILES['file_d']['name'][$i]!=""){
-			try {
-				$file = $_FILES['file_d']['name'][$i];
-				$file_loc = $_FILES['file_d']['tmp_name'][$i];
-				// $image=$_POST['file_d'];
-				$folder=$sourceFilePath;
-				$ext = pathinfo($file, PATHINFO_EXTENSION);
-				$new_file_name = uniqid().".".$ext;
-				$path_file = $folder."/".$new_file_name;
-				$final_file=str_replace(' ','-',$new_file_name);
-				move_uploaded_file($file_loc,$folder.$final_file);    
-			}catch(Exception $e) {
-				// echo '<script>alert("Error : '.$e.'")</script>'; 
-			}
-		}
-		////////////////////////////////////
+		// 		if($start_policy=="true"){
+		// 			$value=1;
+		// 			$query->bindParam(':default_insurance_p',$value,PDO::PARAM_STR);
+		// 			$start_policy="false";
+		// 		}else{
+		// 			$value=0;
+		// 			$query->bindParam(':default_insurance_p',$value,PDO::PARAM_STR);
+		// 		}
+		// //////////// upload ////////////
+		// $new_file_name="";
+		// // echo '<script>alert("post file_d : '.$_FILES['file_d']['name'][$i].'")</script>'; 
+		// if($_FILES['file_d']['name'][$i]!=""){
+		// 	try {
+		// 		$file = $_FILES['file_d']['name'][$i];
+		// 		$file_loc = $_FILES['file_d']['tmp_name'][$i];
+		// 		// $image=$_POST['file_d'];
+		// 		$folder=$sourceFilePath;
+		// 		$ext = pathinfo($file, PATHINFO_EXTENSION);
+		// 		$new_file_name = uniqid().".".$ext;
+		// 		$path_file = $folder."/".$new_file_name;
+		// 		$final_file=str_replace(' ','-',$new_file_name);
+		// 		move_uploaded_file($file_loc,$folder.$final_file);    
+		// 	}catch(Exception $e) {
+		// 		// echo '<script>alert("Error : '.$e.'")</script>'; 
+		// 	}
+		// }
+		// ////////////////////////////////////
 
-				$query->bindParam(':file_name_p',$_FILES['file_d']['name'][$i],PDO::PARAM_STR);
-				$query->bindParam(':file_name_uniqid_p',$new_file_name,PDO::PARAM_STR);
-				////////////
-				$query->execute();
-				// print_r($query->errorInfo());
+		// 		$query->bindParam(':file_name_p',$_FILES['file_d']['name'][$i],PDO::PARAM_STR);
+		// 		$query->bindParam(':file_name_uniqid_p',$new_file_name,PDO::PARAM_STR);
+		// 		////////////
+		// 		$query->execute();
 
-				$lastInsertId_insurance = $dbh->lastInsertId();
-				// if($start_id_insurance=="true"){
-				//     $start_lastInsertId_insurance = $dbh->lastInsertId();
-				//     $start_id_insurance="false";
-				// }
+		// 		$lastInsertId_insurance = $dbh->lastInsertId();
+		// 		// if($start_id_insurance=="true"){
+		// 		//     $start_lastInsertId_insurance = $dbh->lastInsertId();
+		// 		//     $start_id_insurance="false";
+		// 		// }
 
-				// $lastInsertId_customer
-				$sql = "INSERT INTO rela_customer_to_insurance".
-					"(id_customer,id_insurance_info,id_default_insurance)";
-				$sql=$sql." VALUES (:id_customer_p,:id_insurance_info_p,:id_default_insurance,:id_default_contact)";
-				$query = $dbh->prepare($sql); 
-				$query->bindParam(':id_customer_p',$lastInsertId_customer,PDO::PARAM_STR);
-				$query->bindParam(':id_insurance_info_p',$lastInsertId_insurance,PDO::PARAM_STR);
-				$query->bindParam(':id_default_insurance',$_POST['id_insurance_info'][0],PDO::PARAM_STR);
-				$query->bindParam(':id_default_contact',$_POST['id_co'][0],PDO::PARAM_STR);
-				$query->execute();
+		// 		// $lastInsertId_customer
+		// 		$sql = "INSERT INTO rela_customer_to_insurance".
+		// 			"(id_customer,id_insurance_info,id_default_insurance)";
+		// 		$sql=$sql." VALUES (:id_customer_p,:id_insurance_info_p,:id_default_insurance,:id_default_contact)";
+		// 		$query = $dbh->prepare($sql); 
+		// 		$query->bindParam(':id_customer_p',$lastInsertId_customer,PDO::PARAM_STR);
+		// 		$query->bindParam(':id_insurance_info_p',$lastInsertId_insurance,PDO::PARAM_STR);
+		// 		$query->bindParam(':id_default_insurance',$_POST['id_insurance_info'][0],PDO::PARAM_STR);
+		// 		$query->bindParam(':id_default_contact',$_POST['id_co'][0],PDO::PARAM_STR);
+		// 		$query->execute();
 				// print_r($query->errorInfo());
 	///////////////-------------------------------------------------------------------
 
 			}
 		}//loop for Insurance information
+		
 
-			// echo '<script>alert("count title_co:'.count($_POST['title_co']).'")</script>'; 
-			// for ($i=0;$i<count($_POST['title_co']);$i++) {
-			// 	// echo '<script>alert("value id_co:'.$_POST['id_co'][$i].'")</script>'; 
-			// 	if($_POST['id_co'][$i]!=""){ ////////// update old value  //////////
-			// 		$sql ="update contact set title_name=:title_name_p,first_name=:first_name_p,last_name=:last_name_p
-			// 			,nick_name=:nick_name_p,tel=:tel_p,mobile=:mobile_p,email=:email_p,line_id=:line_id_p
-			// 			,position=:position_p,remark=:remark_p,default_contact=:default_contact_p,department=:department_p wher id='"+$_POST['id_co'][$i]+"'";
-			// 		$query = $dbh->prepare($sql); 
-			// 		$query->bindParam(':title_name_p',$_POST['title_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':first_name_p',$_POST['first_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':last_name_p',$_POST['last_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':nick_name_p',$_POST['nick_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':tel_p',$_POST['tel_co'][$i],PDO::PARAM_STR);
+	}
 
-			// 		$query->bindParam(':mobile_p',$_POST['mobile_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':email_p',$_POST['email_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':line_id_p',$_POST['line_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':position_p',$_POST['position_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':remark_p',$_POST['remark_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':department_p',$_POST['department'][$i],PDO::PARAM_STR);
-
-			// 		$default_status = $_POST['default_co'][$i];
-			// 		if($default_status==""){
-			// 			$default_status="0";
-			// 		}else{
-			// 			$default_status="1";
-			// 		}
-			// 		$query->bindParam(':default_contact_p',$default_status,PDO::PARAM_STR);
-			// 		$query->execute();
-
-			// 		if($default_status==""){
-			// 			// $default_status="0";
-			// 		}else{
-			// 			$lastInsertId_contact_default = $_POST['id_co'][$i];
-			// 		}
-
-			// 		// print_r($query->errorInfo());
-
-			// 	}else{ ////////// new value  ////////////////
-
-			// 		$sql = "INSERT INTO contact ".
-			// 		"(title_name,first_name,last_name,nick_name,tel".
-			// 		",mobile,email,line_id,position,remark".
-			// 		",default_contact,department)";
-			// 		$sql=$sql." VALUES (:title_name_p,:first_name_p,:last_name_p,:nick_name_p,:tel_p".
-			// 			 ",:mobile_p,:email_p,:line_id_p,:position_p,:remark_p".
-			// 			 ",:default_contact_p,:department_p)";
-			// 		$query = $dbh->prepare($sql); 
-			// 		$query->bindParam(':title_name_p',$_POST['title_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':first_name_p',$_POST['first_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':last_name_p',$_POST['last_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':nick_name_p',$_POST['nick_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':tel_p',$_POST['tel_co'][$i],PDO::PARAM_STR);
-
-			// 		$query->bindParam(':mobile_p',$_POST['mobile_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':email_p',$_POST['email_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':line_id_p',$_POST['line_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':position_p',$_POST['position_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':remark_p',$_POST['remark_co'][$i],PDO::PARAM_STR);
-			// 		$query->bindParam(':department_p',$_POST['department'][$i],PDO::PARAM_STR);
-
-			// 		$default_status = $_POST['default_co'][$i];
-			// 		if($default_status==""){
-			// 			$default_status="0";
-			// 		}else{
-			// 			$default_status="1";
-			// 		}
-
-			// 		$query->bindParam(':default_contact_p',$default_status,PDO::PARAM_STR);
-			// 		$query->execute();
-			// 		// print_r($query->errorInfo());
-			// 		$lastInsertId_contact = $dbh->lastInsertId();
-
-			// 		$sql = "INSERT INTO rela_customer_to_contact".
-			// 		"(id_customer,id_contact)";
-			// 		$sql=$sql." VALUES (:id_customer_p,:id_contact_p)";
-			// 		$query = $dbh->prepare($sql); 
-			// 		$query->bindParam(':id_customer_p',$lastInsertId_customer,PDO::PARAM_STR);
-			// 		$query->bindParam(':id_contact_p',$lastInsertId_contact,PDO::PARAM_STR);
-			// 		if($default_status==""){
-			// 			// $default_status="0";
-			// 		}else{
-			// 			$lastInsertId_contact_default = $lastInsertId_contact;
-			// 		}
-			// 		$query->execute();
-			// 	}
-
-			// }//loop for Contact Person
-
-
-
-			 $sql = "INSERT INTO report_history_policy
-					(id_insurance_info,policy_no,start_date,end_date
-			   ,premium_rate
-			   ,convertion_value
-			   ,percent_trade,commission_rate,payment_status
-			   ,insurance_company_id,insurance_company_name,status,agent_id
-			   ,customer_id,customer_name,tel,mobile,email,paid_date,type,contact_id_default,modify_by,cdate)  VALUES  
-				(:id_insurance_info_p,:policy_no_p,:start_date_p,:end_date_p
-			   ,:premium_rate_p
-			   ,:convertion_value_p
-			   ,:percent_trade_p,:commission_rate_p,:payment_status_p
-			   ,:insurance_company_id_p,:insurance_company_name_p,:status_p,:agent_id_p
-			   ,:customer_id_p,:customer_name_p,:tel_p,:mobile_p,:email_p,:paid_date_p,:type_p,:contact_id_default_p,:modify_by_p,GETDATE()) ";
-
-				// $sql = "INSERT INTO report_history_policy
-				// (id_insurance_info
-				// 	,policy_no,start_date,end_date
-				// 	,premium_rate
-				// 	,convertion_value
-				// 	,cdate
-				// 	) 
-			    // VALUES  
-				// (:id_insurance_info_p
-				// 	,GETDATE()
-				// ) ";
-
-				$query = $dbh->prepare($sql); 
-				$query->bindParam(':id_insurance_info_p',$_POST['id_insurance_info'][0],PDO::PARAM_STR);
-				$query->bindParam(':policy_no_p',$_POST['policy'][0],PDO::PARAM_STR);
-				
-				$query->bindParam(':start_date_p',date("Y-m-d", strtotime($_POST['start_date'][0])),PDO::PARAM_STR);
-				$query->bindParam(':end_date_p',date("Y-m-d", strtotime($_POST['end_date'][0])),PDO::PARAM_STR);
-
-				$premium_rate_p = (float) str_replace(',','',$_POST['convertion_value'][0]);
-				$query->bindParam(':premium_rate_p',$premium_rate_p,PDO::PARAM_STR);
-
-				$convertion_value_p = (float) str_replace(',','',$_POST['premium_rate'][0]);
-				$query->bindParam(':convertion_value_p',$convertion_value_p,PDO::PARAM_STR);
-
-				$percent_trade_p = (float) str_replace(',','',substr($_POST['percent_trade'][0],0,-1));
-				$query->bindParam(':percent_trade_p',$percent_trade_p,PDO::PARAM_STR);
-
-				$commission_rate_p = (float) str_replace(',','',$_POST['commission'][0]);
-				$query->bindParam(':commission_rate_p',$commission_rate_p,PDO::PARAM_STR);
-
-
-				$query->bindParam(':payment_status_p',$_POST['payment_status'][0],PDO::PARAM_STR);
-
-				$query->bindParam(':insurance_company_id_p',$_POST['insurance_com'][0],PDO::PARAM_STR);
-				$query->bindParam(':insurance_company_name_p',$_POST['product_name'][0],PDO::PARAM_STR);
-				$query->bindParam(':status_p',$_POST['status'][0],PDO::PARAM_STR);
-				$query->bindParam(':agent_id_p',$_POST['agent'][0],PDO::PARAM_STR);
-
-				$query->bindParam(':customer_id_p',$lastInsertId_customer,PDO::PARAM_STR);
-				$query->bindParam(':customer_name_p',$name_c_input,PDO::PARAM_STR);
-				$query->bindParam(':tel_p',$tel_c_input,PDO::PARAM_STR);
-				$query->bindParam(':mobile_p',$mobile_c_input,PDO::PARAM_STR);
-				$query->bindParam(':email_p',$email_c_input,PDO::PARAM_STR);
-				$query->bindParam(':paid_date_p',date("Y-m-d", strtotime($_POST['paid_date'][$i])),PDO::PARAM_STR);
-				$type_insert = "update";
-				$query->bindParam(':type_p',$type_insert,PDO::PARAM_STR);
-				$query->bindParam(':contact_id_default_p',$lastInsertId_contact_default,PDO::PARAM_STR);
-				$query->bindParam(':modify_by_p',$_SESSION['id'],PDO::PARAM_STR);
-
-				$query->execute();
-
-		}
-
-		}
-		// echo '<script>alert("Successfully edited information.")</script>';
-		echo "<script>window.location.href ='entry-policy.php'</script>";
+}
+			// echo '<script>alert("Successfully edited information.")</script>';
+			$dbh = null;
+			echo "<script>window.location.href ='entry-policy.php'</script>";
 		}else{
 
 		}
@@ -583,12 +337,15 @@
 	$stop_date = date('d-m-Y');
 	$paid_date = date('d-m-Y');
 
-	if($_GET['id']){
 
-		$sql = "SELECT * FROM rela_customer_to_insurance WHERE id_insurance_info =".$_GET['id'];
-		$query = $dbh->prepare($sql);
-		$query->execute();
-		$results = $query->fetchAll(PDO::FETCH_OBJ);
+	if($_GET['id']){
+		$results = get_rela_insurance($dbh,$_GET['id']);
+		
+		if(count($results)==0){
+			$dbh = null;
+			header("Location: entry-policy.php"); 
+		}
+		
 		foreach($results as $value){
 			$id_policy = $value->id_default_insurance;
 			$id_default_contact = $value->id_default_contact;
@@ -597,26 +354,10 @@
 			// header("Location: entry-policy.php");
 		}
 
-	$sql_insurance = " SELECT ip.id_currency_list,cl.currency,cc.currency_value,cc.currency_value_convert,
-	FORMAT(insurance_info.start_date, 'dd-MM-yyyy') as start_date_f,FORMAT(end_date, 'dd-MM-yyyy') as end_date_f 
-	,FORMAT(insurance_info.paid_date, 'dd-MM-yyyy') as paid_date_f
-					 ,cl.currency,ct.id AS customer_id_ct,ct.customer_name AS customer_name_ct,ct.customer_type 
-					 ,ct.customer_id AS customer_id_ct,re_ci.id_customer,insurance_info.id as id_insurance_info,insurance_info.*
-					  from insurance_info 
-					 JOIN rela_customer_to_insurance re_ci ON re_ci.id_insurance_info = insurance_info.id 
-					 LEFT JOIN customer ct ON ct.id = re_ci.id_customer 
-					 LEFT JOIN insurance_partner ip ON ip.id = insurance_info.insurance_company_id 
-					 LEFT JOIN currency_list cl ON ip.id_currency_list = cl.id 
-					 LEFT JOIN currency_convertion cc ON  cc.id = 
-				(SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id_currency_list = ip.id_currency_list
- 				AND  insurance_info.start_date >= c_c.start_date and insurance_info.start_date <= c_c.stop_date and c_c.status='1')
-					 WHERE   insurance_info.id =".$id_policy;
-					 // insurance_info.default_insurance = 1 and
-		$query_insurance = $dbh->prepare($sql_insurance);
-		$query_insurance->execute();
-		$results_insurance = $query_insurance->fetchAll(PDO::FETCH_OBJ);
+		$results_insurance = get_insurance($dbh,$id_policy);
 		$start = "true";
 	}
+
 	foreach($results_insurance as $result){
 		$id_insurance = $result->id;
 		$product_cat = $result->product_category;
@@ -634,6 +375,9 @@
 		$agent_id = $result->agent_id;
 
 		$policy_no = $result->policy_no;
+		$policy_type = $result->policy_type;
+		$policy_primary = $result->policy_primary;
+
 		$status = $result->status;
 		$product_id = $result->product_id;
 		$period_id = $result->period;
@@ -665,55 +409,15 @@
 	// echo '<script>alert("id_customer: '.$policy_no.'")</script>'; 
 	}
 
-	$sql_company = " SELECT ip.id AS id_partner,*,cl.currency from insurance_partner ip
-	JOIN currency_list cl ON ip.id_currency_list = cl.id
-	WHERE ip.status = 1 ";
-	$query_company = $dbh->prepare($sql_company);
-	$query_company->execute();
-	$results_company = $query_company->fetchAll(PDO::FETCH_OBJ);
+	
+	$results_company = get_company($dbh);
+	$results_product = get_product($dbh,$insurance_company_id);
+	$results_period  = get_period($dbh);
+	$results_agent	 = get_agent_old($dbh,$insurance_company_id);
+	$results_c_level = get_customer_level($dbh);
 
-
-	$sql_product = " SELECT pr.* FROM product pr
-	JOIN rela_partner_to_product rp ON rp.id_product = pr.id
-	WHERE rp.id_partner = ".$insurance_company_id;
-	$query_product = $dbh->prepare($sql_product);
-	$query_product->execute();
-	$results_product = $query_product->fetchAll(PDO::FETCH_OBJ);
-
-
-	$sql_period = " SELECT * from period WHERE status = 1 order by LEN(period) ";
-	$query_period = $dbh->prepare($sql_period);
-	$query_period->execute();
-	$results_period = $query_period->fetchAll(PDO::FETCH_OBJ);
-
-	// $sql_agent = "SELECT ag.id,ag.title_name,ag.first_name,ag.last_name FROM rela_agent_to_insurance reag
-	// JOIN agent ag ON ag.id = reag.id_agent
-	// -- WHERE reag.id_insurance =  '".$insurance_company_id."' and ag.status = '1' "
-	// ." GROUP BY ag.id,ag.title_name,ag.first_name,ag.last_name ";
-	$sql_agent = " SELECT CONCAT(ag.title_name,' ',ag.first_name,' ',ag.last_name) as agent_namefull,MIN(ag.id) id
- 		,ag.title_name,ag.first_name,ag.last_name 
- 		FROM under un 
- 		LEFT JOIN agent ag ON ag.id = un.id_agent 
- 		WHERE ag.status = '1' and id_partner = '".$insurance_company_id."' GROUP BY ag.first_name,ag.last_name,ag.title_name";
-	$query_agent = $dbh->prepare($sql_agent);
-	$query_agent->execute();
-	$results_agent=$query_agent->fetchAll(PDO::FETCH_OBJ);
-
-	$sql_c_level = " SELECT * from customer_level WHERE status = 1 ";
-	$query_c_level = $dbh->prepare($sql_c_level);
-	$query_c_level->execute();
-	$results_c_level=$query_c_level->fetchAll(PDO::FETCH_OBJ);
-
-	$sql_categories = " SELECT * from product_categories WHERE status = 1 order by id asc ";
-	$query_categories = $dbh->prepare($sql_categories);
-	$query_categories->execute();
-	$results_categories = $query_categories->fetchAll(PDO::FETCH_OBJ);
-
-
-	$sql_sub = " SELECT * from product_subcategories WHERE status = 1 AND id_product_categorie = '".$product_cat."'";
-	$query_sub = $dbh->prepare($sql_sub);
-	$query_sub->execute();
-	$results_sub = $query_sub->fetchAll(PDO::FETCH_OBJ);
+	$results_categories = get_categories($dbh);
+	$results_sub 	 = get_sub($dbh,$product_cat);
 
 ?>
 
@@ -857,6 +561,11 @@ $(function(){
                 </div>
                 <!-- col-xs-auto -->
                 <div class="col ">
+                	<input hidden="true" name="status_old[]" value="<?php echo $status; ?>" >
+                	<input hidden="true" name="policy_old[]" value="<?php echo $policy_no; ?>" >
+                	<input hidden="true" name="policy_type[]" value="<?php echo $policy_type; ?>" >
+                	<input hidden="true" name="policy_primary[]" value="<?php echo $policy_primary; ?>" >
+
                     <input id="policy" name="policy[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $policy_no; ?>" required>
                 </div>
                 <div class="col-sm-2  label_left" >
@@ -1002,20 +711,21 @@ $(function(){
 					calculate.on('change', function(){
 						if($(this).val()=="Percentage"){
 							document.getElementById("calculate").value = 'Percentage';
-						    document.getElementById("percent_trade").value = parseFloat(percen_value).toFixed(2)+'%';
-						        	
-						    document.getElementById("calculate_popup").value = 'Percentage';
-						    document.getElementById("percent_trade_popup").value = parseFloat(percen_value).toFixed(2)+'%';
+							document.getElementById("calculate_popup").value = 'Percentage';
+							if(percen_value!=''){
+						    	document.getElementById("percent_trade").value = parseFloat(percen_value).toFixed(2)+'%';
+						    	document.getElementById("percent_trade_popup").value = parseFloat(percen_value).toFixed(2)+'%';
+						    }
 						    chang_commission_type();
 						}else{
 							document.getElementById("calculate").value = 'Net Value';
-						    document.getElementById("percent_trade").value = parseFloat(net_value).toFixed(2);
-						        	
-						    document.getElementById("calculate_popup").value = 'Net Value';
-						    document.getElementById("percent_trade_popup").value = parseFloat(net_value).toFixed(2);
+							document.getElementById("calculate_popup").value = 'Net Value';
+							if(net_value!=''){
+						    	document.getElementById("percent_trade").value = parseFloat(net_value).toFixed(2);
+						    	document.getElementById("percent_trade_popup").value = parseFloat(net_value).toFixed(2);
+						    }
 						    chang_commission_type();
 						}
-
 					}); 
 
 					function chang_commission_type() {
@@ -1057,17 +767,21 @@ $(function(){
 					calculate.on('change', function(){
 						if($(this).val()=="Percentage"){
 							document.getElementById("calculate").value = 'Percentage';
-						    document.getElementById("percent_trade").value = parseFloat(percen_value).toFixed(2)+'%';
-						        	
 						    document.getElementById("calculate_popup").value = 'Percentage';
-						    document.getElementById("percent_trade_popup").value = parseFloat(percen_value).toFixed(2)+'%';
+
+						    if(percen_value!=''){
+						    	document.getElementById("percent_trade").value = parseFloat(percen_value).toFixed(2)+'%';
+						    	document.getElementById("percent_trade_popup").value = parseFloat(percen_value).toFixed(2)+'%';
+							}
 						    chang_commission_type_popup();
 						}else{
 							document.getElementById("calculate").value = 'Net Value';
-						    document.getElementById("percent_trade").value = parseFloat(net_value).toFixed(2);
-						        	
 						    document.getElementById("calculate_popup").value = 'Net Value';
-						    document.getElementById("percent_trade_popup").value = parseFloat(net_value).toFixed(2);
+						    
+						    if(net_value!=''){
+						    	document.getElementById("percent_trade").value = parseFloat(net_value).toFixed(2);
+						    	document.getElementById("percent_trade_popup").value = parseFloat(net_value).toFixed(2);
+							}
 						    chang_commission_type_popup();
 						}
 
@@ -1340,13 +1054,34 @@ $(function(){
                 </div>
 				
 				<div class="col-sm-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Paid Date:</label>
+                    <label style="color: #102958;"  ><small><font color="red">*</font></small>Paid Date:</label>
                 </div> 
                 <div class="col-sm-2">
                     <input id="paid_date" name="paid_date[]" <?php echo $paid_date; ?> style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control" 
                     value="<?php echo $paid_date; ?>" placeholder="dd-mm-yyyy" required>
+
+                     <input hidden="" id="paid_date_old" name="paid_date_old[]" <?php echo $paid_date; ?>  type="text"  class="form-control" 
+                    value="<?php echo $paid_date; ?>" placeholder="dd-mm-yyyy" >
+
                 </div>
         </div>
+
+        <script>
+        	var value_status = document.getElementById("status_i_input").value;
+	        if(value_status=="New" || value_status=="Renew"){
+	        	document.getElementById("paid_date").removeAttribute("disabled");
+	            // document.getElementById("paid_date").removeAttribute("readOnly");
+	        }else{
+	        	 document.getElementById("paid_date").setAttribute("disabled","disabled");
+	            // document.getElementById("paid_date").value=new Date();
+	            // document.getElementById("paid_date").setAttribute("readOnly", true);
+	            // $('#paid_date').datepicker({
+                // format: 'dd-mm-yyyy',
+                // language: 'en'
+            	// }).attr('readonly', true);
+	        }
+	    </script>
+
         <!-- hidden="true" -->
         <input hidden="true" id="partner_currency"  type="text" value="<?php echo $currency_value; ?>" >
         <input hidden="true" id="partner_currency_value"  type="text" value="<?php echo $currency_value_convert; ?>" >
@@ -1429,33 +1164,33 @@ $(function(){
                     <select id="calculate" name="calculate[]"  style="color: #000;border-color:#102958;" class="form-control" 
                         onchange="
 
-                        if(document.getElementById('percent_trade').value!=''){
-                        // var premium = parseFloat(document.getElementById('premium_rate').value).toFixed(2);
-                       	var premiumInput = document.getElementById('convertion_value').value.replace(/,/g,'');
-						var premium = parseFloat(premiumInput).toFixed(2);
-                        var percent = parseFloat(document.getElementById('percent_trade').value).toFixed(2);
-                        if(document.getElementById('calculate').value=='Percentage'){
-                            if (parseFloat(percent)>100){
-                                document.getElementById('percent_trade').value=parseFloat(100.00).toFixed(2)+'%';
-                            }else{
-                                document.getElementById('percent_trade').value=parseFloat(percent).toFixed(2)+'%';
-                            } 
-                            var percent = parseFloat(document.getElementById('percent_trade').value).toFixed(2);
-                            var commission = ((percent / 100) * premium);
-                        }else{
-                            document.getElementById('percent_trade').value = percent;
-                            var commission = percent;
-                        }else{
-                        	var commissionNumber  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(commission);
-	                        document.getElementById('commission').value =commissionNumber;
-                        }
+                        // if(document.getElementById('percent_trade').value!=''){
+                        // // var premium = parseFloat(document.getElementById('premium_rate').value).toFixed(2);
+                       	// var premiumInput = document.getElementById('convertion_value').value.replace(/,/g,'');
+						// var premium = parseFloat(premiumInput).toFixed(2);
+                        // var percent = parseFloat(document.getElementById('percent_trade').value).toFixed(2);
+                        // if(document.getElementById('calculate').value=='Percentage'){
+                        //     if (parseFloat(percent)>100){
+                        //         document.getElementById('percent_trade').value=parseFloat(100.00).toFixed(2)+'%';
+                        //     }else{
+                        //         document.getElementById('percent_trade').value=parseFloat(percent).toFixed(2)+'%';
+                        //     } 
+                        //     var percent = parseFloat(document.getElementById('percent_trade').value).toFixed(2);
+                        //     var commission = ((percent / 100) * premium);
+                        // }else{
+                        //     document.getElementById('percent_trade').value = percent;
+                        //     var commission = percent;
+                        // }else{
+                        // 	var commissionNumber  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(commission);
+	                    //     document.getElementById('commission').value =commissionNumber;
+                        // }
 
-                        	// if(commission!='NaN'){
-	                        var commissionNumber  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(commission);
-	                        document.getElementById('commission').value =commissionNumber;
-	                    	// }
+                        // 	// if(commission!='NaN'){
+	                    //     var commissionNumber  = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(commission);
+	                    //     document.getElementById('commission').value =commissionNumber;
+	                    // 	// }
 	                    	
-                        }
+                        // }
                         "  />
                         <option value="Percentage" <?php if ("Percentage"==$calculate_type) { echo ' selected="selected"'; } ?> >Percentage</option>
                         <option value="Net Value" <?php if ("Net Value"==$calculate_type) { echo ' selected="selected"'; } ?> >Net Value</option>
@@ -2402,6 +2137,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
 
                 	if(item.currency!="฿THB"&& item.currency!="THB" ){
 	                    	if(item.currency_value==null || item.currency_value_convert==null ){
+	                    		$dbh = null;
 	                    		alert('Your currency conversion rate has expired. Kindly assess and update it accordingly.');
 	        					window.location.href ='currency_convertion.php';
 	                    	}
@@ -2613,10 +2349,14 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
         }
 
         if(value_status=="New" || value_status=="Renew"){
+        	// document.getElementById("paid_date").removeAttribute("readOnly");
             document.getElementById("paid_date").removeAttribute("disabled");
+          
         }else{
+        	// document.getElementById("paid_date").setAttribute("readOnly", true);
             document.getElementById("paid_date").setAttribute("disabled","disabled");
             // document.getElementById("paid_date").value=new Date();
+
         }
 
         var payment_object = $('#payment_status');
@@ -2634,6 +2374,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
             $('#ModalRenew').modal('show');
         }
 
-
     }
 </script> 
+
+<?php $dbh = null; ?>

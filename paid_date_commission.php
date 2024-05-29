@@ -10,8 +10,27 @@
 	// alert('not checked');
 
 	if(strlen($_SESSION['alogin'])=="") {
+		$dbh = null;
 		header('Location: logout.php');
 	}
+
+	$status_view ='0';
+	$status_add ='0';
+    $status_edit ='0';
+    $status_delete ='0';
+    foreach ($_SESSION["application_page_status"] as $page_id) {
+        if($page_id["page_id"]=="26"){
+        	$status_view =$page_id["page_view"];
+            $status_add =$page_id["page_add"];
+            $status_edit =$page_id["page_edit"];
+            $status_delete =$page_id["page_delete"];
+        }
+    }
+    if($status_view==0) {
+		$dbh = null;
+		header('Location: logout.php');
+	}
+	
 	// else{
 
 	// if($_GET['id']){
@@ -25,6 +44,8 @@
 
 	$paid_policy = get_paid_policy($conn,$_GET['status']);
 	
+	
+
 ?>
 
 <!DOCTYPE html>
@@ -287,6 +308,7 @@
 				<script>
 					function handleChange(select) {
 						var status = select.value;
+						$dbh = null;
 				        window.location.href = 'paid_date_commission.php?status=' + encodeURIComponent(status);
 					}
 
@@ -312,7 +334,11 @@
 							<th style="color: #102958;" width="70px">Comm. Status</th>
 							
 							<!-- <th style="color: #102958;" width="100px">End Date</th> -->
+							<?php if($status_edit==1){ ?>
 							<th style="color: #102958;" width="40px">Action</th>
+							<?php }else{ ?>
+							<th hidden="true" ></th>
+							<?php } ?>
 						</tr>
 					</thead>
 					<tbody style="color: #0C1830; font-size: 13px;" >
@@ -339,6 +365,8 @@
 						<td class="text-center" ><?php echo $result['commission_status'];?></td>
 						
 						<!-- <td class="text-center" class="stauts_table" ><?php if($result->status==1){ echo "Active"; }else{ echo "InActive"; } ?></td> -->
+
+						<?php if($status_edit==1){ ?>
 						<td class="text-center">
 
 							<a href="edit-paid-date.php?id=<?php echo $result['id']; ?>"><i class="fa " title="Edit Record"></i>
@@ -356,6 +384,10 @@
 								</a>
 							</i>  -->
 						</td>
+						<?php }else{ ?>
+						<td hidden="true" ></td>
+						<?php } ?>
+
 					</tr> 
 					<?php $cnt++;}} ?>  
 
@@ -433,11 +465,37 @@
     <script src="assets/js/pdfmake.min.js"></script>
     <script src="assets/js/vfs_fonts.js"></script>
     <!-- <script src="assets/js/custom.js"></script> -->
-       
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
-        $(document).ready(function(){
+    $(document).ready(function(){
+    	jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            "date-dd-mmm-yyyy-pre": function(a) {
+                return moment(a, 'DD-MM-YYYY').unix();
+            },
+            "date-dd-mmm-yyyy-asc": function(a, b) {
+                return a - b;
+            },
+            "date-dd-mmm-yyyy-desc": function(a, b) {
+                return b - a;
+            }
+        });
+
     var table = $('#example').DataTable({
-        scrollX: true,
+    	"columnDefs": [
+                { 
+                    "targets": [6],
+                    "type": "date-dd-mmm-yyyy"
+                }
+            ],
+    	scrollY: 400, // ตั้งค่าความสูงที่คุณต้องการให้แถวแรก freeze
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            fixedColumns: {
+                leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+            },
+        // scrollX: true,
         lengthMenu: [[10, 25, 50, 100, -1], [10,25, 50, 100, "All"]],
         "scrollCollapse": true,
         "paging":         true,
@@ -480,3 +538,5 @@
 
 </html>
 <?php //} ?>
+
+<?php $dbh = null;?>

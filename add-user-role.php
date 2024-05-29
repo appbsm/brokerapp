@@ -3,15 +3,14 @@
 	// session_start();
 	// error_reporting(0);
 	include('includes/config_path.php');
-	if(strlen($_SESSION['alogin'])=="")
-		{   
+	if(strlen($_SESSION['alogin'])==""){   
+		$dbh = null;
 		header("Location: index.php"); 
+	}else{
+		if(isset($_POST['back'])){
+			$dbh = null;
+			header("Location: manage-user.php"); 
 		}
-		else{
-
-			if(isset($_POST['back'])){
-				header("Location: manage-user.php"); 
-			}
 
 
 	if(isset($_POST['submit'])){
@@ -106,6 +105,7 @@
 	if($lastInsertId){
 
 	// echo '<script>alert("Successfully added information.")</script>';
+	$dbh = null;
 	echo "<script>window.location.href ='manage-user.php'</script>";
 	$msg="Class Created successfully";
 
@@ -131,37 +131,45 @@
 		$name_title="Mr.";
 	}
 
-	/////////////////////////// gen id user
-	$sql = "SELECT TOP(1) * FROM user_info order BY id desc ";
+	$company_code ='';
+	$sql = "SELECT TOP(1) * FROM company_list order BY id desc ";
 	$query = $dbh->prepare($sql);
 	$query->execute();
 	$results=$query->fetchAll(PDO::FETCH_OBJ);
-	// $id_username="1000";
-	// echo '<script>alert("results: '.count($results).'")</script>';
 	if(count($results)>0){
-		foreach($results as $result){
-			$number="";
-			$number_str = ltrim(substr($result->username, -4), '0');
-			if ($number_str === '') {
-				$id_username = "S"."001"."0001";
-			}else{
-				$number = intval($number_str+1);
-				// echo '<script>alert("number: '.$number.'")</script>';
-				if(strlen((string)$number) == 1) {
-					$number = "000".$number;
-				}else if(strlen((string)$number) == 2){
-					$number = "00".$number;
-				}else if(strlen((string)$number) == 3){
-					$number = "0".$number;
-				}else{
-					$number = $number;
-				}
-				$id_username = "S"."001".$number;
-			}
-		}
-	}else{
-		$id_username = "S"."001"."0001";
-	}
+	 	foreach($results as $result){
+	 		 $company_code =  $result->company_code;
+	 	}
+	 }
+	/////////////////////////// gen id user
+	// $sql = "SELECT TOP(1) * FROM user_info order BY id desc ";
+	// $query = $dbh->prepare($sql);
+	// $query->execute();
+	// $results=$query->fetchAll(PDO::FETCH_OBJ);
+	// if(count($results)>0){
+	// 	foreach($results as $result){
+	// 		$number="";
+	// 		$number_str = ltrim(substr($result->username, -4), '0');
+	// 		if ($number_str === '') {
+	// 			$id_username = "S"."001"."0001";
+	// 		}else{
+	// 			$number = intval($number_str+1);
+	// 			// echo '<script>alert("number: '.$number.'")</script>';
+	// 			if(strlen((string)$number) == 1) {
+	// 				$number = "000".$number;
+	// 			}else if(strlen((string)$number) == 2){
+	// 				$number = "00".$number;
+	// 			}else if(strlen((string)$number) == 3){
+	// 				$number = "0".$number;
+	// 			}else{
+	// 				$number = $number;
+	// 			}
+	// 			$id_username = "S"."001".$number;
+	// 		}
+	// 	}
+	// }else{
+	// 	$id_username = "S"."001"."0001";
+	// }
 	///////////////////////////
 
 ?>
@@ -405,6 +413,9 @@
 											<select style="border-color:#102958;  color: #000;" id="id_role" name="id_role" class="form-control" required>
 												<option value="" selected>Select Role User</option>
 												<?php $sql = "SELECT * from role_name where status=1 ";
+													if($_SESSION["system_admin"]!=1){
+														$sql = $sql." AND system_admin is null ";
+													}
 													$query = $dbh->prepare($sql);
 													$query->execute();
 													$results=$query->fetchAll(PDO::FETCH_OBJ);
@@ -439,11 +450,25 @@
 
 									<div class="form-group row col-md-10 col-md-offset-1">
 										<div class="col-sm-2  label_left" >
+											<label style="color: #102958;" for="success" class="control-label">Code Company:</label>
+										</div> 
+										<div class="col ">
+											 <input id="username" name="username" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $company_code;
+											 //$username; ?>" readonly>
+										</div>
+										<div class="col ">
+										</div>
+										<div class="col-sm-2  label_left" >
+										</div> 
+									</div>
+
+									<div class="form-group row col-md-10 col-md-offset-1">
+										<div class="col-sm-2  label_left" >
 											<label style="color: #102958;" for="success" class="control-label">Username:</label>
 										</div> 
 										<div class="col ">
-											 <input id="username" name="username" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php echo $id_username;
-											 //$username; ?>" readonly>
+											 <input id="username" name="username" minlength="1" maxlength="50" style="border-color:#102958;" type="text" class="form-control" value="<?php //echo $id_username;
+											 //$username; ?>" >
 										</div> 
 										<div class="col-sm-2  label_right" >
 											<label style="color: #102958;" for="success" class="control-label"><small><font color="red">*</font></small>Password:</label>
@@ -474,7 +499,14 @@
 												var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 												if (!regex.test(password)) {
-													alert("Password must contain at least one lowercase letter, one uppercase letter, one numeric digit, one special character, and be at least 8 characters long.");
+													// alert("Password must contain at least one lowercase letter, one uppercase letter, one numeric digit, one special character, and be at least 8 characters long.");
+													var text = "Your password is not strong, please using the following criteria:\n"+
+														"1.The password must have a minimum of 8 characters.\n"+
+														"2.It must include at least 1 uppercase letter.\n"+
+														"3.It must include at least 1 lowercase letter.\n"+
+														"4.It must include at least 1 digit.\n"+
+														"5.It must include at least 1 special character (e.g., @, !, #, $).";
+													alert(text);
 													return false;
 												}
 
@@ -682,3 +714,5 @@
 <div id="loading-overlay">
     <img src="loading.gif" alt="Loading...">
 </div>
+
+<?php $dbh = null; ?>

@@ -1430,4 +1430,6 @@ function validateForm() {
 
 <div id="loading-overlay">
     <img src="loading.gif" alt="Loading...">
-</div>  
+</div>
+
+<?php sqlsrv_close($conn); ?>

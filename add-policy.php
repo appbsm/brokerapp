@@ -9,9 +9,11 @@
 	error_reporting(0);
 	include('includes/config_path.php');
 	if(strlen($_SESSION['alogin'])==""){
+		$dbh = null;
 		header("Location: index.php"); 
 	}else{
 		if(isset($_POST['back'])){
+			$dbh = null;
 			header("Location: manage-user.php"); 
 		}
 
@@ -127,14 +129,17 @@
 				",premium_rate".
 				",convertion_value".
 				",percent_trade,commission_rate,agent_id,file_name".
-				",file_name_uniqid,default_insurance,calculate_type,payment_status,paid_date,commission_status,cdate,create_by,reason,remark)";
+				",file_name_uniqid,default_insurance,calculate_type,payment_status,paid_date,commission_status,cdate,create_by,reason,remark,policy_type)";
 			$sql=$sql." VALUES (:insurance_company_p,:policy_no_p,:status_p,:product_category_p,:sub_categories_p".
 					",:insurance_company_id_p,:product_id_p,:period_p,:period_type_p,:period_day_p,:start_date_p,:end_date_p".
 					",:premium_rate_p".
 					",:convertion_value_p".
 					",:percent_trade_p,:commission_rate_p,:agent_id_p,:file_name_p".
-					",:file_name_uniqid_p,:default_insurance_p,:calculate_type_p,:payment_status_p,:paid_date_p,:commission_status_p,GETDATE(),:create_by_p,:reason_p,:remark_p)";
+					",:file_name_uniqid_p,:default_insurance_p,:calculate_type_p,:payment_status_p,:paid_date_p,:commission_status_p,GETDATE(),:create_by_p,:reason_p,:remark_p,:policy_type_p)";
 				$query = $dbh->prepare($sql); 
+
+				$policy_type = "primary";
+				$query->bindParam(':policy_type_p',$policy_type,PDO::PARAM_STR);
 
 				$query->bindParam(':insurance_company_p',$_POST['insurance_company'][$i],PDO::PARAM_STR);
 				$query->bindParam(':policy_no_p',$_POST['policy'][$i],PDO::PARAM_STR);
@@ -178,7 +183,15 @@
 
 				$query->bindParam(':calculate_type_p',$_POST['calculate'][$i],PDO::PARAM_STR);
 				
-				$query->bindParam(':paid_date_p',date("Y-m-d", strtotime($_POST['paid_date'][$i])),PDO::PARAM_STR);
+				
+				if($_POST['status'][$i]=="Follow up" || $_POST['status'][$i]=="Wait" || $_POST['status'][$i]=="Not renew"){
+					$value_null = null;
+					$query->bindParam(':paid_date_p',$value_null,PDO::PARAM_NULL);
+				}else{
+					$query->bindParam(':paid_date_p',date("Y-m-d", strtotime($_POST['paid_date'][$i])),PDO::PARAM_STR);
+				}
+				// $query->bindParam(':paid_date_p',date("Y-m-d", strtotime($_POST['paid_date'][$i])),PDO::PARAM_STR);
+
 
 				$commission_status = "Not Paid";
 				$query->bindParam(':commission_status_p',$commission_status,PDO::PARAM_STR);
@@ -224,6 +237,15 @@
 				// print_r($query->errorInfo());
 
 				$lastInsertId_insurance = $dbh->lastInsertId();
+
+
+				$sql_update = "update insurance_info set policy_primary=:policy_primary_p 
+							where id ='".$lastInsertId_insurance."'";
+				$query = $dbh->prepare($sql_update);
+				$query->bindParam(':policy_primary_p',$lastInsertId_insurance,PDO::PARAM_STR);
+				$query->execute();
+
+
 				if($start_id_insurance=="true"){
 					$start_lastInsertId_insurance = $dbh->lastInsertId();
 					$start_id_insurance="false";
@@ -359,6 +381,7 @@
 
 		}
 		// echo '<script>alert("Successfully added information.")</script>';
+		$dbh = null;
 		echo "<script>window.location.href ='entry-policy.php'</script>";
 
 		}else{
@@ -740,23 +763,26 @@ $(function(){
 					calculate.on('change', function(){
 						if($(this).val()=="Percentage"){
 							document.getElementById("calculate").value = 'Percentage';
-						    document.getElementById("percent_trade").value = parseFloat(percen_value).toFixed(2)+'%';
-						        	
-						    document.getElementById("calculate_popup").value = 'Percentage';
-						    document.getElementById("percent_trade_popup").value = parseFloat(percen_value).toFixed(2)+'%';
+							document.getElementById("calculate_popup").value = 'Percentage';
+							if(percen_value!=''){
+						    	document.getElementById("percent_trade").value = parseFloat(percen_value).toFixed(2)+'%';
+						    	document.getElementById("percent_trade_popup").value = parseFloat(percen_value).toFixed(2)+'%';
+						    }
 						    chang_commission_type();
 						}else{
 							document.getElementById("calculate").value = 'Net Value';
-						    document.getElementById("percent_trade").value = parseFloat(net_value).toFixed(2);
-						        	
-						    document.getElementById("calculate_popup").value = 'Net Value';
-						    document.getElementById("percent_trade_popup").value = parseFloat(net_value).toFixed(2);
+							document.getElementById("calculate_popup").value = 'Net Value';
+							if(net_value!=''){
+						    	document.getElementById("percent_trade").value = parseFloat(net_value).toFixed(2);
+						    	document.getElementById("percent_trade_popup").value = parseFloat(net_value).toFixed(2);
+						    }
 						    chang_commission_type();
 						}
 
 					}); 
 
 					function chang_commission_type() {
+
 						var commission = '';
 	                    if(document.getElementById('percent_trade').value!=''){
 	                    	var premiumInput = document.getElementById('convertion_value').value.replace(/,/g,'');
@@ -777,6 +803,7 @@ $(function(){
 	                        	}
 
 	                        }else if(document.getElementById('calculate').value=='Net Value'){
+
 	                            document.getElementById('percent_trade').value = percent;
 	                            // var commission = premium-percent;
 	                            commission = percent;
@@ -795,17 +822,21 @@ $(function(){
 					calculate.on('change', function(){
 						if($(this).val()=="Percentage"){
 							document.getElementById("calculate").value = 'Percentage';
-						    document.getElementById("percent_trade").value = parseFloat(percen_value).toFixed(2)+'%';
-						        	
 						    document.getElementById("calculate_popup").value = 'Percentage';
-						    document.getElementById("percent_trade_popup").value = parseFloat(percen_value).toFixed(2)+'%';
+
+						    if(percen_value!=''){
+						    	document.getElementById("percent_trade").value = parseFloat(percen_value).toFixed(2)+'%';
+						    	document.getElementById("percent_trade_popup").value = parseFloat(percen_value).toFixed(2)+'%';
+							}
 						    chang_commission_type_popup();
 						}else{
 							document.getElementById("calculate").value = 'Net Value';
-						    document.getElementById("percent_trade").value = parseFloat(net_value).toFixed(2);
-						        	
 						    document.getElementById("calculate_popup").value = 'Net Value';
-						    document.getElementById("percent_trade_popup").value = parseFloat(net_value).toFixed(2);
+
+						    if(net_value!=''){
+						    	document.getElementById("percent_trade").value = parseFloat(net_value).toFixed(2);
+						    	document.getElementById("percent_trade_popup").value = parseFloat(net_value).toFixed(2);
+							}
 						    chang_commission_type_popup();
 						}
 
@@ -2092,6 +2123,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
 	                $.each(result, function(index, item){
 	                	if(item.currency!="฿THB"&& item.currency!="THB" ){
 	                    	if(item.currency_value==null || item.currency_value_convert==null ){
+	                    		$dbh = null;
 	                    		alert('Your currency conversion rate has expired. Kindly assess and update it accordingly.');
 	        					window.location.href ='currency_convertion.php';
 	                    	}
@@ -2278,9 +2310,11 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
 
         if(value_status=="New" || value_status=="Renew"){
             document.getElementById("paid_date").removeAttribute("disabled");
+            // document.getElementById("paid_date").removeAttribute("readOnly");
         }else{
             document.getElementById("paid_date").setAttribute("disabled","disabled");
             // document.getElementById("paid_date").value=new Date();
+            // document.getElementById("paid_date").setAttribute("readOnly", true);
         }
 
 
@@ -2301,3 +2335,5 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
         
     }
 </script> 
+
+<?php $dbh = null; ?>

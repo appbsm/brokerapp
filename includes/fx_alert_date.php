@@ -1,14 +1,16 @@
 <?php
-include_once('connect_sql.php');
+// include_once('connect_sql.php');
 include_once('fx_crud_db.php');
 
 function near_to_due_list($conn) {
     $list = array();
     // . "DATEADD(day,+".$num_of_days.",end_date) as alert_date, "
     $sql = "select cl.currency,*, 
-            end_date as policy_end_date,  ip.insurance_company, ii.status as insurance_status, CONCAT(a.first_name, '  ' , a.last_name) as agent_name, 
-            CONCAT(c.title_name,' ',c.first_name, '  ' , c.last_name) as customer_name,c.tel,c.email as email_cus,c.mobile, 
-            ii.status as insurance_status, ii.id as insurance_id,pr.product_name AS product_name_in,ii.id as id_insurance 
+            end_date as policy_end_date,  ip.insurance_company, ii.status as insurance_status
+            , CONCAT(a.first_name, '  ' , a.last_name) as agent_name, 
+            CONCAT(c.first_name, '  ' , c.last_name) as customer_name,c.tel,c.email as email_cus,c.mobile, 
+            ii.status as insurance_status, ii.id as insurance_id,pr.product_name AS product_name_in,ii.id as id_insurance
+            ,ii.paid_date as paid_date_policy
             from insurance_info ii 
             left join rela_customer_to_insurance ci on ci.id_insurance_info = ii.id 
             left join customer c on c.id = ci.id_customer 
@@ -16,10 +18,24 @@ function near_to_due_list($conn) {
             left join agent a on a.id = ii.agent_id 
             LEFT JOIN product pr ON pr.id = ii.product_id
             LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list 
+
             where ii.status = 'Follow up' 
             AND end_date > DATEADD(DAY,-(SELECT due_date FROM alert_date WHERE type = 'near_due'),GETDATE()) 
             AND end_date < DATEADD(DAY,+(SELECT due_date FROM alert_date WHERE type = 'near_due'),GETDATE()) 
             AND end_date >= GETDATE() ";
+
+            // INNER JOIN (
+            // SELECT 
+            //     policy_primary, MAX(cdate) AS max_cdate
+            // FROM 
+            //     insurance_info
+            //     where status = 'Follow up' 
+            //         AND end_date > DATEADD(DAY,-(SELECT due_date FROM alert_date WHERE type = 'near_due'),GETDATE()) 
+            //         AND end_date < DATEADD(DAY,+(SELECT due_date FROM alert_date WHERE type = 'near_due'),GETDATE()) 
+            //         AND end_date >= GETDATE() 
+            // GROUP BY 
+            //     policy_primary
+            // ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate   
 
     // print_r($sql);
     $stmt = sqlsrv_query( $conn, $sql);  
@@ -39,6 +55,7 @@ function near_to_overdue_list($conn) {
             end_date as policy_end_date,  ip.insurance_company, ii.status as insurance_status, CONCAT(a.first_name, '  ' , a.last_name) as agent_name, 
             CONCAT(c.title_name,' ',c.first_name, '  ' , c.last_name) as customer_name,c.tel,c.email as email_cus,c.mobile, 
             ii.status as insurance_status, ii.id as insurance_id,pr.product_name AS product_name_in,ii.id as id_insurance 
+            ,ii.paid_date as paid_date_policy
             from insurance_info ii 
             left join rela_customer_to_insurance ci on ci.id_insurance_info = ii.id 
             left join customer c on c.id = ci.id_customer 
@@ -48,6 +65,17 @@ function near_to_overdue_list($conn) {
             LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
             where ii.status = 'Wait'
             AND end_date < GETDATE() ";
+
+            //  INNER JOIN (
+            // SELECT 
+            //     policy_primary, MAX(cdate) AS max_cdate
+            // FROM 
+            //     insurance_info
+            //     where status = 'Wait' 
+            //         AND end_date < GETDATE() 
+            // GROUP BY 
+            //     policy_primary
+            // ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate   
 
     // print_r($sql);
     $stmt = sqlsrv_query( $conn, $sql);  

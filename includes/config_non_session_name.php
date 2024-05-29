@@ -16,7 +16,7 @@ try{
 	$dbh->exec("SET CHARACTER SET utf8"); 
 }catch (PDOException $e){
 	echo "<br>"."Error ".$e."<br>";
-exit("Error: " . $e->getMessage());
+	exit("Error: " . $e->getMessage());
 }
 
 

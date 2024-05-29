@@ -127,7 +127,7 @@
                     <ul class="breadcrumb">
                         <li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
                         <!-- <li> Classes</li> -->
-                        <li class="active" >Entry Policy</li>
+                        <li class="active" >Entry Policy (Not Renew)</li>
                     </ul>
                 </div>
             </div>
@@ -139,7 +139,7 @@
 
                     <div class="card-header py-3">
                         <div class="panel-title" style="display: inline-block;" >
-                             <h2 class="title m-5" style="color: #102958;">Entry Policy</h2>
+                             <h2 class="title m-5" style="color: #102958;">Entry Policy (Not Renew)</h2>
                         </div>
                         
                         <div class="row pull-right" style="display: inline-block;">

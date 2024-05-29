@@ -7,8 +7,26 @@ error_reporting(0);
 include_once('includes/fx_reports-sales-product.php');
 
 if(strlen($_SESSION['alogin'])==""){   
+	$dbh = null;
     header("Location: index.php"); 
 }
+
+    $status_view ='0';
+    $status_add ='0';
+    $status_edit ='0';
+    $status_delete ='0';
+    foreach ($_SESSION["application_page_status"] as $page_id) {
+        if($page_id["page_id"]=="12"){
+            $status_view =$page_id["page_view"];
+            $status_add =$page_id["page_add"];
+            $status_edit =$page_id["page_edit"];
+            $status_delete =$page_id["page_delete"];
+        }
+    }
+    if($status_view==0) {
+        $dbh = null;
+        header('Location: logout.php');
+    }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_POST)) {
@@ -175,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </script> 
         
                     <div class="form-group row col-md-12 ">
-                    	<label style="color: #102958;" for="policy_no" class="col-sm-2 label_left">Policy no:</label>
+                    	<label style="color: #102958;" class="col-sm-2 label_left">Policy no:</label>
                         <div class="col-sm-2">
                         	<select name="policy_no" style="border-color:#102958; color: #000;" id="policy_no" class="form-control selectpicker" data-live-search="true" >
                                 <option value="all">Select Policy</option>
@@ -295,9 +313,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <th width="300px">Partner Company</th>
                                             <th width="200px">Agent</th>
                                             <th width="100px">Subagent</th>
-                                            <th width="110px">Mobile</th>
-                                            <th width="200px">Email</th>
-                                            <th width="150px">Remark</th>                                      
+                                            <th width="110px">Agent Mobile</th>
+                                            <th width="200px">Agent Email</th>
+                                            <!-- <th width="150px">Remark</th>                                       -->
                                         </tr>
                                     </thead>
 
@@ -349,7 +367,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                              <td class="text-right"><?php echo number_format($total_subagent_premium_rate, 2)?></td>     
                                               <td></td>
                                               <td></td> 
-                                              <td></td>                                                 
+                                              <!-- <td></td>                                                  -->
                                             </tr> 
 
                                         <?php 
@@ -420,7 +438,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             
                                              <td><?php echo $s['mobile_co'];?></td>
                                              <td><?php echo $s['email_co'];?></td>                                              
-                                            <td><?php echo $s['remark_co'];?></td>                                                                                                     
+                                            <!-- <td><?php echo $s['remark_co'];?></td>                                                                                                      -->
                                         </tr> 
 
                                         <?php $id_product=$s['product_name'];
@@ -452,7 +470,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                              <td></td>
                                              <td></td>
                                              <td></td>                                              
-                                            <td></td>                                                                                                     
+                                            <!-- <td></td>                                                                                                      -->
                                         </tr>  
                                     <?php }?>                                    
                                         <tr style="font-weight: bold;">                                            
@@ -475,7 +493,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <td class="text-right"><?php echo number_format($total_subagent_premium_rate, 2)?></td>     
                                             <td></td>
                                             <td></td> 
-                                            <td></td>                                                 
+                                            <!-- <td></td>                                                  -->
                                         </tr>                                          
                                     <?php     
                                     $grand_total_primary_premium_rate += $total_primary_premium_rate;
@@ -508,7 +526,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <th><?php echo number_format($grand_total_subagent_premium_rate, 2)?></th>     
                                             <th></th>
                                             <th></th> 
-                                            <th></th>                                                 
+                                            <!-- <th></th>                                                  -->
                                         </tr>                   
                                     </tfoot>
                                 <?php }//check value data sale ?>
@@ -579,9 +597,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		}
     </style> 
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
 <script>
     $(document).ready(function(){
+        jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+            "date-dd-mmm-yyyy-pre": function(a) {
+                return moment(a, 'DD-MM-YYYY').unix();
+            },
+            "date-dd-mmm-yyyy-asc": function(a, b) {
+                return a - b;
+            },
+            "date-dd-mmm-yyyy-desc": function(a, b) {
+                return b - a;
+            }
+        });
+
     var table = $('#example').DataTable({
+        "columnDefs": [
+                { 
+                    "targets": [4,5],
+                    "type": "date-dd-mmm-yyyy"
+                }
+            ],
+        scrollY: 400, // ตั้งค่าความสูงที่คุณต้องการให้แถวแรก freeze
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            fixedColumns: {
+                leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+            },
         "order": [], //Initial no order.
         "aaSorting": [], 
         "ordering": false,
@@ -667,3 +712,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </html>
 
+<?php $dbh = null;?>

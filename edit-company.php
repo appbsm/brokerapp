@@ -10,11 +10,13 @@ error_reporting(0);
 include('includes/config_path.php');
 if(strlen($_SESSION['alogin'])=="")
     {   
+	$dbh = null;
     header("Location: index.php"); 
     }
     else{
 
         if(isset($_POST['back'])){
+			$dbh = null;
             header("Location: manage-user.php"); 
         }
 
@@ -225,6 +227,7 @@ for ($i=0;$i<count($_POST['title_co']);$i++) {
 // if($lastInsertId){
 
 // echo '<script>alert("Successfully edited information.")</script>';
+$dbh = null;
 echo "<script>window.location.href ='companylist.php'</script>";
 $msg="Class Created successfully";
 
@@ -1055,3 +1058,4 @@ return valid();
     <img src="loading.gif" alt="Loading...">
 </div>   
 
+<?php $dbh = null;?>

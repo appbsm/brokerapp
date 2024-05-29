@@ -22,6 +22,7 @@ include('includes/config.php');
         array_push($json, $result);
     }
     echo json_encode($json);
+    $dbh = null;
 // }
 
 // if (isset($_POST['action']) && $_POST['action'] == 'get_agen_fopage_agent') {
