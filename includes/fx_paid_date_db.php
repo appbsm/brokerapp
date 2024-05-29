@@ -46,10 +46,21 @@ function update_insurance_info($conn, $post_data) {
 
 	echo '<script>alert("percent_trade: '.$post_data['percent_trade'].'")</script>'; 
 
+	$premium_rate = (float) str_replace(',', '', $_POST['convertion_value']);
+	$convertion_value = (float) str_replace(',', '', $_POST['premium_rate']);
+
+	$percent_trade = (float) str_replace(',', '', $post_data['percent_trade']);
+
+	$commission = (float) str_replace(',', '',$_POST['commission']);
+
+
+
 	$data['id'] = $post_data['id_insurance_info'];
 	$data['table'] = 'insurance_info';
 	$data['columns'] = array(
+	'premium_rate',
 	'percent_trade',
+	'commission_rate',
 	'calculate_type',
 	'commission_status',
 	'commission_paid_date',
@@ -57,11 +68,12 @@ function update_insurance_info($conn, $post_data) {
 	);
 
 	$data['values'] = array(
-		floatval($post_data['percent_trade']),
+		$premium_rate,
+		$percent_trade,
+		$commission,
 		$post_data['calculate'],
 		'Paid',
 		date("Y-m-d", strtotime($post_data['commission_paid_date'])),
-		// $post_data['commission_paid_date'],
 		$_SESSION['id']
 	);
 	update_table ($conn, $data);
@@ -87,6 +99,7 @@ function check_policy($conn,$id) {
 function get_insurance_info($conn,$id) {
 	$result = array();
 	$sql = " SELECT pe.period AS period_name,cl.currency,pc.categorie,ps.subcategorie
+	 ,cc.currency_value,cc.currency_value_convert
 	 ,ip.insurance_company AS insurance_company_in,pr.product_name AS product_name_in,cu.mobile AS mobile_customer
 	 ,cu.tel AS tel_customer,cu.email AS email_customer,insu.status AS status_insurance 
      ,CASE WHEN cu.customer_type = 'Personal'
@@ -95,10 +108,10 @@ function get_insurance_info($conn,$id) {
       END as full_name
      ,CONCAT(ag.first_name,' ',ag.last_name) as agent_name
      ,ag.title_name AS title_name_agent,ag.first_name AS first_name_agent,ag.last_name AS last_name_agent 
-     ,insu.id AS id_insurance,FORMAT(start_date, 'dd-MM-yyyy') AS start_date_day 
-     ,FORMAT(paid_date, 'dd-MM-yyyy') AS paid_date_day 
-     ,FORMAT(end_date, 'dd-MM-yyyy') AS end_date_day
-     ,FORMAT(commission_paid_date, 'dd-MM-yyyy') AS commission_paid_date_day
+     ,insu.id AS id_insurance,FORMAT(insu.start_date, 'dd-MM-yyyy') AS start_date_day 
+     ,FORMAT(insu.paid_date, 'dd-MM-yyyy') AS paid_date_day 
+     ,FORMAT(insu.end_date, 'dd-MM-yyyy') AS end_date_day
+     ,FORMAT(insu.commission_paid_date, 'dd-MM-yyyy') AS commission_paid_date_day
      ,insu.* 
       from insurance_info insu 
      left JOIN rela_customer_to_insurance re_ci ON re_ci.id_insurance_info = insu.id 
@@ -109,7 +122,10 @@ function get_insurance_info($conn,$id) {
      LEFT JOIN product_categories pc ON pc.id = insu.product_category
      LEFT JOIN product_subcategories ps ON ps.id = insu.sub_categories 
      LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
-     LEFT JOIN period pe ON pe.id = insu.period ";
+     LEFT JOIN period pe ON pe.id = insu.period
+     LEFT JOIN currency_convertion cc ON  cc.id = 
+		(SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id_currency_list = ip.id_currency_list
+ 		AND  insu.start_date >= c_c.start_date and insu.start_date <= c_c.stop_date and c_c.status='1') ";
      $sql = $sql." WHERE insu.id = '".$id."' ";
 
     if($status!="" && $status!="Show All"){
