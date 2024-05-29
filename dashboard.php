@@ -1,6 +1,13 @@
 <?php 
-	session_name("broker");
+	
+	
+	include('includes/config.php');
 	session_start(); 
+
+	if(strlen($_SESSION['alogin'])==""){   
+        $dbh = null;
+		header("Location: index.php"); 
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -113,7 +120,16 @@
 		}
 	}
 	
-
+	.chart-notes {
+		text-align: right;
+		font-size: x-small;
+		color: #555;
+		/*margin-top: 10px;*/
+		line-height: 1.5;
+	}
+	.chart-notes p {
+		margin: 0;
+	}
 </style>
 
 <body id="page-top">
@@ -216,7 +232,6 @@
                     <div class="row">
 						<!-- Total Policy MONTHLY(New, Follow Up, Renew )-->
 						<?php
-							include('includes/config.php');
 
 							try {
 								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
@@ -228,13 +243,13 @@
 
 							$sql = "SELECT COUNT(*) AS num_policies, SUM(premium_rate) AS total_premium
 								FROM [brokerapp].[dbo].[insurance_info]
-								WHERE status IN ('New', 'Follow Up', 'Renew', 'Wait')
+								WHERE status IN ('New', 'Follow Up', 'Renew', 'Wait', 'Not Renew')
 								AND MONTH(start_date) = MONTH(GETDATE()) AND YEAR(start_date) = YEAR(GETDATE())";
 							$sql_year = "SELECT YEAR(start_date) AS policy_year, 
 									   COUNT(*) AS num_policies_year, 
 									   SUM(premium_rate) AS total_premium_year
 								FROM [brokerapp].[dbo].[insurance_info]
-								WHERE status IN ('New', 'Follow Up', 'Renew', 'Wait')
+								WHERE status IN ('New', 'Follow Up', 'Renew', 'Wait', 'Not Renew')
 								GROUP BY YEAR(start_date)";
 							$stmt = $dbh->prepare($sql);
 							$stmt->execute();
@@ -269,13 +284,13 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-primary text-uppercase mb-0 mt-0">(MTD) </div>
+											<div class="text-xs font-weight-bold text-primary text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-primary text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
 												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-primary text-uppercase mb-0 mt-0">(YTD) </div>
+											<div class="text-xs font-weight-bold text-primary text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-primary text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
@@ -287,9 +302,8 @@
 							</div>
 						</div>
 						
-						<!-- Total Policy collected(New, Follow Up, Renew )-->
+						<!-- Total Policy collected('New', 'Follow Up', 'Renew', 'Wait', 'Not Renew' )-->
 						<?php
-							include('includes/config.php');
 
 							try {
 								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
@@ -302,14 +316,14 @@
 							$sql = "SELECT COUNT(*) AS num_policies, 
 									SUM(premium_rate) AS total_collected 
 									FROM [brokerapp].[dbo].[insurance_info] 
-									WHERE status IN ('New', 'Follow Up', 'Renew') 
+									WHERE status IN ('New', 'Follow Up', 'Renew', 'Wait', 'Not Renew') 
 									AND MONTH(paid_date) = MONTH(GETDATE()) 
 									AND YEAR(paid_date) = YEAR(GETDATE())";
 									
 							$sql_year = "SELECT COUNT(*) AS num_policies_year, 
 									   SUM(premium_rate) AS total_collected_year 
 								FROM [brokerapp].[dbo].[insurance_info] 
-								WHERE status IN ('New', 'Follow Up', 'Renew')
+								WHERE status IN ('New', 'Follow Up', 'Renew', 'Wait', 'Not Renew')
 								AND YEAR(paid_date) = YEAR(GETDATE())";
 
 							$stmt = $dbh->prepare($sql);
@@ -347,13 +361,13 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-primary-2 text-uppercase mb-0 mt-0">(MTD) </div>
+											<div class="text-xs font-weight-bold text-primary-2 text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-primary-2 text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
 												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-primary-2 text-uppercase mb-0 mt-0">(YTD) </div>
+											<div class="text-xs font-weight-bold text-primary-2 text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-primary-2 text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
@@ -368,7 +382,6 @@
 						
 						<!-- ToTal Policy status=New -->
 						<?php
-							include('includes/config.php');
 
 							try {
 								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
@@ -408,7 +421,7 @@
 
 						<div class="col-xl-3 col-md-6 mb-4">
 							<div class="card border-left-success shadow h-100 py-2">
-								<a href="entry-policy.php" style="text-decoration: none; color: inherit;">
+								<a href="dashboard-new.php" style="text-decoration: none; color: inherit;">
 									<div class="card-body">
 										<div class="row">
 											<div class="col mr-2">
@@ -425,18 +438,20 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-success text-uppercase mb-0 mt-0">(MTD) </div>
+											<div class="text-xs font-weight-bold text-success text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-success text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
-												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>
+												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-success text-uppercase mb-0 mt-0">(YTD) </div>
+											<div class="text-xs font-weight-bold text-success text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-success text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium_year) ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>-->
-												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>
+												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>-->
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
 											</div>
 										</div>
 									</div>
@@ -446,7 +461,6 @@
 						
 						<!-- ToTal Policy status=Renew -->
 						<?php
-							include('includes/config.php');
 
 							try {
 								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
@@ -486,7 +500,7 @@
 
 						<div class="col-xl-3 col-md-6 mb-4">
 							<div class="card border-left-info shadow h-100 py-2">
-								<a href="entry-policy.php" style="text-decoration: none; color: inherit;">
+								<a href="dashboard-renew.php" style="text-decoration: none; color: inherit;">
 									<div class="card-body">
 										<div class="row">
 											<div class="col mr-2">
@@ -503,18 +517,20 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-info text-uppercase mb-0 mt-0">(MTD) </div>
+											<div class="text-xs font-weight-bold text-info text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-info text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
-												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>
+												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-info text-uppercase mb-0 mt-0">(YTD) </div>
+											<div class="text-xs font-weight-bold text-info text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-info text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium_year) ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>-->
-												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>
+												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>-->
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
 											</div>
 										</div>
 									</div>
@@ -524,30 +540,10 @@
 						
 						
 						
-						<!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row ">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1" style="font-size: medium;">
-                                                Pending</div>
-											<div class="text-xs font-weight-bold text-warning text-uppercase mb-1" style="font-size: medium;">
-                                                Requests</div>
-											<div class="text-xs font-weight-bold text-warning text-uppercase mt-3">TOTAL Requests</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800 mt-0">0</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+						
 						
 						<!-- Due Policy -->
 						<?php/*
-							include('includes/config.php');
 
 							try {
 								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
@@ -614,7 +610,6 @@
 						
 						<!-- ToTal Policy status=Follow Up -->
 						<?php
-							include('includes/config.php');
 
 							try {
 								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
@@ -672,7 +667,7 @@
 
 						<div class="col-xl-3 col-md-6 mb-4">
 							<div class="card border-left-warning-2 shadow h-100 py-2">
-								<a href="entry-policy.php" style="text-decoration: none; color: inherit;">
+								<a href="dashboard-followup.php" style="text-decoration: none; color: inherit;">
 									<div class="card-body">
 										<div class="row">
 											<div class="col mr-2">
@@ -689,18 +684,20 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-warning-2 text-uppercase mb-0 mt-0">(MTD) </div>
+											<div class="text-xs font-weight-bold text-warning-2 text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-warning-2 text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
-												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>
+												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-warning-2 text-uppercase mb-0 mt-0">(YTD) </div>
+											<div class="text-xs font-weight-bold text-warning-2 text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-warning-2 text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium_year) ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>-->
-												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>
+												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>-->
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
 											</div>
 										</div>
 									</div>
@@ -711,7 +708,6 @@
 						
 						<!-- ToTal Policy status=Wait -->
 						<?php
-							include('includes/config.php');
 
 							try {
 								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
@@ -724,13 +720,13 @@
 							try {
 								$sql = "SELECT COUNT(*) AS num_policies, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
 									FROM [brokerapp].[dbo].[insurance_info]
-									WHERE status = 'Wait' AND MONTH(start_date) = MONTH(GETDATE()) AND YEAR(start_date) = YEAR(GETDATE())";
+									WHERE status = 'Wait' AND MONTH(end_date) = MONTH(GETDATE()) AND YEAR(end_date) = YEAR(GETDATE())";
 								$sql_year = "SELECT 
 										COUNT(*) AS num_policies_year, 
 										FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium_year
 									FROM [brokerapp].[dbo].[insurance_info]
 									WHERE status = 'Wait' 
-									AND YEAR(start_date) = YEAR(GETDATE())";
+									AND YEAR(end_date) = YEAR(GETDATE())";
 									
 								$stmt = $dbh->prepare($sql);
 								$stmt->execute();
@@ -754,7 +750,7 @@
 
 						<div class="col-xl-3 col-md-6 mb-4">
 							<div class="card border-left-danger shadow h-100 py-2">
-								<a href="entry-policy.php" style="text-decoration: none; color: inherit;">
+								<a href="dashboard-wait.php" style="text-decoration: none; color: inherit;">
 									<div class="card-body">
 										<div class="row">
 											<div class="col mr-2">
@@ -771,18 +767,21 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-danger text-uppercase mb-0 mt-0">(MTD) </div>
+											<div class="text-xs font-weight-bold text-danger text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-danger text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
-												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>
+												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
+												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium; ?></div>-->
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-danger text-uppercase mb-0 mt-0">(YTD) </div>
+											<div class="text-xs font-weight-bold text-danger text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-danger text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium_year) ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>-->
-												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>
+												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>-->
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
 											</div>
 										</div>
 									</div>
@@ -792,7 +791,6 @@
 						
 						<!-- ToTal Policy status=Not Renew -->
 						<?php
-							include('includes/config.php');
 
 							try {
 								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
@@ -805,11 +803,11 @@
 							try {
 								$sql = "SELECT COUNT(*) AS num_policies, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
 										FROM [brokerapp].[dbo].[insurance_info]
-										WHERE status = 'Not New' AND MONTH(start_date) = MONTH(GETDATE()) AND YEAR(start_date) = YEAR(GETDATE())";
+										WHERE status = 'Not Renew' AND MONTH(end_date) = MONTH(GETDATE()) AND YEAR(end_date) = YEAR(GETDATE())";
 								$sql_year = "SELECT COUNT(*) AS num_policies_year, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium_year
 										FROM [brokerapp].[dbo].[insurance_info]
-										WHERE status = 'Not New' 
-										AND YEAR(start_date) = YEAR(GETDATE())";
+										WHERE status = 'Not Renew' 
+										AND YEAR(end_date) = YEAR(GETDATE())";
 										
 								$stmt = $dbh->prepare($sql);
 								$stmt->execute();
@@ -833,7 +831,7 @@
 
 						<div class="col-xl-3 col-md-6 mb-4">
 							<div class="card border-left-dark shadow h-100 py-2">
-								<a href="entry-policy.php" style="text-decoration: none; color: inherit;">
+								<a href="dashboard-notrenew.php" style="text-decoration: none; color: inherit;">
 									<div class="card-body">
 										<div class="row">
 											<div class="col mr-2">
@@ -850,25 +848,50 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-dark text-uppercase mb-0 mt-0">(MTD) </div>
+											<div class="text-xs font-weight-bold text-dark text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-dark text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
-												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>
+												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
+												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium; ?></div>-->
+												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>-->
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-dark text-uppercase mb-0 mt-0">(YTD) </div>
+											<div class="text-xs font-weight-bold text-dark text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
 												<div class="col-2 text-xs font-weight-bold text-dark text-uppercase mb-0"> </div>
 												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium_year) ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>-->
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>-->
-												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>
+												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>-->
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
 											</div>
 										</div>
 									</div>
 								</a>
 							</div>
 						</div>
+						
+						<!-- Pending Requests Card Example -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row ">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1" style="font-size: medium;">
+                                                Pending</div>
+											<div class="text-xs font-weight-bold text-warning text-uppercase mb-1" style="font-size: medium;">
+                                                Requests</div>
+											<div class="text-xs font-weight-bold text-warning text-uppercase mt-3">TOTAL Requests</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800 mt-0">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 					
 					
@@ -892,7 +915,6 @@
 								12 => "Dec"
 							);
 
-							include('includes/config.php');
 
 							try {
 								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
@@ -903,11 +925,18 @@
 							}
 
 							try {
-								$sql = "SELECT MONTH(paid_date) AS month, YEAR(paid_date) AS year, SUM(premium_rate) AS total_sales
+								/*$sql = "SELECT MONTH(paid_date) AS month, YEAR(paid_date) AS year, SUM(premium_rate) AS total_sales
 										FROM [brokerapp].[dbo].[insurance_info]
 										WHERE status IN ('New', 'Follow Up', 'Renew' ,'Wait' ,'Not Renew') AND YEAR(paid_date) IN (YEAR(GETDATE()), YEAR(GETDATE()) - 1)
 										GROUP BY MONTH(paid_date), YEAR(paid_date)
-										ORDER BY YEAR(paid_date), MONTH(paid_date)";
+										ORDER BY YEAR(paid_date), MONTH(paid_date)";*/
+										
+								$sql = "SELECT MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(premium_rate) AS total_sales
+									FROM [brokerapp].[dbo].[insurance_info]
+									WHERE status IN ('New', 'Follow Up', 'Renew' ,'Wait' ,'Not Renew') 
+									AND YEAR(start_date) IN (YEAR(GETDATE()), YEAR(GETDATE()) - 1)
+									GROUP BY MONTH(start_date), YEAR(start_date)
+									ORDER BY YEAR(start_date), MONTH(start_date)";
 
 								$stmt = $dbh->prepare($sql);
 								$stmt->execute();
@@ -936,7 +965,7 @@
 							<div class="card shadow mb-4">
 								<a href="report-monthly-sales.php" style="text-decoration: none; color: inherit;">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-										<h6 class="m-0 font-weight-bold text-primary">Sales Overview (YTD)</h6>
+										<h6 class="m-0 font-weight-bold text-primary">Sales Overview (Current Year)</h6>
 									</div>
 								</a>
 								<div class="card-body">
@@ -1009,7 +1038,6 @@
 					<div class="row">
 						<!-- Donut Chart Product Categories-->
 						<?php
-							include('includes/config.php');
 
 							try {
 								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
@@ -1057,12 +1085,16 @@
 								<div class="card shadow mb-4">
 									<a href="report-product-sales.php" style="text-decoration: none; color: inherit;">
 										<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-											<h6 class="m-0 font-weight-bold text-primary">Product Categories (YTD)</h6>
+											<h6 class="m-0 font-weight-bold text-primary">Product Categories (Current Year)</h6>
 										</div>
 									</a>
 									<div class="card-body">
 										<div class="chart-pie pt-2 pb-2">
 											<canvas id="myDonutChart"></canvas>
+										</div>
+										<div class="chart-notes">
+											<p>- ตัวเลขในวงเล็บ คือจำนวนทั้งหมด</p>
+											<p>- ตัวเลขด้านหลัง คือผลรวมของเงินทั้งหมด</p>
 										</div>
 									</div>
 								</div>
@@ -1148,7 +1180,6 @@
 						
 						<!-- Pie Chart Product Sub Categories-->
 						<?php
-							include('includes/config.php');
 
 							try {
 								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
@@ -1187,17 +1218,21 @@
 							<div class="card shadow mb-4">
 								<a href="report-product-sales.php" style="text-decoration: none; color: inherit;">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-										<h6 class="m-0 font-weight-bold text-primary">Product Sub Categories (YTD)</h6>
+										<h6 class="m-0 font-weight-bold text-primary">Product Sub Categories (Current Year)</h6>
 									</div>
 								</a>
 								<div class="card-body">
 									<div class="chart-pie pt-2 pb-2">
 										<div id="myPieChart"></div>
 									</div>
+									<div class="chart-notes">
+										<p>- ตัวเลขในวงเล็บ คือจำนวนทั้งหมด</p>
+										<p>- ตัวเลขด้านหลัง คือผลรวมของเงินทั้งหมด</p>
+									</div>
 								</div>
 							</div>
 						</div>
-
+						
 						<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 						<script type="text/javascript">
 							google.charts.load('current', {'packages':['corechart']});
@@ -1251,8 +1286,8 @@
 									pieHole: 0.4,
 									legend: { position: 'right' },
 									chartArea: { width: '100%', height: '100%' },
-									colors: ['#3366cc', '#dc3912', '#ff9900', '#109618', '#990099']
 									//colors: colors
+									colors: ['#3366cc', '#dc3912', '#ff9900', '#109618', '#990099']
 									
 								};
 
@@ -1265,7 +1300,6 @@
 					<div class="row">
 						<!-- Sales by Customer Top 10 -->
 						<?php
-							include('includes/config.php');
 
 							try {
 								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
@@ -1295,6 +1329,7 @@
 										psup.categorie
 									ORDER BY total_premium_rate DESC";
 							*/
+							/*
 							$sql = "SELECT 
 										CASE 
 											WHEN cu.customer_type = 'Corporate' THEN cu.company_name
@@ -1314,6 +1349,27 @@
 										END,
 										psup.categorie
 									ORDER BY total_premium_rate DESC";
+							*/
+							$sql = "SELECT TOP 10
+									CASE 
+										WHEN cu.customer_type = 'Corporate' THEN cu.company_name
+										ELSE CONCAT(cu.first_name, ' ', cu.last_name) 
+									END AS customer_name,
+									SUM(info.premium_rate) AS total_premium_rate, 
+									psup.categorie AS product
+								FROM customer cu
+								LEFT JOIN rela_customer_to_insurance recu ON cu.id = recu.id_customer
+								JOIN insurance_info info ON info.id = recu.id_insurance_info
+								JOIN product_categories psup ON psup.id = info.product_category
+								WHERE YEAR(info.start_date) = YEAR(GETDATE())
+								GROUP BY 
+									CASE 
+										WHEN cu.customer_type = 'Corporate' THEN cu.company_name
+										ELSE CONCAT(cu.first_name, ' ', cu.last_name) 
+									END,
+									psup.categorie
+								ORDER BY total_premium_rate DESC
+								";
 
 							$stmt = $dbh->prepare($sql);
 							$stmt->execute();
@@ -1321,11 +1377,15 @@
 
 							$customers = array();
 							$products = array();
+							$customer_ids = array();
 
 							foreach ($result as $row) {
 								$customer = $row['customer_name'];
 								$product = $row['product'];
 								$total_premium_rate = $row['total_premium_rate'];
+								
+								$customer_id = $row['customer_id']; 
+								$customer_ids[] = $customer_id;
 
 								if (!isset($customers[$customer])) {
 									$customers[$customer] = array();
@@ -1343,7 +1403,9 @@
 							}
 
 							$labels = array_keys($customers);
+							$customer_ids = array_keys($customers);
 
+							
 							$data = array();
 							foreach ($customers as $customer => $purchase) {
 								$customerData = array();
@@ -1359,7 +1421,7 @@
 							<div class="card shadow mb-4">
 								<a href="report-customer-sales-total.php" style="text-decoration: none; color: inherit;">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-										<h6 class="m-0 font-weight-bold text-primary">Sales by Customers (YTD)</h6>
+										<h6 class="m-0 font-weight-bold text-primary">Sales by Customers (Current Year)</h6>
 									</div>
 								</a>
 								<div class="card-body">
@@ -1372,6 +1434,7 @@
 
 						<script>
 							var labels = <?php echo json_encode($labels); ?>;
+							//var labels = <?php echo json_encode($customer_ids); ?>;
 							var data = <?php echo json_encode($data); ?>;
 							var products = <?php echo json_encode($products); ?>;
 							var ctx = document.getElementById('myStackedBarChart').getContext('2d');
@@ -1379,6 +1442,7 @@
 								type: 'bar',
 								data: {
 									labels: labels,
+									//label: '<?php echo substr($customer, 0, 60); ?>',
 									datasets: [
 										<?php foreach ($products as $index => $product): ?>
 										{
@@ -1459,7 +1523,6 @@
 					<div class="row">
 						<!-- Sales by Partners Top 10 -->
 						<?php
-							include('includes/config.php');
 
 							try {
 								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
@@ -1596,7 +1659,7 @@
 							<div class="card shadow mb-4">
 								<a href="report-customer-sales-total.php" style="text-decoration: none; color: inherit;">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-										<h6 class="m-0 font-weight-bold text-primary">Sales by Partners (YTD)</h6>
+										<h6 class="m-0 font-weight-bold text-primary">Sales by Partners (Current Year)</h6>
 									</div>
 								</a>
 								<div class="card-body">
@@ -1780,3 +1843,4 @@
 </body>
 
 </html>
+<?php $dbh = null; ?>
