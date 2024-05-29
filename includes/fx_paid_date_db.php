@@ -44,30 +44,29 @@ function get_paid_policy($conn,$status) {
 
 function update_insurance_info($conn, $post_data) {
 
-	echo '<script>alert("percent_trade: '.$post_data['percent_trade'].'")</script>'; 
-
 	$premium_rate = (float) str_replace(',', '', $_POST['convertion_value']);
 	$convertion_value = (float) str_replace(',', '', $_POST['premium_rate']);
-
 	$percent_trade = (float) str_replace(',', '', $post_data['percent_trade']);
-
 	$commission = (float) str_replace(',', '',$_POST['commission']);
-
 
 
 	$data['id'] = $post_data['id_insurance_info'];
 	$data['table'] = 'insurance_info';
 	$data['columns'] = array(
-	'premium_rate',
-	'percent_trade',
-	'commission_rate',
-	'calculate_type',
-	'commission_status',
-	'commission_paid_date',
-	'paid_by'
+		'convertion_value',
+		'premium_rate',
+		'percent_trade',
+		'commission_rate',
+		'calculate_type',
+		'commission_status',
+		'commission_paid_date',
+		'paid_by'
 	);
-
+	// "Y-m-d"
+	// d-m-Y
+	$status_paid = "Paid";
 	$data['values'] = array(
+		$convertion_value,
 		$premium_rate,
 		$percent_trade,
 		$commission,
