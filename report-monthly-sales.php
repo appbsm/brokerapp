@@ -5,13 +5,31 @@ error_reporting(0);
 include_once('includes/fx_reports.php');
 
 
-if(strlen($_SESSION['alogin'])=="")
-    {   
+if(strlen($_SESSION['alogin'])==""){   
+	$dbh = null;
     header("Location: index.php"); 
+}
+
+    $status_view ='0';
+    $status_add ='0';
+    $status_edit ='0';
+    $status_delete ='0';
+    foreach ($_SESSION["application_page_status"] as $page_id) {
+        if($page_id["page_id"]=="13"){
+            $status_view =$page_id["page_view"];
+            $status_add =$page_id["page_add"];
+            $status_edit =$page_id["page_edit"];
+            $status_delete =$page_id["page_delete"];
+        }
     }
-    $customers = get_customers ($conn);
+    if($status_view==0) {
+        $dbh = null;
+        header('Location: logout.php');
+    }
+
+    $customers = get_customers($conn);
     $insurance_policy = get_policy_no($conn);
-    $products = get_products ($conn);
+    $products = get_products($conn);
     
     $data = array();
     $data['year']='';
@@ -210,10 +228,7 @@ if(strlen($_SESSION['alogin'])=="")
                             <option value="<?php echo $p['policy_no'];?>" <?php echo  ($_GET['policy_no'] == $p['policy_no']) ? 'selected' : '';?>><?php echo $p['policy_no'];?></option>
                             <?php } ?>
                         </select>
-                		
                     </div>
-
-                    
 
                     <label style="color: #102958;" for="staticEmail" class="col-sm-2 label_left">Prod.:</label>                    
                     <div class="col-sm-2">                		
@@ -255,6 +270,7 @@ if(strlen($_SESSION['alogin'])=="")
                                         <tr>
                                             <th>#</th>
                                             <th>Month</th>
+                                            <th>New</th>
                                             <th>Renew</th>
                                             <th>Not Renew</th>
                                             <th>Subagent Work</th>
@@ -276,6 +292,7 @@ if(strlen($_SESSION['alogin'])=="")
                                        $year = $_GET['year']; 
                                     }
                                     // echo ":year:".$year;
+                                    $total_new = 0;
                                     $total_renew = 0;
                                     $total_not_renew = 0;
                                     $total_subagent = 0;
@@ -283,15 +300,17 @@ if(strlen($_SESSION['alogin'])=="")
                                     foreach ($months as $m) {
                                         // echo "m:".$m;
                                         $pos = array_search($m, $def_months);
+                                        $new = get_sales_monthly_new ($conn, $data, $pos, $year);
                                         $renew = get_sales_monthly ($conn, $data, $pos, $year);
                                         $not_renew = get_not_renew_monthly ($conn, $data, $ctr, $year);
                                         $subagent = get_subagent_monthly($conn, $data, $ctr, $year);
-                                        $total = $renew[0]['total_sales'] + $subagent[0]['total_sales'];
-                                        $accumurate += $renew[0]['total_sales'];
+                                        $total = $new[0]['total_sales'] + $renew[0]['total_sales'] + $subagent[0]['total_sales'];
+                                        $accumurate += $new[0]['total_sales'] + $renew[0]['total_sales'];
                                         ?>
                                         <tr>
                                             <td class="text-center"><?php echo $ctr;?></td>
                                             <td><?php echo $m;?></td>
+                                            <td class="text-right"><?php echo number_format($new[0]['total_sales'], 2);?></td>
                                             <td class="text-right"><?php echo number_format($renew[0]['total_sales'], 2);?></td>
                                             <td class="text-right"><?php echo number_format($not_renew[0]['total_sales'], 2);?></td>     
                                             <td class="text-right"><?php echo number_format($subagent[0]['total_sales'], 2);?></td>  
@@ -300,6 +319,7 @@ if(strlen($_SESSION['alogin'])=="")
                                                                                                         
                                         </tr>  
 										<?php
+                                        $total_new += $new[0]['total_sales'];
 										$total_renew += $renew[0]['total_sales'];
 										$total_not_renew += $not_renew[0]['total_sales'];
 										$total_subagent += $subagent[0]['total_sales'];
@@ -311,6 +331,7 @@ if(strlen($_SESSION['alogin'])=="")
                                             <td class="text-center" >TOTAL</td>
                                             <td ></td>
 
+                                            <td class="text-right"><?php echo number_format($total_new, 2);?></td>
                                             <td class="text-right"><?php echo number_format($total_renew, 2);?></td>
                                             <td class="text-right"><?php echo number_format($total_not_renew, 2);?></td>     
                                             <td class="text-right"><?php echo number_format($total_subagent, 2);?></td>  
@@ -469,3 +490,5 @@ if(strlen($_SESSION['alogin'])=="")
 
 </html>
 
+<?php sqlsrv_close($conn); ?>
+<?php $dbh = null;?>

@@ -1,5 +1,5 @@
 <?php
-include_once('connect_sql.php');
+// include_once('connect_sql.php');
 include_once('fx_crud_db.php');
 
 
@@ -215,6 +215,79 @@ function get_sales_by_product ($conn, $data, $id_product) {
             return $result;
 }
 
+function get_sales_monthly_new ($conn, $data, $month,  $year) {
+    // echo '<script>alert("year: '.$year.'")</script>'; 
+    $result = array();
+    $where = '';
+    $tsql = "select "
+        . "SUM(premium_rate) as total_sales "
+        . "from insurance_info ii "
+        . "left join rela_customer_to_insurance rci on rci.id_insurance_info = ii.id "
+        . "left join customer c on c.id = rci.id_customer "
+        . "left join rela_insurance_to_contact ric on ric.id_insurance = ii.id "
+        . "left join contact co on co.id = ric.id_contact "
+        . "left join product p on p.id = ii.product_id "
+        .  "left join agent a on a.id = ii.agent_id "
+        . "left join rela_agent_to_insurance rai on (rai.id_agent = a.id and rai.id_insurance = ii.id) "
+
+        // . "  INNER JOIN (
+        //     SELECT 
+        //         policy_primary, MAX(cdate) AS max_cdate
+        //     FROM 
+        //         insurance_info
+        //     GROUP BY 
+        //         policy_primary
+        //     ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate "
+
+       // . "left join rela_partner_to_product rpp on (rpp.id_product = p.id and rpp.id_product = ii.product_id) "
+        //. "right join insurance_partner ip on (ip.id = rpp.id_partner and ip.id = ii.insurance_company_id) "
+        . " where ii.id IS NOT NULL "
+        . "and Month(start_date) = '".$month. "' " 
+       // . "and Month(start_date) <= '".$month_to. "' " 
+        . "and Year(start_date) = '".$year. "' " 
+        . " and (ii.status = 'New') ";
+    
+    // and (ii.status = 'New' OR ii.status = 'Renew')
+
+    // print_r($tsql);
+    if (isset($data) && count($data) > 0) {
+        if (isset($data['date_from']) && $data['date_from'] != '') {
+            $where .= " and start_date >= '".$data['date_from']."' ";
+        }
+        if (isset($data['date_to']) && $data['date_to'] != '') {
+            $where .= " and start_date <= '".$data['date_to']."' ";
+        }
+
+        if (isset($data['agent']) && $data['agent'] != '') {
+            //$where = ($where != '') ? 'and' : 'where';
+            $where .= " and ii.agent_id = ".$data['agent_id'];
+        }
+        if (isset($data['policy_no']) && $data['policy_no'] != '') {
+            //$where = ($where != '') ? 'and' : 'where';
+            $where .= " and ii.policy_no = '".$data['policy_no']."' ";
+        }
+        if (isset($data['customer']) && $data['customer'] != '' ) {
+            //$where = ($where != '') ? 'and' : 'where';
+            $where .= " and c.id = ".$data['customer'];
+        }
+        if (isset($data['product']) && $data['product'] != '') {
+            //$where = ($where != '') ? 'and' : 'where';
+            $where .= " and ii.product_id = ".$data['product'];
+        }
+    }
+    $tsql .= $where;
+   //echo $tsql;
+    $stmt = sqlsrv_query( $conn, $tsql);
+    if( $stmt === false) {
+        die( print_r( sqlsrv_errors(), true) );
+    }
+    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC))
+    {
+        $result[] = $row;
+    }
+    return $result;
+}
+
 function get_sales_monthly ($conn, $data, $month,  $year) {
     // echo '<script>alert("year: '.$year.'")</script>'; 
     $result = array();
@@ -229,14 +302,26 @@ function get_sales_monthly ($conn, $data, $month,  $year) {
         . "left join product p on p.id = ii.product_id "
         .  "left join agent a on a.id = ii.agent_id "
         . "left join rela_agent_to_insurance rai on (rai.id_agent = a.id and rai.id_insurance = ii.id) "
+
+        // . "  INNER JOIN (
+        //     SELECT 
+        //         policy_primary, MAX(cdate) AS max_cdate
+        //     FROM 
+        //         insurance_info
+        //     GROUP BY 
+        //         policy_primary
+        //     ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate "
+
        // . "left join rela_partner_to_product rpp on (rpp.id_product = p.id and rpp.id_product = ii.product_id) "
         //. "right join insurance_partner ip on (ip.id = rpp.id_partner and ip.id = ii.insurance_company_id) "
         . " where ii.id IS NOT NULL "
         . "and Month(start_date) = '".$month. "' " 
        // . "and Month(start_date) <= '".$month_to. "' " 
         . "and Year(start_date) = '".$year. "' " 
-        . "and (ii.status = 'New' OR ii.status = 'Renew') ";
+        . " and (ii.status = 'Renew') ";
     
+    // and (ii.status = 'New' OR ii.status = 'Renew')
+
     // print_r($tsql);
     if (isset($data) && count($data) > 0) {
         if (isset($data['date_from']) && $data['date_from'] != '') {
@@ -288,7 +373,17 @@ function get_not_renew_monthly ($conn, $data, $month, $year) {
                             . "left join contact co on co.id = ric.id_contact "
                                 . "left join product p on p.id = ii.product_id "
                                     .  "left join agent a on a.id = ii.agent_id "
-                                        . "left join rela_agent_to_insurance rai on (rai.id_agent = a.id and rai.id_insurance = ii.id) "
+                                    .  "left join rela_agent_to_insurance rai on (rai.id_agent = a.id and rai.id_insurance = ii.id) "
+
+    // ."  INNER JOIN (
+    //         SELECT 
+    //             policy_primary, MAX(cdate) AS max_cdate
+    //         FROM 
+    //             insurance_info
+    //         GROUP BY 
+    //             policy_primary
+    //         ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate "
+
                                             // . "left join rela_partner_to_product rpp on (rpp.id_product = p.id and rpp.id_product = ii.product_id) "
     //. "right join insurance_partner ip on (ip.id = rpp.id_partner and ip.id = ii.insurance_company_id) "
     . " where ii.id IS NOT NULL "
@@ -324,6 +419,7 @@ function get_not_renew_monthly ($conn, $data, $month, $year) {
                     }
                     $tsql .= $where;
                     //echo $tsql;
+                    // print_r($tsql);
                     $stmt = sqlsrv_query( $conn, $tsql);
                     if( $stmt === false) {
                         die( print_r( sqlsrv_errors(), true) );
@@ -348,12 +444,23 @@ function get_subagent_monthly ($conn, $data, $month, $year) {
                                 . "left join product p on p.id = ii.product_id "
                                     .  "left join agent a on a.id = ii.agent_id "
                                         . "left join rela_agent_to_insurance rai on (rai.id_agent = a.id and rai.id_insurance = ii.id) "
+
+        // ."  INNER JOIN (
+        //     SELECT 
+        //         policy_primary, MAX(cdate) AS max_cdate
+        //     FROM 
+        //         insurance_info
+        //     GROUP BY 
+        //         policy_primary
+        //     ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate "
+
                                             // . "left join rela_partner_to_product rpp on (rpp.id_product = p.id and rpp.id_product = ii.product_id) "
     //. "right join insurance_partner ip on (ip.id = rpp.id_partner and ip.id = ii.insurance_company_id) "
+
     . " where ii.id IS NOT NULL "
         . "and Month(start_date) = '".$month. "' "
             . "and Year(start_date) = '".$year. "' "
-                . "and ii.status = 'Not Renew' "
+                // . "and ii.status = 'Not Renew' "
                     . "and a.agent_type ='Sub-agent' "
                     ;
                     if (isset($data) && count($data) > 0) {
@@ -384,6 +491,7 @@ function get_subagent_monthly ($conn, $data, $month, $year) {
                     }
                     $tsql .= $where;
                     //echo $tsql;
+                    // print_r($tsql);
                     $stmt = sqlsrv_query( $conn, $tsql);
                     if( $stmt === false) {
                         die( print_r( sqlsrv_errors(), true) );
@@ -434,9 +542,29 @@ function get_customers ($conn) {
 
 function get_policy_no ($conn) {
     $result = array();
-    $tsql = "select ii.id, ii.policy_no "
+    $tsql = "select max(ii.id), ii.policy_no 
+            from insurance_info ii 
+            where policy_no IS NOT NULL AND  policy_no != ''
+            GROUP BY ii.policy_no
+            order by policy_no ";
+
+    //echo $tsql;
+    $stmt = sqlsrv_query( $conn, $tsql);
+    if( $stmt === false) {
+        die( print_r( sqlsrv_errors(), true) );
+    }
+    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC))
+    {
+        $result[] = $row;
+    }
+    return $result;
+}
+
+function get_policy_no_group($conn) {
+    $result = array();
+    $tsql = "select max(ii.id),ii.policy_no "
         . "from insurance_info ii "
-        . "where policy_no IS NOT NULL AND  policy_no != ''"
+        . "where policy_no IS NOT NULL AND  policy_no != '' GROUP BY ii.policy_no "
             . "order by policy_no "
                         ;
     //echo $tsql;
@@ -505,6 +633,14 @@ function get_conversion($conn,$currency, $today) {
 
 function get_commission_report ($conn, $data, $agent) {
     //echo "ID".$agent;
+
+            $sql_join_date = "";
+            if (isset($data['date_from']) && $data['date_from'] != '') {
+                $where .= " and start_date >= '".date("Y-m-d", strtotime($data['date_from']))."' ";
+            }
+            if (isset($data['date_to']) && $data['date_to'] != '') {
+                $where .= " and start_date <= '".date("Y-m-d", strtotime($data['date_to']))."' ";
+            }
     
     $result = array();
     $where = '';
@@ -523,6 +659,7 @@ function get_commission_report ($conn, $data, $agent) {
             . "ii.status, "
             . "ii.start_date, "
             . "ii.end_date, "
+            . "ii.convertion_value, "
             . "ip.insurance_company, "
             . "ip.id as partner_id, "
             . "ip.id_currency_list as id_currency "
@@ -536,8 +673,20 @@ function get_commission_report ($conn, $data, $agent) {
         . "left join rela_agent_to_insurance rai on (rai.id_agent = a.id and rai.id_insurance = ii.id) "
         . "left join rela_partner_to_product rpp on (rpp.id_product = p.id and rpp.id_product = ii.product_id) "
         . "right join insurance_partner ip on (ip.id = rpp.id_partner and ip.id = ii.insurance_company_id) "
-        . "where ii.agent_id IS NOT NULL "
-        . "and ii.agent_id = ".$agent;
+
+        . " where ii.agent_id IS NOT NULL "
+        . " and ii.agent_id = ".$agent;
+
+        // . " INNER JOIN (
+        //     SELECT 
+        //         policy_primary, MAX(cdate) AS max_cdate
+        //     FROM 
+        //         insurance_info where policy_no != '' ".$sql_join_date."
+        //     GROUP BY 
+        //         policy_primary
+        //     ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate "
+
+
         // echo $tsql;
         if (isset($data) && count($data) > 0) {
             if (isset($data['date_from']) && $data['date_from'] != '') {
