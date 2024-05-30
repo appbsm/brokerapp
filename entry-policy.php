@@ -206,8 +206,8 @@
                                             </th>
 
                                             <th width="20px" style="color: #102958;">#</th>
-                                            <!-- hidden="tue" -->
-                                            <th >ID</th>
+
+                                            <th hidden="tue" >ID</th>
                                             <th width="150px" style="color: #102958;">Policy no.</th>
                                             <th width="200px" style="color: #102958;">Cust. name</th>
                                             <th width="200px" style="color: #102958;">Partner company</th>
@@ -246,9 +246,7 @@
             <input type="checkbox" class="row-checkbox">
         </td>
         <td class="text-center"><?php echo $cnt;?></td>
-        <!-- hidden="tue" -->
-        <td class="policy-id" ><?php echo $result->id;?></td>
-
+        <td hidden="tue" class="policy-id" ><?php echo $result->id;?></td>
         <td><?php echo $result->policy_no;?></td>
 
         <td><?php echo $result->full_name;?></td>
@@ -380,36 +378,37 @@
         }*/
 </style>
 
-        <div class="modal fade" id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModalLabel" aria-hidden="true">
-    <div class="modal-dialog d-flex align-items-center justify-content-center" role="document">
-        <div class="modal-content" style="width: 500px;">
-            <div class="modal-header">
-                <div class="col-sm-12 px-3 text-left">
-                    Edit Policy Status
+        <div class="modal fade"  id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModalLabel" aria-hidden="true">
+            <div class="modal-dialog d-flex align-items-center justify-content-center" role="document">
+            <div class="modal-dialog" role="document" >
+                <div class="modal-content" style="width: 500px;" >
+                    <div class="modal-header" >
+                        <div class="col-sm-12 px-3" class="text-left" >
+                            Edit Policy Status 
+                        </div>
+                    </div>
+                    <div class="modal-body" >
+                        <form id="popupForm">
+                            <div class="form-group">
+                                <label for="inputData">Status Policy:</label>
+                                <select id="status" name="status" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" required >
+                                    <option value="">Select Status</option>
+                                    <option value="New">New</option>
+                                    <option value="Follow up">Follow up</option>
+                                    <option value="Renew">Renew</option>
+                                    <option value="Wait" >Wait</option>
+                                    <option value="Not renew">Not renew</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="submitPopup">Submit</button>
+                    </div>
                 </div>
             </div>
-            <div class="modal-body">
-                <form id="popupForm">
-                    <div class="form-group">
-                        <label for="inputData">Status Policy:</label>
-                        <select id="status" name="status" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" required>
-                            <option value="">Select Status</option>
-                            <option value="New">New</option>
-                            <option value="Follow up">Follow up</option>
-                            <option value="Renew">Renew</option>
-                            <option value="Wait">Wait</option>
-                            <option value="Not renew">Not renew</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="submitPopup">Submit</button>
-            </div>
         </div>
-    </div>
-</div>
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
