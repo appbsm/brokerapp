@@ -199,9 +199,7 @@
                         <option value="Net Value" <?php if ("Net Value"==$calculate_type) { echo ' selected="selected"'; } ?> >Net Value</option>
                     </select>
                 </div>
-            </div> 
-
-            <div class="form-group row col-md-12">
+           
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Commission Value:</label>
                 </div> 
