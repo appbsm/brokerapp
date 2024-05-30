@@ -344,7 +344,7 @@
 													
 						<div class="col-xl-3 col-md-6 mb-4">
 							<div class="card border-left-primary-2 shadow h-100 py-2">
-								<a href="entry-policy.php" style="text-decoration: none; color: inherit;">
+								<a href="dashboard-collected.php" style="text-decoration: none; color: inherit;">
 									<div class="card-body">
 										<div class="row">
 											<div class="col mr-2">

@@ -26,35 +26,55 @@
         header('Location: logout.php');
     }
 
-	$sql = " SELECT cl.currency,ip.insurance_company AS insurance_company_in,pr.product_name AS product_name_in,cu.mobile AS mobile_customer,cu.tel AS tel_customer,cu.email AS email_customer,insu.status AS status_insurance 
-		 ,CASE WHEN cu.customer_type = 'Personal'
-		  THEN CONCAT(cu.first_name,' ',cu.last_name)
-		  ELSE cu.company_name
-		  END as full_name
-
-		 ,ag.title_name AS title_name_agent,ag.first_name AS first_name_agent,ag.last_name AS last_name_agent 
-		 ,insu.id AS id_insurance,FORMAT(start_date, 'dd-MM-yyyy') AS start_date_day 
-		 ,FORMAT(end_date, 'dd-MM-yyyy') AS end_date_day
-         ,FORMAT(paid_date, 'dd-MM-yyyy') AS paid_date_day
-         ,insu.* 
-		  from insurance_info insu 
-		 left JOIN  rela_customer_to_insurance re_ci ON re_ci.id_insurance_info = insu.id 
-		 left JOIN customer cu ON cu.id = re_ci.id_customer 
-		 left JOIN agent ag ON ag.id = insu.agent_id 
-		 LEFT JOIN product pr ON pr.id = insu.product_id
-		 LEFT JOIN insurance_partner ip ON ip.id = insu.insurance_company_id
-         LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
-
-    INNER JOIN (
-    SELECT 
-        policy_primary, MAX(cdate) AS max_cdate
-    FROM 
-        insurance_info
-    GROUP BY 
-        policy_primary
-    ) latest ON insu.policy_primary = latest.policy_primary AND insu.cdate = latest.max_cdate
-
-		 ORDER BY insu.cdate desc ";
+	$sql = "SELECT 
+			cl.currency,
+			ip.insurance_company AS insurance_company_in,
+			pr.product_name AS product_name_in,
+			cu.mobile AS mobile_customer,
+			cu.tel AS tel_customer,
+			cu.email AS email_customer,
+			insu.status AS status_insurance,
+			CASE 
+				WHEN cu.customer_type = 'Personal' THEN CONCAT(cu.first_name, ' ', cu.last_name)
+				ELSE cu.company_name
+			END as full_name,
+			ag.title_name AS title_name_agent,
+			ag.first_name AS first_name_agent,
+			ag.last_name AS last_name_agent,
+			insu.id AS id_insurance,
+			FORMAT(start_date, 'dd-MM-yyyy') AS start_date_day,
+			FORMAT(end_date, 'dd-MM-yyyy') AS end_date_day,
+			FORMAT(paid_date, 'dd-MM-yyyy') AS paid_date_day,
+			insu.*
+		FROM 
+			insurance_info insu 
+		LEFT JOIN  
+			rela_customer_to_insurance re_ci ON re_ci.id_insurance_info = insu.id 
+		LEFT JOIN 
+			customer cu ON cu.id = re_ci.id_customer 
+		LEFT JOIN 
+			agent ag ON ag.id = insu.agent_id 
+		LEFT JOIN 
+			product pr ON pr.id = insu.product_id
+		LEFT JOIN 
+			insurance_partner ip ON ip.id = insu.insurance_company_id
+		LEFT JOIN 
+			currency_list cl ON cl.id = ip.id_currency_list
+		INNER JOIN (
+			SELECT 
+				policy_primary, MAX(cdate) AS max_cdate
+			FROM 
+				insurance_info
+			GROUP BY 
+				policy_primary
+		) latest ON insu.policy_primary = latest.policy_primary AND insu.cdate = latest.max_cdate
+		WHERE 
+			insu.status IN ('New', 'Follow Up', 'Renew', 'Wait', 'Not Renew')
+			AND insu.paid_date IS NOT NULL
+			AND YEAR(insu.paid_date) = YEAR(GETDATE())
+		ORDER BY 
+			insu.cdate DESC;
+		 ";
 
 
 
@@ -126,7 +146,7 @@
                     <ul class="breadcrumb">
                         <li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
                         <!-- <li> Classes</li> -->
-                        <li class="active" >Entry Policy</li>
+                        <li class="active" >Entry Policy (Collected)</li>
                     </ul>
                 </div>
             </div>
@@ -138,7 +158,7 @@
 
                     <div class="card-header py-3">
                         <div class="panel-title" style="display: inline-block;" >
-                             <h2 class="title m-5" style="color: #102958;">Entry Policy</h2>
+                             <h2 class="title m-5" style="color: #102958;">Entry Policy (Collected)</h2>
                         </div>
                         
                         <div class="row pull-right" style="display: inline-block;">
