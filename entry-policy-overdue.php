@@ -46,22 +46,22 @@ if(strlen($_SESSION['alogin'])==""){
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="css/font-awesome.min.css" media="screen" >
-        <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen" >
-        <link rel="stylesheet" href="css/lobipanel/lobipanel.min.css" media="screen" >
-        <link rel="stylesheet" href="css/prism/prism.css" media="screen" >
-        <link rel="stylesheet" type="text/css" href="js/DataTables/datatables.min.css"/>
-        <link rel="stylesheet" href="css/main.css" media="screen" >
-        <script src="js/modernizr/modernizr.min.js"></script>
+    <link rel="stylesheet" href="css/font-awesome.min.css" media="screen" >
+    <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen" >
+    <link rel="stylesheet" href="css/lobipanel/lobipanel.min.css" media="screen" >
+    <link rel="stylesheet" href="css/prism/prism.css" media="screen" >
+    <link rel="stylesheet" type="text/css" href="js/DataTables/datatables.min.css"/>
+    <link rel="stylesheet" href="css/main.css" media="screen" >
+    <script src="js/modernizr/modernizr.min.js"></script>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-        <script src="js/DataTables/datatables.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="js/DataTables/datatables.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 </head>
 
@@ -75,7 +75,9 @@ if(strlen($_SESSION['alogin'])==""){
 	.table thead th.sorting_desc:after {
 		top: 20px;
 	}*/
-	
+	 .table thead th:first-child.sorting:after {
+      content: "";
+    }
 </style>
 
 <body id="page-top" >
@@ -98,28 +100,36 @@ if(strlen($_SESSION['alogin'])==""){
         </div>
 
             <div class="container-fluid">
-
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                             <div class="panel-title"  >
-                                <h2 class="title" style="color: #102958;">Overdue Policies</h2>
-                            </div>
+                        <div class="panel-title" style="display: inline-block;" >
+                            <h2 class="title m-5" style="color: #102958;">Overdue Policies</h2>
+                        </div>
                         
                         <div class="row pull-right">
-
                             <div class="text-right">
-                                <div class="dropdown">
-  <button class="btn btn-primary mr-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Export
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
-    <a class="dropdown-item" id="btnCsv" style="font-size: 15px;" >CSV</a>
-    <a class="dropdown-item" id="btnExcel" style="font-size: 15px;" >Excel</a>
-    <a class="dropdown-item" id="btnPdf" style="font-size: 15px;" >PDF</a>
-    <a class="dropdown-item" id="btnPrint" style="font-size: 15px;" >Print</a>
-  </div>
-</div>
+                                <div class="row">
+                                <?php if($status_edit==1){ ?>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inputModal" id="openPopupStatus" disabled>
+                                            Update Status Entry Policy
+                                        </button>
+                                        &nbsp;&nbsp;
+                                <?php } ?>
+
+    <div class="dropdown pl-1 mr-3">
+      <button class="btn btn-primary mr-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Export
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
+        <a class="dropdown-item" id="btnCsv" style="font-size: 15px;" >CSV</a>
+        <a class="dropdown-item" id="btnExcel" style="font-size: 15px;" >Excel</a>
+        <a class="dropdown-item" id="btnPdf" style="font-size: 15px;" >PDF</a>
+        <a class="dropdown-item" id="btnPrint" style="font-size: 15px;" >Print</a>
+      </div>
+    </div>
+                                </div>
+
                                 <!-- background-color:#102958; -->
                                 <!-- <a href="add-policy.php" class="btn btn-primary" style="color:#F9FAFA;" >
                                     <svg  width="16" height="16" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
@@ -151,7 +161,11 @@ if(strlen($_SESSION['alogin'])==""){
                                 <table id="example"  class="table table-bordered "  style="color: #969FA7;" >
                                     <thead >
                                         <tr style="color: #102958;" >
+                                            <th width="20px" style="color: #102958;">
+                                                <input type="checkbox" id="select-all">
+                                            </th>
                                             <th width="20px" style="color: #102958;">#</th>
+                                            <th hidden="tue" >ID</th>
                                             <th width="250px" style="color: #102958;">Policy no.</th>
                                             <th width="300px" style="color: #102958;">Cust. name</th>
                                             <th width="200px" style="color: #102958;">Partner company</th>
@@ -193,7 +207,11 @@ if(strlen($_SESSION['alogin'])==""){
            $alert_date = $a_date->format('d-m-Y');
 ?>
     <tr>
+        <td class="text-center">
+            <input type="checkbox" class="row-checkbox">
+        </td>
         <td class="text-center"><?php echo $cnt;?></td>
+        <td hidden="tue" class="policy-id" ><?php echo $result['id_policy'];?></td>
         <td><?php echo $result['policy_no'];?></td>
         <td><?php echo ($result['customer_type']=="Corporate") ? $result['company_name'] : $result['customer_name']; ?></td>
         <td><?php echo $result['insurance_company'];?></td>
@@ -245,6 +263,103 @@ if(strlen($_SESSION['alogin'])==""){
                     </div>
             </div>
         </div>
+
+<script>
+        $(document).ready(function() {
+            const selectAllCheckbox = $('#select-all');
+            const rowCheckboxes = $('.row-checkbox');
+            const openPopupStatus = $('#openPopupStatus');
+
+            selectAllCheckbox.on('change', function() {
+                rowCheckboxes.prop('checked', this.checked);
+                togglePopupButton();
+            });
+
+            rowCheckboxes.on('change', function() {
+                if (!this.checked) {
+                    selectAllCheckbox.prop('checked', false);
+                } else if (rowCheckboxes.length === rowCheckboxes.filter(':checked').length) {
+                    selectAllCheckbox.prop('checked', true);
+                }
+                togglePopupButton();
+            });
+
+            $('#submitPopup').on('click', function() {
+                // document.getElementById("loading-overlay").style.display = "flex";
+                const selectedCheckboxes = rowCheckboxes.filter(':checked').map(function() {
+                    return $(this).closest('tr').find('.policy-id').text();
+                }).get();
+
+                const inputData = $('#status').val();
+                if (selectedCheckboxes.length > 0 && inputData) {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'edit_status_policy.php', // Replace with the path to your PHP file
+                        data: {
+                            selectedCheckboxes: selectedCheckboxes,
+                            inputData: inputData
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                alert('Submitted Successfully edited status.');
+                                // alert('Data submitted successfully! Selected IDs: ' + response.selectedIds.join(', '));
+                                // $('#inputModal').modal('hide');
+                                window.location.href = 'entry-policy.php';
+                            } else {
+                                alert('Error: ' + response.message);
+                                $('#inputModal').modal('hide');
+                            }
+                        },
+                        error: function() {
+                            alert('Error submitting data.');
+                        }
+                    });
+                } else {
+                    alert('Please select status.');
+                }
+            });
+
+            function togglePopupButton() {
+                if (rowCheckboxes.filter(':checked').length > 0) {
+                    openPopupStatus.prop('disabled', false);
+                } else {
+                    openPopupStatus.prop('disabled', true);
+                }
+            }
+
+        });
+    </script>
+
+<div class="modal fade"  id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModalLabel" aria-hidden="true">
+            <div class="modal-dialog d-flex align-items-center justify-content-center" role="document">
+                <div class="modal-content" style="width: 500px;" >
+                    <div class="modal-header" >
+                        <div class="col-sm-12 px-3" class="text-left" >
+                            Edit Policy Status 
+                        </div>
+                    </div>
+                    <div class="modal-body" >
+                        <form id="popupForm">
+                            <div class="form-group">
+                                <label for="inputData">Status Policy:</label>
+                                <select id="status" name="status" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" required >
+                                    <option value="">Select Status</option>
+                                    <option value="New">New</option>
+                                    <option value="Follow up">Follow up</option>
+                                    <option value="Renew">Renew</option>
+                                    <option value="Wait" >Wait</option>
+                                    <option value="Not renew">Not renew</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="submitPopup">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">

@@ -7,7 +7,7 @@ function update_policy_status($dbh,$_POST) {
 		$sql_reason = ",reason='".$_POST['textarea']."'";
 	}
 
-	$sql ="UPDATE insurance_info set status='".$_POST['inputData']."'".$sql_reason." where id IN (";
+	$sql ="UPDATE insurance_info set udate='".date('Y-m-d H:i:s')."',modify_by='".$_SESSION['id']."',status='".$_POST['inputData']."'".$sql_reason." where id IN (";
 	$ids = implode(", ", $_POST['selectedCheckboxes']);
     $sql .= $ids . ")";
 	$query = $dbh->prepare($sql); 

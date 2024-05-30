@@ -118,6 +118,8 @@
 	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 	<script src="js/DataTables/datatables.min.js"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </head>
 
 <style>
@@ -131,6 +133,9 @@
 	.table thead th.sorting_desc:after {
 		top: 20px;
 	}
+    .table thead th:first-child.sorting:after {
+      content: "";
+    }
 </style>
 
 <body id="page-top" >
@@ -165,6 +170,14 @@
                             <div class="text-right" style="margin: 5px;">
 
                                 <div class="row">
+
+                                    <?php if($status_edit==1){ ?>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inputModal" id="openPopupStatus" disabled>
+                                            Update Status Entry Policy
+                                        </button>
+                                        &nbsp;&nbsp;
+                                    <?php } ?>
+
                                     <?php if($status_add==1){ ?>
                                     <a href="add-policy.php" class="btn btn-primary" style="color:#F9FAFA;" >
                                         <svg  width="16" height="16" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
@@ -211,7 +224,11 @@
                                 <table id="example"  class="table table-bordered "  style="color: #969FA7;"  >
                                     <thead >
                                         <tr style="color: #102958;" >
+                                             <th width="20px" style="color: #102958;">
+                                                <input type="checkbox" id="select-all">
+                                            </th>
                                             <th width="20px" style="color: #102958;">#</th>
+                                            <th hidden="tue" >ID</th>
                                             <th width="150px" style="color: #102958;">Policy no.</th>
                                             <th width="200px" style="color: #102958;">Cust. name</th>
                                             <th width="200px" style="color: #102958;">Partner company</th>
@@ -245,11 +262,14 @@
        foreach($results as $result){ 
 ?> 
     <tr>
+        <td class="text-center">
+            <input type="checkbox" class="row-checkbox">
+        </td>
         <td class="text-center"><?php echo $cnt;?></td>
         <td><?php echo $result->policy_no;?></td>
-
-         <td><?php echo $result->full_name;?></td>
-         <td><?php echo $result->insurance_company_in;?></td>
+        <td hidden="tue" class="policy-id" ><?php echo $result->id;?></td>
+        <td><?php echo $result->full_name;?></td>
+        <td><?php echo $result->insurance_company_in;?></td>
         <td><?php echo $result->product_name_in;?></td>
 
         <!-- <td class="text-center"><?php echo $result->mobile_customer;?></td>
@@ -303,6 +323,104 @@
                     </div>
             </div>
     </div>
+
+<script>
+        $(document).ready(function() {
+            const selectAllCheckbox = $('#select-all');
+            const rowCheckboxes = $('.row-checkbox');
+            const openPopupStatus = $('#openPopupStatus');
+
+            selectAllCheckbox.on('change', function() {
+                rowCheckboxes.prop('checked', this.checked);
+                togglePopupButton();
+            });
+
+            rowCheckboxes.on('change', function() {
+                if (!this.checked) {
+                    selectAllCheckbox.prop('checked', false);
+                } else if (rowCheckboxes.length === rowCheckboxes.filter(':checked').length) {
+                    selectAllCheckbox.prop('checked', true);
+                }
+                togglePopupButton();
+            });
+
+            $('#submitPopup').on('click', function() {
+                // document.getElementById("loading-overlay").style.display = "flex";
+                const selectedCheckboxes = rowCheckboxes.filter(':checked').map(function() {
+                    return $(this).closest('tr').find('.policy-id').text();
+                }).get();
+
+                const inputData = $('#status').val();
+                if (selectedCheckboxes.length > 0 && inputData) {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'edit_status_policy.php', // Replace with the path to your PHP file
+                        data: {
+                            selectedCheckboxes: selectedCheckboxes,
+                            inputData: inputData
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                alert('Submitted Successfully edited status.');
+                                // alert('Data submitted successfully! Selected IDs: ' + response.selectedIds.join(', '));
+                                // $('#inputModal').modal('hide');
+                                window.location.href = 'dashboard-collected.php';
+                            } else {
+                                alert('Error: ' + response.message);
+                                $('#inputModal').modal('hide');
+                            }
+                        },
+                        error: function() {
+                            alert('Error submitting data.');
+                        }
+                    });
+                } else {
+                    alert('Please select status.');
+                }
+            });
+
+            function togglePopupButton() {
+                if (rowCheckboxes.filter(':checked').length > 0) {
+                    openPopupStatus.prop('disabled', false);
+                } else {
+                    openPopupStatus.prop('disabled', true);
+                }
+            }
+
+        });
+</script>
+
+<div class="modal fade"  id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModalLabel" aria-hidden="true">
+            <div class="modal-dialog d-flex align-items-center justify-content-center" role="document">
+                <div class="modal-content" style="width: 500px;" >
+                    <div class="modal-header" >
+                        <div class="col-sm-12 px-3" class="text-left" >
+                            Edit Policy Status 
+                        </div>
+                    </div>
+                    <div class="modal-body" >
+                        <form id="popupForm">
+                            <div class="form-group">
+                                <label for="inputData">Status Policy:</label>
+                                <select id="status" name="status" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" required >
+                                    <option value="">Select Status</option>
+                                    <option value="New">New</option>
+                                    <option value="Follow up">Follow up</option>
+                                    <option value="Renew">Renew</option>
+                                    <option value="Wait" >Wait</option>
+                                    <option value="Not renew">Not renew</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="submitPopup">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>

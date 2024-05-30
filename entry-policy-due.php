@@ -62,6 +62,7 @@ if(strlen($_SESSION['alogin'])==""){
         <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
         <script src="js/DataTables/datatables.min.js"></script>
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <style>
@@ -74,7 +75,9 @@ if(strlen($_SESSION['alogin'])==""){
 	.table thead th.sorting_desc:after {
 		top: 20px;
 	}*/
-	
+	 .table thead th:first-child.sorting:after {
+      content: "";
+    }
 </style>
 
 <body id="page-top" >
@@ -85,30 +88,38 @@ if(strlen($_SESSION['alogin'])==""){
         <?php include('includes/topbar2.php');?>  
         <!-- container-fluid -->
         <div class="container-fluid mb-4" >
-                            <div class="row breadcrumb-div" style="background-color:#ffffff">
-                                <div class="col-md-6" >
-                                    <ul class="breadcrumb">
-                                        <li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
-                                        <!-- <li> Classes</li> -->
-                                        <li class="active" >Policies Near to Due</li>
-                                    </ul>
-                                </div>
-                            </div>
+            <div class="row breadcrumb-div" style="background-color:#ffffff">
+                <div class="col-md-6" >
+                    <ul class="breadcrumb">
+                        <li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
+                        <!-- <li> Classes</li> -->
+                        <li class="active" >Policies Near to Due</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-            <div class="container-fluid">
-
-                <!-- DataTales Example -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                             <div class="panel-title"  >
-                                <h2 class="title" style="color: #102958;">Policies Near to Due</h2>
-                            </div>
+        <div class="container-fluid">
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <div class="panel-title" style="display: inline-block;" >
+                        <h2 class="title m-5" style="color: #102958;">Policies Near to Due</h2>
+                    </div>
                         
-                        <div class="row pull-right">
+                    <div class="row pull-right">
 
-                            <div class="text-right">
-                                <div class="dropdown">
+                        <div class="text-right">
+                            <div class="row">
+
+                                <?php if($status_edit==1){ ?>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inputModal" id="openPopupStatus" disabled>
+                                            Update Status Entry Policy
+                                        </button>
+                                        &nbsp;&nbsp;
+                                <?php } ?>
+
+<div class="dropdown pl-1 mr-3">
   <button class="btn btn-primary mr-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Export
   </button>
@@ -119,6 +130,7 @@ if(strlen($_SESSION['alogin'])==""){
     <a class="dropdown-item" id="btnPrint" style="font-size: 15px;" >Print</a>
   </div>
 </div>
+
                                 <!-- background-color:#102958; -->
                                 <!-- <a href="add-policy.php" class="btn btn-primary" style="color:#F9FAFA;" >
                                     <svg  width="16" height="16" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
@@ -126,7 +138,8 @@ if(strlen($_SESSION['alogin'])==""){
   <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
                                     </svg>
                                     <span class="text">Add New Policy</span>
-                                </a> -->               
+                                </a> -->  
+                                </div>
                             </div>
                             <!-- &nbsp;&nbsp;&nbsp;
                             <div class="text-right">
@@ -141,14 +154,18 @@ if(strlen($_SESSION['alogin'])==""){
                             </div> -->
                             <!-- &nbsp;&nbsp; -->
                         </div>
-                    </div>
+                </div>
 
                         <div class="card-body" >
                             <div class="table-responsive" style="font-size: 13px;">
                                 <table id="example"  class="table table-bordered "  style="color: #969FA7;" >
                                     <thead >
                                         <tr style="color: #102958;" >
-                                           <th width="20px" style="color: #102958;">#</th>
+                                            <th width="20px" style="color: #102958;">
+                                                <input type="checkbox" id="select-all">
+                                            </th>
+                                            <th width="20px" style="color: #102958;">#</th>
+                                            <th hidden="tue" >ID</th>
                                             <th width="150px" style="color: #102958;">Policy no.</th>
                                             <th width="200px" style="color: #102958;">Cust. name</th>
                                             <th width="200px" style="color: #102958;">Partner company</th>
@@ -188,7 +205,11 @@ if(strlen($_SESSION['alogin'])==""){
            $alert_date = $a_date->format('d-m-Y');
 ?> 
     <tr>
+        <td class="text-center">
+            <input type="checkbox" class="row-checkbox">
+        </td>
         <td class="text-center"><?php echo $cnt;?></td>
+        <td hidden="tue" class="policy-id" ><?php echo $result['id_policy'];?></td>
         <td><?php echo $result['policy_no'];?></td>
         <td><?php echo ($result['customer_type']=="Corporate") ? $result['company_name'] : $result['customer_name']; ?></td>
         <td><?php echo $result['insurance_company'];?></td>
@@ -244,6 +265,104 @@ if(strlen($_SESSION['alogin'])==""){
                     </div>
             </div>
         </div>
+
+<script>
+        $(document).ready(function() {
+            const selectAllCheckbox = $('#select-all');
+            const rowCheckboxes = $('.row-checkbox');
+            const openPopupStatus = $('#openPopupStatus');
+
+            selectAllCheckbox.on('change', function() {
+                rowCheckboxes.prop('checked', this.checked);
+                togglePopupButton();
+            });
+
+            rowCheckboxes.on('change', function() {
+                if (!this.checked) {
+                    selectAllCheckbox.prop('checked', false);
+                } else if (rowCheckboxes.length === rowCheckboxes.filter(':checked').length) {
+                    selectAllCheckbox.prop('checked', true);
+                }
+                togglePopupButton();
+            });
+
+            $('#submitPopup').on('click', function() {
+                // document.getElementById("loading-overlay").style.display = "flex";
+                const selectedCheckboxes = rowCheckboxes.filter(':checked').map(function() {
+                    return $(this).closest('tr').find('.policy-id').text();
+                }).get();
+
+                const inputData = $('#status').val();
+                if (selectedCheckboxes.length > 0 && inputData) {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'edit_status_policy.php', // Replace with the path to your PHP file
+                        data: {
+                            selectedCheckboxes: selectedCheckboxes,
+                            inputData: inputData
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                alert('Submitted Successfully edited status.');
+                                // alert('Data submitted successfully! Selected IDs: ' + response.selectedIds.join(', '));
+                                // $('#inputModal').modal('hide');
+                                window.location.href = 'entry-policy-due.php';
+                            } else {
+                                alert('Error: ' + response.message);
+                                $('#inputModal').modal('hide');
+                            }
+                        },
+                        error: function() {
+                            alert('Error submitting data.');
+                        }
+                    });
+                } else {
+                    alert('Please select status.');
+                }
+            });
+
+            function togglePopupButton() {
+                if (rowCheckboxes.filter(':checked').length > 0) {
+                    openPopupStatus.prop('disabled', false);
+                } else {
+                    openPopupStatus.prop('disabled', true);
+                }
+            }
+
+        });
+    </script>
+
+<div class="modal fade"  id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModalLabel" aria-hidden="true">
+            <div class="modal-dialog d-flex align-items-center justify-content-center" role="document">
+                <div class="modal-content" style="width: 500px;" >
+                    <div class="modal-header" >
+                        <div class="col-sm-12 px-3" class="text-left" >
+                            Edit Policy Status 
+                        </div>
+                    </div>
+                    <div class="modal-body" >
+                        <form id="popupForm">
+                            <div class="form-group">
+                                <label for="inputData">Status Policy:</label>
+                                <select id="status" name="status" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" required >
+                                    <option value="">Select Status</option>
+                                    <option value="New">New</option>
+                                    <option value="Follow up">Follow up</option>
+                                    <option value="Renew">Renew</option>
+                                    <option value="Wait" >Wait</option>
+                                    <option value="Not renew">Not renew</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="submitPopup">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
+
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
