@@ -338,7 +338,7 @@
                         },
                         success: function(response) {
                             if (response.status === 'success') {
-                                alert('Data submitted Successfully edited status.');
+                                alert('Submitted Successfully edited status.');
                                 // alert('Data submitted successfully! Selected IDs: ' + response.selectedIds.join(', '));
                                 // $('#inputModal').modal('hide');
                                 window.location.href = 'entry-policy.php';
@@ -380,7 +380,6 @@
 
         <div class="modal fade"  id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModalLabel" aria-hidden="true">
             <div class="modal-dialog d-flex align-items-center justify-content-center" role="document">
-            <div class="modal-dialog" role="document" >
                 <div class="modal-content" style="width: 500px;" >
                     <div class="modal-header" >
                         <div class="col-sm-12 px-3" class="text-left" >
