@@ -114,6 +114,9 @@
 	.table thead th.sorting_desc:after {
 		top: 20px;
 	}
+	.table thead th:first-child.sorting:after {
+	  content: "";
+	}
 </style>
 
 <body id="page-top" >
