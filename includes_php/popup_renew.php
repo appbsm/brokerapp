@@ -115,7 +115,7 @@
                 </div>
                 <div class="col-sm-2">
                     <input id="premium_rate_popup"  type="text" style="border-color:#102958;" step="0.01" min="0" class="form-control" 
-                        value="<?php echo number_format((float)$premium_rate, 2, '.', ''); ?>"
+                        value="<?php echo number_format((float)$premium_rate, 2, '.', ','); ?>"
                         onchange="
                         // var premium = parseFloat(this.value).toFixed(2);
                         // var percent = parseFloat(document.getElementById('percent_trade_pop').value).toFixed(2);
@@ -139,7 +139,7 @@
                 </div>
                 <div class="col-sm-2">
                     <input id="convertion_value_popup"  type="text" style="border-color:#102958;" step="0.01" min="0" class="form-control" 
-                        value="<?php echo number_format((float)$premium_rate, 2, '.', ''); ?>" readOnly/>
+                        value="<?php echo number_format((float)$premium_rate, 2, '.', ','); ?>" readOnly/>
                 </div>  
 
                 <div class="col-sm-2 label_left" >
