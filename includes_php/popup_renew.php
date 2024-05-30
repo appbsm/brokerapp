@@ -107,6 +107,14 @@
                     value="" placeholder="dd-mm-yyyy" >
                     <?php //echo $stop_date; ?>
                 </div>
+
+                <div class="col-sm-2 label_left" >
+                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Collected Date:</label>
+                </div> 
+                <div class="col-sm-2">
+                    <input id="paid_date_popup" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" placeholder="dd-mm-yyyy"
+                    value="<?php echo $paid_date; ?>" >
+                </div>
             </div>
 
             <div class="form-group row col-md-12">
@@ -143,11 +151,14 @@
                 </div>  
 
                 <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Collected Date:</label>
+                    <label style="color: #102958;" for="staticEmail" >Payment Status:
+                </label>
                 </div> 
-                <div class="col-sm-2">
-                    <input id="paid_date_popup" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" placeholder="dd-mm-yyyy"
-                    value="<?php echo $paid_date; ?>" >
+                <div class="col-sm-2 " >
+                    <select id="payment_status_popup" style="color: #0C1830;border-color:#102958;" class="form-control"   >
+                        <option value="Paid" selected>Paid</option>
+                        <option value="Not Paid" >Not Paid</option>
+                    </select>
                 </div>
             </div>
 
@@ -232,16 +243,8 @@
                 <div class="col-sm-2 " >
                     <input type="text" id="commission_popup" style="border-color:#102958;" class="form-control" value="<?php echo number_format((float)$commission_rate, 2, '.', ''); ?>" readOnly/>
                 </div>
-                 <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" >Commission Status:</label>
-                </div> 
-                <div class="col-sm-2 " >
-                    <select id="payment_status_popup" style="color: #0C1830;border-color:#102958;" class="form-control"   >
-                       
-                        <option value="Paid" >Paid</option>
-                         <option value="Not Paid" selected>Not Paid</option>
-                    </select>
-                </div>
+
+                
             </div>
 
     </div>
