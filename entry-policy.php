@@ -129,6 +129,18 @@
 		padding: 0 4px;
 	}
 
+    .btn-primary:disabled {
+        color: #fff;
+        background-color: #999ba3;
+        border-color: #999ba3;
+    }
+    .btn-primary:disabled:hover {
+        color: #fff;
+        background-color: #999ba3;
+        border-color: #999ba3;
+        cursor: not-allowed; 
+    }
+
 </style>
 
 <body id="page-top" >
@@ -149,7 +161,6 @@
                 </div>
             </div>
         </div>
-
             <div class="container-fluid">
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
@@ -163,12 +174,6 @@
                             <div class="text-right" style="margin: 5px;">
 
                                 <div class="row">
-                                    <?php if($status_edit==1){ ?>
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inputModal" id="openPopupStatus" disabled>
-                                            Update Status Entry Policy
-                                        </button>
-                                        &nbsp;&nbsp;
-                                    <?php } ?>
 
                                     <?php if($status_add==1){ ?>
                                     <a href="add-policy.php" class="btn btn-primary" style="color:#F9FAFA;" >
@@ -180,6 +185,13 @@
                                     </a>  
                                      &nbsp;&nbsp;
 
+                                    <?php } ?>
+
+                                     <?php if($status_edit==1){ ?>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inputModal" id="openPopupStatus" disabled>
+                                            Update Policy Status
+                                        </button>
+                                        &nbsp;&nbsp;
                                     <?php } ?>
 
                                     <div class="dropdown pl-1 pr-3">
@@ -343,19 +355,21 @@
                 }).get();
 
                 const inputData = $('#status').val();
+                const textarea = $('#textarea').val();
                 if (selectedCheckboxes.length > 0 && inputData) {
                     $.ajax({
                         type: 'POST',
                         url: 'edit_status_policy.php', // Replace with the path to your PHP file
                         data: {
                             selectedCheckboxes: selectedCheckboxes,
-                            inputData: inputData
+                            inputData: inputData,
+                            textarea: textarea
                         },
                         success: function(response) {
                             if (response.status === 'success') {
                                 alert('Submitted Successfully edited status.');
                                 // alert('Data submitted successfully! Selected IDs: ' + response.selectedIds.join(', '));
-                                // $('#inputModal').modal('hide');
+                                // alert('Data submitted successfully! Selected IDs: ' + response.test);
                                 window.location.href = 'entry-policy.php';
                             } else {
                                 alert('Error: ' + response.message);
@@ -380,49 +394,53 @@
             }
 
         });
+
+        function ClickChange() {
+            var status = document.getElementById('status').value;
+            var reasonContainer = document.getElementById('reasonContainer');
+            
+            if (status === 'Not renew') {
+                reasonContainer.style.display = 'block';
+            } else {
+                reasonContainer.style.display = 'none';
+            }
+        }
     </script>
 
- <style>
-        /*.modal-xl-custom {
-            max-width: 100%;
-            width: 1000px;
-        }
-        .modal-body-custom {
-            height: 80vh;
-            max-width: 100%;
-        }*/
-</style>
-
-        <div class="modal fade"  id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModalLabel" aria-hidden="true">
-            <div class="modal-dialog d-flex align-items-center justify-content-center" role="document">
-                <div class="modal-content" style="width: 500px;" >
-                    <div class="modal-header" >
-                        <div class="col-sm-12 px-3" class="text-left" >
-                            Edit Policy Status 
-                        </div>
-                    </div>
-                    <div class="modal-body" >
-                        <form id="popupForm">
-                            <div class="form-group">
-                                <label for="inputData">Status Policy:</label>
-                                <select id="status" name="status" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" required >
-                                    <option value="">Select Status</option>
-                                    <option value="New">New</option>
-                                    <option value="Follow up">Follow up</option>
-                                    <option value="Renew">Renew</option>
-                                    <option value="Wait" >Wait</option>
-                                    <option value="Not renew">Not renew</option>
-                                </select>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="submitPopup">Submit</button>
-                    </div>
+        <div class="modal fade" id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModalLabel" aria-hidden="true">
+    <div class="modal-dialog d-flex align-items-center justify-content-center" role="document">
+        <div class="modal-content" style="width: 500px;">
+            <div class="modal-header">
+                <div class="col-sm-12 px-3 text-left">
+                    Edit Policy Status
                 </div>
             </div>
+            <div class="modal-body">
+                <form id="popupForm">
+                    <div class="form-group">
+                        <label for="status">Status Policy:</label>
+                        <select id="status" name="status" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" required>
+                            <option value="">Select Status</option>
+                            <option value="New">New</option>
+                            <option value="Follow up">Follow up</option>
+                            <option value="Renew">Renew</option>
+                            <option value="Wait">Wait</option>
+                            <option value="Not renew">Not renew</option>
+                        </select>
+                    </div>
+                    <div id="reasonContainer" style="display: none;">
+                        <label style="color: #102958;" for="textarea" id="reasonLabel">Reason:</label>
+                        <textarea class="form-control" id="textarea" name="textarea" rows="5" placeholder="Cancellation reason"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submitPopup">Submit</button>
+            </div>
         </div>
+    </div>
+</div>
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">

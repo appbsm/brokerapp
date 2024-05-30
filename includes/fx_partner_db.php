@@ -169,19 +169,21 @@ function get_partner_by_id($conn, $id) {
 
 function get_partner_ctr($conn) {
 	$result = array();
-	$tsql = "SELECT MAX(partner_ctr) FROM insurance_partner";
+	$tsql = "SELECT MAX(insurance_id) FROM insurance_partner";
+	// $tsql = "SELECT MAX(partner_ctr) FROM insurance_partner";
 	
 	$stmt = sqlsrv_query( $conn, $tsql);  
-	if( $stmt === false) {
+	if($stmt === false) {
 		die( print_r( sqlsrv_errors(), true) );
 	}
 	// Make the first (and in this case, only) row of the result set available for reading.
 	if( sqlsrv_fetch( $stmt ) === false) {
 		 die( print_r( sqlsrv_errors(), true));
 	}
-	$last_customer = sqlsrv_get_field( $stmt, 0);
+
+	$last_customer = sqlsrv_get_field($stmt, 0);
 	if ($last_customer == '') {
-		$last_customer = 0;
+		$last_customer = "P-000000";
 	}
 	return $last_customer;
 }
@@ -189,9 +191,22 @@ function get_partner_ctr($conn) {
 function generate_partner_id($conn) {
 	$result = '';
 	$last_partner = get_partner_ctr($conn);
-	$partner_id = 'P-'. str_pad($last_partner + 1, 6, '0', STR_PAD_LEFT);
+
+	$prefix = substr($last_partner, 0, strrpos($last_partner, '-') + 1);
+	$number = (int)substr($last_partner, strrpos($last_partner, '-') + 1);
+
+	// เพิ่มเลขเข้าไป
+	$number += 1;
+
+	// จัดรูปแบบตัวเลขใหม่ให้อยู่ในรูปแบบที่มี 6 หลัก (000013)
+	$new_number = str_pad($number, 6, '0', STR_PAD_LEFT);
+
+	// รวมส่วนของ prefix และตัวเลขเข้าด้วยกัน
+	$last_partner = $prefix . $new_number;
+
+	// $partner_id = 'P-'. str_pad($last_partner + 1, 6, '0', STR_PAD_LEFT);
 	
-	return $partner_id;
+	return $last_partner;
 }
 
 function get_partner_bank($conn, $id) {
@@ -249,10 +264,13 @@ function save_partner($conn, $post_data) {
 		$status=1;
 	}
 
+	$insurance_id = generate_partner_id($conn);
+
 	$last_partner = get_partner_ctr($conn);
 	$data['values'] = array(
 	$last_partner+1,
-	$post_data['insurance_id'],
+	// $post_data['insurance_id'],
+	$insurance_id,
 	$post_data['address_number'],
 	$post_data['building_name'],
 	$post_data['soi'],
@@ -262,8 +280,8 @@ function save_partner($conn, $post_data) {
 	$post_data['province'],
 	$post_data['post_code'],
 	date('Y-m-d H:i:s'),
+	$_SESSION['id'],
 	'',
-	$post_data['modify_by'],
 	$post_data['id_rela_product'],
 	$post_data['id_rela_contact'],
 	$status,
@@ -444,7 +462,8 @@ function update_partner ($conn, $post_data) {
 	'district',
 	'province',
 	'post_code',
-
+	'modify_by',
+	'udate',
 	'status',
 	'website',
 	'insurance_company',
@@ -467,8 +486,9 @@ function update_partner ($conn, $post_data) {
 	$post_data['sub_district'],
 	$post_data['district'],
 	$post_data['province'],
-	$post_data['post_code'],		
-
+	$post_data['post_code'],
+	$_SESSION['id'],
+	date('Y-m-d H:i:s'),
 	$post_data['status'],
 	$post_data['website'],
 	$post_data['insurance_company'],
@@ -571,8 +591,6 @@ function update_partner ($conn, $post_data) {
 		        update_table($conn, $data_under);
 		    }
 		}else{
-			echo '<script>alert("IN default_type: '.$post_data["default_type".($ctr+1)].'")</script>'; 
-			echo '<script>alert("agent_under: '.$post_data['agent_under'][$ctr].'")</script>'; 
 
 			if ($post_data['agent_under'][$ctr]!="") {
 				$data_under=null;

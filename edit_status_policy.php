@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         include('includes/config.php');
         include('includes/fx_policy_db.php');
+        // $test = update_policy_status($dbh,$_POST);
         update_policy_status($dbh,$_POST);
         $dbh = null;
 

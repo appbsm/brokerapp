@@ -5,7 +5,7 @@ include_once('fx_crud_db.php');
 function near_to_due_list($conn) {
     $list = array();
     // . "DATEADD(day,+".$num_of_days.",end_date) as alert_date, "
-    $sql = "select cl.currency,*, 
+    $sql = "select ii.id as id_policy,cl.currency,*, 
             end_date as policy_end_date,  ip.insurance_company, ii.status as insurance_status
             , CONCAT(a.first_name, '  ' , a.last_name) as agent_name, 
             CONCAT(c.first_name, '  ' , c.last_name) as customer_name,c.tel,c.email as email_cus,c.mobile, 
@@ -51,7 +51,7 @@ function near_to_due_list($conn) {
 
 function near_to_overdue_list($conn) {
     $list = array();
-    $sql = "select cl.currency,*, 
+    $sql = "select ii.id as id_policy,cl.currency,*, 
             end_date as policy_end_date,  ip.insurance_company, ii.status as insurance_status, CONCAT(a.first_name, '  ' , a.last_name) as agent_name, 
             CONCAT(c.title_name,' ',c.first_name, '  ' , c.last_name) as customer_name,c.tel,c.email as email_cus,c.mobile, 
             ii.status as insurance_status, ii.id as insurance_id,pr.product_name AS product_name_in,ii.id as id_insurance 

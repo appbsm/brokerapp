@@ -1122,7 +1122,7 @@ $(function(){
                 </div>
 
                  <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Paid Date:</label>
+                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Collected Date:</label>
                 </div>
                 <div class="col-sm-2">
                     <input id="paid_date" name="paid_date[]"  style="color: #000;border-color:#102958; text-align: center;" type="test"  class="form-control" 

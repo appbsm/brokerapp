@@ -6,7 +6,8 @@ session_start();
 error_reporting(0);
 include_once('includes/fx_partner_db.php');
 include_once('includes/fx_insurance_products.php');
-include_once('includes/fx_address.php');
+// include_once('includes/fx_address.php');
+include_once('includes/fx_address_function.php');
 include_once('includes/fx_agent_db.php');
 
 if(strlen($_SESSION['alogin'])=="") {
@@ -854,7 +855,7 @@ $currency = get_currency($conn);
 				$('#district').change(function(){
 					//alert($(this).val())
 					$.ajax({
-					type:"post", 
+					type:"post",
 					url: "includes/fx_address.php", 
 					data: {
 						action: 'get_subdistrict',

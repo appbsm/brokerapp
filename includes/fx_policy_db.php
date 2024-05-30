@@ -2,7 +2,12 @@
 
 function update_policy_status($dbh,$_POST) {
 
-	$sql ="UPDATE insurance_info set status='".$_POST['inputData']."' where id IN (";
+	$sql_reason = "";
+	if($_POST['inputData'] == "Not renew"){
+		$sql_reason = ",reason='".$_POST['textarea']."'";
+	}
+
+	$sql ="UPDATE insurance_info set status='".$_POST['inputData']."'".$sql_reason." where id IN (";
 	$ids = implode(", ", $_POST['selectedCheckboxes']);
     $sql .= $ids . ")";
 	$query = $dbh->prepare($sql); 

@@ -143,7 +143,7 @@
                 </div>  
 
                 <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Paid Date:</label>
+                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Collected Date:</label>
                 </div> 
                 <div class="col-sm-2">
                     <input id="paid_date_popup" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" placeholder="dd-mm-yyyy"
@@ -237,8 +237,9 @@
                 </div> 
                 <div class="col-sm-2 " >
                     <select id="payment_status_popup" style="color: #0C1830;border-color:#102958;" class="form-control"   >
+                       
                         <option value="Paid" >Paid</option>
-                        <option value="Not Paid" >Not Paid</option>
+                         <option value="Not Paid" selected>Not Paid</option>
                     </select>
                 </div>
             </div>

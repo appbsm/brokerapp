@@ -2,7 +2,6 @@
 // include_once('connect_sql.php');
 include_once('fx_crud_db.php');
 
-
 function check_insurance_agent($conn,$id) {
 	$result = array();
 	$tsql = "SELECT TOP 1 * from insurance_info WHERE agent_id = '".$id."'";
@@ -117,37 +116,33 @@ function save_agent ($conn, $post_data) {
 	    'agent_type',
 	    'status',
 	    'cdate',
-	    'udate',
-	    'create_by',
-	    'modify_by'
+	    'create_by'
 	);
 	$last_agent_ctr = get_agent_ctr($conn);
 	$data['values'] = array(
-	$last_agent_ctr+1,
-	$post_data['agent_id'], 
-	$post_data['title_name'],
-	$post_data['first_name'],
-	$post_data['last_name'],
-	$post_data['nick_name'],
-	$post_data['tax_id'],
-	$post_data['address_number'],
-	$post_data['building_name'],
-	$post_data['soi'],
-	$post_data['road'],
-	$post_data['sub_district'],
-	$post_data['district'],
-	$post_data['province'],
-	$post_data['post_code'],
-	$post_data['tel'],
-	$post_data['mobile'],
-	$post_data['email'],
-	//$post_data['id_rela_agent_insurance'],
-	$post_data['agent_type'],
-	1,
-	date('Y-m-d H:i:s'),
-	$post_data['udate'],
-	$post_data['create_by'],
-	$post_data['modify_by']
+		$last_agent_ctr+1,
+		$post_data['agent_id'], 
+		$post_data['title_name'],
+		$post_data['first_name'],
+		$post_data['last_name'],
+		$post_data['nick_name'],
+		$post_data['tax_id'],
+		$post_data['address_number'],
+		$post_data['building_name'],
+		$post_data['soi'],
+		$post_data['road'],
+		$post_data['sub_district'],
+		$post_data['district'],
+		$post_data['province'],
+		$post_data['post_code'],
+		$post_data['tel'],
+		$post_data['mobile'],
+		$post_data['email'],
+		//$post_data['id_rela_agent_insurance'],
+		$post_data['agent_type'],
+		1,
+		date('Y-m-d H:i:s'),
+		$_SESSION['id']
 	);
 	$agent_id = insert_table ($conn, $data);
 	
@@ -222,9 +217,8 @@ function update_agent ($conn, $post_data) {
         // 'id_rela_agent_insurance',
         'agent_type',
         'status',
-        'udate'
-        //'create_by',
-        //'modify_by'
+        'udate',
+        'modify_by'
     );
     //$last_agent_ctr = get_agent_ctr($conn);
     $data['values'] = array(
@@ -247,9 +241,8 @@ function update_agent ($conn, $post_data) {
         //$post_data['id_rela_agent_insurance'],
         $post_data['agent_type'],
         isset($post_data['check_active']) ? 1 : 0,
-        date('Y-m-d H:i:s')
-        //$post_data['create_by'],
-        //$post_data['modify_by']
+        date('Y-m-d H:i:s'),
+        $_SESSION['id']
     );
 	$last_id = update_table ($conn, $data);	
 

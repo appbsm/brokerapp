@@ -1054,7 +1054,7 @@ $(function(){
                 </div>
 				
 				<div class="col-sm-sm-2 label_left" >
-                    <label style="color: #102958;"  ><small><font color="red">*</font></small>Paid Date:</label>
+                    <label style="color: #102958;"  ><small><font color="red">*</font></small>Collected Date:</label>
                 </div> 
                 <div class="col-sm-2">
                     <input id="paid_date" name="paid_date[]" <?php echo $paid_date; ?> style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control" 

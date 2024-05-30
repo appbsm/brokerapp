@@ -4,7 +4,7 @@ session_start();
 error_reporting(0);
 include_once('includes/fx_partner_db.php');
 include_once('includes/fx_insurance_products.php');
-include_once('includes/fx_address.php');
+include_once('includes/fx_address_function.php');
 include_once('includes/fx_agent_db.php');
 
 if(strlen($_SESSION['alogin'])=="") {
@@ -47,8 +47,6 @@ if($_GET[id]){
     // print_r($partner);
 
     $provinces = get_provinces($conn);
-    // $districts = get_district_by_province($conn,$partner['province']);
-    // $subdistricts = get_subdistrict_by_district($conn,$partner['district']);
     $districts = get_district_by_province($conn, $provinces[0]['code']);
     $subdistricts = get_subdistrict_by_district($conn, $districts[0]['code']);
 
