@@ -1,5 +1,15 @@
 <?php
 
+function update_policy_status($dbh,$_POST) {
+
+	$sql ="UPDATE insurance_info set status='".$_POST['inputData']."' where id IN (";
+	$ids = implode(", ", $_POST['selectedCheckboxes']);
+    $sql .= $ids . ")";
+	$query = $dbh->prepare($sql); 
+	$query->execute();
+	// return $sql;
+}
+
 function update_policy($dbh,$_POST,$_FILES,$new_file_name,$lastInsertId_customer,$i) {
 
 
