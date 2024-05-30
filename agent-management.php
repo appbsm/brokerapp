@@ -177,7 +177,8 @@
                                             <!--<th>#</th>-->
 											<th>Agent ID</th>
                                             <th>Agent Name</th>
-                                            <th>Nickname</th>	                                                          
+                                            <th>Nickname</th>	 
+											<th>Agen Type</th>											
                                             <th >Email</th>
                                             <!-- <th>Tel</th> -->
                                             <th>Mobile</th>
@@ -197,6 +198,7 @@
 											<td class="text-center"><?php echo $agent['agent_id']?></td>
                                             <td><?php echo $agent['first_name'].' '.$agent['last_name'];?></td>
                                             <td class="text-center"><?php echo $agent['nick_name'];?></td>
+											<td class="text-center"><?php echo $agent['agent_type'];?></td>
                                             <td><?php echo $agent['email']?></td>
                                             <td class="text-center"><?php echo $agent['mobile']?></td>
                                             <td class="text-center"><?php echo ($agent['status'] == 1) ? 'Active' : 'Inactive';?></td>

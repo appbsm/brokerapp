@@ -97,8 +97,10 @@
                     <span class="form-control-feedback"><i class="fas fa-user"></i></span>
                 </div>
                 <div class="form-group has-feedback">
-                    <input type="password" id="password" name="password" class="form-control" id="inputPassword3" placeholder="Password" required>
-                    <span class="form-control-feedback"><i class="fas fa-lock"></i></span>
+                    <!--<input type="password" id="password" name="password" class="form-control" id="inputPassword3" placeholder="Password" required>
+                    <span class="form-control-feedback"><i class="fas fa-lock"></i></span>-->
+					<input minlength="8" maxlength="20" type="password" id="password" name="password" class="form-control" id="inputPassword3" placeholder="Password" required>
+                    <span  toggle="#password" class="form-control-feedback fa fa-fw fa-eye-slash field-icon toggle-password"><span>
                 </div>
                 <div class="form-group">
                     <input type="text" id="company" name="company" class="form-control" readOnly>
@@ -110,18 +112,61 @@
                 </div>
             </form>
 			<script>
-		function validateForm() {
-			var company_value = document.getElementById("company").value;
-			if (company_value!="") {
-				// document.getElementById("loading-overlay").style.display = "flex";
-				return true;
-			}else{
-				// alert("Please enter the correct company code.");
-				showAlert("Your company code incorrect.");
-				return false;
-			}
-		}
-	</script>
+				document.querySelectorAll('.toggle-password').forEach(function(icon) {
+					icon.addEventListener('click', function() {
+						var target = document.querySelector(this.getAttribute('toggle'));
+						if (target.type === 'password') {
+							target.type = 'text';
+							this.classList.remove('fa-eye-slash');
+							this.classList.add('fa-eye');
+						} else {
+							target.type = 'password';
+							this.classList.remove('fa-eye');
+							this.classList.add('fa-eye-slash');
+						}
+					});
+				});
+
+				function valid() {
+					var password = document.forms["chngpwd"]["password"].value;
+					var confirmPassword = document.forms["chngpwd"]["confirmpassword"].value;
+
+					// เงื่อนไขสำหรับตรวจสอบรหัสผ่าน
+					var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+					if (!regex.test(password)) {
+						//alert("รหัสผ่านต้องประกอบด้วยตัวเล็ก ตัวใหญ่ ตัวเลข และอักขระพิเศษ และมีความยาวอย่างน้อย 8 ตัวอักษร");
+						// alert("Password must contain at least one lowercase letter, one uppercase letter, one numeric digit, one special character, and be at least 8 characters long.");
+						var text = "Your password is not strong, please using the following criteria:\n"+
+							"1.The password must have a minimum of 8 characters.\n"+
+							"2.It must include at least 1 uppercase letter.\n"+
+							"3.It must include at least 1 lowercase letter.\n"+
+							"4.It must include at least 1 digit.\n"+
+							"5.It must include at least 1 special character (e.g., @, !, #, $).";
+						alert(text);
+						return false;
+					}
+
+					if (password !== confirmPassword) {
+						//alert("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน");
+						alert("Your Password do not match.");
+						return false;
+					}
+				}
+			</script>
+			<script>
+				function validateForm() {
+					var company_value = document.getElementById("company").value;
+					if (company_value!="") {
+						// document.getElementById("loading-overlay").style.display = "flex";
+						return true;
+					}else{
+						// alert("Please enter the correct company code.");
+						showAlert("Your company code incorrect.");
+						return false;
+					}
+				}
+			</script>
 
 			<script>
 				var company_object = document.getElementById("code_company");
