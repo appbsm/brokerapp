@@ -262,6 +262,18 @@
 									<input  name="product_name" minlength="1" maxlength="255" style="color: #000;border-color:#102958;" type="text" required="required" class="form-control" value="" required>
 								</div>
 							</div>
+							
+							<div class="form-group row col-md-10 col-md-offset-1" >
+								<div class="col-sm-2  label_left" >
+									<label style="color: #102958;" >Prod. Automatic:</label>
+								</div>
+								<div class="col ">
+									<input id="status-notrenew" name="status-notrenew"  class="form-check-input" type="checkbox" value="true" >
+									<label style="color: red; font-size: 12px;">
+										<i>&nbsp;&nbsp;&nbsp;&nbsp; Product automatic for status will automatically change to "Not Renew"</i>
+									</label>
+								</div>
+							</div>
 
 							<div class="form-group row col-md-10 col-md-offset-1" >
 								<div class="col-sm-2  label_left" >
