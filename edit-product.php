@@ -18,6 +18,7 @@
 	$id_product_cat=$_POST['id_product_cat'];
 	$id_product_sub=$_POST['id_product_sub']; 
 	$status=$_POST['status'];
+	$status_notrenew=$_POST['status_notrenew'];
 	if(is_null($active)){
 		 $active=0;
 	}
@@ -26,7 +27,7 @@
 	// ,id_product_sub=:id_product_sub_p,status=:status_p,udate=GETDATE(),modify_by=:modify_by_p where id=:id";
 
 	$sql="update product set product_name=:product_name_p,product_note=:product_note_p,id_product_categories=:id_product_categories_p
-	,id_product_sub=:id_product_sub_p,status=:status_p,udate=GETDATE(),modify_by=:modify_by_p where id=:id";
+	,id_product_sub=:id_product_sub_p,status=:status_p,status_notrenew=:status_notrenew_p,udate=GETDATE(),modify_by=:modify_by_p where id=:id";
 
 	$query = $dbh->prepare($sql);
 
@@ -40,7 +41,15 @@
 	}else{
 		$status="1";
 	}
+
+	if($status_notrenew==""){
+		$status_notrenew="0";
+	}else{
+		$status_notrenew="1";
+	}
+
 	$query->bindParam(':status_p',$status,PDO::PARAM_STR);
+	$query->bindParam(':status_notrenew_p',$status_notrenew,PDO::PARAM_STR);
 	$query->bindParam(':modify_by_p',$_SESSION['id'],PDO::PARAM_STR);
 	$query->bindParam(':id',$_GET['id'],PDO::PARAM_STR);
 	$query->execute();
@@ -98,7 +107,7 @@
 			$id_product_cat = $result->id_product_categories;
 			$id_product_sub = $result->id_product_sub;
 			$status = $result->status;
-
+			$status_notrenew = $result->status_notrenew;
 			$product_id = $result->product_id;
 		} 
 	}
@@ -293,15 +302,23 @@
 			</div>
 			<div class="form-group row col-md-10 col-md-offset-1" >
 				<div class="col-sm-2  label_left" >
-					<label style="color: #102958;" >Prod. Automatic:</label>
+					<label style="color: #102958;" >Automatic Not Renew:</label>
 				</div>
 				<div class="col ">
-					<input id="status-notrenew" name="status-notrenew"  class="form-check-input" type="checkbox" value="true" >
+					<input id="status_notrenew" name="status_notrenew"  class="form-check-input" type="checkbox" value="true"
+					<?php if($status_notrenew==1){ ?>
+                        checked
+                    <?php } ?>
+					 >
 					<label style="color: red; font-size: 12px;">
-						<i>&nbsp;&nbsp;&nbsp;&nbsp; Product automatic for status will automatically change to "Not Renew"</i>
+						<i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Upon selecting this option, the system will automatically calculate by the end date of policy and subsequently change the status to "Not Renew."</i>
 					</label>
 				</div>
 			</div>
+
+
+
+
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <div class="col-sm-2  label_left" >
                     <label style="color: #102958;" >Prod. Note:</label>

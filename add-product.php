@@ -3,31 +3,31 @@
 	include('includes/config.php');
 	session_start();
 	error_reporting(0);
-	if(strlen($_SESSION['alogin'])=="")
-		{  
+
+	if(strlen($_SESSION['alogin'])==""){  
 		$dbh = null;
 		header("Location: index.php"); 
+	}else{
+		if(isset($_POST['back'])){
+			$dbh = null;
+			header("Location: manage-user.php"); 
 		}
-		else{
-
-			if(isset($_POST['back'])){
-				$dbh = null;
-				header("Location: manage-user.php"); 
-			}
 
 
-	if(isset($_POST['submit'])){
-
+if(isset($_POST['submit'])){
 	$product_name=$_POST['product_name'];
 	$product_note=$_POST['product_note'];
 	$id_product_cat=$_POST['id_product_cat'];
 	$id_product_sub=$_POST['id_product_sub']; 
 	$product_id=$_POST['product_id'];
 	$status=$_POST['status'];
-		if(is_null($active)){
-			 $active=0;
-		}
-	$sql="INSERT INTO  product(product_name,product_note,id_product_categories,id_product_sub,status,cdate,create_by,product_id) VALUES(:product_name_p,:product_note_p,:id_product_categories_p,:id_product_sub_p,:status_p,GETDATE(),:create_by_p,:product_id_p)";
+	$status_notrenew=$_POST['status_notrenew'];
+
+	if(is_null($active)){
+		$active=0;
+	}
+
+	$sql="INSERT INTO  product(product_name,product_note,id_product_categories,id_product_sub,status,status_notrenew,cdate,create_by,product_id) VALUES(:product_name_p,:product_note_p,:id_product_categories_p,:id_product_sub_p,:status_p,:status_notrenew_p,GETDATE(),:create_by_p,:product_id_p)";
 
 	// $sql="INSERT INTO  product(name_title,name,username,password,role_id,active) VALUES(:name_title_p,:name_p,:username_p,:password_p,:id_role_p,:active_p)";
 	$query = $dbh->prepare($sql);
@@ -36,36 +36,42 @@
 	$query->bindParam(':product_note_p',$product_note,PDO::PARAM_STR);
 	$query->bindParam(':id_product_categories_p',$id_product_cat,PDO::PARAM_STR);
 	$query->bindParam(':id_product_sub_p',$id_product_sub,PDO::PARAM_STR);
+
 	if($status==""){
 		$status="0";
 	}else{
 		$status="1";
 	}
+
+	if($status_notrenew==""){
+		$status_notrenew="0";
+	}else{
+		$status_notrenew="1";
+	}
+
 	$query->bindParam(':status_p',$status,PDO::PARAM_STR);
+	$query->bindParam(':status_notrenew_p',$status_notrenew,PDO::PARAM_STR);
 	$query->bindParam(':create_by_p',$_SESSION['id'],PDO::PARAM_STR);
 	$query->bindParam(':product_id_p',$product_id,PDO::PARAM_STR);
 	$query->execute();
 	// print_r($query->errorInfo());
 	// echo '<script>alert("sql: '.$sql.'")</script>'; 
 	$lastInsertId = $dbh->lastInsertId();
-	if($lastInsertId)
-	{
-	// echo '<script>alert("Successfully added information.")</script>';
-	$dbh = null;
-	echo "<script>window.location.href ='product-management.php'</script>";
-	$msg="Class Created successfully";
 
-	$name_title="";
-	$name=""; 
-	$username="";
-	$password="";
-	$id_role="";
-	$active=1;
+	if($lastInsertId){
+		// echo '<script>alert("Successfully added information.")</script>';
+		$dbh = null;
+		echo "<script>window.location.href ='product-management.php'</script>";
+		$msg="Class Created successfully";
 
-	}
-	else 
-	{
-	$error="Something went wrong. Please try again";
+		$name_title="";
+		$name=""; 
+		$username="";
+		$password="";
+		$id_role="";
+		$active=1;
+	}else {
+		$error="Something went wrong. Please try again";
 	}
 
 	}else{
@@ -265,12 +271,12 @@
 							
 							<div class="form-group row col-md-10 col-md-offset-1" >
 								<div class="col-sm-2  label_left" >
-									<label style="color: #102958;" >Prod. Automatic:</label>
+									<label style="color: #102958;" >Automatic Not Renew:</label>
 								</div>
 								<div class="col ">
-									<input id="status-notrenew" name="status-notrenew"  class="form-check-input" type="checkbox" value="true" >
+									<input id="status_notrenew" name="status_notrenew"  class="form-check-input" type="checkbox" value="true" >
 									<label style="color: red; font-size: 12px;">
-										<i>&nbsp;&nbsp;&nbsp;&nbsp; Product automatic for status will automatically change to "Not Renew"</i>
+										<i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Upon selecting this option, the system will automatically calculate by the end date of policy and subsequently change the status to "Not Renew."</i>
 									</label>
 								</div>
 							</div>
