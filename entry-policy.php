@@ -117,6 +117,18 @@
 	.table thead th:first-child.sorting:after {
 	  content: "";
 	}
+	.table thead th:first-child, .table tbody td:first-child {
+	  text-align: center;
+	}
+	table.dataTable thead>tr>th:first-child.sorting_asc,
+	table.dataTable thead>tr>th:first-child.sorting_desc,
+	table.dataTable thead>tr>th:first-child.sorting,
+	table.dataTable thead>tr>td:first-child.sorting_asc,
+	table.dataTable thead>tr>td:first-child.sorting_desc,
+	table.dataTable thead>tr>td:first-child.sorting {
+		padding: 0 4px;
+	}
+
 </style>
 
 <body id="page-top" >
