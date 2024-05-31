@@ -14,4 +14,8 @@ update_follow($due_list, $conn);
 $overdue_list = check_overdue_policy($conn);
 update_wait($overdue_list, $conn);
 
+$notrenew_list = check_product_notrenew_policy($conn);
+// echo '<script>alert("notrenew_list: '.count($notrenew_list).'")</script>'; 
+update_notrenew($notrenew_list, $conn);
+
 ?>

@@ -125,14 +125,22 @@ function near_to_overdue_list_topbar($conn) {
 function check_due_policy ($conn) {
     $result = array();
     // $sql = "SELECT * from insurance_info ii
+    //     LEFT JOIN product pd ON pd.id =  ii.product_id
+    //     LEFT JOIN product_subcategories ps ON ps.id =  pd.id_product_sub
     //     WHERE end_date > DATEADD(DAY,-(SELECT due_date FROM alert_date WHERE type = 'near_due'),GETDATE()) 
-    //     AND end_date <= GETDATE()
-    //     AND (status = 'New' OR status = 'Renew')";
-    $sql = "SELECT * from insurance_info ii
+    //     AND end_date < DATEADD(DAY,+(SELECT due_date FROM alert_date WHERE type = 'near_due'),GETDATE()) 
+    //     AND end_date >= GETDATE()
+    //     AND (ii.status = 'New' OR ii.status = 'Renew')";
+    $sql = "SELECT ps.status_travel,pd.status_notrenew,ii.* from insurance_info ii
+        LEFT JOIN product pd ON pd.id =  ii.product_id
+        LEFT JOIN product_subcategories ps ON ps.id =  pd.id_product_sub
         WHERE end_date > DATEADD(DAY,-(SELECT due_date FROM alert_date WHERE type = 'near_due'),GETDATE()) 
         AND end_date < DATEADD(DAY,+(SELECT due_date FROM alert_date WHERE type = 'near_due'),GETDATE()) 
         AND end_date >= GETDATE()
-        AND (status = 'New' OR status = 'Renew')";
+        AND (ii.status = 'New' OR ii.status = 'Renew')
+        AND ( (ps.status_travel IS null or ps.status_travel != '1')
+        OR (pd.status_notrenew = '1' AND ps.status_travel = '1' ) ) ";
+
     $stmt = sqlsrv_query( $conn, $sql);
     if( $stmt === false) {
             // die( print_r( sqlsrv_errors(), true) );
@@ -146,9 +154,32 @@ function check_due_policy ($conn) {
 function check_overdue_policy($conn) {
     $result = array();
     // end_date < DATEADD(DAY,-(SELECT due_date FROM alert_date WHERE type = 'near_due'),GETDATE())   
-    $sql = "SELECT * from insurance_info ii
+    $sql = "SELECT ps.status_travel,pd.status_notrenew,ii.* from insurance_info ii
+        LEFT JOIN product pd ON pd.id =  ii.product_id
+        LEFT JOIN product_subcategories ps ON ps.id =  pd.id_product_sub
         WHERE  end_date <= GETDATE()
-        AND (status = 'Follow up' OR status = 'New' OR status = 'Renew')";
+        AND (ii.status = 'Follow up' OR ii.status = 'New' OR ii.status = 'Renew')
+        AND pd.status_notrenew = '0' AND (ps.status_travel IS null or ps.status_travel != '1')  ";
+
+    $stmt = sqlsrv_query( $conn, $sql);
+    if( $stmt === false) {
+            // die( print_r( sqlsrv_errors(), true) );
+    }
+    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC)){
+            $result[] = $row;
+    }
+    return $result;   
+}
+
+function check_product_notrenew_policy ($conn) {
+    $result = array();
+    $sql = "SELECT ps.status_travel,pd.status_notrenew,ii.* from insurance_info ii
+        LEFT JOIN product pd ON pd.id =  ii.product_id
+        LEFT JOIN product_subcategories ps ON ps.id =  pd.id_product_sub
+        WHERE  end_date <= GETDATE()
+        AND (ii.status = 'Follow up' OR ii.status = 'New' OR ii.status = 'Renew')
+         AND ( (pd.status_notrenew = '1' AND (ps.status_travel IS null OR ps.status_travel = '1')) 
+         OR  (pd.status_notrenew = '0' AND  ps.status_travel = '1') )";
     $stmt = sqlsrv_query( $conn, $sql);
     if( $stmt === false) {
             // die( print_r( sqlsrv_errors(), true) );
@@ -188,6 +219,22 @@ function update_wait($list, $conn) {
             'Wait'
         );
         update_table ($conn, $data);
+    }
+}
+
+function update_notrenew($list, $conn) {
+    $data = array();
+    foreach ($list as $value) {
+        $data['id'] = $value['id'];
+        $data['table'] = 'insurance_info';
+        $data['columns'] = array(
+            'status'
+        );
+        
+        $data['values'] = array(
+            'Not renew'
+        );
+        update_table($conn, $data);
     }
 }
 
