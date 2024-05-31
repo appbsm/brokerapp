@@ -495,8 +495,8 @@
             document.getElementById("calculate").value = calculate;
             document.getElementById("commission").value = commission;
             document.getElementById("payment_status").value = payment_status;
+            document.getElementById("hidden_payment_status").value = payment_status;
             
-
 
             convertion_value_funtion();
 

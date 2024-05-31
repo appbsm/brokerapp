@@ -891,11 +891,23 @@ $(function(){
                     <label style="color: #102958;" >Payment Status:</label>
                 </div> 
                 <div class="col-sm-2" >
-                     <select disabled="true" id="payment_status" name="payment_status[]" style="color: #000;border-color:#102958;" class="form-control"   >
+                     <select disabled="true" id="payment_status" style="color: #000;border-color:#102958;" class="form-control" >
                         <option value="Paid" >Paid</option>
                         <option value="Not Paid" >Not Paid</option>
-                    </select>
+                    </select >
                 </div>
+
+                <input type="hidden" name="payment_status[]" id="hidden_payment_status" value="Paid">
+				<script>
+				    document.getElementById('status_i_input').addEventListener('change', function(event) {
+				        // document.getElementById('hidden_payment_status').value = this.value;
+				        document.getElementById('hidden_payment_status').value = document.getElementById('payment_status').value;
+				    });
+				    document.getElementById('payment_status').addEventListener('change', function(event) {
+				    	document.getElementById('hidden_payment_status').value = document.getElementById('payment_status').value;
+				    });	
+				</script>
+
                 <!-- <div class="col-2" >
                 </div> -->
             </div> 
@@ -2321,6 +2333,7 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
         var payment_object = $('#payment_status');
         payment_object.html('');
         if(value_status=="New" || value_status=="Follow up"){
+        	// document.getElementById("payment_status").setAttribute("readOnly", true);
             document.getElementById("payment_status").setAttribute("disabled","disabled");
             payment_object.append($('<option></option>').val("Paid").html("Paid"));
         }else if(value_status=="Wait" || value_status=="Not renew"){
