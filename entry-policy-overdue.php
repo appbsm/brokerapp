@@ -75,8 +75,31 @@ if(strlen($_SESSION['alogin'])==""){
 	.table thead th.sorting_desc:after {
 		top: 20px;
 	}*/
-	 .table thead th:first-child.sorting:after {
+	.table thead th:first-child.sorting:after {
       content: "";
+    }
+    .table thead th:first-child, .table tbody td:first-child {
+      text-align: center;
+    }
+    table.dataTable thead>tr>th:first-child.sorting_asc,
+    table.dataTable thead>tr>th:first-child.sorting_desc,
+    table.dataTable thead>tr>th:first-child.sorting,
+    table.dataTable thead>tr>td:first-child.sorting_asc,
+    table.dataTable thead>tr>td:first-child.sorting_desc,
+    table.dataTable thead>tr>td:first-child.sorting {
+        padding: 0 4px;
+    }
+
+    .btn-primary:disabled {
+        color: #fff;
+        background-color: #999ba3;
+        border-color: #999ba3;
+    }
+    .btn-primary:disabled:hover {
+        color: #fff;
+        background-color: #999ba3;
+        border-color: #999ba3;
+        cursor: not-allowed; 
     }
 </style>
 
@@ -112,7 +135,7 @@ if(strlen($_SESSION['alogin'])==""){
                                 <div class="row">
                                 <?php if($status_edit==1){ ?>
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inputModal" id="openPopupStatus" disabled>
-                                            Update Status Entry Policy
+                                            Update Policy Status
                                         </button>
                                         &nbsp;&nbsp;
                                 <?php } ?>
@@ -291,13 +314,15 @@ if(strlen($_SESSION['alogin'])==""){
                 }).get();
 
                 const inputData = $('#status').val();
+                const textarea = $('#textarea').val();
                 if (selectedCheckboxes.length > 0 && inputData) {
                     $.ajax({
                         type: 'POST',
                         url: 'edit_status_policy.php', // Replace with the path to your PHP file
                         data: {
                             selectedCheckboxes: selectedCheckboxes,
-                            inputData: inputData
+                            inputData: inputData,
+                            textarea: textarea
                         },
                         success: function(response) {
                             if (response.status === 'success') {
@@ -328,6 +353,17 @@ if(strlen($_SESSION['alogin'])==""){
             }
 
         });
+
+        function ClickChange() {
+            var status = document.getElementById('status').value;
+            var reasonContainer = document.getElementById('reasonContainer');
+            
+            if (status === 'Not renew') {
+                reasonContainer.style.display = 'block';
+            } else {
+                reasonContainer.style.display = 'none';
+            }
+        }
     </script>
 
 <div class="modal fade"  id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModalLabel" aria-hidden="true">
@@ -351,10 +387,14 @@ if(strlen($_SESSION['alogin'])==""){
                                     <option value="Not renew">Not renew</option>
                                 </select>
                             </div>
+                             <div id="reasonContainer" style="display: none;">
+                                <label style="color: #102958;" for="textarea" id="reasonLabel">Reason:</label>
+                                <textarea class="form-control" id="textarea" name="textarea" rows="5" placeholder="Cancellation reason"></textarea>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary" id="submitPopup">Submit</button>
                     </div>
                 </div>

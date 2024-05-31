@@ -187,7 +187,7 @@
 
                                     <?php } ?>
 
-                                     <?php if($status_edit==1){ ?>
+                                    <?php if($status_edit==1){ ?>
                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#inputModal" id="openPopupStatus" disabled>
                                             Update Policy Status
                                         </button>
@@ -231,9 +231,7 @@
                                             <th width="20px" style="color: #102958;">
                                                 <input type="checkbox" id="select-all">
                                             </th>
-
                                             <th width="20px" style="color: #102958;">#</th>
-
                                             <th hidden="tue" >ID</th>
                                             <th width="150px" style="color: #102958;">Policy no.</th>
                                             <th width="200px" style="color: #102958;">Cust. name</th>
@@ -407,7 +405,7 @@
         }
     </script>
 
-        <div class="modal fade" id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModalLabel" aria-hidden="true">
+<div class="modal fade" id="inputModal" tabindex="-1" role="dialog" aria-labelledby="inputModalLabel" aria-hidden="true">
     <div class="modal-dialog d-flex align-items-center justify-content-center" role="document">
         <div class="modal-content" style="width: 500px;">
             <div class="modal-header">
@@ -435,7 +433,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" id="submitPopup">Submit</button>
             </div>
         </div>
