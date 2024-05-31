@@ -264,10 +264,6 @@
 
 							$num_policies_year = $result_ytd['num_policies_year'];
 							$total_premium_year = $result_ytd['total_premium_year'];
-							
-							$current_month = date('F'); 
-							$current_year = date('Y'); 
-							
 						?>
 						
 						<div class="col-xl-3 col-md-6 mb-4">
@@ -288,17 +284,17 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-primary text-uppercase mb-0 mt-0">(<?php echo date('F'); ?>)</div>
+											<div class="text-xs font-weight-bold text-primary text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-primary text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-primary text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-primary text-uppercase mb-0 mt-0">(<?php echo date('Y'); ?>)</div>
+											<div class="text-xs font-weight-bold text-primary text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-primary text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium_year) ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-primary text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium_year) ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>
 											</div>
 										</div>
 									</div>
@@ -343,9 +339,6 @@
 							
 							$num_policies_year = $result_ytd['num_policies_year'];
 							$total_collected_year = $result_ytd['total_collected_year'];
-							
-							$current_month = date('F'); 
-							$current_year = date('Y');
 
 						?>
 													
@@ -368,17 +361,17 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-primary-2 text-uppercase mb-0 mt-0">(<?php echo date('F'); ?>)</div>
+											<div class="text-xs font-weight-bold text-primary-2 text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-primary-2 text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-primary-2 text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-primary-2 text-uppercase mb-0 mt-0">(<?php echo date('Y'); ?>)</div>
+											<div class="text-xs font-weight-bold text-primary-2 text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-primary-2 text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_collected_year) ? '฿' . number_format($total_collected_year, 0, '.', ',') : '฿0'; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-primary-2 text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_collected_year) ? '฿' . number_format($total_collected_year, 0, '.', ',') : '฿0'; ?></div>
 											</div>
 										</div>
 									</div>
@@ -419,9 +412,6 @@
 								
 								$num_policies_year = $result_ytd['num_policies_year'];
 								$total_premium_year = $result_ytd['total_premium_year'];
-								
-								$current_month = date('F'); 
-								$current_year = date('Y');
 							
 							} catch (PDOException $e) {
 								echo "Error: " . $e->getMessage();
@@ -448,20 +438,20 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-success text-uppercase mb-0 mt-0">(<?php echo date('F'); ?>)</div>
+											<div class="text-xs font-weight-bold text-success text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-success text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-success text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-success text-uppercase mb-0 mt-0">(<?php echo date('Y'); ?>)</div>
+											<div class="text-xs font-weight-bold text-success text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-success text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-success text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium_year) ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>-->
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>-->
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
 											</div>
 										</div>
 									</div>
@@ -502,9 +492,6 @@
 								$num_policies_year = $result_ytd['num_policies_year'];
 								$total_premium_year = $result_ytd['total_premium_year'];
 								
-								$current_month = date('F'); 
-								$current_year = date('Y');
-								
 							} catch (PDOException $e) {
 								echo "Error: " . $e->getMessage();
 								die();
@@ -530,20 +517,20 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-info text-uppercase mb-0 mt-0">(<?php echo date('F'); ?>)</div>
+											<div class="text-xs font-weight-bold text-info text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-info text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-info text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-info text-uppercase mb-0 mt-0">(<?php echo date('Y'); ?>)</div>
+											<div class="text-xs font-weight-bold text-info text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-info text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-info text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium_year) ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>-->
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>-->
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
 											</div>
 										</div>
 									</div>
@@ -672,9 +659,6 @@
 								$num_policies_year = $result_ytd['num_policies_year'];
 								$total_premium_year = $result_ytd['total_premium_year'];
 								
-								$current_month = date('F'); 
-								$current_year = date('Y');
-								
 							} catch (PDOException $e) {
 								echo "Error: " . $e->getMessage();
 								die();
@@ -700,20 +684,20 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-warning-2 text-uppercase mb-0 mt-0">(<?php echo date('F'); ?>)</div>
+											<div class="text-xs font-weight-bold text-warning-2 text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-warning-2 text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-warning-2 text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-warning-2 text-uppercase mb-0 mt-0">(<?php echo date('Y'); ?>)</div>
+											<div class="text-xs font-weight-bold text-warning-2 text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-warning-2 text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-warning-2 text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium_year) ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>-->
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>-->
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
 											</div>
 										</div>
 									</div>
@@ -758,9 +742,6 @@
 								$num_policies_year = $result_ytd['num_policies_year'];
 								$total_premium_year = $result_ytd['total_premium_year'];
 								
-								$current_month = date('F'); 
-								$current_year = date('Y');
-								
 							} catch (PDOException $e) {
 								echo "Error: " . $e->getMessage();
 								die();
@@ -786,21 +767,21 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-danger text-uppercase mb-0 mt-0">(<?php echo date('F'); ?>)</div>
+											<div class="text-xs font-weight-bold text-danger text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-danger text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-danger text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium; ?></div>-->
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-danger text-uppercase mb-0 mt-0">(<?php echo date('Y'); ?>)</div>
+											<div class="text-xs font-weight-bold text-danger text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-danger text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-danger text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium_year) ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>-->
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>-->
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
 											</div>
 										</div>
 									</div>
@@ -842,9 +823,6 @@
 								$num_policies_year = $result_ytd['num_policies_year'];
 								$total_premium_year = $result_ytd['total_premium_year'];
 								
-								$current_month = date('F'); 
-								$current_year = date('Y');
-								
 							} catch (PDOException $e) {
 								echo "Error: " . $e->getMessage();
 								die();
@@ -870,23 +848,23 @@
 												<span>Policy</span>
 												<span>Premium </span>
 											</div>
-											<div class="text-xs font-weight-bold text-dark text-uppercase mb-0 mt-0">(<?php echo date('F'); ?>)</div>
+											<div class="text-xs font-weight-bold text-dark text-uppercase mb-0 mt-0">(Current Month) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-dark text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-dark text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium) ? '฿' . number_format($total_premium, 0, '.', ',') : '฿0'; ?></div>-->
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium; ?></div>-->
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>-->
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium !== null ? $total_premium : '฿0'; ?></div>
 											</div>
-											<div class="text-xs font-weight-bold text-dark text-uppercase mb-0 mt-0">(<?php echo date('Y'); ?>)</div>
+											<div class="text-xs font-weight-bold text-dark text-uppercase mb-0 mt-0">(Current Year) </div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800 mt-0" style="display: flex; justify-content: space-between;">
-												<div class="col text-xs font-weight-bold text-dark text-uppercase mb-0"> </div>
-												<div class="col-4 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
+												<div class="col-2 text-xs font-weight-bold text-dark text-uppercase mb-0"> </div>
+												<div class="col-3 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $num_policies_year; ?></div>
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo isset($total_premium_year) ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>-->
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year; ?></div>-->
 												<!--<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year ? '฿' . number_format($total_premium_year, 0, '.', ',') : '฿0'; ?></div>-->
-												<div class="col-8 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
+												<div class="col-7 h6 mb-0 font-weight-bold text-gray-800 mt-0" style="text-align: right;"><?php echo $total_premium_year !== null ? $total_premium_year : '฿0'; ?></div>
 											</div>
 										</div>
 									</div>
@@ -978,10 +956,6 @@
 								echo "Error: " . $e->getMessage();
 								die();
 							}
-							
-							$current_year = date('Y');
-							$previous_year = $current_year - 1;
-							
 						?>
 						
 						<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script> -->
@@ -991,7 +965,7 @@
 							<div class="card shadow mb-4">
 								<a href="report-monthly-sales.php" style="text-decoration: none; color: inherit;">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-										<h6 class="m-0 font-weight-bold text-primary">Sales Overview (<?php echo $previous_year; ?> - <?php echo $current_year; ?>)</h6>
+										<h6 class="m-0 font-weight-bold text-primary">Sales Overview (Current Year)</h6>
 									</div>
 								</a>
 								<div class="card-body">
@@ -1022,16 +996,16 @@
 								data: {
 									labels: months,
 									datasets: [{
-										label: 'Total Sales - <?php echo $previous_year; ?>',
-										data: sales_previous_year,
-										backgroundColor: 'rgba(255, 99, 132, 0.2)',
-										borderColor: 'rgba(255, 99, 132, 1)',
-										borderWidth: 2
-									}, {
-										label: 'Total Sales - <?php echo $current_year; ?>',
+										label: 'Total Sales - Current Year',
 										data: sales_current_year,
 										backgroundColor: 'rgba(54, 162, 235, 0.2)',
 										borderColor: 'rgba(54, 162, 235, 1)',
+										borderWidth: 2
+									}, {
+										label: 'Total Sales - Previous Year',
+										data: sales_previous_year,
+										backgroundColor: 'rgba(255, 99, 132, 0.2)',
+										borderColor: 'rgba(255, 99, 132, 1)',
 										borderWidth: 2
 									}]
 								},
@@ -1103,9 +1077,6 @@
 							for ($i = 0; $i < count($data); $i++) {
 								$data_and_premium[] = $data[$i] . ', ' . $premium[$i];
 							}
-							
-							$current_month = date('F'); 
-							$current_year = date('Y');
 							?>
 
 							
@@ -1114,7 +1085,7 @@
 								<div class="card shadow mb-4">
 									<a href="report-product-sales.php" style="text-decoration: none; color: inherit;">
 										<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-											<h6 class="m-0 font-weight-bold text-primary">Product Categories (<?php echo date('Y'); ?>)</h6>
+											<h6 class="m-0 font-weight-bold text-primary">Product Categories (Current Year)</h6>
 										</div>
 									</a>
 									<div class="card-body">
@@ -1241,16 +1212,13 @@
 								$data[] = $row['count'];
 								$totalAmounts[] = $row['total_amount'];
 							}
-							
-							$current_month = date('F'); 
-							$current_year = date('Y');
 						?>
 
 						<div class="col-xl-6 col-lg-6">
 							<div class="card shadow mb-4">
 								<a href="report-product-sales.php" style="text-decoration: none; color: inherit;">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-										<h6 class="m-0 font-weight-bold text-primary">Product Sub Categories (<?php echo date('Y'); ?>)</h6>
+										<h6 class="m-0 font-weight-bold text-primary">Product Sub Categories (Current Year)</h6>
 									</div>
 								</a>
 								<div class="card-body">
@@ -1446,9 +1414,6 @@
 								}
 								$data[] = $customerData;
 							}
-							
-							$current_month = date('F'); 
-							$current_year = date('Y');
 						?>
 
 						<script src="js/chart.min.js"></script>
@@ -1456,7 +1421,7 @@
 							<div class="card shadow mb-4">
 								<a href="report-customer-sales-total.php" style="text-decoration: none; color: inherit;">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-										<h6 class="m-0 font-weight-bold text-primary">Sales by Customers (<?php echo date('Y'); ?>)</h6>
+										<h6 class="m-0 font-weight-bold text-primary">Sales by Customers (Current Year)</h6>
 									</div>
 								</a>
 								<div class="card-body">
@@ -1658,10 +1623,7 @@
 							$partners = array();
 							$products = array();
 							$total_subcategories = array();
-							
-							$current_month = date('F'); 
-							$current_year = date('Y');
-							
+
 							foreach ($result as $row) {
 								$partner_name = $row['partner_name'];
 								$product = $row['product'];
@@ -1697,7 +1659,7 @@
 							<div class="card shadow mb-4">
 								<a href="report-customer-sales-total.php" style="text-decoration: none; color: inherit;">
 									<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-										<h6 class="m-0 font-weight-bold text-primary">Sales by Partners (<?php echo date('Y'); ?>)</h6>
+										<h6 class="m-0 font-weight-bold text-primary">Sales by Partners (Current Year)</h6>
 									</div>
 								</a>
 								<div class="card-body">
