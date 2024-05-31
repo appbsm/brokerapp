@@ -835,7 +835,12 @@ $(function(){
 	                <select id="agent_name" name="agent[]" style="color:#000;border-color:#102958;" class="form-control selectpicker" data-live-search="true" >
 	                    <?php  foreach($results_agent as $result){ ?>
 	                        <option value="<?php echo $result->id; ?>" <?php if ($result->id==$agent_id) { echo ' selected="selected"'; } ?>
-	                            ><?php echo $result->title_name." ".$result->first_name." ".$result->last_name."(".$result->nick_name.")"; ?></option>
+	                            ><?php echo $result->title_name." ".$result->first_name." ".$result->last_name;
+	                            	// if (!is_null(trim($result->nick_name)) && trim($result->nick_name) != null && trim($result->nick_name) != "") {
+	                            	// 	echo " (".$result->nick_name.")";
+	                            	// }
+	                             ?>
+	                        </option>
 	                    <? } ?>
 	                </select>
 	            </div>
@@ -911,6 +916,37 @@ $(function(){
                     <input <?php if($period_type=="Month"){echo 'hidden="true"';} ?> id="period_day" name="period_day[]" minlength="1" maxlength="3" value="<?php echo $period_day; ?>" style="color: #000;border-color:#102958;" type="number" class="form-control input_text" >
                 </div>
             </div>
+
+<script>
+
+		var currency_id = document.getElementById("insurance_com").value;
+		// alert('currency_id:'+currency_id);
+		$.get('get_currency_list.php?id=' + currency_id, function(data){
+                var result = JSON.parse(data);
+                document.getElementById("partner_currency").value = "";
+                document.getElementById("partner_currency_value").value = "";
+                $.each(result, function(index, item){
+
+                	if(item.currency!="฿THB"&& item.currency!="THB" ){
+	                    	if(item.currency_value==null || item.currency_value_convert==null ){
+	                    		$dbh = null;
+	                    		alert('Your currency conversion rate has expired. Kindly assess and update it accordingly.');
+	        					window.location.href ='currency_convertion.php';
+	                    	}
+	                    	// return false;
+	                }
+                    // document.getElementById("currency_id").value = item.id;
+                    // document.getElementById("currency").value = item.currency;
+
+                    document.getElementById("partner_currency").value = item.currency_value;
+                	document.getElementById("partner_currency_value").value = item.currency_value_convert;
+
+                    // document.getElementById("premium_rate").value = '';
+                    // document.getElementById("convertion_value").value = '';
+
+                });
+            });
+</script>
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <div class="col-sm-2 label_left" >
@@ -1098,10 +1134,13 @@ $(function(){
         <input hidden="true" id="partner_currency_value"  type="text" value="<?php echo $currency_value_convert; ?>" >
 
         <script>
+
         	$(function(){
 	            var premium_rate_object = $('#premium_rate');
 	            var convertion_value_object = $('#convertion_value');
 	            var currency_object = $('#currency');
+
+	            
 
 	            premium_rate_object.on('change', function(){
 
@@ -1131,6 +1170,7 @@ $(function(){
 	            			var formattedResult = premium_value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 	            			convertion_value_object.val(formattedResult);
 	            		}
+	            		
 	            	}
 	            		var commission=0;
 	            		var premiumInput = document.getElementById('premium_rate').value.replace(/,/g,'');
@@ -2162,8 +2202,13 @@ $results_2=$query_2->fetchAll(PDO::FETCH_OBJ);
 
                     document.getElementById("premium_rate").value = '';
                     document.getElementById("convertion_value").value = '';
+
+
                 });
             });
+
+
+
             // alert('test:');
             product_object.html('');
             $.get('get_product.php?id=' + currency_id,function(data){
