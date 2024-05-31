@@ -276,7 +276,7 @@ function generate_customer_id($conn) {
 	return $customer_id;
 }
 
-function save_customer ($conn, $post_data,$path) {
+function save_customer($conn, $post_data,$path) {
     $customer_id = '';
     $contact_id = '';
 	$data['table'] = 'customer';
@@ -302,7 +302,7 @@ function save_customer ($conn, $post_data,$path) {
 	'province',
 	'post_code',
 	'cdate',
-	//'create_by',
+	'create_by',
 	//'id_rela_contact',
 	//'id_rela_insurance_info',
 	
@@ -335,6 +335,7 @@ function save_customer ($conn, $post_data,$path) {
 	$post_data['province'],
 	$post_data['post_code'],
 	date('Y-m-d H:i:s'),
+	$_SESSION['id'],
 	//$post_data['create_by'],
 	//$post_data['id_rela_contact'],
 	//$post_data['id_rela_insurance_info'],	
@@ -558,6 +559,8 @@ function update_customer ($conn, $post_data,$path) {
 	'district',
 	'province',
 	'post_code',
+	'udate',
+	'modify_by',
 
 	//'id_rela_contact',
 	//'id_rela_insurance_info',
@@ -588,6 +591,8 @@ function update_customer ($conn, $post_data,$path) {
 	$post_data['district'],
 	$post_data['province'],
 	$post_data['post_code'],
+	date('Y-m-d H:i:s'),
+	$_SESSION['id'],
 	/*
 	$post_data['id_rela_contact'],
 	$post_data['id_rela_insurance_info'],
