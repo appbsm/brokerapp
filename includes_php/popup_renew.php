@@ -12,7 +12,7 @@
                 <div class="col-sm-2  label_left"  >
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Policy No:</label>
                 </div>
-                <div class="col-sm-4 ">
+                <div class="col-sm-3 ">
                     <input id="policy_popup"  minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $policy_no; ?>" required>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Period type:</label>
                 </div>
                 <div class="col-sm-2">
-                    <select id="period_type_popup" style="color: #0C1830;border-color:#102958;"class="form-control" >
+                    <select id="period_type_popup" style="color: #0C1830;border-color:#102958; text-align: center;"class="form-control" >
                         <!-- <option value="" selected>Select Period</option> -->
                         <option value="Day" <?php if($period_type=="Day"){ echo "selected";} ?> >Day</option>
                         <option value="Month" <?php if($period_type=="Month"){ echo "selected";} ?> >Month</option>
@@ -95,7 +95,7 @@
                     <label style="color: #102958;" ><small><font color="red">*</font></small>Start date:</label>
                 </div> 
                 <div class="col-sm-2">
-                    <input id="start_date_popup"  required="required" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" 
+                    <input id="start_date_popup"  required="required" style="color: #0C1830;border-color:#102958; text-align: center;" type="text" class="form-control" 
                     value="" placeholder="dd-mm-yyyy" >
                     <?php //echo $start_date; ?>
                 </div>
@@ -103,17 +103,9 @@
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>End date:</label>
                 </div> 
                 <div class="col-sm-2">
-                    <input id="end_date_popup"  required="required" style="color: #0C1830;border-color:#102958;" type="text"  class="form-control" 
+                    <input id="end_date_popup"  required="required" style="color: #0C1830;border-color:#102958; text-align: center;" type="text"  class="form-control" 
                     value="" placeholder="dd-mm-yyyy" >
                     <?php //echo $stop_date; ?>
-                </div>
-
-                <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Collected Date:</label>
-                </div> 
-                <div class="col-sm-2">
-                    <input id="paid_date_popup" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" placeholder="dd-mm-yyyy"
-                    value="<?php echo $paid_date; ?>" >
                 </div>
             </div>
 
@@ -122,7 +114,7 @@
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Premium Rate:</label>
                 </div>
                 <div class="col-sm-2">
-                    <input id="premium_rate_popup"  type="text" style="border-color:#102958;" step="0.01" min="0" class="form-control" 
+                    <input id="premium_rate_popup"  type="text" style="border-color:#102958; text-align: right;" step="0.01" min="0" class="form-control" 
                         value="<?php echo number_format((float)$premium_rate, 2, '.', ','); ?>"
                         onchange="
                         // var premium = parseFloat(this.value).toFixed(2);
@@ -146,21 +138,30 @@
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Conversion Value:</label>
                 </div>
                 <div class="col-sm-2">
-                    <input id="convertion_value_popup"  type="text" style="border-color:#102958;" step="0.01" min="0" class="form-control" 
+                    <input id="convertion_value_popup"  type="text" style="border-color:#102958; text-align: right;" step="0.01" min="0" class="form-control" 
                         value="<?php echo number_format((float)$premium_rate, 2, '.', ','); ?>" readOnly/>
                 </div>  
-
-                <div class="col-sm-2 label_left" >
-                    <label style="color: #102958;" for="staticEmail" >Payment Status:
-                </label>
+            </div>
+			
+			<div class="form-group row col-md-12">
+				<div class="col-sm-2 label_left" >
+                    <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>Paid Date:</label>
+                </div> 
+                <div class="col-sm-2">
+                    <input id="paid_date_popup" style="color: #0C1830;border-color:#102958; text-align: center;" type="text" class="form-control" placeholder="dd-mm-yyyy"
+                    value="<?php echo $paid_date; ?>" >
+                </div>
+				<div class="col-sm-2 label_left" >
+                    <!--<label style="color: #102958;" for="staticEmail" >Commission Status:</label>-->
+					<label style="color: #102958;" for="staticEmail" >Payment Status:</label>
                 </div> 
                 <div class="col-sm-2 " >
                     <select id="payment_status_popup" style="color: #0C1830;border-color:#102958;" class="form-control"   >
-                        <option value="Paid" selected>Paid</option>
+                        <option value="Paid" >Paid</option>
                         <option value="Not Paid" >Not Paid</option>
                     </select>
                 </div>
-            </div>
+			</div>
 
             <div class="form-group row col-md-12">
                 <div class="col-sm-2 label_left" >
@@ -199,12 +200,12 @@
                         <option value="Net Value" <?php if ("Net Value"==$calculate_type) { echo ' selected="selected"'; } ?> >Net Value</option>
                     </select>
                 </div>
-           
+            
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" >Commission Value:</label>
                 </div> 
                 <div class="col-sm-2 " >
-                    <input id="percent_trade_popup" type="text" class="form-control" style="border-color:#102958;"
+                    <input id="percent_trade_popup" type="text" class="form-control" style="border-color:#102958; text-align: right;"
                     value="<?php echo number_format((float)$percent_trade, 2, '.', ''); ?>" onchange="
                         var num = $(this).val().replace(/,/g,'');
                         if (parseFloat(num)) {
@@ -239,10 +240,8 @@
                     <label style="color: #102958;" for="staticEmail" >Commission rate:</label>
                 </div> 
                 <div class="col-sm-2 " >
-                    <input type="text" id="commission_popup" style="border-color:#102958;" class="form-control" value="<?php echo number_format((float)$commission_rate, 2, '.', ''); ?>" readOnly/>
+                    <input type="text" id="commission_popup" style="border-color:#102958; text-align: right;" class="form-control" value="<?php echo number_format((float)$commission_rate, 2, '.', ''); ?>" readOnly/>
                 </div>
-
-                
             </div>
 
     </div>
