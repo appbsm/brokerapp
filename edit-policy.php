@@ -864,6 +864,17 @@ $(function(){
                         <option value="Not Paid" <?php if ("Not Paid"==$payment_status) { echo ' selected="selected"'; } ?> >Not Paid</option>
                     </select>
                 </div>
+
+                <input type="hidden" name="payment_status[]" id="hidden_payment_status" value="<?php echo $payment_status; ?>">
+				<script>
+				    document.getElementById('status_i_input').addEventListener('change', function(event) {
+				        // document.getElementById('hidden_payment_status').value = this.value;
+				        document.getElementById('hidden_payment_status').value = document.getElementById('payment_status').value;
+				    });
+				    document.getElementById('payment_status').addEventListener('change', function(event) {
+				    	document.getElementById('hidden_payment_status').value = document.getElementById('payment_status').value;
+				    });	
+				</script>
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">

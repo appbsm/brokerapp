@@ -206,7 +206,9 @@
                     <label style="color: #102958;" for="staticEmail" >Payment Status:</label>
                 </div> 
                 <div class="col-2 " >
-                     <input id="payment_status" name="payment_status[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" value="<?php echo $result['payment_status']; ?>" readOnly>
+                     <input id="payment_status" name="payment_status[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control input_text" value="<?php if($result['payment_status']==""){ echo "Paid"; }else{ echo $result['payment_status']; } ?>" readOnly>
+
+                     
                      <!-- <select <?php //if($status!="Renew"){ echo 'disabled="true"'; } ?> id="payment_status" name="payment_status[]" style="color: #0C1830;border-color:#102958;" class="form-control"   >
                         <option value="Paid" <?php //if ("Paid"==$result['commission_status']) { echo ' selected="selected"'; } ?> >Paid</option>
                         <option value="Not Paid" <?php //if ("Not Paid"==$result['commission_status']) { //echo ' selected="selected"'; } ?> >Not Paid</option>
