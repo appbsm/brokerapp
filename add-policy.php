@@ -586,7 +586,7 @@ $(function(){
     var policy_object = $('#policy');
     policy_object.on('change', function(){
         var policy_value = $(this).val();
-            $.get('get_policy.php?policy=' + policy_value, function(data){
+            $.get('get_policy.php?policy=' + policy_value.trim(), function(data){
                 var result = JSON.parse(data);
                 policy_check = "true";
                 $.each(result, function(index,item){
