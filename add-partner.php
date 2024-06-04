@@ -160,7 +160,7 @@ $currency = get_currency($conn);
 				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Tax ID / Passport ID:</label>
 				<div class="col-sm-4">
 					<input minlength="13" maxlength="13" style="color: #000;border-color:#102958;" type="text" name="tax_id" class="form-control" id="tax_id"  pattern="\d{13}">
-					<!-- <input minlength="1" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" name="tax_id" class="form-control" id="tax_id"  required> -->
+					<!-- <input minlength="1" maxlength="13" style="color: #0C1830;border-color:#102958;" type="text" name="tax_id" class="form-control" id="tax_id"  > -->
 				</div>
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Currency:</label>
@@ -236,7 +236,7 @@ $currency = get_currency($conn);
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Address No:</label>
                 <div class="col-sm-4">
-                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="" required>
+                    <input minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="" >
                 </div>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Building Name:</label>
                 <div class="col-sm-4">
@@ -258,9 +258,9 @@ $currency = get_currency($conn);
 			-->
 			
 			<div class="form-group row col-md-10 col-md-offset-1">
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Address No:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Address No:</label>
                 <div class="col-2">
-                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="" required>
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="" >
                 </div>
 				<label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Soi:</label>
                 <div class="col pl-0">
@@ -282,9 +282,9 @@ $currency = get_currency($conn);
 
 			
             <div class="form-group row col-md-10 col-md-offset-1">
-				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Province:</label>
+				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Province:</label>
                 <div class="col-sm-4">
-                    <select style="color: #000;border-color:#102958;" name="province" class="form-control selectpicker" id="province" data-live-search="true" required>
+                    <select style="color: #000;border-color:#102958;" name="province" class="form-control selectpicker" id="province" data-live-search="true" >
                         <option value="" selected>Select Province</option>
 								<?php foreach ($provinces as $province) { ?>
 						<option value="<?php echo $province['code']?>"><?php echo $province['name_en'];?></option>
@@ -293,9 +293,9 @@ $currency = get_currency($conn);
                
                 </div>
                 
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>District:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">District:</label>
                 <div class="col-sm-4">
-                     <select style="color: #000;border-color:#102958;" name="district" class="form-control selectpicker" id="district" data-live-search="true" required>
+                     <select style="color: #000;border-color:#102958;" name="district" class="form-control selectpicker" id="district" data-live-search="true" >
                                 <option value="" selected>Select District</option>
 								<?php //foreach ($districts as $district) { ?>
 						<!-- <option value="<?php //echo $district['code']?>"><?php //echo $district['name_en'];?></option> -->
@@ -305,20 +305,20 @@ $currency = get_currency($conn);
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Sub-district:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Sub-district:</label>
                 <div class="col-sm-4">
                     <!-- <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="name" class="form-control" id="success" value" > -->
 
-                    <select style="color: #000;border-color:#102958;" name="sub_district" class="form-control selectpicker" id="sub_district" data-live-search="true" required>
+                    <select style="color: #000;border-color:#102958;" name="sub_district" class="form-control selectpicker" id="sub_district" data-live-search="true" >
                                 <option value="" selected>Select Sub-district</option>
 								<?php foreach ($subdistricts as $sub) { ?>
 						<option value="<?php echo $sub['code']?>"><?php echo $sub['name_en'];?></option>
 						<?php } ?>	
                         </select>
                 </div>
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Post Code:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Post Code:</label>
 				<div class="col-sm-4">
-					<input minlength="5" maxlength="5" style="color: #000;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control" required pattern="\d{5}">
+					<input minlength="5" maxlength="5" style="color: #000;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control"  pattern="\d{5}">
 				</div>
             </div>
 
@@ -422,7 +422,7 @@ $currency = get_currency($conn);
                         </div>
                         <div class="col-sm-10">
                             <!-- placeholder="dd-mm-yyyy"  Search -->
-                            <select id="product_id" name="product_id[]" style="color: #000;border-color:#102958;" class="form-control selectpicker" data-none-selected-text="Select Products" data-search-text="Search" title="Search Products" data-live-search="true" multiple="multiple"  required>
+                            <select id="product_id" name="product_id[]" style="color: #000;border-color:#102958;" class="form-control selectpicker" data-none-selected-text="Select Products" data-search-text="Search" title="Search Products" data-live-search="true" multiple="multiple" required>
                                 <!-- <option value="All">Select All</option> -->
                                 <?php foreach ($products as $p) { ?>
                                     <option value="<?php echo $p['id'];?>"><?php echo $p['product_name'];?></option>

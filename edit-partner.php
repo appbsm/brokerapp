@@ -261,9 +261,9 @@ if($_GET[id]){
             </div>  
 
 			<div class="form-group row col-md-10 col-md-offset-1">
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Address No:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Address No:</label>
                 <div class="col-2">
-                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="<?php echo $partner['address_number'];?>"  required>
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="address_number"  class="form-control" id="address_number" value="<?php echo $partner['address_number'];?>"  >
                 </div>
 				<label style="color: #102958;" for="staticEmail" class="col-sm-1 col-form-label">Soi:</label>
                 <div class="col">
@@ -284,9 +284,9 @@ if($_GET[id]){
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
-				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Province:</label>
+				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Province:</label>
                 <div class="col-sm-4">
-                     <select style="color: #000;border-color:#102958;" name="province" class="form-control selectpicker" id="province" data-live-search="true"  required>
+                     <select style="color: #000;border-color:#102958;" name="province" class="form-control selectpicker" id="province" data-live-search="true" >
                                 <option value="" selected>Select Province</option>
 								<?php foreach($provinces as $province) { ?>
 						<option value="<?php echo $province['code']?>" <?php echo ($partner['province'] == $province['code']) ? 'selected' : ''; ?>><?php echo $province['name_en'];?></option>
@@ -295,9 +295,9 @@ if($_GET[id]){
                
                 </div>
                 
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>District:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">District:</label>
                 <div class="col-sm-4">
-                     <select style="color: #000;border-color:#102958;" name="district" class="form-control selectpicker" id="district" data-live-search="true"  required>
+                     <select style="color: #000;border-color:#102958;" name="district" class="form-control selectpicker" id="district" data-live-search="true" >
                                 <option value="" selected>Select District</option>
 								<?php 
                                 if($partner['province']!=""){
@@ -312,10 +312,10 @@ if($_GET[id]){
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Sub-district:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Sub-district:</label>
                 <div class="col-sm-4">
                     <select id="sub_district" name="sub_district" style="color: #000;border-color:#102958;"
-                     class="form-control selectpicker" data-live-search="true"  required>
+                     class="form-control selectpicker" data-live-search="true" >
                         
                        <option value="" selected>Select Subdistrict</option>
                                 <?php 
@@ -325,9 +325,9 @@ if($_GET[id]){
                         <?php } ?>  
                     </select>
                 </div>
-                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Post Code:</label>
+                <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Post Code:</label>
                 <div class="col-sm-4">
-					<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control" value="<?php echo $partner['post_code'];?>" required>
+					<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="post_code" id="post_code" class="form-control" value="<?php echo $partner['post_code'];?>" >
                 </div>
             </div>
 
