@@ -199,7 +199,7 @@ if(count($_POST["policy"])>0){
 				}else{
 
 					update_policy($dbh,$_POST,$_FILES,$new_file_name,$lastInsertId_customer,$i,$_FILES['file_d']);
-					
+
 				}
 				insert_history_policy($dbh,$_POST,$lastInsertId_customer,"update");
 
@@ -963,7 +963,7 @@ $(function(){
                 <div class="col-sm-2">
                     <input id="start_date" name="start_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control" value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" required>
                 </div>
-                <input  name="start_date_old" type="text" value="<?php echo $start_date; ?>" >
+                <input hidden="ture" name="start_date_old" type="text" value="<?php echo $start_date; ?>" >
 
                 <div class="col-sm-2 label_left" >
                     <label style="color: #102958;" for="staticEmail" ><small><font color="red">*</font></small>End Date:</label>
@@ -972,7 +972,7 @@ $(function(){
                     <input id="end_date" name="end_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control" 
                     value="<?php echo $stop_date; ?>" placeholder="dd-mm-yyyy" required>
                 </div>
-                <input  name="end_date_old" type="text" value="<?php echo $stop_date; ?>" >
+                <input hidden="ture" name="end_date_old" type="text" value="<?php echo $stop_date; ?>" >
 
             </div>
 
