@@ -1,7 +1,7 @@
 <?php
 include('includes/config.php');
 
-$sql = "SELECT top 1 * FROM customer WHERE first_name = '{$_GET['name']}' and last_name = '{$_GET['last']}' and first_name != '' and last_name != '' ";
+$sql = "SELECT top 1 * FROM insurance_partner WHERE insurance_company = '{$_GET['name']}' and insurance_company != '' ";
 if($_GET['id']!=""){
     $sql =$sql." and id != '{$_GET['id']}'";
 }

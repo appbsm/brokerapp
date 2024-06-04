@@ -100,7 +100,7 @@ $currency = get_currency($conn);
 </div>
 
 
-<form method="post" onSubmit="return valid();" >
+<form method="post" onSubmit="return validateForm();" >
 <br>
 <!-- <section class="section"> -->
 
@@ -143,11 +143,45 @@ $currency = get_currency($conn);
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Partner Name:</label>
                 <div class="col-sm-10">
-                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="insurance_company"  class="form-control" id="insurance_company" required>
+                    <input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="insurance_company" id="insurance_company" class="form-control" required>
                 </div>
-
-               
             </div>
+
+<script>
+
+var partner_check = "true";
+
+$(function(){
+
+    var partner_object = $('#insurance_company');
+    partner_object.on('change', function(){
+        var partner_value = $(this).val().trim();
+        $.get('get_partner_name.php?name=' + partner_value, function(data){
+            var result = JSON.parse(data);
+            partner_check = "true";
+            $.each(result, function(index,item){
+                if(item.id!=""){
+                    alert("This partner already exist.");
+                    partner_check="false";
+                }
+            });
+        });
+    });
+
+});
+
+function validateForm() {
+
+    if (partner_check=="true") {
+        document.getElementById("loading-overlay").style.display = "flex";
+        return true;
+    }else{
+        alert("This partner already exist.");
+        return false;
+    }
+}
+
+</script>
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Short Partner Name:</label>

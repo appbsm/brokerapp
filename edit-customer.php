@@ -143,59 +143,88 @@
 <script>
 var tax_id_check = "true";
 var mobile_check = "true";
+var name_check = "true";
 
 $(function(){
     var tax_id_object = $('#tax_id');
 
     var id = document.getElementById("id").value;
 
-    tax_id_object.on('change', function(){
-        var tax_id_value = $(this).val();
-            $.get('get_customer_tax.php?tax_id=' + tax_id_value + '&id=' + id, function(data){
-                var result = JSON.parse(data);
-                tax_id_check = "true";
-                $.each(result, function(index,item){
-                    if(item.id!=""){
-                        alert("This customer already exist.");
-                        // tax_id_check="false";
-                    }
-                });
-            });
-    });
+    // tax_id_object.on('change', function(){
+    //     var tax_id_value = $(this).val();
+    //         $.get('get_customer_tax.php?tax_id=' + tax_id_value + '&id=' + id, function(data){
+    //             var result = JSON.parse(data);
+    //             tax_id_check = "true";
+    //             $.each(result, function(index,item){
+    //                 if(item.id!=""){
+    //                     alert("This customer already exist.");
+    //                     // tax_id_check="false";
+    //                 }
+    //             });
+    //         });
+    // });
 
-    var mobile_object = $('#mobile');
-    mobile_object.on('change', function(){
-        var mobile_value = $(this).val();
-            // alert('get_customer_mobile.php?mobile=' + mobile_value + '&id=' + id);
-            $.get('get_customer_mobile.php?mobile=' + mobile_value + '&id=' + id, function(data){
-                var result = JSON.parse(data);
-                mobile_check = "true";
-                $.each(result, function(index,item){
-                    if(item.id!=""){
-                        alert("This customer already exist.");
-                        // mobile_check="false";
-                    }
-                });
-            });
-    });
+    // var mobile_object = $('#mobile');
+    // mobile_object.on('change', function(){
+    //     var mobile_value = $(this).val();
+    //         // alert('get_customer_mobile.php?mobile=' + mobile_value + '&id=' + id);
+    //         $.get('get_customer_mobile.php?mobile=' + mobile_value + '&id=' + id, function(data){
+    //             var result = JSON.parse(data);
+    //             mobile_check = "true";
+    //             $.each(result, function(index,item){
+    //                 if(item.id!=""){
+    //                     alert("This customer already exist.");
+    //                     // mobile_check="false";
+    //                 }
+    //             });
+    //         });
+    // });
 
     var name_object = $('#first_name');
+    var last_object = $('#last_name');
     name_object.on('change', function(){
-        var name_value = $(this).val();
-            $.get('get_customer_first_name.php?name=' + name_value + '&id=' + id, function(data){
+        // var name_value = $(this).val();
+        var name_value = document.getElementById("first_name").value.trim();
+        var last_value = document.getElementById("last_name").value.trim();
+        if(name_value!="" && last_value!=""){
+            $.get('get_customer_first_name.php?name=' + name_value +"&last="+ last_value + '&id=' + id, function(data){
                 var result = JSON.parse(data);
+                name_check = "true";
                 $.each(result, function(index,item){
                     if(item.id!=""){
                         alert("This customer already exist.");
+                        name_check="false";
                     }
                 });
             });
+        }
     });
+
+    // alert('get_customer_first_name.php?name=' + name_value +"&last="+ last_value);
+    last_object.on('change', function(){
+        var name_value = document.getElementById("first_name").value.trim();
+        var last_value = document.getElementById("last_name").value.trim();
+        if(name_value!="" && last_value!=""){
+            $.get('get_customer_first_name.php?name=' + name_value +"&last="+ last_value + '&id=' + id, function(data){
+                var result = JSON.parse(data);
+                name_check = "true";
+                $.each(result, function(index,item){
+                    if(item.id!=""){
+                        alert("This customer already exist.");
+                        name_check="false";
+                    }
+                });
+            });
+        }
+    });
+
+
 
 });
 
 function validateForm() {
-    if (tax_id_check=="true" && mobile_check == "true") {
+
+    if (name_check=="true") {
         document.getElementById("loading-overlay").style.display = "flex";
         return true;
     }else{
