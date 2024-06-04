@@ -83,7 +83,7 @@ function near_to_overdue_list($conn) {
             GROUP BY 
                 policy_primary
             ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate 
-            
+
             where ii.status = 'Wait'
             AND end_date < GETDATE() ";
 
@@ -122,6 +122,17 @@ function near_to_overdue_list_topbar($conn) {
             left join insurance_partner ip on ip.id = ii.insurance_company_id 
             left join agent a on a.id = ii.agent_id 
             LEFT JOIN product pr ON pr.id = ii.product_id 
+
+            INNER JOIN (
+            SELECT 
+                policy_primary, MAX(cdate) AS max_cdate
+            FROM 
+                insurance_info
+                where status = 'Wait' 
+            GROUP BY 
+                policy_primary
+            ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate 
+            
             where ii.status = 'Wait' 
             AND end_date < GETDATE() 
             AND end_date > DATEADD(DAY,-((SELECT due_date FROM alert_date WHERE type = 'overdue')+(SELECT due_date FROM alert_date WHERE type = 'near_due')),GETDATE()) ";
