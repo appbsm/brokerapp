@@ -9,9 +9,9 @@ cc.currency_value,cc.currency_value_convert
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list ) AS id_currency_list_v
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list_convert ) AS id_currency_list_convert_v
 ,cl.currency,cc.id_currency_list,cc.id_currency_list_convert
-,CONCAT(ag.title_name,' ',ag.first_name,' ',ag.last_name) AS agent_name,ag.agent_type
+,CONCAT(ag.first_name,' ',ag.last_name) AS agent_name,ag.agent_type
 ,CASE WHEN cu.customer_type = 'Personal'
-THEN CONCAT(cu.title_name,' ',cu.first_name,' ',cu.last_name)
+THEN CONCAT(cu.first_name,' ',cu.last_name)
       ELSE cu.company_name
       END as customer_name
 ,cu.customer_type
@@ -33,7 +33,7 @@ LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
  LEFT JOIN currency_convertion cc ON  cc.id = 
  (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id_currency_list = ip.id_currency_list 
  AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1')
-ORDER BY pr.id";
+ORDER BY pr.id,info.start_date DESC";
 
 // INNER JOIN (
 //     SELECT 
@@ -75,9 +75,9 @@ cc.currency_value,cc.currency_value_convert
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list ) AS id_currency_list_v
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list_convert ) AS id_currency_list_convert_v
 ,cl.currency,cc.id_currency_list,cc.id_currency_list_convert
-,CONCAT(ag.title_name,' ',ag.first_name,' ',ag.last_name) AS agent_name,ag.agent_type
+,CONCAT(ag.first_name,' ',ag.last_name) AS agent_name,ag.agent_type
 ,CASE WHEN cu.customer_type = 'Personal'
-THEN CONCAT(cu.title_name,' ',cu.first_name,' ',cu.last_name)
+THEN CONCAT(cu.first_name,' ',cu.last_name)
       ELSE cu.company_name
       END as customer_name
 ,cu.customer_type
@@ -140,7 +140,7 @@ LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
         if ($post_data['subcategory'] != 'all') {
             $sql .= " and info.sub_categories = ".$post_data['subcategory'];
         }
-    $sql .= " ORDER BY pr.id ASC ";
+    $sql .= " ORDER BY pr.id,info.start_date DESC ";
     // print_r($sql);
     $stmt = sqlsrv_query( $conn, $sql);
             if( $stmt === false) {

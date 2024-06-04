@@ -43,7 +43,7 @@ LEFT JOIN currency_convertion cc ON  cc.id =
   (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id_currency_list = ip.id_currency_list
  AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1')
 
-ORDER BY full_name ASC";
+ORDER BY full_name,info.start_date DESC";
 
 //   INNER JOIN (
 //     SELECT 
@@ -159,7 +159,7 @@ function get_customers_sales_search($conn,$post_data) {
             $sql .= " and info.sub_categories = ".$post_data['sub_cat'];
         }
 
-$sql .= " ORDER BY full_name ASC ";
+$sql .= " ORDER BY full_name,info.start_date DESC ";
 // print_r($sql);
 // echo '<script>alert("sql search: '.$sql.'")</script>'; 
     $stmt = sqlsrv_query( $conn, $sql);  
@@ -255,7 +255,7 @@ function get_partners ($conn) {
     return $result;
 }
 
-function get_product_categories ($conn) {
+function get_product_categories($conn) {
     $result = array();
     $tsql = "SELECT * FROM product_categories ";
     

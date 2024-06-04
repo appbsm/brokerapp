@@ -188,7 +188,7 @@ if(count($_POST["policy"])>0){
 
 				// ($_POST['status'][$i] == "Renew" && ($_POST['status'][$i] != $_POST['status_old'][$i])) ||
 
-				echo '<script>alert("insert_2 ")</script>'; 
+			
 				if(
 					($_POST['status'][$i] == "Renew" && ($_POST['policy'][$i] != $_POST['policy_old'][$i]))
 				){
