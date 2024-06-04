@@ -9,7 +9,7 @@ cc.currency_value,cc.currency_value_convert
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list ) AS id_currency_list_v
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list_convert ) AS id_currency_list_convert_v
 ,cl.currency,cc.id_currency_list,cc.id_currency_list_convert
-,CONCAT(ag.first_name,' ',ag.last_name) AS agent_name,ag.agent_type
+,CONCAT(ag.first_name,' ',ag.last_name) AS agent_name,ag.agent_type,ag.nick_name
 ,CASE WHEN cu.customer_type = 'Personal'
 THEN CONCAT(cu.first_name,' ',cu.last_name)
       ELSE cu.company_name
@@ -75,7 +75,7 @@ cc.currency_value,cc.currency_value_convert
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list ) AS id_currency_list_v
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list_convert ) AS id_currency_list_convert_v
 ,cl.currency,cc.id_currency_list,cc.id_currency_list_convert
-,CONCAT(ag.first_name,' ',ag.last_name) AS agent_name,ag.agent_type
+,CONCAT(ag.first_name,' ',ag.last_name) AS agent_name,ag.agent_type,ag.nick_name
 ,CASE WHEN cu.customer_type = 'Personal'
 THEN CONCAT(cu.first_name,' ',cu.last_name)
       ELSE cu.company_name

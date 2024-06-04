@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $data['status']     =$_POST['status'];
     }
 }else{
-    $sales  = get_sales_by_product_start ($conn);
+    $sales  = get_sales_by_product_start($conn);
     $data = array();
     $data['date_from'] = '';
     $data['date_to'] = '';
@@ -312,6 +312,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                             <th width="300px">Partner Company</th>
                                             <th width="200px">Agent</th>
+                                            <th width="70px">Nick Name</th>
                                             <th width="100px">Subagent</th>
                                             <th width="110px">Agent Mobile</th>
                                             <th width="200px">Agent Email</th>
@@ -361,7 +362,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <td class="converted text-right"><?php //echo number_format($total_converted_value, 2)?></td>       
                                             <?php }?>
                                         <td class="converted text-right"><?php echo number_format($total_primary_premium_rate, 2)?></td>
-
+                                            <td></td>
                                              <td></td> 
                                              <td></td>        
                                              <td class="text-right"><?php echo number_format($total_subagent_premium_rate, 2)?></td>     
@@ -433,6 +434,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                             <td><?php echo $s['insurance_company'];?></td>
                                             <td><?php echo $s['agent_name']; ?></td>
+                                            <td><?php echo $s['nick_name']; ?></td>
 
                                             <td class="text-right"><?php echo ($s['agent_type']=='Sub-agent') ? number_format( $s['premium_rate'], 2) : '';?></td>
                                             
@@ -467,6 +469,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <?php }?>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
                                              <td></td>
                                              <td></td>
                                              <td></td>                                              
@@ -474,8 +477,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </tr>  
                                     <?php }?>                                    
                                         <tr style="font-weight: bold;">                                            
-                                             <td></td>
-                                             <td>TOTAL</td>
+                                            <td></td>
+                                            <td>TOTAL</td>
                                             <td></td>
                                             <td></td>     
                                             <td></td>  
@@ -487,7 +490,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <?php }?>
 
                                             <td class="text-right"><?php echo number_format($total_primary_premium_rate, 2)?></td> 
-
+                                            <td></td>
                                             <td></td> 
                                             <td></td>        
                                             <td class="text-right"><?php echo number_format($total_subagent_premium_rate, 2)?></td>     
@@ -520,7 +523,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <?php }?>
 
                                             <th ><?php echo number_format($grand_total_primary_premium_rate, 2)?></th>
-
+                                            <td></td>
                                             <th></th> 
                                             <th></th>        
                                             <th><?php echo number_format($grand_total_subagent_premium_rate, 2)?></th>     
