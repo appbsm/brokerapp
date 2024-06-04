@@ -147,6 +147,20 @@ $(function(){
                 });
             });
     });
+
+    var name_object = $('#first_name');
+    name_object.on('change', function(){
+        var name_value = $(this).val();
+            $.get('get_customer_first_name.php?name=' + name_value, function(data){
+                var result = JSON.parse(data);
+                $.each(result, function(index,item){
+                    if(item.id!=""){
+                        alert("This customer already exist.");
+                    }
+                });
+            });
+    });
+
 });
 
 function validateForm() {

@@ -4,12 +4,14 @@
     error_reporting(0);
 
 	include_once('includes/fx_customer_db.php');
-	include_once('includes/fx_address.php');
+	// include_once('includes/fx_address.php');
+    include_once('includes/fx_address_function.php');
 	include_once('includes/fx_agent_db.php');
 	include_once('includes/fx_insurance_products.php');
 	include('includes/config_path.php');
 
 	if(strlen($_SESSION['alogin'])=="") {
+        sqlsrv_close($conn);
 		header('Location: logout.php');
 	}
 
@@ -29,6 +31,7 @@
 			
 		}
 		// echo '<script>alert("Successfully edited information.")</script>';
+        sqlsrv_close($conn);
 		echo "<script>window.location.href ='customer-information.php'</script>";
 		// header('Location: customer-information.php');
 	}
@@ -171,6 +174,19 @@ $(function(){
                     if(item.id!=""){
                         alert("This customer already exist.");
                         // mobile_check="false";
+                    }
+                });
+            });
+    });
+
+    var name_object = $('#first_name');
+    name_object.on('change', function(){
+        var name_value = $(this).val();
+            $.get('get_customer_first_name.php?name=' + name_value + '&id=' + id, function(data){
+                var result = JSON.parse(data);
+                $.each(result, function(index,item){
+                    if(item.id!=""){
+                        alert("This customer already exist.");
                     }
                 });
             });
