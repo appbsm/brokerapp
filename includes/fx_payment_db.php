@@ -19,7 +19,7 @@ function get_payment_start($dbh) {
 		 LEFT JOIN product pr ON pr.id = insu.product_id
 		 LEFT JOIN insurance_partner ip ON ip.id = insu.insurance_company_id
          LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
-		 ORDER BY insu.cdate desc ";
+		 ORDER BY insu.start_date desc ";
 
         // ORDER BY LTRIM(insu.policy_no) asc ";
 		   // WHERE insu.default_insurance = 1
@@ -77,7 +77,7 @@ function get_payment_search($dbh,$post_data) {
             $sql .= " and insu.sub_categories = ".$post_data['sub_cat'];
         }
 
-    $sql = $sql." ORDER BY insu.cdate desc ";
+    $sql = $sql." ORDER BY insu.start_date desc ";
 
         // ORDER BY LTRIM(insu.policy_no) asc ";
 		   // WHERE insu.default_insurance = 1
