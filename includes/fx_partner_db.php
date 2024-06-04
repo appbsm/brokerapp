@@ -269,7 +269,7 @@ function save_partner($conn, $post_data) {
 	$last_partner = get_partner_ctr($conn);
 	$data['values'] = array(
 	$last_partner+1,
-	// $post_data['insurance_id'],
+	// $post_data['insurance_id'], 
 	$insurance_id,
 	$post_data['address_number'],
 	$post_data['building_name'],

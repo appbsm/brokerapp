@@ -6,12 +6,14 @@
     session_start();
     error_reporting(0);
 	include_once('includes/fx_customer_db.php');
-	include_once('includes/fx_address.php');
+	// include_once('includes/fx_address.php');
+    include_once('includes/fx_address_function.php');
 	include_once('includes/fx_agent_db.php');
 	include_once('includes/fx_insurance_products.php');
 	include('includes/config_path.php');
 
 	if(strlen($_SESSION['alogin'])=="") {
+        sqlsrv_close($conn);
 		header('Location: logout.php');
 	}
 
@@ -35,6 +37,7 @@
 			// print_r($_POST);
 			
 			// echo '<script>alert("Successfully added information.")</script>';
+            sqlsrv_close($conn);
 			echo "<script>window.location.href ='customer-information.php'</script>";
 		}
 		// header('Location: customer-information.php');
@@ -213,7 +216,7 @@ function validateForm() {
                         <label style="color: #102958;"  >Cust. ID:</label>
                     </div>
                     <div class="col-3 ">
-                        <input name="customer_id" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="name" class="form-control" value="<?php echo $customer_id;?>"  readOnly> 
+                        <input name="customer_id" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $customer_id;?>"  readOnly> 
                     </div>
                     <div class="col-1 label_left" >
                         <label style="color: #102958;"  ><small><font color="red">*</font></small>Cust. Level:</label>

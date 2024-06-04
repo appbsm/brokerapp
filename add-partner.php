@@ -126,9 +126,9 @@ $currency = get_currency($conn);
 			<div class="form-group row col-md-10 col-md-offset-1">
 				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Partner ID:</label>
 				<div class="col-sm-4">
-					<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="insurance_id" class="form-control" id="insurance_id" value="<?php echo $insurance_id;?>" readOnly>
+					<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="insurance_id" class="form-control" id="insurance_id" value="<?php echo $insurance_id; ?>" readOnly>
 				</div>
-
+ 
                 <!-- Status: -->
                 <!-- <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"></label> -->
                 <div class="col-sm-6">

@@ -277,6 +277,9 @@ function generate_customer_id($conn) {
 }
 
 function save_customer($conn, $post_data,$path) {
+
+	$customer_id_autorun = generate_customer_id($conn);
+
     $customer_id = '';
     $contact_id = '';
 	$data['table'] = 'customer';
@@ -316,7 +319,8 @@ function save_customer($conn, $post_data,$path) {
 	$data['values'] = array(
 	$last_customer+1,
 	$post_data['first_name'].' '.$post_data['last_name'],
-	$post_data['customer_id'], 
+	// $post_data['customer_id'], 
+	$customer_id_autorun,
 	$post_data['title_name'], 
 	$post_data['first_name'], 
 	$post_data['last_name'], 

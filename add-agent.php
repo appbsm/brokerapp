@@ -105,7 +105,7 @@
 						<div class="form-group row col-md-10 col-md-offset-1">
 							<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Agent ID:</label>
 							<div class="col-sm-2 label_left">
-								<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="agent_id" required="required" class="form-control" id="success" value="<?php echo $agent_id;?>" readOnly>               
+								<input minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="agent_id" required="required" class="form-control" id="success" value="<?php echo $agent_id;?>"  readOnly>               
 							</div>
 							
 							<!-- <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"></label> -->

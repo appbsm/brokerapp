@@ -92,6 +92,9 @@ function generate_agent_id($conn) {
 }
 
 function save_agent ($conn, $post_data) {
+
+	$agent_id = generate_agent_id($conn);
+
 	$data['table'] = 'agent';
 	$data['columns'] = array(
 	    'agent_ctr',
@@ -121,7 +124,8 @@ function save_agent ($conn, $post_data) {
 	$last_agent_ctr = get_agent_ctr($conn);
 	$data['values'] = array(
 		$last_agent_ctr+1,
-		$post_data['agent_id'], 
+		// $post_data['agent_id'],
+		$agent_id,
 		$post_data['title_name'],
 		$post_data['first_name'],
 		$post_data['last_name'],
