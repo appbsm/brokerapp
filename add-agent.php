@@ -173,7 +173,7 @@ $(function(){
                 name_check = "true";
                 $.each(result, function(index,item){
                     if(item.id!=""){
-                        alert("This agent already exist.");
+                        alert("This first and last name already exist. Please try again.");
                         name_check="false";
                     }
                 });
@@ -191,7 +191,7 @@ $(function(){
                 name_check = "true";
                 $.each(result, function(index,item){
                     if(item.id!=""){
-                        alert("This agent already exist.");
+                        alert("This first and last name already exist. Please try again.");
                         name_check="false";
                     }
                 });
@@ -207,7 +207,7 @@ function validateForm() {
         document.getElementById("loading-overlay").style.display = "flex";
         return true;
     }else{
-        alert("This agent already exist.");
+        alert("This first and last name already exist. Please try again.");
         return false;
     }
 }

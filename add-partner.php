@@ -161,7 +161,7 @@ $(function(){
             partner_check = "true";
             $.each(result, function(index,item){
                 if(item.id!=""){
-                    alert("This partner already exist.");
+                    alert("This partner name already exist. Please try again.");
                     partner_check="false";
                 }
             });
@@ -176,7 +176,7 @@ function validateForm() {
         document.getElementById("loading-overlay").style.display = "flex";
         return true;
     }else{
-        alert("This partner already exist.");
+        alert("This partner name already exist. Please try again.");
         return false;
     }
 }
