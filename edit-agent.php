@@ -106,8 +106,8 @@
         </div>
     </div>
 
-<form method="post" onSubmit="return valid();">
-<input type="hidden" name="id" value="<?php echo $_GET['id'];?>">
+<form method="post" onSubmit="return validateForm();">
+<input id="id" name="id" type="hidden" value="<?php echo $_GET['id'];?>">
 <br>
 
 <div class="container-fluid">
@@ -170,13 +170,72 @@
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="first_name" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>First name:</label>
                 <div class="col-sm-4">
-                    <input id="input_fname" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="first_name" class="form-control" id="first_name"  value="<?php echo $agent['first_name'];?>" required>
+                    <input id="input_fname" name="first_name" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" class="form-control" value="<?php echo $agent['first_name'];?>" required>
                 </div>
 				<label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label"><small><font color="red">*</font></small>Last name:</label>
                 <div class="col-sm-4">
-                    <input id="input_lname" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text" name="last_name" class="form-control" value="<?php echo $agent['last_name'];?>" required>
+                    <input id="input_lname" name="last_name" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" value="<?php echo $agent['last_name'];?>" required>
                 </div>
             </div>
+
+<script>
+
+var name_check = "true";
+
+$(function(){
+
+    var id = document.getElementById("id").value;
+    var name_object = $('#input_fname');
+    var last_object = $('#input_lname');
+    name_object.on('change', function(){
+        // var name_value = $(this).val();
+        var name_value = document.getElementById("input_fname").value.trim();
+        var last_value = document.getElementById("input_lname").value.trim();
+        if(name_value!="" && last_value!=""){
+            $.get('get_agent_first_name.php?name=' + name_value +"&last="+ last_value + '&id=' + id, function(data){
+                var result = JSON.parse(data);
+                name_check = "true";
+                $.each(result, function(index,item){
+                    if(item.id!=""){
+                        alert("This agent already exist.");
+                        name_check="false";
+                    }
+                });
+            });
+        }
+    });
+
+    last_object.on('change', function(){
+        var name_value = document.getElementById("input_fname").value.trim();
+        var last_value = document.getElementById("input_lname").value.trim();
+        if(name_value!="" && last_value!=""){
+            $.get('get_agent_first_name.php?name=' + name_value +"&last="+ last_value + '&id=' + id, function(data){
+                var result = JSON.parse(data);
+                name_check = "true";
+                $.each(result, function(index,item){
+                    if(item.id!=""){
+                        alert("This agent already exist.");
+                        name_check="false";
+                    }
+                });
+            });
+        }
+    });
+
+});
+
+function validateForm() {
+
+    if (name_check=="true") {
+        document.getElementById("loading-overlay").style.display = "flex";
+        return true;
+    }else{
+        alert("This agent already exist.");
+        return false;
+    }
+}
+
+</script>            
 
             <div class="form-group row col-md-10 col-md-offset-1">
                	<label style="color: #102958;" for="nick_name" class="col-sm-2 col-form-label">Nickname:</label>
