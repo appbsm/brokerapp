@@ -117,6 +117,7 @@
 var tax_id_check = "true";
 var mobile_check = "true";
 var name_check = "true";
+var company_check = "true";
 
 $(function(){
 
@@ -152,6 +153,8 @@ $(function(){
 
     var name_object = $('#first_name');
     var last_object = $('#last_name');
+    var customer_object = $('#company_c_input');
+
     name_object.on('change', function(){
         // var name_value = $(this).val();
         var name_value = document.getElementById("first_name").value.trim();
@@ -188,6 +191,20 @@ $(function(){
         }
     });
 
+    customer_object.on('change', function(){
+        var company_value = document.getElementById("company_c_input").value.trim();
+        $.get('get_customer_company_name.php?company=' + company_value, function(data){
+            var result = JSON.parse(data);
+            company_check = "true";
+            $.each(result, function(index,item){
+                if(item.id!=""){
+                    alert("This customer already exist.");
+                    company_check="false";
+                }
+            });
+        });
+    });
+
 });
 
 function validateForm() {
@@ -202,13 +219,28 @@ function validateForm() {
     //         tax_id_check ="false";
     //     });
     // });
-    if (name_check=="true") {
-        document.getElementById("loading-overlay").style.display = "flex";
-        return true;
+
+    var customer_type_value = document.getElementById("customer_type").value.trim();
+
+    if(customer_type_value=="Personal"){
+        if (name_check=="true") {
+            document.getElementById("loading-overlay").style.display = "flex";
+            return true;
+        }else{
+            alert("This customer name already exist.");
+            return false;
+        }
     }else{
-        alert("This customer already exist.");
-        return false;
+        if (company_check=="true") {
+            document.getElementById("loading-overlay").style.display = "flex";
+            return true;
+        }else{
+            alert("This customer company already exist.");
+            return false;
+        }
     }
+
+    
 }
 </script>
 
@@ -236,7 +268,7 @@ function validateForm() {
                         <label  style="color: #102958;"  ><small><font color="red">*</font></small>Cust. Type:</label>
                     </div>
                     <div class="col-3 ">
-                        <select name="customer_type" style="border-color:#102958; color: #000;" id="customer_type" onchange="" class="form-control" required>
+                        <select id="customer_type" name="customer_type" style="border-color:#102958; color: #000;" class="form-control" required>
 							<option value="">Select Cust. Type</option>
 							<option value="Personal" >Personal</option>
 							<option value="Corporate" >Corporate</option>
