@@ -165,7 +165,7 @@ $(function(){
                 name_check = "true";
                 $.each(result, function(index,item){
                     if(item.id!=""){
-                        alert("This customer already exist.");
+                        alert("This first and last name already exist. Please try again.");
                         name_check="false";
                     }
                 });
@@ -183,7 +183,7 @@ $(function(){
                 name_check = "true";
                 $.each(result, function(index,item){
                     if(item.id!=""){
-                        alert("This customer already exist.");
+                        alert("This first and last name already exist. Please try again.");
                         name_check="false";
                     }
                 });
@@ -198,7 +198,7 @@ $(function(){
             company_check = "true";
             $.each(result, function(index,item){
                 if(item.id!=""){
-                    alert("This customer already exist.");
+                    alert("This company name already exist. Please try again.");
                     company_check="false";
                 }
             });
@@ -227,7 +227,7 @@ function validateForm() {
             document.getElementById("loading-overlay").style.display = "flex";
             return true;
         }else{
-            alert("This customer name already exist.");
+            alert("This first and last name already exist. Please try again.");
             return false;
         }
     }else{
@@ -235,7 +235,7 @@ function validateForm() {
             document.getElementById("loading-overlay").style.display = "flex";
             return true;
         }else{
-            alert("This customer company already exist.");
+            alert("This company name already exist. Please try again.");
             return false;
         }
     }
