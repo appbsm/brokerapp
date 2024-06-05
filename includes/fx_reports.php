@@ -716,7 +716,7 @@ function get_commission_report ($conn, $data, $agent) {
                 $where .= " and ip.id = ".$data['partner'];
             }
         }
-        $tsql .= $where." order by ii.start_date ";
+        $tsql .= $where." order by ii.start_date desc ";
 
 
 
