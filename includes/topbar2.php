@@ -332,73 +332,80 @@ $count_overdue = count($overdue_list);
 
     <style>
         h1, h2, h3, h4, h5, h6, b, span, p, table, a, div, label, ul, li, div,
-    button {
-        font-family: Manrope, 'IBM Plex Sans Thai';
-    }
-    
-    .bootstrap-select.btn-group .dropdown-toggle .caret {
-        right: 10px !important;
+		button {
+			font-family: Manrope, 'IBM Plex Sans Thai';
+		}
 		
-    }
-    
-    @media all and (max-width:30em){
-        .bootstrap-select.btn-group .dropdown-toggle .caret {
-            margin-top: -4px !important;
-        }   
-    }
-    
-    @media all and (min-width: 768px){
-        .bootstrap-select.btn-group .dropdown-toggle .caret {
-            margin-top: -4px !important;
-        }   
-    }
-	
-	.btn-group>.btn:first-child {
-		border-color: #102958;
-	}
-	
-	#loading-overlay {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(0, 0, 0, 0.5); /* ความโปร่งใสของสีดำ */
-		display: none; /* ก่อนที่จะแสดง */
-		justify-content: center;
-		align-items: center;
-	}
+		.bootstrap-select.btn-group .dropdown-toggle .caret {
+			right: 10px !important;
+			
+		}
+		
+		@media all and (max-width:30em){
+			.bootstrap-select.btn-group .dropdown-toggle .caret {
+				margin-top: -4px !important;
+			}   
+		}
+		
+		@media all and (min-width: 768px){
+			.bootstrap-select.btn-group .dropdown-toggle .caret {
+				margin-top: -4px !important;
+			}   
+		}
+		
+		.btn-group>.btn:first-child {
+			border-color: #102958;
+		}
+		
+		#loading-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.5); /* ความโปร่งใสของสีดำ */
+			display: none; /* ก่อนที่จะแสดง */
+			justify-content: center;
+			align-items: center;
+		}
 
-	#loading-overlay img {
-		width: 50px; /* ขนาดของ Loading.gif */
-		height: 50px;
-	}
-	
-	.nav-item1 .nav-link1 .fa-fw:hover path {
-		fill: #000 !important; 
-	}
-	
-	.nav-item1 .nav-link1:hover .fa-fw path,
-	.nav-item1 .nav-link1:hover .fa-fw,
-	.nav-item1 .nav-link1:hover span {
-		color: #000 !important;
-	}
-	
-	.bellIcon1 {
-		color: #ff0000; 
-	}
+		#loading-overlay img {
+			width: 50px; /* ขนาดของ Loading.gif */
+			height: 50px;
+		}
+		
+		.nav-item1 .nav-link1 .fa-fw:hover path {
+			fill: #000 !important; 
+		}
+		
+		.nav-item1 .nav-link1:hover .fa-fw path,
+		.nav-item1 .nav-link1:hover .fa-fw,
+		.nav-item1 .nav-link1:hover span {
+			color: #000 !important;
+		}
+		
+		.bellIcon1 {
+			color: #ff0000; 
+		}
 
-	.bellIcon1:hover {
-		color: #bb0404; 
-	}
-	
-	.bellIcon2 {
-		color: #e7df09; 
-	}
+		.bellIcon1:hover {
+			color: #bb0404; 
+		}
+		
+		.bellIcon2 {
+			color: #e7df09; 
+		}
 
-	.bellIcon2:hover {
-		color: #cbc40a; 
-	}
+		.bellIcon2:hover {
+			color: #cbc40a; 
+		}
+		
+		@media (min-width: 768px) {
+			.modal-dialog {
+				width: 40% !important;
+				margin: 30px auto;
+			{
+		{
 
     </style>
 
