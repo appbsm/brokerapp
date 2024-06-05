@@ -29,7 +29,7 @@ function near_to_due_list($conn) {
                 policy_primary
             ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate 
 
-            where ii.status = 'Follow up' 
+            where ii.status = 'Follow up' and pr.no_update_status != '1' 
             AND end_date > DATEADD(DAY,-(SELECT due_date FROM alert_date WHERE type = 'near_due'),GETDATE()) 
             AND end_date < DATEADD(DAY,+(SELECT due_date FROM alert_date WHERE type = 'near_due'),GETDATE()) 
             AND end_date >= GETDATE() ";
@@ -84,7 +84,7 @@ function near_to_overdue_list($conn) {
                 policy_primary
             ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate 
 
-            where ii.status = 'Wait'
+            where ii.status = 'Wait' 
             AND end_date < GETDATE() ";
 
             //  INNER JOIN (
@@ -171,7 +171,7 @@ function check_due_policy ($conn) {
         AND end_date >= GETDATE()
         AND (ii.status = 'New' OR ii.status = 'Renew')
         AND ( (ps.status_travel IS null or ps.status_travel != '1')
-        OR (pd.status_notrenew = '1' AND ps.status_travel = '1' ) ) ";
+        OR (pd.status_notrenew = '1' AND ps.status_travel = '1' ) ) and pd.no_update_status != '1' ";
 
     $stmt = sqlsrv_query( $conn, $sql);
     if( $stmt === false) {
@@ -191,7 +191,7 @@ function check_overdue_policy($conn) {
         LEFT JOIN product_subcategories ps ON ps.id =  pd.id_product_sub
         WHERE  end_date <= GETDATE()
         AND (ii.status = 'Follow up' OR ii.status = 'New' OR ii.status = 'Renew')
-        AND pd.status_notrenew = '0' AND (ps.status_travel IS null or ps.status_travel != '1')  ";
+        AND pd.status_notrenew = '0' AND (ps.status_travel IS null or ps.status_travel != '1') and pd.no_update_status != '1'  ";
 
     $stmt = sqlsrv_query( $conn, $sql);
     if( $stmt === false) {
@@ -211,7 +211,7 @@ function check_product_notrenew_policy ($conn) {
         WHERE  end_date <= GETDATE()
         AND (ii.status = 'Follow up' OR ii.status = 'New' OR ii.status = 'Renew')
          AND ( (pd.status_notrenew = '1' AND (ps.status_travel IS null OR ps.status_travel = '1')) 
-         OR  (pd.status_notrenew = '0' AND  ps.status_travel = '1') )";
+         OR  (pd.status_notrenew = '0' AND  ps.status_travel = '1') ) and pd.no_update_status != '1' ";
     $stmt = sqlsrv_query( $conn, $sql);
     if( $stmt === false) {
             // die( print_r( sqlsrv_errors(), true) );

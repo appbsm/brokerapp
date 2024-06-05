@@ -1,3 +1,7 @@
+<head>
+    <meta charset="utf-8">
+</head>
+
 <?php
 // include('includes/config.php');
 include_once('includes/connect_sql.php');
@@ -17,11 +21,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $rela_products = get_rela_partner_to_product($conn,$_GET['id']);
         delete_rela_product_list($conn,$selectedValues,$rela_products);
+
         update_partner($conn,$selectedValues,$rela_products,$_GET['id']);
+
         // foreach ($selectedValues as $values) {
         //     print_r("value:".$values[0]);
         // }
-        print_r($selectedValues."testtest:".$_GET['id']."count".count($selectedValues));
+        // print_r($selectedValues."testtest:".$_GET['id']."count".count($selectedValues));
     } else {
         // ถ้าไม่มีข้อมูลถูกส่งมา
         echo "No data received.";
@@ -57,17 +63,17 @@ function get_rela_partner_to_product($conn, $id) {
     return $result;
 }
 
-function update_partner ($conn, $selectedValues,$rela_products,$id) {
+function update_partner($conn,$selectedValues,$rela_products,$id) {
     $data_rel_product['table'] = 'rela_partner_to_product';
     $data_rel_product['columns'] = array(
         'id_partner',
         'id_product'
     );
-
+    
     foreach ($selectedValues as $values) {
         $duplicate_information = "false";
         foreach ($rela_products as $rela){
-            if($values[0]==$rela['id_product']){
+            if($values==$rela['id_product']){
                 $duplicate_information = "true";
             }
         }
@@ -75,12 +81,21 @@ function update_partner ($conn, $selectedValues,$rela_products,$id) {
         if($duplicate_information=="false"){
             $data_rel_product['values'] = array(
                 $id,
-                $values[0]
+                $values
             );
-            insert_table ($conn, $data_rel_product);
+            insert_table ($conn,$data_rel_product);
         }
     }
 }
+
+// writeLog("count:".count($selectedValues));
+function writeLog($message, $logfile = 'log/application.txt') {
+    // สร้างข้อความ log พร้อมวันที่และเวลา
+    $logMessage = date('Y-m-d H:i:s') . " - " . $message . PHP_EOL;
+    // เขียนข้อความลงไฟล์ log
+    file_put_contents($logfile, $logMessage, FILE_APPEND);
+}
+
 
 ?>
 
