@@ -15,7 +15,7 @@ if(strlen($_SESSION['alogin'])==""){
     $status_edit ='0';
     $status_delete ='0';
     foreach ($_SESSION["application_page_status"] as $page_id) {
-        if($page_id["page_id"]=="13"){
+        if($page_id["page_id"]=="32"){
             $status_view =$page_id["page_view"];
             $status_add =$page_id["page_add"];
             $status_edit =$page_id["page_edit"];
@@ -139,7 +139,7 @@ if(strlen($_SESSION['alogin'])==""){
                                     <ul class="breadcrumb">
                                         <li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
                                         <!-- <li> Classes</li> -->
-                                        <li class="active" >Sales by status</li>
+                                        <li class="active" >Sales By Status</li>
                                     </ul>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@ if(strlen($_SESSION['alogin'])==""){
                         <div class="card-header">
  
                              <div class="panel-title" >
-                                <h2 class="title m-5" style="color: #102958;">Report: Sales by status
+                                <h2 class="title m-5" style="color: #102958;">Report: Sales By Status
                             </div>
                         </div>
 
@@ -166,8 +166,9 @@ if(strlen($_SESSION['alogin'])==""){
                                 <option value="all">Select Year</option>
                                 <?php 
                                 $today = date('Y-m-d');
-                                $start_year = date('Y', strtotime('-10 years', strtotime($today)));
-                                $end_year = date('Y', strtotime('+10 years', strtotime($today)));
+                                $start_year = date('Y', strtotime('-2 years', strtotime($today)));
+                                // $end_year = date('Y', strtotime('+10 years', strtotime($today)));
+                                $end_year = date('Y',strtotime($today));
                                 $curr_year = $start_year;
                                 $selected = '';
                                
@@ -293,10 +294,10 @@ if(strlen($_SESSION['alogin'])==""){
                                 <table class="table table-bordered " id="example"  cellspacing="0" >
                                     <thead >
                                         <tr>
-                                            <th rowspan="2">#</th>
-                                            <th rowspan="2">Month</th>
+                                            <th rowspan="2" >#</th>
+                                            <th rowspan="2" >Month</th>
                                             <th rowspan="2">Description</th>
-                                            <th colspan="2">New</th>
+                                            <th colspan="2" >New</th>
                                             <th colspan="2">Renew</th>
                                             <th colspan="2">Follow Up</th>
                                             <th colspan="2">Wait</th>
@@ -305,8 +306,8 @@ if(strlen($_SESSION['alogin'])==""){
                                             <th colspan="3">Not Renew</th>   
                                         </tr>
                                         <tr>
-                                            <th>Primary Agent</th>
-                                            <th>Sub Agent</th>
+                                            <th width="200px">Primary Agent</th>
+                                            <th width="200px">Sub Agent</th>
                                             <th>Primary Agent</th>
                                             <th>Sub Agent</th>
                                             <th>Primary Agent</th>
@@ -320,11 +321,11 @@ if(strlen($_SESSION['alogin'])==""){
 
                                             <th>Primary Agent</th>
                                             <th>Sub Agent</th>
-                                            <th>Total Agent</th>
+                                            <th>Total Accumulate</th>
 
                                             <th>Primary Agent</th>
                                             <th>Sub Agent</th>
-                                            <th>Total Agent</th>
+                                            <th >Total Not Renew</th>
                                             
                                         </tr>
                                     </thead>
@@ -424,7 +425,7 @@ if(strlen($_SESSION['alogin'])==""){
                         <tr>
                             <td class="text-center"><?php echo $ctr;?></td>
                             <td><?php echo $m;?></td>
-                            <td>Number Policy</td>
+                            <td>Amt. Policy</td>
                             <td class="text-right"><?php echo $value_s[0]['total_new_policy_pri']; ?></td>
                             <td class="text-right"><?php echo $value_s[0]['total_new_policy_sub'];?></td>
                             <td class="text-right"><?php echo $value_s[0]['total_renew_policy_pri'];?></td>     
@@ -449,7 +450,7 @@ if(strlen($_SESSION['alogin'])==""){
                         <tr>
                             <td class="text-center"><?php //echo $ctr;?></td>
                             <td><?php //echo $m;?></td>
-                            <td>Premium Rate</td>
+                            <td>Amt. Premium</td>
                             <?php 
                             
                              ?>
