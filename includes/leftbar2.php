@@ -184,8 +184,15 @@
                         <a class="collapse-item " href="report-customer-sales-total.php">Sales By Customer</a><?php } ?>
                         <?php if (in_array("12",$_SESSION['application_page'])) { ?>
                         <a class="collapse-item " href="report-product-sales.php">Sales By Products</a><?php } ?>
+
+                        <?php if (in_array("32",$_SESSION['application_page'])) { ?>
+                        <a class="collapse-item " href="report-status.php">Sales by status</a><?php } ?>
+
                         <?php if (in_array("13",$_SESSION['application_page'])) { ?>
                         <a class="collapse-item " href="report-monthly-sales.php">Monthly Sales</a><?php } ?>
+
+
+
                         <?php if (in_array("14",$_SESSION['application_page'])) { ?>
                         <a class="collapse-item " href="report-sales-commission.php">Commission Report</a><?php } ?>
                         <?php if (in_array("15",$_SESSION['application_page'])) { ?>

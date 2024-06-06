@@ -215,6 +215,107 @@ function get_sales_by_product ($conn, $data, $id_product) {
             return $result;
 }
 
+function get_sales_monthly_status ($conn, $data, $month,  $year) {
+    
+
+    $result = array();
+    $where = '';
+    $tsql = "select "
+        . "SUM(CASE WHEN ii.status = 'New' AND a.agent_type ='Primary' THEN ii.premium_rate ELSE 0 END)  AS total_new_pri,
+SUM(CASE WHEN ii.status = 'New' AND a.agent_type ='Sub-agent' THEN ii.premium_rate ELSE 0 END)      AS total_new_sub,
+count(CASE WHEN ii.status = 'New' AND a.agent_type ='Primary' THEN 1 ELSE null END)         AS total_new_policy_pri,
+count(CASE WHEN ii.status = 'New' AND a.agent_type ='Sub-agent' THEN 1 ELSE null END)       AS total_new_policy_sub,
+SUM(CASE WHEN ii.status = 'Renew' AND a.agent_type ='Primary' THEN ii.premium_rate ELSE 0 END)      AS total_renew_pri,
+SUM(CASE WHEN ii.status = 'Renew' AND a.agent_type ='Sub-agent' THEN ii.premium_rate ELSE 0 END)    AS total_renew_sub,
+count(CASE WHEN ii.status = 'Renew' AND a.agent_type ='Primary' THEN 1 ELSE null END)         AS total_renew_policy_pri,
+count(CASE WHEN ii.status = 'Renew' AND a.agent_type ='Sub-agent' THEN 1 ELSE null END)       AS total_renew_policy_sub,
+SUM(CASE WHEN ii.status = 'Follow up' AND a.agent_type ='Primary' THEN ii.premium_rate ELSE 0 END) AS total_follow_pri,
+SUM(CASE WHEN ii.status = 'Follow up' AND a.agent_type ='Sub-agent' THEN ii.premium_rate ELSE 0 END) AS total_follow_sub,
+count(CASE WHEN ii.status = 'Follow up' AND a.agent_type ='Primary' THEN 1 ELSE null END)         AS total_follow_policy_pri,
+count(CASE WHEN ii.status = 'Follow up' AND a.agent_type ='Sub-agent' THEN 1 ELSE null END)       AS total_follow_policy_sub,
+SUM(CASE WHEN ii.status = 'Wait' AND a.agent_type ='Primary' THEN ii.premium_rate ELSE 0 END)       AS total_wait_pri,
+SUM(CASE WHEN ii.status = 'Wait' AND a.agent_type ='Sub-agent' THEN ii.premium_rate ELSE 0 END)     AS total_wait_sub,
+count(CASE WHEN ii.status = 'Wait' AND a.agent_type ='Primary' THEN 1 ELSE null END)         AS total_wait_policy_pri,
+count(CASE WHEN ii.status = 'Wait' AND a.agent_type ='Sub-agent' THEN 1 ELSE null END)       AS total_wait_policy_sub,
+SUM(CASE WHEN a.agent_type ='Primary' THEN ii.premium_rate ELSE 0 END)      AS total_pri,
+SUM(CASE WHEN a.agent_type ='Sub-agent' THEN ii.premium_rate ELSE 0 END)    AS total_sub,
+count(CASE WHEN a.agent_type ='Primary' THEN 1 ELSE null END)         AS total_policy_pri,
+count(CASE WHEN a.agent_type ='Sub-agent' THEN 1 ELSE null END)       AS total_policy_sub,
+SUM(CASE WHEN ii.status = 'Not renew' AND a.agent_type ='Primary' THEN ii.premium_rate ELSE 0 END)  AS total_not_pri,
+SUM(CASE WHEN ii.status = 'Not renew' AND a.agent_type ='Sub-agent' THEN ii.premium_rate ELSE 0 END)    AS total_not_sub,
+count(CASE WHEN ii.status = 'Not renew' AND a.agent_type ='Primary' THEN 1 ELSE null END)         AS total_not_policy_pri,
+count(CASE WHEN ii.status = 'Not renew' AND a.agent_type ='Sub-agent' THEN 1 ELSE null END)       AS total_not_policy_sub "
+        . "from insurance_info ii "
+        . "left join rela_customer_to_insurance rci on rci.id_insurance_info = ii.id "
+        . "left join customer c on c.id = rci.id_customer "
+        . "left join rela_insurance_to_contact ric on ric.id_insurance = ii.id "
+        . "left join contact co on co.id = ric.id_contact "
+        . "left join product p on p.id = ii.product_id "
+        .  "left join agent a on a.id = ii.agent_id "
+        . "left join rela_agent_to_insurance rai on (rai.id_agent = a.id and rai.id_insurance = ii.id) "
+
+        // . "  INNER JOIN (
+        //     SELECT 
+        //         policy_primary, MAX(cdate) AS max_cdate
+        //     FROM 
+        //         insurance_info
+        //     GROUP BY 
+        //         policy_primary
+        //     ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate "
+
+       // . "left join rela_partner_to_product rpp on (rpp.id_product = p.id and rpp.id_product = ii.product_id) "
+        //. "right join insurance_partner ip on (ip.id = rpp.id_partner and ip.id = ii.insurance_company_id) "
+        . " where ii.id IS NOT NULL "
+        . "and Month(start_date) = '".$month. "' " 
+       // . "and Month(start_date) <= '".$month_to. "' " 
+        . "and Year(start_date) = '".$year. "' ";
+        // and (ii.status = 'New')
+    
+    // and (ii.status = 'New' OR ii.status = 'Renew')
+
+    // print_r($tsql);
+    if (isset($data) && count($data) > 0) {
+        if (isset($data['date_from']) && $data['date_from'] != '') {
+            $where .= " and start_date >= '".$data['date_from']."' ";
+        }
+        if (isset($data['date_to']) && $data['date_to'] != '') {
+            $where .= " and start_date <= '".$data['date_to']."' ";
+        }
+
+        if (isset($data['agent']) && $data['agent'] != '') {
+            $where .= " and ii.agent_id = '".$data['agent']."' ";
+        }
+        if (isset($data['agent_type']) && $data['agent_type'] != '') {
+            $where .= " and a.agent_type = '".$data['agent_type']."' ";
+        }
+
+        if (isset($data['policy_no']) && $data['policy_no'] != '') {
+            //$where = ($where != '') ? 'and' : 'where';
+            $where .= " and ii.policy_no = '".$data['policy_no']."' ";
+        }
+        if (isset($data['customer']) && $data['customer'] != '' ) {
+            //$where = ($where != '') ? 'and' : 'where';
+            $where .= " and c.id = ".$data['customer'];
+        }
+
+
+       
+
+    }
+    $tsql .= $where;
+    // print($tsql);
+   // echo $tsql;
+    $stmt = sqlsrv_query( $conn, $tsql);
+    if( $stmt === false) {
+        die( print_r( sqlsrv_errors(), true) );
+    }
+    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC))
+    {
+        $result[] = $row;
+    }
+    return $result;
+}
+
 function get_sales_monthly_new ($conn, $data, $month,  $year) {
     // echo '<script>alert("year: '.$year.'")</script>'; 
     $result = array();
@@ -246,6 +347,8 @@ function get_sales_monthly_new ($conn, $data, $month,  $year) {
        // . "and Month(start_date) <= '".$month_to. "' " 
         . "and Year(start_date) = '".$year. "' " 
         . " and (ii.status = 'New') ";
+
+        // and (ii.status = 'New')
     
     // and (ii.status = 'New' OR ii.status = 'Renew')
 
@@ -276,6 +379,7 @@ function get_sales_monthly_new ($conn, $data, $month,  $year) {
         }
     }
     $tsql .= $where;
+    // print($tsql);
    //echo $tsql;
     $stmt = sqlsrv_query( $conn, $tsql);
     if( $stmt === false) {
@@ -598,6 +702,21 @@ function get_partner_by_id($conn, $id) {
 function get_products($conn) {
     $result = array();
     $tsql = "SELECT * FROM product where id IN (select distinct (product_id) from insurance_info)";
+    
+    $stmt = sqlsrv_query( $conn, $tsql);
+    if( $stmt === false) {
+        die( print_r( sqlsrv_errors(), true) );
+    }
+    while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC))
+    {
+        $result[] = $row;
+    }
+    return $result;
+}
+
+function get_agent($conn) {
+    $result = array();
+    $tsql = "SELECT * FROM agent";
     
     $stmt = sqlsrv_query( $conn, $tsql);
     if( $stmt === false) {
