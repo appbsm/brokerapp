@@ -324,42 +324,78 @@ if(strlen($_SESSION['alogin'])==""){
         //         formats: ['xlsx'],
         //         exportButtons: false
         //     });
-
         //     let exportData = exportInstance.getExportData()['example']['xlsx'];
         //     exportInstance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
         // });
 
-        document.getElementById('btnExcel').addEventListener('click', function() {
-            // Get the table data
-            let table = document.getElementById('example');
-            let wb = XLSX.utils.table_to_book(table, {
-                sheet: "Sheet1",
-                raw: true // Preserve original data types
-            });
+        // document.getElementById('btnExcel').addEventListener('click', function() {
+        //     // Create a new workbook
+        //     let wb = XLSX.utils.book_new();
 
-            // Define the cell style for right alignment and number format
-            const numberStyle = {
-                alignment: {
-                    horizontal: "right"
-                },
-                numFmt: "0.00" // Format for two decimal places
-            };
+        //     // Convert the table to a worksheet
+        //     let ws = XLSX.utils.table_to_sheet(document.getElementById('example'));
 
-            // Iterate through all cells to set the style
-            const ws = wb.Sheets["Sheet1"];
-            for (const cell in ws) {
-                if (ws.hasOwnProperty(cell) && cell[0] !== '!') {
-                    if (typeof ws[cell].v === 'number') {
-                        ws[cell].t = 'n'; // Set type to number
-                        if (!ws[cell].s) ws[cell].s = {}; // Create style object if it doesn't exist
-                        ws[cell].s = numberStyle;
-                    }
-                }
+        //     // Define the cell style for right alignment and number format
+        //     const numberStyle = {
+        //         alignment: {
+        //             horizontal: "right"
+        //         },
+        //         numFmt: "0.00" // Format for two decimal places
+        //     };
+
+        //     // Iterate through all cells to set the style
+        //     for (const cell in ws) {
+        //         if (ws.hasOwnProperty(cell) && cell[0] !== '!') {
+        //             if (typeof ws[cell].v === 'number') {
+        //                 ws[cell].t = 'n'; // Set type to number
+        //                 ws[cell].s = numberStyle; // Apply number format and alignment
+        //             }
+        //         }
+        //     }
+
+        //     // Add the worksheet to the workbook
+        //     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+        //     // Save the workbook as an Excel file
+        //     XLSX.writeFile(wb, 'example.xlsx');
+        // });
+
+
+document.getElementById('btnExcel').addEventListener('click', function() {
+    // Create a new workbook
+    let wb = XLSX.utils.book_new();
+
+    // Convert the table to a worksheet
+    let ws = XLSX.utils.table_to_sheet(document.getElementById('example'));
+
+    // Define the cell style for right alignment and number format
+    const numberStyle = {
+        alignment: {
+            horizontal: "right"
+        },
+        numFmt: "0,000.00" // Format for comma-separated thousands and two decimal places
+    };
+
+    // Iterate through all cells to set the type and style
+    for (const cell in ws) {
+        if (ws.hasOwnProperty(cell) && cell[0] !== '!') {
+            if (typeof ws[cell].v === 'number') {
+                ws[cell].t = 'n'; // Set type to number
+                ws[cell].s = numberStyle; // Apply number format and alignment
             }
+        }
+    }
 
-            // Export the file
-            XLSX.writeFile(wb, 'example.xlsx');
-        });
+    // Add the worksheet to the workbook
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+    // Save the workbook as an Excel file
+    XLSX.writeFile(wb, 'example.xlsx');
+});
+
+
+
+
 
         document.getElementById('btnPdf').addEventListener('click', function() {
             let { jsPDF } = window.jspdf;
