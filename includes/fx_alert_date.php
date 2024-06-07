@@ -24,7 +24,7 @@ function near_to_due_list($conn) {
                 policy_primary, MAX(cdate) AS max_cdate
             FROM 
                 insurance_info
-                where status = 'Follow up' 
+                 
             GROUP BY 
                 policy_primary
             ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate 
@@ -79,7 +79,7 @@ function near_to_overdue_list($conn) {
                 policy_primary, MAX(cdate) AS max_cdate
             FROM 
                 insurance_info
-                where status = 'Wait' 
+               
             GROUP BY 
                 policy_primary
             ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate 
@@ -128,7 +128,7 @@ function near_to_overdue_list_topbar($conn) {
                 policy_primary, MAX(cdate) AS max_cdate
             FROM 
                 insurance_info
-                where status = 'Wait' 
+                
             GROUP BY 
                 policy_primary
             ) latest ON ii.policy_primary = latest.policy_primary AND ii.cdate = latest.max_cdate 
