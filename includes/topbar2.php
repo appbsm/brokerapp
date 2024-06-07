@@ -299,7 +299,7 @@ $count_overdue = count($overdue_list);
 
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-2" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Ready to Logout?</h5>
@@ -350,8 +350,9 @@ $count_overdue = count($overdue_list);
 		@media all and (min-width: 768px){
 			.bootstrap-select.btn-group .dropdown-toggle .caret {
 				margin-top: -4px !important;
-			}   
+			} 			
 		}
+		
 		
 		.btn-group>.btn:first-child {
 			border-color: #102958;
@@ -401,7 +402,7 @@ $count_overdue = count($overdue_list);
 		}
 		
 		@media (min-width: 768px) {
-			.modal-dialog {
+			.modal-dialog-2 {
 				width: 40% !important;
 				margin: 30px auto;
 			{
