@@ -200,7 +200,7 @@ if(count($_POST["policy"])>0){
 
 				}else{
 
-					update_policy($dbh,$_POST,$_FILES,$new_file_name,$lastInsertId_customer,$i,$_FILES['file_d']);
+					update_policy($dbh,$_POST,$_FILES,$new_file_name,$lastInsertId_customer,$i);
 
 				}
 				insert_history_policy($dbh,$_POST,$lastInsertId_customer,"update");
@@ -637,7 +637,7 @@ $(function(){
                 </div> 
                 <div class="col">
                     <!-- <input name="product_name[]" minlength="1" maxlength="50" style="color: #0C1830;border-color:#102958;" type="text" class="form-control" > -->
-                    <select id="product_name" name="product_name[]"  style="color: #000;border-color:#102958;"class="form-control" value="0"  required>
+                    <select id="product_name" name="product_name[]"  style="color: #000;border-color:#102958;"class="form-control" value="0" required>
                     	<option value="" selected>Select Product Name</option>
                       <?php  foreach($results_product as $result){ ?>
                         <option value="<?php echo $result->id; ?>" 
