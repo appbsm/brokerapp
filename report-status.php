@@ -107,22 +107,22 @@ if(strlen($_SESSION['alogin'])==""){
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
-   <!-- <link rel="stylesheet" href="css/bootstrap.min.css" media="screen" > -->
-        <link rel="stylesheet" href="css/font-awesome.min.css" media="screen" >
-        <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen" >
-        <link rel="stylesheet" href="css/lobipanel/lobipanel.min.css" media="screen" >
-        <link rel="stylesheet" href="css/prism/prism.css" media="screen" >
-        <link rel="stylesheet" type="text/css" href="js/DataTables/datatables.min.css"/>
-        <link rel="stylesheet" href="css/main.css" media="screen" >
-        <script src="js/modernizr/modernizr.min.js"></script>
+    <link rel="stylesheet" href="css/font-awesome.min.css" media="screen" >
+    <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen" >
+    <link rel="stylesheet" href="css/lobipanel/lobipanel.min.css" media="screen" >
+    <link rel="stylesheet" href="css/prism/prism.css" media="screen" >
+    <link rel="stylesheet" type="text/css" href="js/DataTables/datatables.min.css"/>
+    <link rel="stylesheet" href="css/main.css" media="screen" >
+    <script src="js/modernizr/modernizr.min.js"></script>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script> -->
-        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-        <script src="js/DataTables/datatables.min.js"></script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="js/DataTables/datatables.min.js"></script> 
         
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+
 
 </head>
 
@@ -166,7 +166,8 @@ if(strlen($_SESSION['alogin'])==""){
                                 <option value="all">Select Year</option>
                                 <?php 
                                 $today = date('Y-m-d');
-                                $start_year = date('Y', strtotime('-2 years', strtotime($today)));
+                                // $start_year = date('Y', strtotime('-2 years', strtotime($today)));
+                                $start_year = '2022';
                                 // $end_year = date('Y', strtotime('+10 years', strtotime($today)));
                                 $end_year = date('Y',strtotime($today));
                                 $curr_year = $start_year;
@@ -270,23 +271,152 @@ if(strlen($_SESSION['alogin'])==""){
 
 
 <div class="row pull-right">                    
-    <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn">Search<span class="btn-label btn-label-right"><i class="fa "></i></span>
-                </button>  
-&nbsp;&nbsp;
+   
 <div class="dropdown">
+     <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn">Search<span class="btn-label btn-label-right"><i class="fa "></i></span>
+    </button>  &nbsp;&nbsp;
   <button style="background-color: #0275d8;color: #F9FAFA;" class="btn btn-primary mr-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Export
   </button>
-  <div class="dropdown-menu col-xs-1" style="width: 300px !important;" aria-labelledby="dropdownMenuButton" >
-    <a href="#" class="dropdown-item" id="btnCsv" style="font-size: 15px;" >CSV</a>
-    <a href="#" class="dropdown-item" id="btnExcel" style="font-size: 15px;" >Excel</a>
-    <a href="#" class="dropdown-item" id="btnPdf" style="font-size: 15px;" >PDF</a>
-    <a href="#" class="dropdown-item" id="btnPrint" style="font-size: 15px;" >Print</a>
-  </div>
-</div>&nbsp;&nbsp;
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.6/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/TableExport/5.2.0/js/tableexport.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.24/jspdf.plugin.autotable.min.js"></script>
+
+
+<!-- <button id="export-excel" class="btn btn-primary my-3">Excel</button>
+<button id="export-csv" class="btn btn-primary my-3">CSV</button>
+<button id="export-pdf" class="btn btn-primary my-3">PDF</button>
+<button id="export-print" class="btn btn-primary my-3">Print</button> -->
+
+  <div class="dropdown-menu col-xs-1 my-3" style="width: 50px !important;"  aria-labelledby="dropdownMenuButton" >
+    <a href="#" class="dropdown-item export-csv" id="btnCsv" style="font-size: 15px;" >CSV</a>
+    <a href="#" class="dropdown-item export-excel" id="btnExcel" style="font-size: 15px;" >Excel</a>
+    <a href="#" class="dropdown-item export-pdf" id="btnPdf" style="font-size: 15px;" >PDF</a>
+    <a href="#" class="dropdown-item export-print" id="btnPrint" style="font-size: 15px;" >Print</a>
+  </div>&nbsp;&nbsp;&nbsp;
+
+</div>
 </div> 
 
-        </form> 
+</form> 
+
+<script>
+        document.getElementById('btnCsv').addEventListener('click', function() {
+            let table = document.getElementById('example');
+            let exportInstance = new TableExport(table, {
+                formats: ['csv'],
+                exportButtons: false
+            });
+            let exportData = exportInstance.getExportData()['example']['csv'];
+            exportInstance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
+        });
+
+        // document.getElementById('btnExcel').addEventListener('click', function() {
+        //     let table = document.getElementById('example');
+        //     let exportInstance = new TableExport(table, {
+        //         formats: ['xlsx'],
+        //         exportButtons: false
+        //     });
+
+        //     let exportData = exportInstance.getExportData()['example']['xlsx'];
+        //     exportInstance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
+        // });
+
+        document.getElementById('btnExcel').addEventListener('click', function() {
+            // Get the table data
+            let table = document.getElementById('example');
+            let wb = XLSX.utils.table_to_book(table, {
+                sheet: "Sheet1",
+                raw: true // Preserve original data types
+            });
+
+            // Define the cell style for right alignment and number format
+            const numberStyle = {
+                alignment: {
+                    horizontal: "right"
+                },
+                numFmt: "0.00" // Format for two decimal places
+            };
+
+            // Iterate through all cells to set the style
+            const ws = wb.Sheets["Sheet1"];
+            for (const cell in ws) {
+                if (ws.hasOwnProperty(cell) && cell[0] !== '!') {
+                    if (typeof ws[cell].v === 'number') {
+                        ws[cell].t = 'n'; // Set type to number
+                        if (!ws[cell].s) ws[cell].s = {}; // Create style object if it doesn't exist
+                        ws[cell].s = numberStyle;
+                    }
+                }
+            }
+
+            // Export the file
+            XLSX.writeFile(wb, 'example.xlsx');
+        });
+
+        document.getElementById('btnPdf').addEventListener('click', function() {
+            let { jsPDF } = window.jspdf;
+            let doc = new jsPDF('landscape');
+            let table = document.getElementById('example');
+            let tableData = [];
+
+            // Loop through table rows and push to tableData array
+            let rows = table.querySelectorAll('tr');
+            rows.forEach(row => {
+                let rowData = [];
+                let cells = row.querySelectorAll('th, td');
+                cells.forEach(cell => {
+                    rowData.push(cell.innerText);
+                });
+                tableData.push(rowData);
+            });
+
+            // Add the table to PDF with autoTable
+            doc.autoTable({
+                head: [tableData[0], tableData[1]],
+                body: tableData.slice(2),
+                styles: { halign: 'center' },
+                theme: 'grid',
+                didDrawPage: function (data) {
+                    // Header
+                    doc.setFontSize(18);
+                    doc.setTextColor(40);
+                    doc.text("Table Export Example", data.settings.margin.left, 10);
+
+                    // Footer
+                    let pageSize = doc.internal.pageSize;
+                    let pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+                    doc.setFontSize(10);
+                    doc.text('Page ' + doc.internal.getNumberOfPages(), data.settings.margin.left, pageHeight - 10);
+                },
+                margin: { top: 20 },
+                startY: 20,
+                pageBreak: 'auto', // Automatically handle page breaks
+            });
+
+            doc.save('table.pdf');
+        });
+
+        document.getElementById('btnPrint').addEventListener('click', function() {
+            let printContent = document.getElementById('example').outerHTML;
+            let printWindow = window.open('', '', 'height=400,width=800');
+            printWindow.document.write('<html><head><title>Print Table</title>');
+            printWindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">'); // Optional CSS
+            printWindow.document.write('</head><body>');
+            printWindow.document.write(printContent);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        });
+</script>
+
         </div>
                         <div class="card-body">
                             <div class="table-responsive" style="font-size: 13px;">
@@ -294,8 +424,8 @@ if(strlen($_SESSION['alogin'])==""){
                                 <table class="table table-bordered " id="example"  cellspacing="0" >
                                     <thead >
                                         <tr>
-                                            <th rowspan="2" >#</th>
-                                            <th rowspan="2" >Month</th>
+                                            <th rowspan="2" width="30px" >#</th>
+                                            <th rowspan="2">Month</th>
                                             <th rowspan="2">Description</th>
                                             <th colspan="2" >New</th>
                                             <th colspan="2">Renew</th>
@@ -306,106 +436,106 @@ if(strlen($_SESSION['alogin'])==""){
                                             <th colspan="3">Not Renew</th>   
                                         </tr>
                                         <tr>
-                                            <th width="200px">Primary Agent</th>
-                                            <th width="200px">Sub Agent</th>
-                                            <th>Primary Agent</th>
-                                            <th>Sub Agent</th>
-                                            <th>Primary Agent</th>
-                                            <th>Sub Agent</th>
-                                            <th>Primary Agent</th>
-                                            <th>Sub Agent</th>
+                                            <th width="90px">Primary Agent</th>
+                                            <th width="90px">Sub Agent</th>
+                                            <th width="90px">Primary Agent</th>
+                                            <th width="90px">Sub Agent</th>
+                                            <th width="90px">Primary Agent</th>
+                                            <th width="90px">Sub Agent</th>
+                                            <th width="90px">Primary Agent</th>
+                                            <th width="90px">Sub Agent</th>
 
-                                            <th>Primary Agent</th>
-                                            <th>Sub Agent</th>
-                                            <th>Total Agent</th>
+                                            <th width="90px">Primary Agent</th>
+                                            <th width="90px">Sub Agent</th>
+                                            <th width="90px">Total Agent</th>
 
-                                            <th>Primary Agent</th>
-                                            <th>Sub Agent</th>
-                                            <th>Total Accumulate</th>
+                                            <th width="90px">Primary Agent</th>
+                                            <th width="90px">Sub Agent</th>
+                                            <th width="90px">Total Accumulate</th>
 
-                                            <th>Primary Agent</th>
-                                            <th>Sub Agent</th>
-                                            <th >Total Not Renew</th>
+                                            <th width="90px">Primary Agent</th>
+                                            <th width="90px">Sub Agent</th>
+                                            <th width="90px">Total Not Renew</th>
                                             
                                         </tr>
                                     </thead>
                                     <tbody style="font-size: 13px;">
                                     
 
-                                    <?php 
+                    <?php 
                                    
-                                    $ctr = 1;
-                                    // $year = 2024;
+                        $ctr = 1;
+                        // $year = 2024;
 
-                                    $year = date('Y');
-                                    // echo "_POST".$_GET['year'];
-                                    if ($_GET['year'] == 'all' or $_GET['year']=="" ) {
-                                       $year = date('Y');  
-                                    }else{
-                                       $year = $_GET['year']; 
-                                    }
-                                    // echo ":year:".$year;
-                                    // $total_new = 0;
-                                    // $total_renew = 0;
-                                    // $total_not_renew = 0;
-                                    // $total_subagent = 0;
-                                    // $total_total = 0;
-                                $total_acc_pri = 0;
-                                $total_acc_sub = 0;
-                                $total_acc = 0;
+                        $year = date('Y');
+                        // echo "_POST".$_GET['year'];
+                        if ($_GET['year'] == 'all' or $_GET['year']=="" ) {
+                           $year = date('Y');  
+                        }else{
+                           $year = $_GET['year']; 
+                        }
+                        // echo ":year:".$year;
+                        // $total_new = 0;
+                        // $total_renew = 0;
+                        // $total_not_renew = 0;
+                        // $total_subagent = 0;
+                        // $total_total = 0;
+                        $total_acc_pri = 0;
+                        $total_acc_sub = 0;
+                        $total_acc = 0;
 
-                                $total_acc_policy_pri = 0;
-                                $total_acc_policy_sub = 0;
-                                $total_acc_policy = 0;
+                        $total_acc_policy_pri = 0;
+                        $total_acc_policy_sub = 0;
+                        $total_acc_policy = 0;
 
-                                $total_all_new_pri = 0;
-                                $total_all_new_sub = 0;
-                                $total_all_renew_pri = 0;
-                                $total_all_renew_sub = 0;
-                                $total_all_follow_pri = 0;
-                                $total_all_follow_sub = 0;
-                                $total_all_wait_pri = 0;
-                                $total_all_wait_sub = 0;
-                                $total_all_agent_pri = 0;
-                                $total_all_agent_sub = 0;
-                                $total_all_agent = 0;
+                        $total_all_new_pri = 0;
+                        $total_all_new_sub = 0;
+                        $total_all_renew_pri = 0;
+                        $total_all_renew_sub = 0;
+                        $total_all_follow_pri = 0;
+                        $total_all_follow_sub = 0;
+                        $total_all_wait_pri = 0;
+                        $total_all_wait_sub = 0;
+                        $total_all_agent_pri = 0;
+                        $total_all_agent_sub = 0;
+                        $total_all_agent = 0;
 
-                                $total_all_acc_pri = 0;
-                                $total_all_acc_sub = 0;
-                                $total_all_acc = 0;
-                                $total_all_not_pri = 0;
-                                $total_all_not_sub = 0;
-                                $total_all_sub = 0;
+                        $total_all_acc_pri = 0;
+                        $total_all_acc_sub = 0;
+                        $total_all_acc = 0;
+                        $total_all_not_pri = 0;
+                        $total_all_not_sub = 0;
+                        $total_all_sub = 0;
 
-                                foreach ($months as $m) {
-                                    $total_agent =0;
-                                    $total_agent_policy =0;
-                                    $total_not =0;
-                                    $total_not_policy =0;
+                        foreach ($months as $m) {
+                            $total_agent =0;
+                            $total_agent_policy =0;
+                            $total_not =0;
+                            $total_not_policy =0;
 
-                                    $pos = array_search($m, $def_months);
-                                    $value_s = get_sales_monthly_status($conn, $data, $pos, $year);
-                                        // $renew = get_sales_monthly ($conn, $data, $pos, $year);
-                                        // $not_renew = get_not_renew_monthly ($conn, $data, $ctr, $year);
-                                        // $subagent = get_subagent_monthly($conn, $data, $ctr, $year);
-                                        // $total = $new[0]['total_sales'] + $renew[0]['total_sales'] ;
-                                        // $accumurate += $new[0]['total_sales'] + $renew[0]['total_sales'];
-                                        // + $subagent[0]['total_sales']
-                                    $total_agent = $value_s[0]['total_pri'] + $value_s[0]['total_sub'];
-                                    $total_agent_policy = $value_s[0]['total_policy_pri'] + $value_s[0]['total_policy_sub'];
+                            $pos = array_search($m, $def_months);
+                            $value_s = get_sales_monthly_status($conn, $data, $pos, $year);
+                            // $renew = get_sales_monthly ($conn, $data, $pos, $year);
+                            // $not_renew = get_not_renew_monthly ($conn, $data, $ctr, $year);
+                            // $subagent = get_subagent_monthly($conn, $data, $ctr, $year);
+                            // $total = $new[0]['total_sales'] + $renew[0]['total_sales'] ;
+                            // $accumurate += $new[0]['total_sales'] + $renew[0]['total_sales'];
+                            // + $subagent[0]['total_sales']
+                            $total_agent = $value_s[0]['total_pri'] + $value_s[0]['total_sub'];
+                            $total_agent_policy = $value_s[0]['total_policy_pri'] + $value_s[0]['total_policy_sub'];
 
-                                    $total_not = $value_s[0]['total_not_pri'] + $value_s[0]['total_not_sub'];
-                                    $total_not_policy = $value_s[0]['total_not_policy_pri'] + $value_s[0]['total_not_policy_sub'];
+                            $total_not = $value_s[0]['total_not_pri'] + $value_s[0]['total_not_sub'];
+                            $total_not_policy = $value_s[0]['total_not_policy_pri'] + $value_s[0]['total_not_policy_sub'];
 
-                                    $total_acc_pri = $total_acc_pri + $value_s[0]['total_pri'];
-                                    $total_acc_sub = $total_acc_sub + $value_s[0]['total_sub'];
-                                    $total_acc = $total_acc_pri + $total_acc_sub;
+                            $total_acc_pri = $total_acc_pri + $value_s[0]['total_pri'];
+                            $total_acc_sub = $total_acc_sub + $value_s[0]['total_sub'];
+                            $total_acc = $total_acc_pri + $total_acc_sub;
 
-                                    $total_acc_policy_pri = $total_acc_policy_pri + $value_s[0]['total_policy_pri'];
-                                    $total_acc_policy_sub = $total_acc_policy_sub + $value_s[0]['total_policy_sub'];
-                                    $total_acc_policy = $total_acc_policy_pri + $total_acc_policy_sub;
+                            $total_acc_policy_pri = $total_acc_policy_pri + $value_s[0]['total_policy_pri'];
+                            $total_acc_policy_sub = $total_acc_policy_sub + $value_s[0]['total_policy_sub'];
+                            $total_acc_policy = $total_acc_policy_pri + $total_acc_policy_sub;
 
-                                    $total_all_new_pri = $total_all_new_pri + $value_s[0]['total_new_pri'];
+                            $total_all_new_pri = $total_all_new_pri + $value_s[0]['total_new_pri'];
                             $total_all_new_sub = $total_all_new_sub + $value_s[0]['total_new_sub'];
                             $total_all_renew_pri = $total_all_renew_pri + $value_s[0]['total_renew_pri'];
                             $total_all_renew_sub = $total_all_renew_sub + $value_s[0]['total_renew_sub'];
@@ -419,8 +549,7 @@ if(strlen($_SESSION['alogin'])==""){
                             $total_all_not_pri = $total_all_not_pri + $value_s[0]['total_not_pri'];
                             $total_all_not_sub = $total_all_not_sub + $value_s[0]['total_not_sub'];
                             $total_all_sub = $total_all_sub + $total_not;
-
-                                ?> 
+                            ?> 
 
                         <tr>
                             <td class="text-center"><?php echo $ctr;?></td>
@@ -474,16 +603,16 @@ if(strlen($_SESSION['alogin'])==""){
                             <td class="text-right"><?php echo number_format($value_s[0]['total_not_sub'], 2);?></td>
                             <td class="text-right"><?php echo number_format($total_not, 2);?></td>
                         </tr>  
-                                        <?php
-                                        $total_new += $new[0]['total_sales'];
-                                        $total_renew += $renew[0]['total_sales'];
-                                        $total_not_renew += $not_renew[0]['total_sales'];
-                                        $total_subagent += $subagent[0]['total_sales'];
-                                        $total_total += $total;
-                                        
-                                    $ctr++;
-                                    } ?>
+                            <?php
+                                $total_new += $new[0]['total_sales'];
+                                $total_renew += $renew[0]['total_sales'];
+                                $total_not_renew += $not_renew[0]['total_sales'];
+                                $total_subagent += $subagent[0]['total_sales'];
+                                $total_total += $total; 
+                                $ctr++;
+                            } ?>
                                     <tr style="font-weight: bold;">
+                                        
                                         <td class="text-center" >TOTAL</td>
                                         <td ></td>
                                         <td ></td>
@@ -507,12 +636,12 @@ if(strlen($_SESSION['alogin'])==""){
                                         <td class="text-right"><?php echo number_format($total_all_not_sub, 2);?></td>
                                         <td class="text-right"><?php echo number_format($total_all_sub, 2);?></td>
                                     </tr>  
-                                    </tbody>                                    
-                                </table>
-                            </div>
+                                </tbody>                                    
+                            </table>
                         </div>
+                    </div>
                         
-                   </div>      
+                </div>      
             </div>
         </div>
 
@@ -524,31 +653,19 @@ if(strlen($_SESSION['alogin'])==""){
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css" rel="stylesheet" />
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Core plugin JavaScript-->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
-     <!-- <script src="js/jquery/jquery-2.2.4.min.js"></script> -->
-        <!-- <script src="js/bootstrap/bootstrap.min.js"></script> -->
+    <script src="js/pace/pace.min.js"></script>
+    <script src="js/lobipanel/lobipanel.min.js"></script>
+    <script src="js/iscroll/iscroll.js"></script>
 
-        <script src="js/pace/pace.min.js"></script>
-        <script src="js/lobipanel/lobipanel.min.js"></script>
-        <script src="js/iscroll/iscroll.js"></script>
-
-        <!-- ========== PAGE JS FILES ========== -->
-        <script src="js/prism/prism.js"></script>
+    <script src="js/prism/prism.js"></script>
 
     <script src="assets/js/datatables.min.js"></script>
     <script src="assets/js/pdfmake.min.js"></script>
     <script src="assets/js/vfs_fonts.js"></script>
-    <!-- <script src="assets/js/custom4-hidden-entries.js"></script> -->
 
         
     <style>
@@ -589,23 +706,44 @@ if(strlen($_SESSION['alogin'])==""){
         "bLengthChange": false,
         "bFilter": true,
         "bInfo": false,
-        "bAutoWidth": false,
+        
         "lengthChange": false,
         // "pageLength": 20,
         "order": [], //Initial no order.
         "aaSorting": [], 
         "ordering": false,
         "columnDefs": [{ 
-                        "targets": [ ], //first column / numbering column
-                        "orderable": false, //set not orderable
-                    }] ,     
+            "targets": [ ], //first column / numbering column
+            // "targets": [0, 1, 2],
+            "orderable": false, //set not orderable
+        }],     
         scrollX: true,
         "scrollCollapse": true,
         "paging":         true,
         buttons: [
             { extend: 'csv',class: 'buttons-csv',className: 'btn-primary',charset: 'UTF-8',filename: 'Report Monthly Sales',footer: true,bom: true
             ,init : function(api,node,config){ $(node).hide();} },
-            { extend: 'excel',class: 'buttons-excel', className: 'btn-primary',charset: 'UTF-8',filename: 'Report Monthly Sales',footer: true,bom: true 
+            { extend: 'excel',class: 'buttons-excel', className: 'btn-primary',charset: 'UTF-8',filename: 'Report Monthly Sales',footer: true,bom: true
+                // ,exportOptions: {
+                    
+                //     columns: ':visible',
+                //     format: {
+                //         header: function(data, columnIdx) {
+                //             if (columnIdx === 0) return '#';
+                //             if (columnIdx === 1) return 'Month';
+                //             if (columnIdx === 2) return 'Description';
+                //             if (columnIdx >= 3 && columnIdx <= 4) return 'New';
+                //             if (columnIdx >= 5 && columnIdx <= 6) return 'ต่ออายุ';
+                //             if (columnIdx >= 7 && columnIdx <= 8) return 'ติดตาม';
+                //             if (columnIdx >= 9 && columnIdx <= 10) return 'รอ';
+                //             if (columnIdx >= 11 && columnIdx <= 13) return 'ยอดขายรวม';
+                //             if (columnIdx >= 14 && columnIdx <= 16) return 'สะสม';
+                //             if (columnIdx >= 17 && columnIdx <= 19) return 'ไม่ต่ออายุ';
+                //             return data;
+                //         }
+                //     }
+                // }
+
             ,init : function(api,node,config){ $(node).hide();} },
             { extend: 'pdf',class: 'buttons-pdf',className: 'btn-primary',charset: 'UTF-8',filename: 'Report Monthly Sales',footer: true,bom: true 
             ,init : function(api,node,config){ $(node).hide();},
@@ -632,21 +770,21 @@ if(strlen($_SESSION['alogin'])==""){
             ]
     });
 
-     $('#btnCsv').on('click',function(){
-        table.button('.buttons-csv').trigger();
-    });
+    // $('#btnCsv').on('click',function(){
+    //     table.button('.buttons-csv').trigger();
+    // });
 
-    $('#btnExcel').on('click',function(){
-        table.button('.buttons-excel').trigger();
-    });
+    // $('#btnExcel').on('click',function(){
+    //     table.button('.buttons-excel').trigger();
+    // });
 
-    $('#btnPdf').on('click',function(){
-        table.button('.buttons-pdf').trigger();
-    });
+    // $('#btnPdf').on('click',function(){
+    //     table.button('.buttons-pdf').trigger();
+    // });
 
-    $('#btnPrint').on('click',function(){
-        table.button('.buttons-print').trigger();
-    });
+    // $('#btnPrint').on('click',function(){
+    //     table.button('.buttons-print').trigger();
+    // });
 
 
     table.buttons().container()
