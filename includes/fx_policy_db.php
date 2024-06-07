@@ -28,6 +28,11 @@ function update_policy($dbh,$_POST,$_FILES,$new_file_name,$lastInsertId_customer
 
 	// policy_old[]
 
+	//////////// upload ////////////
+	if($_FILES['file_d']['name'][$i]!=""){
+		$sql_upload_file = ",file_name=:file_name_p,file_name_uniqid=:file_name_uniqid_p";
+	}
+
 	$sql ="UPDATE insurance_info set insurance_company=:insurance_company_p
 				,policy_no =:policy_no_p
 				,status=:status_p,product_category=:product_category_p,sub_categories=:sub_categories_p
@@ -117,6 +122,7 @@ function update_policy($dbh,$_POST,$_FILES,$new_file_name,$lastInsertId_customer
 					$query->bindParam(':default_insurance_p',$value,PDO::PARAM_STR);
 				}
 
+				
 				//////////// upload ////////////
 				if($_FILES['file_d']['name'][$i]!=""){
 						$query->bindParam(':file_name_p',$_FILES['file_d']['name'][$i],PDO::PARAM_STR);
