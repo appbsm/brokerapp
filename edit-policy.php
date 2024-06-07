@@ -192,11 +192,11 @@ if(count($_POST["policy"])>0){
 				if(
 					($_POST['status'][$i] == "Renew" && ($_POST['policy'][$i] != $_POST['policy_old'][$i]))
 				){
-					insert_policy_renew($dbh,$_POST,$_FILES,$new_file_name,$lastInsertId_customer,$i,$_FILES['file_d']);
+					insert_policy_renew($dbh,$_POST,$_FILES,$new_file_name,$lastInsertId_customer,$i);
 				}else if(
 					($_POST['status'][$i] == "Renew" && ($_POST['start_date'][$i] != $_POST['start_date_old'] && $_POST['end_date'][$i] != $_POST['end_date_old']) )
 				){
-					insert_policy_renew($dbh,$_POST,$_FILES,$new_file_name,$lastInsertId_customer,$i,$_FILES['file_d']);
+					insert_policy_renew($dbh,$_POST,$_FILES,$new_file_name,$lastInsertId_customer,$i);
 
 				}else{
 
