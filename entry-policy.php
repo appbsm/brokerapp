@@ -38,14 +38,14 @@
          ,FORMAT(paid_date, 'dd-MM-yyyy') AS paid_date_day
          ,insu.* 
 		  from insurance_info insu 
-		 left JOIN  rela_customer_to_insurance re_ci ON re_ci.id_insurance_info = insu.id 
+		 left JOIN rela_customer_to_insurance re_ci ON re_ci.id_insurance_info = insu.id 
 		 left JOIN customer cu ON cu.id = re_ci.id_customer 
 		 left JOIN agent ag ON ag.id = insu.agent_id 
 		 LEFT JOIN product pr ON pr.id = insu.product_id
 		 LEFT JOIN insurance_partner ip ON ip.id = insu.insurance_company_id
          LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
 
-    INNER JOIN (
+          INNER JOIN (
     SELECT 
         policy_primary, MAX(cdate) AS max_cdate
     FROM 
@@ -53,10 +53,41 @@
     GROUP BY 
         policy_primary
     ) latest ON insu.policy_primary = latest.policy_primary AND insu.cdate = latest.max_cdate
+    where insu.policy_no != ''";
 
-		 ORDER BY insu.cdate desc ";
+    if (isset($_POST['start_date']) && $_POST['start_date'] != '') {
+        $sql = $sql." and insu.start_date >= '".date("Y-m-d", strtotime($_POST['start_date']))."' ";
 
+        if (isset($_POST['end_date']) && $_POST['end_date'] != '') {
+            $sql = $sql." and insu.start_date <= '".date("Y-m-d", strtotime($_POST['end_date']))."' ";
+        }
+    }
 
+    if (isset($_POST['status']) && $_POST['status'] != '') {
+        $sql = $sql." and insu.status = '".$_POST['status']."' ";
+    }
+    if (isset($_POST['customer']) && $_POST['customer'] != '') {
+        $sql = $sql." and cu.id = '".$_POST['customer']."' ";
+    }
+    if (isset($_POST['partner']) && $_POST['partner'] != '') {
+        $sql = $sql." and ip.id = '".$_POST['partner']."' ";
+    }
+    if (isset($_POST['product']) && $_POST['product'] != '') {
+        $sql = $sql." and pr.id = '".$_POST['product']."' ";
+    }
+    
+
+	$sql = $sql." ORDER BY insu.cdate desc ";
+
+    // print($sql);
+    // INNER JOIN (
+    // SELECT 
+    //     policy_primary, MAX(cdate) AS max_cdate
+    // FROM 
+    //     insurance_info
+    // GROUP BY 
+    //     policy_primary
+    // ) latest ON insu.policy_primary = latest.policy_primary AND insu.cdate = latest.max_cdate
 
         // ORDER BY LTRIM(insu.policy_no) asc ";
 		   // WHERE insu.default_insurance = 1
@@ -64,6 +95,30 @@
 	$query->execute();
 	$results = $query->fetchAll(PDO::FETCH_OBJ);
 
+    $sql = "select DISTINCT(c.id),c.customer_type "
+        . ",CASE WHEN c.customer_type = 'Personal' "
+        . " THEN CONCAT(c.title_name, ' ', c.first_name, ' ', c.last_name) "
+        . " ELSE company_name "
+        . " END as customer_name "
+        . ", c.last_name, c.first_name "
+        . "from insurance_info ii "
+        . "left join rela_customer_to_insurance rci on rci.id_insurance_info = ii.id "
+        . "left join customer c on c.id = rci.id_customer "
+        . "where c.id IS NOT NULL "
+        . "order by c.last_name, c.first_name ";
+    $query = $dbh->prepare($sql);
+    $query->execute();
+    $customers_list = $query->fetchAll(PDO::FETCH_OBJ);
+
+    $sql = "select * from insurance_partner where status = 1 order by insurance_company ASC ";
+    $query = $dbh->prepare($sql);
+    $query->execute();
+    $partners_list = $query->fetchAll(PDO::FETCH_OBJ);
+
+    $sql = "select * from product order by id ASC ";
+    $query = $dbh->prepare($sql);
+    $query->execute();
+    $products_list = $query->fetchAll(PDO::FETCH_OBJ);
 ?>
 
 <!DOCTYPE html>
@@ -100,6 +155,11 @@
 	<script src="js/DataTables/datatables.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+        
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css">
 
 </head>
 
@@ -174,7 +234,7 @@
                             <div class="text-right" style="margin: 5px;">
 
                                 <div class="row">
-
+                                    
                                     <?php if($status_add==1){ ?>
                                     <a href="add-policy.php" class="btn btn-primary" style="color:#F9FAFA;" >
                                         <svg  width="16" height="16" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
@@ -221,7 +281,134 @@
 
                             </div>
                         </div>
-                    </div>
+
+
+                    <form method="post" action="entry-policy.php"  >
+                        <div class="form-group row col-md-12 mb-4 mt-4">
+                            <label style="color: #102958;"  class="col-md-2 label_left">From Date:</label>
+                            <div class="col-md-2">
+                                <?php //echo ($_GET['date_from'] != '') ? date('Y-m-d', strtotime($_GET['date_from'])) : '';?>
+                                <input  style="color: #000;border-color:#102958; text-align: center;" type="test" name="start_date" class="form-control" id="start_date" value="<?php 
+                                    if($_POST['start_date'] != ''){
+                                        echo date('d-m-Y', strtotime($_POST['start_date']));
+                                    }
+                                ?>" placeholder="dd-mm-yyyy">
+                            </div>
+
+                            <label style="color: #102958;"  class="col-md-2 label_left">End Date:</label>
+                            <div class="col-md-2">
+                                <input  style="color: #000;border-color:#102958; text-align: center;" type="test" name="end_date" class="form-control" id="end_date" value="<?php echo ($_POST['end_date'] != '') ? date('d-m-Y', strtotime($_POST['end_date'])) : '';?>" placeholder="dd-mm-yyyy">
+                            </div>
+
+                            <label style="color: #102958;" class="col-md-2 label_left">Status:</label>
+                            <div class="col-md-2">
+                <select id="status" name="status" style="border-color:#102958; color: #000;" class="remove-example form-control selectpicker" data-live-search="true" >
+                    <option value="" >All</option>
+                    <option value="New" <?php echo  ($_POST['status']== "New") ? 'selected' : '';?>>New</option>
+                    <option value="Follow up" <?php echo  ($_POST['status']== "Follow up") ? 'selected' : '';?>>Follow up</option>
+                    <option value="Renew" <?php echo  ($_POST['status']== "Renew") ? 'selected' : '';?>>Renew</option>
+                    <option value="Wait" <?php echo  ($_POST['status']== "Wait") ? 'selected' : '';?>>Wait</option>
+                    <option value="Not renew" <?php echo  ($_POST['status']== "Not renew") ? 'selected' : '';?>>Not renew</option>  
+                </select>                        
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row col-md-12 mb-4 ">
+                            <label style="color: #102958;" class="col-md-2 label_right">Cust. name:</label>
+                            <div class="col-md-2">
+                               
+                                <select id="customer" name="customer" style="border-color:#102958; color: #000;" class="remove-example form-control selectpicker" data-live-search="true" >
+                                    <option value="">All</option>
+                                    <?php foreach ($customers_list as $value) { ?>
+                                        <option value="<?php echo $value->id; ?>" 
+                                            <?php if ($value->id==$_POST['customer']) { echo 'selected="selected"'; } ?>
+                                            ><?php echo trim($value->customer_name); ?>
+                                        </option>
+                                    <?php } ?>    
+                                </select>                        
+                            </div>
+
+                            <label style="color: #102958;"  class="col-md-2 label_left">Partners:</label>
+                            <div class="col-md-2">
+                                <select  id="partner" name="partner" style="border-color:#102958; color: #000;" class="form-control selectpicker" data-live-search="true" >
+                                    <option value="">All</option>
+                                    <?php foreach ($partners_list as $value) { ?>
+                                    <option value="<?php echo $value->id;?>" <?php echo  ($_POST['partner'] == $value->id) ? 'selected' : '';?>><?php echo $value->insurance_company;?></option>
+                                    <?php } ?>
+                                </select>
+                                
+                            </div>
+
+                            <label style="color: #102958;" class="col-md-2 label_left">Prod.:</label>
+                            <div class="col-md-2">
+                               
+                                <select id="product" name="product" value="<?php echo $customer; ?>" style="border-color:#102958; color: #000;" class="remove-example form-control selectpicker" data-live-search="true" >
+                                    <option value="">All</option>
+                                    <?php //echo $value['id']; ?>
+                                    <?php foreach ($products_list as $value) { ?>
+                                        <option value="<?php echo $value->id; ?>" 
+                                            <?php if ($value->id==$_POST['product']) { echo 'selected="selected"'; } ?>
+                                            ><?php echo trim($value->product_name); ?>
+                                        </option>
+                                    <?php } ?>    
+                                </select>                        
+                            </div>
+                        </div>
+
+                        <div class="row pull-left">                    
+                            &nbsp;&nbsp;<button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  ">Search<span class="btn-label btn-label-right"><i class="fa "></i></span>
+                            </button>  
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+<script>
+    var emptyPost = "<?php echo (empty($_POST) ? 'true' : 'false'); ?>";
+    if (emptyPost === 'false') {
+        var startDate = "<?php echo $_POST['start_date']; ?>";
+        if(startDate === ""){
+            var currentDate = new Date();
+            var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+            $('#start_date').val(formattedDate);
+        }
+        var endDate = "<?php echo $_POST['end_date']; ?>";
+        if(endDate === ""){
+            var currentDate = new Date();
+            var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+            $('#end_date').val(formattedDate);
+        }
+    }else{
+        // var currentDate = new Date();
+        //     var formattedDate = (currentDate.getDate() < 10 ? '0' : '') + currentDate.getDate() + '-' + ((currentDate.getMonth() + 1) < 10 ? '0' : '') + (currentDate.getMonth() + 1) + '-' + currentDate.getFullYear();
+        //     $('#start_date, #end_date').val(formattedDate);
+        var currentDate = new Date();
+        var startOfYear = new Date(currentDate.getFullYear(), 0, 1); // วันแรกของปีปัจจุบัน
+        var endOfYear = new Date(currentDate.getFullYear(), 11, 31); // วันสุดท้ายของปีปัจจุบัน
+
+        function formatDate(date) {
+            return (date.getDate() < 10 ? '0' : '') + date.getDate() + '-' + ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1) + '-' + date.getFullYear();
+        }
+
+        $('#start_date').val(formatDate(startOfYear));
+        $('#end_date').val(formatDate(endOfYear));
+    }
+
+  $(document).ready(function(){
+    $('#start_date').datepicker({
+      format: 'dd-mm-yyyy',
+      language: 'en'
+    });
+    $('#end_date').datepicker({
+      format: 'dd-mm-yyyy',
+      language: 'en'
+    });
+  });
+</script>
+
 
                         <div class="card-body" >
                             <div class="table-responsive" style="font-size: 13px;">
@@ -471,6 +658,18 @@
     <!-- <script src="assets/js/custom.js"></script> -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <style>
+    /*@media (min-width: 1340px){*/
+        .label_left{
+            max-width: 140px;
+        }
+        .label_right{
+            max-width: 140px;
+        }
+    /*}*/
+    </style>
+
 	<script>
 		$(document).ready(function(){
 
