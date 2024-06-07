@@ -765,8 +765,14 @@ if(strlen($_SESSION['alogin'])==""){
                     }
                 });
             }           },
-            { extend: 'print',class: 'buttons-print',className: 'btn-primary',charset: 'UTF-8',footer: true,bom: true 
-            ,init : function(api,node,config){ $(node).hide();} }
+            { 
+                extend: 'print',
+                class: 'buttons-print',
+                className: 'btn-primary',
+                charset: 'UTF-8',
+                footer: true,bom: true 
+                ,init : function(api,node,config){ $(node).hide();} 
+            }
             ]
     });
 
