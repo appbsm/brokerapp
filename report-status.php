@@ -312,8 +312,10 @@ if(strlen($_SESSION['alogin'])==""){
                 formats: ['csv'],
                 exportButtons: false
             });
+            // Report sales by status
             let exportData = exportInstance.getExportData()['example']['csv'];
-            exportInstance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
+            // exportInstance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
+            exportInstance.export2file(exportData.data, exportData.mimeType,'Report sales by status', exportData.fileExtension);
         });
 
 // document.getElementById('btnExcel').addEventListener('click', function() {
@@ -413,7 +415,7 @@ document.getElementById('btnExcel').addEventListener('click', function() {
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
  
     // Save the workbook as an Excel file
-    XLSX.writeFile(wb, 'example.xlsx');
+    XLSX.writeFile(wb, 'Report sales by status.xlsx');
 });
 
 

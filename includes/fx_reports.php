@@ -251,7 +251,7 @@ count(CASE WHEN ii.status = 'Not renew' AND a.agent_type ='Sub-agent' THEN 1 ELS
         . "left join rela_insurance_to_contact ric on ric.id_insurance = ii.id "
         . "left join contact co on co.id = ric.id_contact "
         . "left join product p on p.id = ii.product_id "
-        .  "left join agent a on a.id = ii.agent_id "
+        . "left join agent a on a.id = ii.agent_id "
         . "left join rela_agent_to_insurance rai on (rai.id_agent = a.id and rai.id_insurance = ii.id) "
 
         // . "  INNER JOIN (
@@ -266,14 +266,15 @@ count(CASE WHEN ii.status = 'Not renew' AND a.agent_type ='Sub-agent' THEN 1 ELS
        // . "left join rela_partner_to_product rpp on (rpp.id_product = p.id and rpp.id_product = ii.product_id) "
         //. "right join insurance_partner ip on (ip.id = rpp.id_partner and ip.id = ii.insurance_company_id) "
         . " where ii.id IS NOT NULL "
-        . "and Month(start_date) = '".$month. "' " 
-       // . "and Month(start_date) <= '".$month_to. "' " 
-        . "and Year(start_date) = '".$year. "' ";
-        // and (ii.status = 'New')
+        // . "and Month(start_date) = '".$month."' " 
+        // . "and Year(start_date) = '".$year. "' ";
+
+        . " AND (  (Month(ii.start_date) = '".$month."' and Year(ii.start_date) = '".$year."' AND (ii.status = 'New' or ii.status = 'Renew' or "
+        . " ii.status = 'Follow up')) "
+        . " OR  (Month(ii.end_date) = '".$month."' and Year(ii.end_date) = '".$year. "' AND (ii.status = 'Wait' or ii.status = 'Not renew' ))  ) ";
     
     // and (ii.status = 'New' OR ii.status = 'Renew')
 
-    // print_r($tsql);
     if (isset($data) && count($data) > 0) {
         if (isset($data['date_from']) && $data['date_from'] != '') {
             $where .= " and start_date >= '".$data['date_from']."' ";
@@ -298,12 +299,9 @@ count(CASE WHEN ii.status = 'Not renew' AND a.agent_type ='Sub-agent' THEN 1 ELS
             $where .= " and c.id = ".$data['customer'];
         }
 
-
-       
-
     }
     $tsql .= $where;
-    // print($tsql);
+     // print($tsql);
    // echo $tsql;
     $stmt = sqlsrv_query( $conn, $tsql);
     if( $stmt === false) {
@@ -422,8 +420,11 @@ function get_sales_monthly ($conn, $data, $month,  $year) {
         . "and Month(start_date) = '".$month. "' " 
        // . "and Month(start_date) <= '".$month_to. "' " 
         . "and Year(start_date) = '".$year. "' " 
-        . " and (ii.status = 'Renew') ";
+        . " and (ii.status = 'Renew' or ii.status = 'Wait' or ii.status = 'Follow up') ";
     
+    // and ii.status = 'Renew'
+    // (ii.status = 'Renew' or ii.status = 'Wait' or ii.status = 'Follow up')
+
     // and (ii.status = 'New' OR ii.status = 'Renew')
 
     // print_r($tsql);
@@ -493,8 +494,8 @@ function get_not_renew_monthly ($conn, $data, $month, $year) {
     . " where ii.id IS NOT NULL "
         . "and Month(start_date) = '".$month. "' "
             . "and Year(start_date) = '".$year. "' "
-                . "and ii.status = 'Not Renew' "
-                    ;
+                . "and ii.status = 'Not renew' " ;
+
                     if (isset($data) && count($data) > 0) {
                         if (isset($data['date_from']) && $data['date_from'] != '') {
                             //$where = ($where != '') ? 'and' : 'where';
@@ -564,7 +565,7 @@ function get_subagent_monthly ($conn, $data, $month, $year) {
     . " where ii.id IS NOT NULL "
         . "and Month(start_date) = '".$month. "' "
             . "and Year(start_date) = '".$year. "' "
-                // . "and ii.status = 'Not Renew' "
+                // . "and ii.status = 'Not renew' "
                     . "and a.agent_type ='Sub-agent' "
                     ;
                     if (isset($data) && count($data) > 0) {

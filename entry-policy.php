@@ -47,7 +47,7 @@
 
           INNER JOIN (
     SELECT 
-        policy_primary, MAX(cdate) AS max_cdate
+        policy_primary, MAX(insurance_info.cdate) AS max_cdate
     FROM 
         insurance_info
     GROUP BY 

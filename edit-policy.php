@@ -348,22 +348,23 @@ if(count($_POST["policy"])>0){
 
 
 	if($_GET['id']){
-		$results = get_rela_insurance($dbh,$_GET['id']);
+		// $results = get_rela_insurance($dbh,$_GET['id']);
 		
-		if(count($results)==0){
+		// foreach($results as $value){
+		// 	$id_policy = $value->id_default_insurance;
+		// 	$id_default_contact = $value->id_default_contact;
+		// }
+		// if($id_policy==""){
+		// 	// header("Location: entry-policy.php");
+		// }
+
+		// $results_insurance = get_insurance($dbh,$id_policy);
+
+		$results_insurance = get_insurance($dbh,$_GET['id']);
+		if(count($results_insurance)==0){
 			$dbh = null;
 			header("Location: entry-policy.php"); 
 		}
-		
-		foreach($results as $value){
-			$id_policy = $value->id_default_insurance;
-			$id_default_contact = $value->id_default_contact;
-		}
-		if($id_policy==""){
-			// header("Location: entry-policy.php");
-		}
-
-		$results_insurance = get_insurance($dbh,$id_policy);
 		$start = "true";
 	}
 
