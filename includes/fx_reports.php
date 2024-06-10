@@ -491,9 +491,10 @@ function get_not_renew_monthly ($conn, $data, $month, $year) {
 
                                             // . "left join rela_partner_to_product rpp on (rpp.id_product = p.id and rpp.id_product = ii.product_id) "
     //. "right join insurance_partner ip on (ip.id = rpp.id_partner and ip.id = ii.insurance_company_id) "
+       // start_date   end_date                          
     . " where ii.id IS NOT NULL "
-        . "and Month(start_date) = '".$month. "' "
-            . "and Year(start_date) = '".$year. "' "
+        . "and Month(end_date) = '".$month. "' "
+            . "and Year(end_date) = '".$year. "' "
                 . "and ii.status = 'Not renew' " ;
 
                     if (isset($data) && count($data) > 0) {
