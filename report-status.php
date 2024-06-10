@@ -279,7 +279,6 @@ if(strlen($_SESSION['alogin'])==""){
     Export
   </button>
 
-
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -289,17 +288,16 @@ if(strlen($_SESSION['alogin'])==""){
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.24/jspdf.plugin.autotable.min.js"></script>
 
-
 <!-- <button id="export-excel" class="btn btn-primary my-3">Excel</button>
 <button id="export-csv" class="btn btn-primary my-3">CSV</button>
 <button id="export-pdf" class="btn btn-primary my-3">PDF</button>
 <button id="export-print" class="btn btn-primary my-3">Print</button> -->
 
   <div class="dropdown-menu col-xs-1 my-3" style="width: 50px !important;"  aria-labelledby="dropdownMenuButton" >
-    <a href="#" class="dropdown-item export-csv" id="btnCsv" style="font-size: 15px;" >CSV</a>
-    <a href="#" class="dropdown-item export-excel" id="btnExcel" style="font-size: 15px;" >Excel</a>
-    <a href="#" class="dropdown-item export-pdf" id="btnPdf" style="font-size: 15px;" >PDF</a>
-    <a href="#" class="dropdown-item export-print" id="btnPrint" style="font-size: 15px;" >Print</a>
+    <a href="#" class="dropdown-item export-csv" id="btnCsv" style="width: 50px !important;"  style="font-size: 15px;" >CSV</a>
+    <a href="#" class="dropdown-item export-excel" id="btnExcel" style="width: 50px !important;"  style="font-size: 15px;" >Excel</a>
+    <!-- <a href="#" class="dropdown-item export-pdf" id="btnPdf" style="font-size: 15px;" >PDF</a> -->
+    <!-- <a href="#" class="dropdown-item export-print" id="btnPrint" style="font-size: 15px;" >Print</a> -->
   </div>&nbsp;&nbsp;&nbsp;
 
 </div>
@@ -318,83 +316,105 @@ if(strlen($_SESSION['alogin'])==""){
             exportInstance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
         });
 
-        // document.getElementById('btnExcel').addEventListener('click', function() {
-        //     let table = document.getElementById('example');
-        //     let exportInstance = new TableExport(table, {
-        //         formats: ['xlsx'],
-        //         exportButtons: false
-        //     });
-        //     let exportData = exportInstance.getExportData()['example']['xlsx'];
-        //     exportInstance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
-        // });
-
-        // document.getElementById('btnExcel').addEventListener('click', function() {
-        //     // Create a new workbook
-        //     let wb = XLSX.utils.book_new();
-
-        //     // Convert the table to a worksheet
-        //     let ws = XLSX.utils.table_to_sheet(document.getElementById('example'));
-
-        //     // Define the cell style for right alignment and number format
-        //     const numberStyle = {
-        //         alignment: {
-        //             horizontal: "right"
-        //         },
-        //         numFmt: "0.00" // Format for two decimal places
-        //     };
-
-        //     // Iterate through all cells to set the style
-        //     for (const cell in ws) {
-        //         if (ws.hasOwnProperty(cell) && cell[0] !== '!') {
-        //             if (typeof ws[cell].v === 'number') {
-        //                 ws[cell].t = 'n'; // Set type to number
-        //                 ws[cell].s = numberStyle; // Apply number format and alignment
-        //             }
-        //         }
-        //     }
-
-        //     // Add the worksheet to the workbook
-        //     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
-        //     // Save the workbook as an Excel file
-        //     XLSX.writeFile(wb, 'example.xlsx');
-        // });
+// document.getElementById('btnExcel').addEventListener('click', function() {
+//     // Create a new workbook
+//     let wb = XLSX.utils.book_new();
+ 
+//     // Convert the table to a worksheet
+//     let ws = XLSX.utils.table_to_sheet(document.getElementById('example'));
+ 
+//     // Define the cell style for right alignment and number format
+//     const numberStyle = {
+//         alignment: {
+//             horizontal: "right"
+//         }
+//     };
+ 
+//     // Iterate through all cells to set the type and style
+//     for (const cell in ws) {
+//         if (ws.hasOwnProperty(cell) && cell[0] !== '!') {
+//             if (typeof ws[cell].v === 'number') {
+//                 ws[cell].t = 'n'; // Set type to number
+//                 if (ws[cell].v % 1 !== 0) {
+//                     // Check if the number has decimals
+//                     ws[cell].z = "0,000,000.00"; // Apply number format if it has decimals
+//                 }
+//             }
+//         }
+//     }
+ 
+//     // Add the worksheet to the workbook
+//     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+ 
+//     // Save the workbook as an Excel file
+//     XLSX.writeFile(wb, 'example.xlsx');
+// });
 
 
 document.getElementById('btnExcel').addEventListener('click', function() {
     // Create a new workbook
     let wb = XLSX.utils.book_new();
-
+ 
     // Convert the table to a worksheet
     let ws = XLSX.utils.table_to_sheet(document.getElementById('example'));
-
+ 
     // Define the cell style for right alignment and number format
     const numberStyle = {
         alignment: {
             horizontal: "right"
         },
-        numFmt: "0,000.00" // Format for comma-separated thousands and two decimal places
+        numFmt: "#,###,##0.00" // Format for comma-separated thousands and two decimal places
     };
 
-    // Iterate through all cells to set the type and style
+    var check_type = "0";
     for (const cell in ws) {
         if (ws.hasOwnProperty(cell) && cell[0] !== '!') {
-            if (typeof ws[cell].v === 'number') {
-                ws[cell].t = 'n'; // Set type to number
-                ws[cell].s = numberStyle; // Apply number format and alignment
+
+            if(ws[cell].v === "Amt. Premium"){
+                check_type ="1";
             }
+
+            if(ws[cell].v === "Amt. Policy"){
+                check_type ="0";
+            }
+
+            if(check_type == "1"){
+                if (typeof ws[cell].v === 'number') {
+                    // if (ws[cell].v % 1 !== 0) {
+                        ws[cell].t = 'n'; // Set type to number
+                        ws[cell].z = numberStyle.numFmt; // Apply number format
+                    // }
+                }
+            }
+
         }
     }
 
+    //  for (const row in ws) {
+    //     if (ws.hasOwnProperty(row) && row[0] !== '!') {
+    //         const rowData = ws[row];
+    //         // Check if the first cell in the row is "Amt. Premium"
+    //         if (rowData && rowData.length > 0 && rowData[0] && rowData[0].v === 'Amt. Premium') {
+                
+    //             for (let i = 1; i < rowData.length; i++) {
+    //                 const cell = rowData[i];
+    //                 ws[cell].t = 'n';
+    //                 ws[cell].z = numberStyle.numFmt;
+    //                 // if (!isNaN(parseFloat(cell.v)) && cell.v.toString().indexOf('.') !== -1) {
+    //                 //     cell.t = 'n'; // Set type to number
+    //                 //     cell.z = numberStyle.numFmt; // Apply number format
+    //                 // }
+    //             }
+    //         }
+    //     }
+    // }
+ 
     // Add the worksheet to the workbook
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
+ 
     // Save the workbook as an Excel file
     XLSX.writeFile(wb, 'example.xlsx');
 });
-
-
-
 
 
         document.getElementById('btnPdf').addEventListener('click', function() {
@@ -733,11 +753,18 @@ document.getElementById('btnExcel').addEventListener('click', function() {
         }
     </style>
 
-    <script>
-        $(document).ready(function(){
+<script>
+$(document).ready(function(){
 
     var table = $('#example').DataTable({
         lengthMenu: [[100, -1], [100, "All"]],
+        scrollY: 800, // ตั้งค่าความสูงที่คุณต้องการให้แถวแรก freeze
+        scrollX: true,
+        scrollCollapse: true,
+        paging: true,
+        fixedColumns: {
+            leftColumns: 2 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+        },
         "bPaginate": false,
         "bLengthChange": false,
         "bFilter": true,
@@ -756,30 +783,11 @@ document.getElementById('btnExcel').addEventListener('click', function() {
         scrollX: true,
         "scrollCollapse": true,
         "paging":         true,
+        
         buttons: [
             { extend: 'csv',class: 'buttons-csv',className: 'btn-primary',charset: 'UTF-8',filename: 'Report Monthly Sales',footer: true,bom: true
             ,init : function(api,node,config){ $(node).hide();} },
             { extend: 'excel',class: 'buttons-excel', className: 'btn-primary',charset: 'UTF-8',filename: 'Report Monthly Sales',footer: true,bom: true
-                // ,exportOptions: {
-                    
-                //     columns: ':visible',
-                //     format: {
-                //         header: function(data, columnIdx) {
-                //             if (columnIdx === 0) return '#';
-                //             if (columnIdx === 1) return 'Month';
-                //             if (columnIdx === 2) return 'Description';
-                //             if (columnIdx >= 3 && columnIdx <= 4) return 'New';
-                //             if (columnIdx >= 5 && columnIdx <= 6) return 'ต่ออายุ';
-                //             if (columnIdx >= 7 && columnIdx <= 8) return 'ติดตาม';
-                //             if (columnIdx >= 9 && columnIdx <= 10) return 'รอ';
-                //             if (columnIdx >= 11 && columnIdx <= 13) return 'ยอดขายรวม';
-                //             if (columnIdx >= 14 && columnIdx <= 16) return 'สะสม';
-                //             if (columnIdx >= 17 && columnIdx <= 19) return 'ไม่ต่ออายุ';
-                //             return data;
-                //         }
-                //     }
-                // }
-
             ,init : function(api,node,config){ $(node).hide();} },
             { extend: 'pdf',class: 'buttons-pdf',className: 'btn-primary',charset: 'UTF-8',filename: 'Report Monthly Sales',footer: true,bom: true 
             ,init : function(api,node,config){ $(node).hide();},
@@ -801,16 +809,12 @@ document.getElementById('btnExcel').addEventListener('click', function() {
                     }
                 });
             }           },
-            { 
-                extend: 'print',
-                class: 'buttons-print',
-                className: 'btn-primary',
-                charset: 'UTF-8',
-                footer: true,bom: true 
-                ,init : function(api,node,config){ $(node).hide();} 
-            }
+            { extend: 'print',class: 'buttons-print',className: 'btn-primary',charset: 'UTF-8',footer: true,bom: true 
+            ,init : function(api,node,config){ $(node).hide();} }
             ]
     });
+
+       
 
     // $('#btnCsv').on('click',function(){
     //     table.button('.buttons-csv').trigger();
@@ -833,7 +837,7 @@ document.getElementById('btnExcel').addEventListener('click', function() {
     .appendTo('#example_wrapper .col-md-6:eq(0)');
 
     });    
-    </script>
+</script>
 
     <?php include('includes/footer.php'); ?>
 </body>
