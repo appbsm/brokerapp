@@ -68,7 +68,6 @@
 	
 		
 	
-	
 	@media (max-width: 768px) {
 		.chart-bar {
 			height: 100%;
@@ -115,9 +114,10 @@
 		}
 		.chart-pie {
 			position: relative;
-			height: auto !important;
+			/*height: auto !important;*/
 			width: 100% !important;
 		}
+		
 	}
 	
 	.chart-notes {
@@ -233,24 +233,53 @@
 						<!-- Total Policy MONTHLY(New, Follow Up, Renew )-->
 						<?php
 
-							try {
-								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
-								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
-
+							// try {
+							// 	$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+							// 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							// } catch (PDOException $e) {
+							// 	echo "Error: " . $e->getMessage();
+							// 	die();
+							// }
+							
+							
+							/*$sql = "SELECT COUNT(*) AS num_policies, 
+								   SUM(premium_rate) AS total_premium
+									FROM [brokerapp].[dbo].[insurance_info]
+									WHERE (status IN ('New', 'Follow Up', 'Renew') AND 
+										   MONTH(start_date) = MONTH(GETDATE()) AND YEAR(start_date) = YEAR(GETDATE()))
+									   OR (status IN ('Wait', 'Not Renew') AND 
+										   MONTH(end_date) = MONTH(GETDATE()) AND YEAR(end_date) = YEAR(GETDATE()))";
+							*/
 							$sql = "SELECT COUNT(*) AS num_policies, SUM(premium_rate) AS total_premium
-								FROM [brokerapp].[dbo].[insurance_info]
+								FROM insurance_info
 								WHERE status IN ('New', 'Follow Up', 'Renew', 'Wait', 'Not Renew')
 								AND MONTH(start_date) = MONTH(GETDATE()) AND YEAR(start_date) = YEAR(GETDATE())";
+							/*
+							$sql_year = "SELECT YEAR(CASE 
+										   WHEN status IN ('Wait', 'Not Renew') THEN end_date 
+										   ELSE start_date 
+									   END) AS policy_year, 
+								   COUNT(*) AS num_policies_year, 
+								   SUM(premium_rate) AS total_premium_year
+							FROM [brokerapp].[dbo].[insurance_info]
+							WHERE status IN ('New', 'Follow Up', 'Renew', 'Wait', 'Not Renew')
+							  AND YEAR(CASE 
+										  WHEN status IN ('Wait', 'Not Renew') THEN end_date 
+										  ELSE start_date 
+									  END) = YEAR(GETDATE())
+							GROUP BY YEAR(CASE 
+											 WHEN status IN ('Wait', 'Not Renew') THEN end_date 
+											 ELSE start_date 
+										 END)";
+							*/
 							$sql_year = "SELECT YEAR(start_date) AS policy_year, 
-									   COUNT(*) AS num_policies_year, 
-									   SUM(premium_rate) AS total_premium_year
-								FROM [brokerapp].[dbo].[insurance_info]
+								COUNT(*) AS num_policies_year, 
+								SUM(premium_rate) AS total_premium_year
+								FROM insurance_info
 								WHERE status IN ('New', 'Follow Up', 'Renew', 'Wait', 'Not Renew')
+								AND YEAR(start_date) = YEAR(GETDATE())
 								GROUP BY YEAR(start_date)";
+							
 							$stmt = $dbh->prepare($sql);
 							$stmt->execute();
 							$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -309,24 +338,24 @@
 						<!-- Total Policy collected('New', 'Follow Up', 'Renew', 'Wait', 'Not Renew' )-->
 						<?php
 
-							try {
-								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
-								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
+							// try {
+							// 	$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+							// 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							// } catch (PDOException $e) {
+							// 	echo "Error: " . $e->getMessage();
+							// 	die();
+							// }
 
 							$sql = "SELECT COUNT(*) AS num_policies, 
 									SUM(premium_rate) AS total_collected 
-									FROM [brokerapp].[dbo].[insurance_info] 
+									FROM insurance_info
 									WHERE status IN ('New', 'Follow Up', 'Renew', 'Wait', 'Not Renew') 
 									AND MONTH(paid_date) = MONTH(GETDATE()) 
 									AND YEAR(paid_date) = YEAR(GETDATE())";
 									
 							$sql_year = "SELECT COUNT(*) AS num_policies_year, 
 									   SUM(premium_rate) AS total_collected_year 
-								FROM [brokerapp].[dbo].[insurance_info] 
+								FROM insurance_info
 								WHERE status IN ('New', 'Follow Up', 'Renew', 'Wait', 'Not Renew')
 								AND YEAR(paid_date) = YEAR(GETDATE())";
 
@@ -390,20 +419,20 @@
 						<!-- ToTal Policy status=New -->
 						<?php
 
-							try {
-								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
-								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
+							// try {
+							// 	$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+							// 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							// } catch (PDOException $e) {
+							// 	echo "Error: " . $e->getMessage();
+							// 	die();
+							// }
 
 							try {
 								$sql = "SELECT COUNT(*) AS num_policies, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
-									FROM [brokerapp].[dbo].[insurance_info]
+									FROM insurance_info
 									WHERE status = 'New' AND MONTH(start_date) = MONTH(GETDATE()) AND YEAR(start_date) = YEAR(GETDATE())";
 								$sql_year = "SELECT COUNT(*) AS num_policies_year, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium_year
-									FROM [brokerapp].[dbo].[insurance_info]
+									FROM insurance_info
 									WHERE status = 'New'
 									AND YEAR(start_date) = YEAR(GETDATE())";
 								$stmt = $dbh->prepare($sql);
@@ -472,20 +501,20 @@
 						<!-- ToTal Policy status=Renew -->
 						<?php
 
-							try {
-								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
-								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
+							// try {
+							// 	$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+							// 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							// } catch (PDOException $e) {
+							// 	echo "Error: " . $e->getMessage();
+							// 	die();
+							// }
 
 							try {
 								$sql = "SELECT COUNT(*) AS num_policies, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
-										FROM [brokerapp].[dbo].[insurance_info]
+										FROM insurance_info
 										WHERE status = 'Renew' AND MONTH(start_date) = MONTH(GETDATE()) AND YEAR(start_date) = YEAR(GETDATE())";
 								$sql_year = "SELECT COUNT(*) AS num_policies_year, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium_year
-										FROM [brokerapp].[dbo].[insurance_info]
+										FROM insurance_info
 										WHERE status = 'Renew' 
 										AND YEAR(start_date) = YEAR(GETDATE())";
 								$stmt = $dbh->prepare($sql);
@@ -624,13 +653,13 @@
 						<!-- ToTal Policy status=Follow Up -->
 						<?php
 
-							try {
-								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
-								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
+							// try {
+							// 	$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+							// 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							// } catch (PDOException $e) {
+							// 	echo "Error: " . $e->getMessage();
+							// 	die();
+							// }
 
 							try {
 								/*$sql = "SELECT 
@@ -647,14 +676,14 @@
 								$sql = "SELECT 
 										COUNT(*) AS num_policies, 
 										FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
-									FROM [brokerapp].[dbo].[insurance_info]
+									FROM insurance_info
 									WHERE status = 'Follow Up' 
 									AND MONTH(start_date) = MONTH(GETDATE()) 
 									AND YEAR(start_date) = YEAR(GETDATE())";
 								$sql_year = "SELECT 
 									COUNT(*) AS num_policies_year, 
 									FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium_year
-								FROM [brokerapp].[dbo].[insurance_info]
+								FROM insurance_info
 								WHERE status = 'Follow Up' 
 								AND YEAR(start_date) = YEAR(GETDATE())";
 								
@@ -725,22 +754,22 @@
 						<!-- ToTal Policy status=Wait -->
 						<?php
 
-							try {
-								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
-								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
+							// try {
+							// 	$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+							// 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							// } catch (PDOException $e) {
+							// 	echo "Error: " . $e->getMessage();
+							// 	die();
+							// }
 
 							try {
 								$sql = "SELECT COUNT(*) AS num_policies, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
-									FROM [brokerapp].[dbo].[insurance_info]
+									FROM insurance_info
 									WHERE status = 'Wait' AND MONTH(end_date) = MONTH(GETDATE()) AND YEAR(end_date) = YEAR(GETDATE())";
 								$sql_year = "SELECT 
 										COUNT(*) AS num_policies_year, 
 										FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium_year
-									FROM [brokerapp].[dbo].[insurance_info]
+									FROM insurance_info
 									WHERE status = 'Wait' 
 									AND YEAR(end_date) = YEAR(GETDATE())";
 									
@@ -811,20 +840,20 @@
 						<!-- ToTal Policy status=Not Renew -->
 						<?php
 
-							try {
-								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
-								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
+							// try {
+							// 	$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+							// 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							// } catch (PDOException $e) {
+							// 	echo "Error: " . $e->getMessage();
+							// 	die();
+							// }
 
 							try {
 								$sql = "SELECT COUNT(*) AS num_policies, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium
-										FROM [brokerapp].[dbo].[insurance_info]
+										FROM insurance_info
 										WHERE status = 'Not Renew' AND MONTH(end_date) = MONTH(GETDATE()) AND YEAR(end_date) = YEAR(GETDATE())";
 								$sql_year = "SELECT COUNT(*) AS num_policies_year, FORMAT(SUM(premium_rate), N'฿#,##0') AS total_premium_year
-										FROM [brokerapp].[dbo].[insurance_info]
+										FROM insurance_info
 										WHERE status = 'Not Renew' 
 										AND YEAR(end_date) = YEAR(GETDATE())";
 										
@@ -938,13 +967,13 @@
 							);
 
 
-							try {
-								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
-								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
+							// try {
+							// 	$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+							// 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							// } catch (PDOException $e) {
+							// 	echo "Error: " . $e->getMessage();
+							// 	die();
+							// }
 
 							try {
 								/*$sql = "SELECT MONTH(paid_date) AS month, YEAR(paid_date) AS year, SUM(premium_rate) AS total_sales
@@ -954,7 +983,7 @@
 										ORDER BY YEAR(paid_date), MONTH(paid_date)";*/
 										
 								$sql = "SELECT MONTH(start_date) AS month, YEAR(start_date) AS year, SUM(premium_rate) AS total_sales
-									FROM [brokerapp].[dbo].[insurance_info]
+									FROM insurance_info
 									WHERE status IN ('New', 'Follow Up', 'Renew' ,'Wait' ,'Not Renew') 
 									AND YEAR(start_date) IN (YEAR(GETDATE()), YEAR(GETDATE()) - 1)
 									GROUP BY MONTH(start_date), YEAR(start_date)
@@ -1065,13 +1094,13 @@
 						<!-- Donut Chart Product Categories-->
 						<?php
 
-							try {
-								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
-								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
+							// try {
+							// 	$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+							// 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							// } catch (PDOException $e) {
+							// 	echo "Error: " . $e->getMessage();
+							// 	die();
+							// }
 
 							$sql_count = "SELECT 
 											pc.categorie AS category,
@@ -1210,13 +1239,13 @@
 						<!-- Pie Chart Product Sub Categories-->
 						<?php
 
-							try {
-								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
-								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
+							// try {
+							// 	$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+							// 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							// } catch (PDOException $e) {
+							// 	echo "Error: " . $e->getMessage();
+							// 	die();
+							// }
 
 							/*$sql = "SELECT p.subcategorie, COUNT(*) AS count 
 							FROM [brokerapp].[dbo].[product_subcategories] p
@@ -1224,8 +1253,8 @@
 							WHERE YEAR(i.paid_date) = YEAR(GETDATE()) 
 							GROUP BY p.subcategorie";*/
 							$sql = "SELECT p.subcategorie, COUNT(*) AS count, SUM(i.premium_rate) AS total_amount
-								FROM [brokerapp].[dbo].[product_subcategories] p
-								INNER JOIN [brokerapp].[dbo].[insurance_info] i ON p.id = i.sub_categories
+								FROM product_subcategories p
+								INNER JOIN insurance_info i ON p.id = i.sub_categories
 								WHERE YEAR(i.paid_date) = YEAR(GETDATE()) 
 								GROUP BY p.subcategorie
 							";
@@ -1333,13 +1362,13 @@
 						<!-- Sales by Customer Top 10 -->
 						<?php
 
-							try {
-								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
-								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
+							// try {
+							// 	$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+							// 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							// } catch (PDOException $e) {
+							// 	echo "Error: " . $e->getMessage();
+							// 	die();
+							// }
 
 							/*$sql = "SELECT 
 										CASE 
@@ -1451,6 +1480,113 @@
 							$current_year = date('Y');
 						?>
 
+						<!-- scale x substring label.lenght >20 -->
+						<!--
+						<script src="js/chart.min.js"></script>
+							<div class="col-xl-12 col-lg-12">
+								<div class="card shadow mb-4">
+									<a href="report-customer-sales-total.php" style="text-decoration: none; color: inherit;">
+										<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+											<h6 class="m-0 font-weight-bold text-primary">Sales by Customers (<?php echo date('Y'); ?>)</h6>
+										</div>
+									</a>
+									<div class="card-body">
+										<div class="chart-bar">
+											<canvas id="myStackedBarChart" class="style-StackedBar" style="width: 100%; height: 300px;"></canvas>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<script>
+								var labels = <?php echo json_encode($labels); ?>;
+								var data = <?php echo json_encode($data); ?>;
+								var products = <?php echo json_encode($products); ?>;
+								
+								// ตัดข้อความสำหรับแสดง
+								var truncatedLabels = labels.map(function(label) {
+									return label.length > 20 ? label.substring(0, 20) + '...' : label;
+								});
+
+								var ctx = document.getElementById('myStackedBarChart').getContext('2d');
+								var myStackedBarChart = new Chart(ctx, {
+									type: 'bar',
+									data: {
+										labels: truncatedLabels,
+										datasets: [
+											<?php foreach ($products as $index => $product): ?>
+											{
+												label: '<?php echo $product; ?>',
+												data: data.map(row => row[<?php echo $index; ?>]),
+												backgroundColor: <?php
+													switch ($product) {
+														case 'Life':
+															echo "'#ffb0c1'";
+															break;
+														case 'Non Life':
+															echo "'#9ad0f5'";
+															break;
+														default:
+															echo "'#bd9af5'";
+													}
+												?>,
+												borderColor: <?php
+													switch ($product) {
+														case 'Life':
+															echo "'rgba(255, 99, 132, 1)'";
+															break;
+														case 'Non Life':
+															echo "'rgba(54, 162, 235, 1)'";
+															break;
+														default:
+															echo "'rgba(138, 43, 226, 1)'";
+													}
+												?>,
+												borderWidth: 1
+											},
+											<?php endforeach; ?>
+										]
+									},
+									options: {
+										indexAxis: 'y',
+										plugins: {
+											title: {
+												display: true,
+												text: 'Sales by Customers Top 10'
+											},
+											tooltip: {
+												callbacks: {
+													title: function(tooltipItems) {
+														var idx = tooltipItems[0].dataIndex;
+														return labels[idx];  // แสดงข้อความเต็มใน tooltip
+													}
+												}
+											}
+										},
+										scales: {
+											x: {
+												stacked: true,
+												ticks: {
+													beginAtZero: true
+												}
+											},
+											y: {
+												stacked: true,
+												ticks: {
+													beginAtZero: true
+												}
+											}
+										},
+										responsive: true,
+										legend: {
+											display: true
+										}
+									}
+								});
+							</script>
+						-->
+						<!-- scale x substring label.lenght >20 -->
+						
 						<script src="js/chart.min.js"></script>
 						<div class="col-xl-12 col-lg-12">
 							<div class="card shadow mb-4">
@@ -1473,6 +1609,7 @@
 							var data = <?php echo json_encode($data); ?>;
 							var products = <?php echo json_encode($products); ?>;
 							var ctx = document.getElementById('myStackedBarChart').getContext('2d');
+							
 							var myStackedBarChart = new Chart(ctx, {
 								type: 'bar',
 								data: {
@@ -1559,13 +1696,13 @@
 						<!-- Sales by Partners Top 10 -->
 						<?php
 
-							try {
-								$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
-								$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-							} catch (PDOException $e) {
-								echo "Error: " . $e->getMessage();
-								die();
-							}
+							// try {
+							// 	$dbh = new PDO("sqlsrv:Server=".DB_HOST.";Database=".DB_NAME, DB_USER, DB_PASS);
+							// 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+							// } catch (PDOException $e) {
+							// 	echo "Error: " . $e->getMessage();
+							// 	die();
+							// }
 
 							/*$sql = "SELECT TOP 10 ip.insurance_company AS partner_name,
 											psup.subcategorie AS product,

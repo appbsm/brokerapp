@@ -1,9 +1,7 @@
 <?php
 include('includes/config_company.php');
 
-$sql = "SELECT top(1) cl.company_name FROM user_info us
-left join company_list cl ON cl.id = us.id_company
-WHERE company_code = '{$_GET['code_company']}'";
+$sql = "SELECT top(1) cl.company_name FROM company_list cl WHERE company_code = '{$_GET['code_company']}'";
 
 $query = $dbh->prepare($sql);
 $query->execute();
