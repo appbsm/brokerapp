@@ -924,11 +924,11 @@ function validateForm() {
                     <!-- hidden="true"  -->
                 <input hidden="true" id="id_insurance_info<? echo $int_insu; ?>" name="id_insurance_info[]" value="<?php echo $i['id'];?>" style="color: #000;border-color:#102958;" type="text" class="form-control" id="success" >
                 </input>
-                    <input id="policy_no" name="policy_no[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $i['policy_no'];?>">
+                    <input id="policy_no" name="policy_no[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $i['policy_no'];?>" disabled="true">
                 </div>
                  <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Period:</label>
                 <div class="col-4">
-                    <select name="period[]" id="period" style="color: #000;border-color:#102958;" class="form-control" value="" >
+                    <select name="period[]" id="period" style="color: #000;border-color:#102958;" class="form-control" value="" disabled="true">
                      <?php foreach ($period_list as $pc) { ?>
                         <option value="<?php echo $pc['id'];?>"
                             <?php if ($pc['id']==$i['period']) { echo 'selected="selected"'; } ?>
@@ -1015,7 +1015,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Partner Company:</label>
                 <div class="col">
-                <select name="insurance_company[]" id="insurance_company<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" value="<?php echo $i['insurance_company'];?>">
+                <select name="insurance_company[]" id="insurance_company<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" value="<?php echo $i['insurance_company'];?>" disabled="true">
                     <option value="">Select Partner</option>
                     <?php foreach ($insurance_company as $insurance) {?>
                     <option value="<?php echo $insurance['id'];?>" <?php echo ($insurance['id'] == $i['insurance_company_id'] ) ? 'selected' : '';?>><?php echo $insurance['insurance_company'];?></option>
@@ -1029,7 +1029,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Product Name:</label>
                 <div class="col">
-                    <select name="product_name[]" id="product_name<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control"   >
+                    <select name="product_name[]" id="product_name<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" disabled="true" >
                     <option value="">Select Product</option>
                       <?php  foreach($product_list as $result){ ?>
                         <option value="<?php echo $result['id']; ?>" 
@@ -1109,25 +1109,25 @@ function validateForm() {
                $s_date = '';
                $e_date = '';              
                 ?>
-                    <input id="start_date<?php echo $int_insu; ?>" name="start_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control"  value="<?php echo $i['start_date_f']; ?>" placeholder="dd-mm-yyyy">
+                    <input id="start_date<?php echo $int_insu; ?>" name="start_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control" value="<?php echo $i['start_date_f']; ?>" placeholder="dd-mm-yyyy" disabled="true">
                
                 </div>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">End date:</label>
                 <div class="col-4">
-                    <input id="end_date<?php echo $int_insu; ?>" name="end_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control"  value="<?php echo $i['end_date_f']; ?>" placeholder="dd-mm-yyyy">
+                    <input id="end_date<?php echo $int_insu; ?>" name="end_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control"  value="<?php echo $i['end_date_f']; ?>" placeholder="dd-mm-yyyy" disabled="true">
                 </div>
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Premium Rate:</label>
                 <div class="col-4">
-                    <input id="premium_rate" name="premium_rate[]" step="0.01" min="0" style="color: #000;border-color:#102958;" type="number" class="form-control"  value="<?php echo $i['premium_rate']?>">
+                    <input id="premium_rate" name="premium_rate[]" step="0.01" min="0" style="color: #000;border-color:#102958;" type="number" class="form-control"  value="<?php echo $i['premium_rate']?>" disabled="true">
                
                 </div>
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Status:</label>
                 <div class="col-4">
-                <select id="insurance_status" name="insurance_status[]" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" >
+                <select id="insurance_status" name="insurance_status[]" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" disabled="true">
                     <option value="New" <?php echo ($i['status'] == 'New') ? 'selected' : ''; ?>>New</option>
                     <option value="Follow up" <?php echo ($i['status'] == 'Follow up') ? 'selected' : ''; ?>>Follow up</option>
                     <option value="Renew" <?php echo ($i['status'] == 'Renew') ? 'selected' : ''; ?>>Renew</option>
@@ -1139,9 +1139,8 @@ function validateForm() {
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Agent Name:</label>
-                
 				<div class="col-4">
-					<select id="agent_name<?php echo $int_insu; ?>" name="agent_name[]" style="color: #000;border-color:#102958;"class="form-control selectpicker" data-live-search="true" value="" >
+					<select id="agent_name<?php echo $int_insu; ?>" name="agent_name[]" style="color: #000;border-color:#102958;"class="form-control " data-live-search="true" value="" disabled="true">
 					   <option value="">Select Agent</option>
 						<?php foreach ($agents  as $a) { ?>
 							<option value="<?php echo $a['id']?>" <?php echo ($i['agent_id'] == $a['id']) ? 'selected' :' ';?>><?php echo $a['first_name'].' '.$a['last_name'];?></option> -->
@@ -1149,7 +1148,7 @@ function validateForm() {
 					</select>
 				</div>
 
-				<label style="color: #102958;" class="col-sm-2 col-form-label">Upload Documents :</label>                
+				<!-- <label style="color: #102958;" class="col-sm-2 col-form-label">Upload Documents :</label>                
 				<div class="col-4">
 					<input id="imgInp<?php echo $int_insu; ?>" name="file_d[]" type="file" style="width: 100%;" accept="application/pdf" >
 					<?php if(trim($i['file_name_uniqid'])!=""){ ?>
@@ -1160,7 +1159,7 @@ function validateForm() {
 					</div>
 					<?php } ?>
 				
-				</div>                     
+				</div> -->                     
             </div>
 
 
@@ -1245,13 +1244,13 @@ function validateForm() {
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Policy No:</label>
                 <div class="col-4">
                     <!-- hidden="true"  -->
-                <input hidden="true" id="id_insurance_info<? echo $int_insu; ?>" name="id_insurance_info[]" value="" style="color: #000;border-color:#102958;" type="text" class="form-control" id="success" >
+                <input hidden="true" id="id_insurance_info<? echo $int_insu; ?>" name="id_insurance_info[]" value="" style="color: #000;border-color:#102958;" type="text" class="form-control" id="success"  >
                 </input>
-                    <input id="policy_no" name="policy_no[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $i['policy_no'];?>">
+                    <input id="policy_no" name="policy_no[]" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control"  value="<?php echo $i['policy_no'];?>" disabled="true">
                 </div>
                  <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Period:</label>
                 <div class="col-2">
-                    <select name="period[]" id="period" style="color: #000;border-color:#102958;" class="form-control" value="" >
+                    <select name="period[]" id="period" style="color: #000;border-color:#102958;" class="form-control" value="" disabled="true">
                      <?php foreach ($period_list as $pc) { ?>
                         <option value="<?php echo $pc['id'];?>"
                             <?php if ($pc['id']==$i['period']) { echo 'selected="selected"'; } ?>
@@ -1335,7 +1334,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Partner Company:</label>
                 <div class="col">
-                <select name="insurance_company[]" id="insurance_company<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" value="<?php echo $i['insurance_company'];?>">
+                <select name="insurance_company[]" id="insurance_company<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" value="<?php echo $i['insurance_company'];?>" disabled="true">
                     <option value="">Select Partner</option>
                     <?php foreach ($insurance_company as $insurance) {?>
                     <option value="<?php echo $insurance['id'];?>" <?php echo ($insurance['id'] == $i['insurance_company_id'] ) ? 'selected' : '';?>><?php echo $insurance['insurance_company'];?></option>
@@ -1347,7 +1346,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Prod. Name:</label>
                 <div class="col">
-                    <select name="product_name[]" id="product_name<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control"   >
+                    <select name="product_name[]" id="product_name<?php echo $int_insu; ?>" style="color: #000;border-color:#102958;"class="form-control" disabled="true">
                     <option value="">Select Product</option>                    
                     </select>
                
@@ -1463,25 +1462,25 @@ function validateForm() {
                $s_date = '';
                $e_date = '';              
                 ?>
-                    <input id="start_date" name="start_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control"  value="<?php echo $i['start_date_f']; ?>" placeholder="dd-mm-yyyy">
+                    <input id="start_date" name="start_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control"  value="<?php echo $i['start_date_f']; ?>" placeholder="dd-mm-yyyy" disabled="true">
                
                 </div>
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">End date:</label>
                 <div class="col-2">
-                    <input id="end_date" name="end_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control"  value="<?php echo $i['end_date_f']; ?>" placeholder="dd-mm-yyyy">
+                    <input id="end_date" name="end_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control"  value="<?php echo $i['end_date_f']; ?>" placeholder="dd-mm-yyyy" disabled="true">
                 </div>
             </div>
 
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Premium Rate:</label>
                 <div class="col-2">
-                    <input id="premium_rate" name="premium_rate[]" step="0.01" min="0" style="color: #000;border-color:#102958;" type="number" class="form-control"  value="<?php echo $i['premium_rate']?>">
+                    <input id="premium_rate" name="premium_rate[]" step="0.01" min="0" style="color: #000;border-color:#102958;" type="number" class="form-control"  value="<?php echo $i['premium_rate']?>" disabled="true">
                
                 </div>
 
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Status:</label>
                 <div class="col-2">
-                <select id="insurance_status" name="insurance_status[]" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" >
+                <select id="insurance_status" name="insurance_status[]" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" disabled="true">
                     <option value="New" <?php echo ($i['status'] == 'New') ? 'selected' : ''; ?>>New</option>
                     <option value="Follow up" <?php echo ($i['status'] == 'Follow up') ? 'selected' : ''; ?>>Follow up</option>
                     <option value="Renew" <?php echo ($i['status'] == 'Renew') ? 'selected' : ''; ?>>Renew</option>
@@ -1495,7 +1494,7 @@ function validateForm() {
                 <label style="color: #102958;" for="staticEmail" class="col-sm-2 col-form-label">Agent Name:</label>
                 
             <div class="col-4">
-                <select id="agent_name<?php echo $int_insu; ?>" name="agent_name[]" style="color: #000;border-color:#102958;"class="form-control" value="" >
+                <select id="agent_name<?php echo $int_insu; ?>" name="agent_name[]" style="color: #000;border-color:#102958;"class="form-control" value="" disabled="true">
                    <option value="">Select Agent</option>
                         <?php //foreach ($agents  as $a) { ?>
                         <!-- <option value="<?php //echo $a['id']?>" <?php //echo ($i['agent_id'] == $a['id']) ? 'selected' :' ';?>><?php //echo $a['first_name'].' '.$a['last_name'];?></option> -->

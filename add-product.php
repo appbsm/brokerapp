@@ -31,36 +31,41 @@ if(isset($_POST['submit'])){
 	" RIGHT JOIN product_categories pc ON pc.id = pd.id_product_categories ".
 	" WHERE pc.id = '".$id_product_cat."' ".
 	" group BY pc.first_letters";
-
+	echo '<script>alert("sql: '.$sql.'")</script>'; 
 	// echo '<script>alert("sql product : '.$sql.'")</script>'; 
 	$query = $dbh->prepare($sql);
 	$query->execute();
 	$results=$query->fetchAll(PDO::FETCH_OBJ);
 
-	foreach($results as $result){
-		// $product_id = $result->id;
-		$number_product = 0;
-		$number = intval(substr($result->id, 3)) + 1;
+	// if(count($results)>0){
+		foreach($results as $result){
+			// $product_id = $result->id;
+			$number_product = 0;
+			$number = intval(substr($result->id, 3)) + 1;
 
-		if($result->id){
-			if (strlen(strval($number)) == 1) {
-			    $number_product = "0000" . strval($number);
-			} elseif (strlen(strval($number)) == 2) {
-			    $number_product = "000" . strval($number);
-			} elseif (strlen(strval($number)) == 3) {
-			    $number_product = "00" . strval($number);
-			} elseif (strlen(strval($number)) == 4) {
-			    $number_product = "0" . strval($number);
-			} elseif (strlen(strval($number)) == 5) {
-			    $number_product = strval($number);
+			if($result->id){
+				if (strlen(strval($number)) == 1) {
+				    $number_product = "0000" . strval($number);
+				} elseif (strlen(strval($number)) == 2) {
+				    $number_product = "000" . strval($number);
+				} elseif (strlen(strval($number)) == 3) {
+				    $number_product = "00" . strval($number);
+				} elseif (strlen(strval($number)) == 4) {
+				    $number_product = "0" . strval($number);
+				} elseif (strlen(strval($number)) == 5) {
+				    $number_product = strval($number);
+				}
+				$product_id = "P".$result->first_letters."-".$number_product;
+			}else{
+				$product_id = "P".$result->first_letters."-"."00001";
 			}
-			$product_id = "P".$result->first_letters."-".$number_product;
-		}else{
-			$product_id = "P".$result->first_letters."-"."00001";
 		}
-	}
+	// }else{
 
-	// echo '<script>alert("product_id: '.$product_id.'")</script>'; 
+	// 	$product_id = "P".$result->first_letters."-"."00001";
+	// }
+
+	echo '<script>alert("product_id: '.$product_id.'")</script>'; 
 
 	$sql="INSERT INTO  product(product_name,product_note,id_product_categories,id_product_sub,status,status_notrenew,cdate,create_by,product_id) VALUES(:product_name_p,:product_note_p,:id_product_categories_p,:id_product_sub_p,:status_p,:status_notrenew_p,GETDATE(),:create_by_p,:product_id_p)";
 

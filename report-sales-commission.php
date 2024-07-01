@@ -300,35 +300,40 @@ if(strlen($_SESSION['alogin'])==""){
                                     ?>
                                     
                                     <?php 
-                                    $sales  = get_commission_report($conn, $data, $agent['id_agent']);
+                                    // $sales  = get_commission_report($conn, $data, $agent['id_agent']);
+
                                    // echo $agent['id_agent'];
                                    // print_r($sales);
                                     if (count($sales) > 0) {
                                     foreach ($sales as $s) {
-                                        $s_date = $s['start_date'];
-                                        $start_date = $s_date->format('d-m-Y');
-                                        $e_date = $s['end_date'];
-                                        $end_date = $e_date->format('d-m-Y');
-                                        $p_date = $s['paid_date'];
-                                        $paid_date = $p_date->format('d-m-Y');
-                                         // echo $s['id_currency'];
-                                        $agent_currency = get_conversion($conn,$s['id_currency'], date('Y-m-d', strtotime($start_date)));
-                                        // echo count($agent_currency);
-                                        $acurrency = (count($agent_currency)) ? $agent_currency[0] : array();
-                                        //print_r($agent_currency);
-                                        
-                                        if($acurrency['currency'] !="฿THB" ){
-                                            if($acurrency['currency_value']<$acurrency['currency_value_convert']){
-                                                $converted_value = (isset($acurrency['currency_value_convert'])) ? floatval($s['premium_rate']) / floatval($acurrency['currency_value_convert']) : 0;
+                                        try {
+                                            $s_date = $s['start_date'];
+                                            $start_date = $s_date->format('d-m-Y');
+                                            $e_date = $s['end_date'];
+                                            $end_date = $e_date->format('d-m-Y');
+                                            $p_date = $s['paid_date'];
+                                            $paid_date = $p_date->format('d-m-Y');
+                                             // echo $s['id_currency'];
+
+                                            $agent_currency = get_conversion($conn,$s['id_currency'], date('Y-m-d', strtotime($start_date)));
+                                            // echo count($agent_currency);
+                                            $acurrency = (count($agent_currency)) ? $agent_currency[0] : array();
+                                            //print_r($agent_currency);
+                                            
+                                            if($acurrency['currency'] !="฿THB" ){
+                                                if($acurrency['currency_value']<$acurrency['currency_value_convert']){
+                                                    $converted_value = (isset($acurrency['currency_value_convert'])) ? floatval($s['premium_rate']) / floatval($acurrency['currency_value_convert']) : 0;
+                                                }else{
+                                                    $converted_value = (isset($acurrency['currency_value_convert'])) ? floatval($s['premium_rate']) * floatval($acurrency['currency_value_convert']) : 0;
+                                                }
                                             }else{
-                                                $converted_value = (isset($acurrency['currency_value_convert'])) ? floatval($s['premium_rate']) * floatval($acurrency['currency_value_convert']) : 0;
+                                                $converted_value = 0;
                                             }
-                                        }else{
-                                            $converted_value = 0;
+
+                                        } catch (Exception $e) {
+                                            
                                         }
 
-                                        //print_r($converted_value);
-                                        //$converted_value = floatval($acurrency['currency_value_convert']);
                                         ?>
                                         <tr>
                                     		<td class="text-center"><?php echo $ctr;?></td>

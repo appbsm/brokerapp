@@ -14,7 +14,7 @@
 
 	if(strlen($_SESSION['alogin'])=="") {
         sqlsrv_close($conn);
-		header('Location: logout.php');
+		header('Location: ../logout.php');
 	}
 
 	$provinces = get_provinces($conn);
@@ -736,11 +736,11 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1">
                 <label style="color: #102958;"  class="col-sm-2 label_left">Policy No:</label>
                 <div class="col-4">
-                    <input name="policy_no[]" id="policy_no" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" >
+                    <input name="policy_no[]" id="policy_no" minlength="1" maxlength="50" style="color: #000;border-color:#102958;" type="text"  class="form-control" disabled="true">
                 </div>
                 <label style="color: #102958;"  class="col-sm-2 label_right">Period:</label>
                 <div class="col-2">
-                    <select name="period[]" id="period" style="color: #000;border-color:#102958;" class="form-control" value="" >
+                    <select name="period[]" id="period" style="color: #000;border-color:#102958;" class="form-control" value="" disabled="true" >
 						<option value="">Select Period</option>
 						<?php foreach ($period_list as $pc) { ?>
 							<option value="<?php echo $pc['id'];?>"><?php echo $pc['period'];?></option>
@@ -780,7 +780,7 @@ function validateForm() {
                     <label style="color: #102958;" >Partner Company:</label>
                 </div>  
                 <div class="col">
-                    <select name="insurance_company[]" id="insurance_company" style="color: #000;border-color:#102958;"class="form-control" >
+                    <select name="insurance_company[]" id="insurance_company" style="color: #000;border-color:#102958;"class="form-control" disabled="true">
                     <option value="">Select Partner</option>
                     <?php foreach ($insurance_company as $insurance) {?>
                         <option value="<?php echo $insurance['id'];?>" ><?php echo $insurance['insurance_company'];?></option>
@@ -792,7 +792,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;"  class="col-sm-2 label_left">Prod. Name:</label>
                 <div class="col">
-                    <select name="product_name[]" id="product_name" style="color: #000;border-color:#102958;"class="form-control" >
+                    <select name="product_name[]" id="product_name" style="color: #000;border-color:#102958;"class="form-control" disabled="true" >
                     <option value="">Select Product</option>                    
                     </select>
                 </div>
@@ -814,12 +814,12 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;"  class="col-sm-2 label_left">Start date:</label>
                 <div class="col-2">
-                    <input id="start_date" name="start_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control" value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy">
+                    <input id="start_date" name="start_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text" class="form-control" value="<?php echo $start_date; ?>" placeholder="dd-mm-yyyy" disabled="true">
                
                 </div>
                 <label style="color: #102958;"  class="col-sm-2 label_left">End date:</label>
                 <div class="col-2">
-                    <input id="end_date" name="end_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control" value="<?php echo $stop_date; ?>" placeholder="dd-mm-yyyy">
+                    <input id="end_date" name="end_date[]" style="color: #000;border-color:#102958; text-align: center;" type="text"  class="form-control" value="<?php echo $stop_date; ?>" placeholder="dd-mm-yyyy" disabled="true">
                 </div>
             </div>
 
@@ -827,13 +827,13 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;"  class="col-sm-2 label_left">Premium Rate:</label>
                 <div class="col-2">
-                    <input id="premium_rate" name="premium_rate[]" step="0.01" min="0" style="color: #000;border-color:#102958;" type="number" class="form-control"  >
+                    <input id="premium_rate" name="premium_rate[]" step="0.01" min="0" style="color: #000;border-color:#102958;" type="number" class="form-control" disabled="true" >
                     
                 </div>
 
                 <label style="color: #102958;"  class="col-sm-2 label_left">Status:</label>
                 <div class="col-2">
-					<select id="insurance_status" name="insurance_status[]" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" >
+					<select id="insurance_status" name="insurance_status[]" onchange="ClickChange()" style="border-color:#102958; color: #000;" class="form-control" disabled="true" >
 						<option value="">Select Status</option>
 						<option value="New">New</option>
 						<option value="Follow up">Follow up</option>
@@ -847,7 +847,7 @@ function validateForm() {
             <div class="form-group row col-md-10 col-md-offset-1" >
                 <label style="color: #102958;"  class="col-sm-2 label_left">Agent Name:</label>
 				<div class="col-4">
-					<select id="agent_name" name="agent_name[]" style="color: #000;border-color:#102958;"class="form-control" value="" >
+					<select id="agent_name" name="agent_name[]" style="color: #000;border-color:#102958;"class="form-control" value="" disabled="true" >
 						<option value="">Select Agent</option>
 						<?php //foreach ($agents  as $a) { ?>
 							<!-- <option value="<?php //echo $a['id']?>"><?php //echo $a['first_name'].' '.$a['last_name'];?></option> -->
@@ -855,10 +855,10 @@ function validateForm() {
 					</select>
 				</div>
 
-				<label style="color: #102958;" class="col-sm-2 label_left">Upload Documents:</label>                
+				<!-- <label style="color: #102958;" class="col-sm-2 label_left">Upload Documents:</label>                
 				<div class="col-4">
 					<input id="imgInp" name="file_d[]" type="file" style="width: 100%;" accept="application/pdf" >
-				</div>                     
+				</div>  -->                    
             </div>
 			<script>
 				$(document).ready(function () {
