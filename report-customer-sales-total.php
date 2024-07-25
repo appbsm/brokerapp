@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // $start_date = date('Y-m-d', strtotime($_POST['start_date']));
         // $end_date = date('Y-m-d', strtotime($_POST['end_date']));
-
+        // echo '<script>alert("get_customers_sales_search")</script>';
         $customers = get_customers_sales_search($conn,$_POST);
         $policy=$_POST['policy_no'];
         $customer=$_POST['customer'];
@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $status_currency=$_POST['status_currency'];
     }
 }else{
+    // echo '<script>alert("get_customers_sales_start")</script>';
     $customers = get_customers_sales_start($conn);
     // $start_date = date('Y-m-d');
     // $end_date   = date('Y-m-d');
@@ -300,20 +301,20 @@ $subcategories = get_product_subcategory($conn);
                     </div>
 
 <div class="row pull-right">                    
-                <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  ">Search<span class="btn-label btn-label-right"><i class="fa "></i></span>
-                </button>  
-&nbsp;&nbsp;
-<div class="dropdown">
-  <button style="background-color: #0275d8;color: #F9FAFA;" class="btn btn-primary mr-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Export
-  </button>
-  <div class="dropdown-menu col-xs-1" style="width: 300px !important;" aria-labelledby="dropdownMenuButton" >
-    <a href="#" class="dropdown-item" id="btnCsv" style="font-size: 15px;" >CSV</a>
-    <a href="#" class="dropdown-item" id="btnExcel" style="font-size: 15px;" >Excel</a>
-    <a href="#" class="dropdown-item" id="btnPdf" style="font-size: 15px;" >PDF</a>
-    <a href="#" class="dropdown-item" id="btnPrint" style="font-size: 15px;" >Print</a>
-  </div>
-</div>&nbsp;&nbsp;
+    <button style="background-color: #0275d8;color: #F9FAFA;" type="submit" name="submit" class="btn  ">Search<span class="btn-label btn-label-right"><i class="fa "></i></span>
+    </button>  
+    &nbsp;&nbsp;
+    <div class="dropdown">
+      <button style="background-color: #0275d8;color: #F9FAFA;" class="btn btn-primary mr-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Export
+      </button>
+      <div class="dropdown-menu col-xs-1" style="width: 200px !important;" aria-labelledby="dropdownMenuButton" >
+        <a href="#" class="dropdown-item" id="btnCsv" style="font-size: 15px;" >CSV</a>
+        <a href="#" class="dropdown-item" id="btnExcel" style="font-size: 15px;" >Excel</a>
+        <a href="#" class="dropdown-item" id="btnPdf" style="font-size: 15px;" >PDF</a>
+        <a href="#" class="dropdown-item" id="btnPrint" style="font-size: 15px;" >Print</a>
+      </div>
+    </div>&nbsp;&nbsp;
 </div> 
 
             </div>
@@ -327,6 +328,7 @@ $subcategories = get_product_subcategory($conn);
                                         <tr>
                                             <th>No</th>
                                             <th width="200px">Cust. Name</th>
+                                            <th width="100px">Remark</th>
                                             <th width="200px">Cust. Email</th>
                                             <th width="110px">Cust. Mobile</th>
 
@@ -381,6 +383,7 @@ $subcategories = get_product_subcategory($conn);
                                             <td></td>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
 
                                             <?php if($status_currency=="true"){ ?>
                                             <td></td>
@@ -410,6 +413,7 @@ $subcategories = get_product_subcategory($conn);
                                             <td class="text-center"><?php echo $ctr; $ctr++; ?></td>
                                             <td><?php echo $value['full_name'];?></td>
                                             <td><?php echo $value['email'];?></td>
+                                            <td><?php echo $value['remark_info'];?></td>
                                             <td class="text-center"><?php echo $value['mobile'];?></td>
 
                                             <td><?php echo $value['policy_no'];?></td>
@@ -472,7 +476,7 @@ $subcategories = get_product_subcategory($conn);
                                         <tr>
                                             <td class="text-center" ><?php //echo $ctr; ?></td>
                                             <td></td>
-
+                                            <td><?php echo $value['remark_info'];?></td>
                                             <td><?php echo $value['email'];?></td>
                                             <td class="text-center"><?php echo $value['mobile'];?></td>
 
@@ -545,6 +549,7 @@ $subcategories = get_product_subcategory($conn);
                                             <td></td>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
 
                                             <?php if($status_currency=="true"){ ?>
                                             <td></td>
@@ -575,6 +580,7 @@ $subcategories = get_product_subcategory($conn);
                                         <tr style="font-weight: bold;"> 
                                             <td class="text-center" ></td>
                                             <td style="font-weight: bold;" class="text-right" >GRAND TOTAL</td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -702,7 +708,7 @@ $subcategories = get_product_subcategory($conn);
         var table = $('#example').DataTable({
             "columnDefs": [
                 { 
-                    "targets": [7,8],
+                    "targets": [8,9],
                     "type": "date-dd-mmm-yyyy"
                 }
             ],
@@ -726,11 +732,11 @@ $subcategories = get_product_subcategory($conn);
 		"footerCallback": function ( data, row, start, end, display){
                 var api = this.api();
                 var textRenderer = $.fn.dataTable.render.text().display;
-                var val_10 =  $(api.column(10).footer().innerHTML);    
-                $(api.column(10).footer()).html(
+                var val_10 =  $(api.column(11).footer().innerHTML);    
+                $(api.column(11).footer()).html(
                     textRenderer('\u200C' + val_10.selector)
                 );
-                $(api.column(10).footer()).addClass('text-right');
+                $(api.column(11).footer()).addClass('text-right');
             } ,
         buttons: [
             { extend: 'csv',class: 'buttons-csv',className: 'btn-primary',charset: 'UTF-8',filename: 'Report: Sales By Customer',footer: true
@@ -741,26 +747,89 @@ $subcategories = get_product_subcategory($conn);
             ,bom: true,init : function(api,node,config){ $(node).hide();} },
             { extend: 'pdf',class: 'buttons-pdf',className: 'btn-primary',charset: 'UTF-8',filename: 'Report: Sales By Customer',footer: true
             ,customize: function(doc) {
-                    doc.content.forEach(function(item) {
-                        if (item.table) {
-                            item.table.body.forEach(function(row) {
-                                row.forEach(function(cell, i) {
-                                    if (typeof cell === 'object' && cell.text !== undefined) {
-                                        // if (i > 0) { // Skip first column (index 0)
-                                        //     cell.alignment = 'right';
-                                        // }
-                                        if (i == 10) { // Skip first column (index 0)
-                                            cell.alignment = 'right';
-                                        }
+                doc.content[1].table.widths = [
+                    '5%',
+                    '5%',
+                    '8%',
+                    '8%',
+                    '6%',
+                    '7%',
+                    '5%',
+                    '5%',
+                    '5%',
+                    '5%',
+                    '8%',
+                    '8%',
+                    '5%', 
+                    '5%',
+                    '4%',
+                    '4%',
+                    '4%',
+                    '4%',
+                    '4%'
+                ];
+
+                doc.content.forEach(function(item) {
+                    if (item.table) {
+                        item.table.body.forEach(function(row) {
+                            row.forEach(function(cell, i) {
+                                if (typeof cell === 'object' && cell.text !== undefined) {
+                                    // if (i > 0) { // Skip first column (index 0)
+                                    //     cell.alignment = 'right';
+                                    // }
+                                    if (i == 11) { // Skip first column (index 0)
+                                        cell.alignment = 'right';
                                     }
-                                });
+                                }
                             });
-                        }
-                    });
-                }
+                        });
+                    }
+                });
+            }
             ,bom: true,orientation: 'landscape',init : function(api,node,config){ $(node).hide();} },
-            { extend: 'print',class: 'buttons-print',className: 'btn-primary',charset: 'UTF-8',footer: true,bom: true 
-            ,init : function(api,node,config){ $(node).hide();} }
+            { extend: 'print',class: 'buttons-print',className: 'btn-primary',charset: 'UTF-8',footer: true,bom: true,
+            customize: function (win) {
+                var css = `
+                    @page { size: landscape; }
+                    table { width: 100%; table-layout: fixed; }
+                    th, td { word-wrap: break-word; white-space: normal; }
+                    th:nth-child(1), td:nth-child(1) { width: 5%; }
+                    th:nth-child(2), td:nth-child(2) { width: 8%; }
+                    th:nth-child(3), td:nth-child(3) { width: 8%; }
+                    th:nth-child(4), td:nth-child(4) { width: 6%; }
+                    th:nth-child(5), td:nth-child(5) { width: 7%; }
+                    th:nth-child(6), td:nth-child(6) { width: 5%; }
+                    th:nth-child(7), td:nth-child(7) { width: 5%; }
+                    th:nth-child(8), td:nth-child(8) { width: 5%; }
+                    th:nth-child(9), td:nth-child(9) { width: 5%; }
+                    th:nth-child(10), td:nth-child(10) { width: 8%; }
+                    th:nth-child(11), td:nth-child(11) { width: 8%; }
+                    th:nth-child(12), td:nth-child(12) { width: 5%; }
+                    th:nth-child(13), td:nth-child(13) { width: 5%; }
+                    th:nth-child(14), td:nth-child(14) { width: 5%; }
+                    th:nth-child(15), td:nth-child(15) { width: 5%; }
+                    th:nth-child(16), td:nth-child(16) { width: 5%; }
+                    th:nth-child(17), td:nth-child(17) { width: 5%; }
+                    th:nth-child(18), td:nth-child(18) { width: 5%; }
+                    th:nth-child(19), td:nth-child(19) { width: 5%; }
+                `,
+                head = win.document.head || win.document.getElementsByTagName('head')[0],
+                style = win.document.createElement('style');
+
+                style.type = 'text/css';
+                style.media = 'print';
+                if (style.styleSheet) {
+                  style.styleSheet.cssText = css;
+                } else {
+                  style.appendChild(win.document.createTextNode(css));
+                }
+
+                head.appendChild(style);
+
+                $(win.document.body).css('font-size', '10pt');
+                $(win.document.body).find('table').addClass('compact').css('font-size', 'inherit');
+            },
+            init : function(api,node,config){ $(node).hide();} }
             ]
     });
 

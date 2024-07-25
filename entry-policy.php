@@ -47,12 +47,12 @@
 
           INNER JOIN (
     SELECT 
-        policy_primary, MAX(insurance_info.cdate) AS max_cdate
+        policy_no, MAX(insurance_info.cdate) AS max_cdate
     FROM 
         insurance_info
     GROUP BY 
-        policy_primary
-    ) latest ON insu.policy_primary = latest.policy_primary AND insu.cdate = latest.max_cdate
+        policy_no
+    ) latest ON insu.policy_no = latest.policy_no AND insu.cdate = latest.max_cdate
     where insu.policy_no != ''";
 
     if (isset($_POST['start_date']) && $_POST['start_date'] != '') {
@@ -409,7 +409,6 @@
   });
 </script>
 
-
                         <div class="card-body" >
                             <div class="table-responsive" style="font-size: 13px;">
                                 <table id="example"  class="table table-bordered "  style="color: #969FA7;"  >
@@ -419,11 +418,12 @@
                                                 <input type="checkbox" id="select-all">
                                             </th>
                                             <th width="20px" style="color: #102958;">#</th>
-                                            <th hidden="tue" >ID</th>
                                             <th width="150px" style="color: #102958;">Policy no.</th>
+                                            <th hidden="tue" >ID</th>
                                             <th width="200px" style="color: #102958;">Cust. name</th>
                                             <th width="200px" style="color: #102958;">Partner company</th>
                                             <th width="250px" style="color: #102958;">Prod.</th>
+                                            <th width="100px" style="color: #102958;">Remark</th>
                                             
                                            <!--  <th width="110px" style="color: #102958;" >Cust. Mobile</th>
                                             <th width="200px" style="color: #102958;">Cust. Email</th> -->
@@ -457,13 +457,15 @@
         <td class="text-center">
             <input type="checkbox" class="row-checkbox">
         </td>
+       
         <td class="text-center"><?php echo $cnt;?></td>
-        <td hidden="tue" class="policy-id" ><?php echo $result->id;?></td>
         <td><?php echo $result->policy_no;?></td>
+         <td hidden="tue" class="policy-id" ><?php echo $result->id;?></td>
 
         <td><?php echo $result->full_name;?></td>
         <td><?php echo $result->insurance_company_in;?></td>
         <td><?php echo $result->product_name_in;?></td>
+        <td><?php echo $result->remark;?></td>
 
         <td class="text-center"><?php echo $result->status_insurance;?></td>
         <td class="text-center"><?php echo $result->start_date_day;?></td>
@@ -655,9 +657,12 @@
     <script src="assets/js/datatables.min.js"></script>
     <script src="assets/js/pdfmake.min.js"></script>
     <script src="assets/js/vfs_fonts.js"></script>
+    
     <!-- <script src="assets/js/custom.js"></script> -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/fixedcolumns/4.0.1/js/dataTables.fixedColumns.min.js"></script> -->
 
     <style>
     /*@media (min-width: 1340px){*/
@@ -697,9 +702,9 @@
             scrollCollapse: true,
             paging: true,
             fixedColumns: {
-                leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+                leftColumns: 3 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
             },
-			// scrollX: true,
+
 			lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 			"scrollCollapse": true,
 			"paging": true,
@@ -712,7 +717,11 @@
 						filename: 'Entry Policy',
 						bom: true,
                         exportOptions: {
-                            columns: ':not(:last-child)' // Exclude the first column from export
+                           // columns: ':not(:first-child):not(:last-child)'
+                            columns: function ( idx, data, node ) {
+                                var numColumns = table.columns().header().length;
+                                return (idx > 1 && idx < numColumns - 1) ? true : false; // Exclude the first and last columns from export
+                            }
                         }, 
 						init: function(api, node, config) { $(node).hide(); }
 					},
@@ -724,7 +733,11 @@
 						filename: 'Entry Policy',
 						bom: true,
                         exportOptions: {
-                            columns: ':not(:last-child)' // Exclude the first column from export
+                           // columns: ':not(:first-child):not(:last-child)'
+                            columns: function ( idx, data, node ) {
+                                var numColumns = table.columns().header().length;
+                                return (idx > 1 && idx < numColumns - 1) ? true : false; // Exclude the first and last columns from export
+                            }
                         },
 						init: function(api, node, config) { $(node).hide(); }
 					},
@@ -736,11 +749,30 @@
 						filename: 'Entry Policy',
 						bom: true,
                         exportOptions: {
-                            columns: ':not(:last-child)' // Exclude the first column from export
+                            columns: function ( idx, data, node ) {
+                                var numColumns = table.columns().header().length;
+                                return (idx > 1 && idx < numColumns - 1) ? true : false; // Exclude the first and last columns from export
+                            }
                         },
 						orientation: 'landscape', // เพิ่มคุณสมบัติ orientation เป็น 'landscape'
 						init: function(api, node, config) { $(node).hide(); },
 						customize: function(doc) {
+                            doc.content[1].table.widths = [
+                                '3%',
+                                '10%',
+                                '10%',
+                                '15%',
+                                '15%',
+                                '5%',
+                                '5%',
+                                '5%',
+                                '5%',
+                                '7%',
+                                '7%',
+                                '5%',
+                                '10%'
+                            ];
+
 							// Loop through all rows and cells to align text to the right
 							doc.content.forEach(function(item) {
 								if (item.table) {
@@ -764,7 +796,45 @@
 						charset: 'UTF-8',
 						bom: true,
                         exportOptions: {
-                            columns: ':not(:last-child)' // Exclude the first column from export
+                            columns: function ( idx, data, node ) {
+                                var numColumns = table.columns().header().length;
+                                return (idx > 1 && idx < numColumns - 1) ? true : false; // Exclude the first and last columns from export
+                            }
+                        },
+                        customize: function (win) {
+                            var css = `
+                                @page { size: landscape; }
+                                table { width: 100%; table-layout: fixed; }
+                                th, td { word-wrap: break-word; white-space: normal; }
+                                th:nth-child(1), td:nth-child(1) { width: 3%; }
+                                th:nth-child(2), td:nth-child(2) { width: 10%; }
+                                th:nth-child(3), td:nth-child(3) { width: 10%; }
+                                th:nth-child(4), td:nth-child(4) { width: 15%; }
+                                th:nth-child(5), td:nth-child(5) { width: 15%; }
+                                th:nth-child(6), td:nth-child(6) { width: 5%; }
+                                th:nth-child(7), td:nth-child(7) { width: 5%; }
+                                th:nth-child(8), td:nth-child(8) { width: 5%; }
+                                th:nth-child(9), td:nth-child(9) { width: 5%; }
+                                th:nth-child(10), td:nth-child(10) { width: 7%; }
+                                th:nth-child(11), td:nth-child(11) { width: 7%; }
+                                th:nth-child(12), td:nth-child(12) { width: 5%; }
+                                th:nth-child(13), td:nth-child(13) { width: 10%; }
+                            `,
+                            head = win.document.head || win.document.getElementsByTagName('head')[0],
+                            style = win.document.createElement('style');
+
+                            style.type = 'text/css';
+                            style.media = 'print';
+                            if (style.styleSheet) {
+                              style.styleSheet.cssText = css;
+                            } else {
+                              style.appendChild(win.document.createTextNode(css));
+                            }
+
+                            head.appendChild(style);
+
+                            $(win.document.body).css('font-size', '10pt');
+                            $(win.document.body).find('table').addClass('compact').css('font-size', 'inherit');
                         },
 						init: function(api, node, config) { $(node).hide(); }
 					}

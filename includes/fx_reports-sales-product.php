@@ -4,7 +4,8 @@ include_once('fx_crud_db.php');
 
 function get_sales_by_product_start($conn){
 	$result = array();
-	$sql ="SELECT 
+	$sql ="
+    SELECT 
 cc.currency_value,cc.currency_value_convert
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list ) AS id_currency_list_v
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list_convert ) AS id_currency_list_convert_v
@@ -17,16 +18,30 @@ THEN CONCAT(cu.first_name,' ',cu.last_name)
 ,cu.customer_type
 ,FORMAT(info.start_date, 'dd-MM-yyyy') AS in_start_date,FORMAT(info.end_date, 'dd-MM-yyyy') AS in_end_date
 ,info.policy_no,info.start_date,info.end_date,info.premium_rate
-,info.convertion_value 
+,info.convertion_value,info.remark as remark_info
 ,ip.insurance_company,ip.phone,ip.email
 ,co.first_name as first_name_co,ag.mobile as mobile_co,co.remark as remark_co,ag.email as email_co
 ,pr.* FROM product pr
 JOIN insurance_info info ON info.product_id = pr.id
+
+INNER JOIN (
+     SELECT 
+         policy_no, MAX(cdate) AS max_cdate
+     FROM 
+         insurance_info 
+     GROUP BY 
+         policy_no
+ ) latest ON  info.cdate = latest.max_cdate AND info.policy_no = latest.policy_no
+
 left join rela_customer_to_insurance rci on rci.id_insurance_info = info.id
 left join customer cu on cu.id = rci.id_customer
 left join insurance_partner ip ON ip.id = info.insurance_company_id
-left join rela_customer_to_contact recon on recon.id_customer = cu.id
-join contact co on co.id = recon.id_contact AND co.default_contact=1
+
+left join contact co on co.id = 
+( SELECT con_t.id  FROM rela_customer_to_contact rec 
+ JOIN contact con_t ON con_t.id = rec.id_contact AND con_t.default_contact = 1
+ WHERE rec.id_customer = cu.id)
+
 LEFT JOIN agent ag ON ag.id = info.agent_id
 LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
 
@@ -83,16 +98,30 @@ THEN CONCAT(cu.first_name,' ',cu.last_name)
 ,cu.customer_type
 ,FORMAT(info.start_date, 'dd-MM-yyyy') AS in_start_date,FORMAT(info.end_date, 'dd-MM-yyyy') AS in_end_date
 ,info.policy_no,info.start_date,info.end_date,info.premium_rate
-,info.convertion_value 
+,info.convertion_value,info.remark as remark_info
 ,ip.insurance_company,ip.phone,ip.email
 ,co.first_name as first_name_co,ag.mobile as mobile_co,co.remark as remark_co,ag.email as email_co
 ,pr.* FROM product pr
 JOIN insurance_info info ON info.product_id = pr.id
+
+INNER JOIN (
+     SELECT 
+         policy_no, MAX(cdate) AS max_cdate
+     FROM 
+         insurance_info 
+     GROUP BY 
+         policy_no
+ ) latest ON  info.cdate = latest.max_cdate AND info.policy_no = latest.policy_no
+
 left join rela_customer_to_insurance rci on rci.id_insurance_info = info.id
 left join customer cu on cu.id = rci.id_customer
 left join insurance_partner ip ON ip.id = info.insurance_company_id
-left join rela_customer_to_contact recon on recon.id_customer = cu.id
-join contact co on co.id = recon.id_contact AND co.default_contact=1
+
+left join contact co on co.id = 
+( SELECT con_t.id  FROM rela_customer_to_contact rec 
+ JOIN contact con_t ON con_t.id = rec.id_contact AND con_t.default_contact = 1
+ WHERE rec.id_customer = cu.id)
+
 LEFT JOIN agent ag ON ag.id = info.agent_id
 LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
 
@@ -135,10 +164,10 @@ LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list
             $sql .= " and info.status = '".$post_data['status']."' ";
         }
         if ($post_data['category'] != 'all' ) {
-            $sql .= " and info.product_category = ".$post_data['category'];
+            $sql .= " and pr.id_product_categories = ".$post_data['category'];
         }
         if ($post_data['subcategory'] != 'all') {
-            $sql .= " and info.sub_categories = ".$post_data['subcategory'];
+            $sql .= " and pr.id_product_sub = ".$post_data['subcategory'];
         }
     $sql .= " ORDER BY pr.id,info.start_date DESC ";
     // print_r($sql);
@@ -176,7 +205,7 @@ function get_customers ($conn) {
 		// echo $tsql;
 		$stmt = sqlsrv_query( $conn, $tsql);
 		if( $stmt === false) {
-			die( print_r( sqlsrv_errors(), true) );
+			die(print_r(sqlsrv_errors(), true) );
 		}
 		while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC))
 		{

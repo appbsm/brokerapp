@@ -56,7 +56,7 @@ if(strlen($_SESSION['alogin'])==""){
     <link rel="stylesheet" href="css/main.css" media="screen" >
     <script src="js/modernizr/modernizr.min.js"></script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
     <script src="js/DataTables/datatables.min.js"></script>
@@ -100,6 +100,37 @@ if(strlen($_SESSION['alogin'])==""){
         background-color: #999ba3;
         border-color: #999ba3;
         cursor: not-allowed; 
+    }
+
+
+    th.freeze-col, td.freeze-col {
+        position: -webkit-sticky; /* Safari */
+        position: sticky;
+        left: 0;
+        background-color: #ffffff; /* พื้นหลังเป็นสีขาว */
+        z-index: 1000; /* ใช้ค่า z-index สูงเพื่อให้แน่ใจว่าคอลัมน์ที่ตรึงอยู่ด้านบน */
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* เพิ่มเงาเพื่อแยกคอลัมน์ */
+    }
+
+    th.freeze-col, td.freeze-col {
+    width: 150px; /* กำหนดความกว้างที่ชัดเจน */
+    }
+
+    table thead th.freeze-col, table tbody td.freeze-col {
+        background-color: #ffffff; /* พื้นหลังเป็นสีขาว */
+        position: -webkit-sticky; /* Safari */
+        position: sticky;
+        left: 0;
+        z-index: 1000; /* ใช้ค่า z-index สูงเพื่อให้แน่ใจว่าคอลัมน์ที่ตรึงอยู่ด้านบน */
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* เพิ่มเงาเพื่อแยกคอลัมน์ */
+    }
+
+    table.dataTable {
+        border-collapse: collapse; /* ทำให้ตารางแสดงผลดีขึ้น */
+    }
+
+    thead th, tbody td {
+        background-color: transparent; /* ตั้งค่าเป็นโปร่งใส */
     }
 </style>
 
@@ -184,12 +215,13 @@ if(strlen($_SESSION['alogin'])==""){
                                 <table id="example"  class="table table-bordered "  style="color: #969FA7;" >
                                     <thead >
                                         <tr style="color: #102958;" >
-                                            <th width="20px" style="color: #102958;">
+                                            <th width="20px" style="background-color: #ffffff !important;" style="color: #102958;" style="color: #102958;" class="freeze-col">
                                                 <input type="checkbox" id="select-all">
                                             </th>
-                                            <th width="20px" style="color: #102958;">#</th>
+                                            <th width="20px" style="background-color: #ffffff !important;" style="color: #102958;" style="color: #102958;" class="freeze-col">#</th>
+                                            <th width="250px" style="background-color: #ffffff !important;" style="color: #102958;" style="color: #102958;" class="freeze-col">Policy no.</th>
+
                                             <th hidden="tue" >ID</th>
-                                            <th width="250px" style="color: #102958;">Policy no.</th>
                                             <th width="300px" style="color: #102958;">Cust. name</th>
                                             <th width="200px" style="color: #102958;">Partner company</th>
 
@@ -230,12 +262,13 @@ if(strlen($_SESSION['alogin'])==""){
            $alert_date = $a_date->format('d-m-Y');
 ?>
     <tr>
-        <td class="text-center">
+        <td style="background-color: #ffffff !important;" class="text-center">
             <input type="checkbox" class="row-checkbox">
         </td>
-        <td class="text-center"><?php echo $cnt;?></td>
+        <td style="background-color: #ffffff !important;" class="text-center"><?php echo $cnt;?></td>
+        <td style="background-color: #ffffff !important;"><?php echo $result['policy_no'];?></td>
         <td hidden="tue" class="policy-id" ><?php echo $result['id_policy'];?></td>
-        <td><?php echo $result['policy_no'];?></td>
+
         <td><?php echo ($result['customer_type']=="Corporate") ? $result['company_name'] : $result['customer_name']; ?></td>
         <td><?php echo $result['insurance_company'];?></td>
 
@@ -450,6 +483,9 @@ if(strlen($_SESSION['alogin'])==""){
        
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/fixedcolumns/4.0.1/js/dataTables.fixedColumns.min.js"></script>
+
+
     <script>
     $(document).ready(function(){
 
@@ -477,7 +513,7 @@ if(strlen($_SESSION['alogin'])==""){
             scrollCollapse: true,
             paging: true,
             fixedColumns: {
-                leftColumns: 1 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
+                leftColumns: 3 // จำนวนคอลัมน์ที่คุณต้องการให้แถวแรก freeze
             },
         // scrollX: true,
         lengthMenu: [[10, 25, 50, 100, -1], [10,25, 50, 100, "All"]],
@@ -485,12 +521,49 @@ if(strlen($_SESSION['alogin'])==""){
         "paging":         true,
         buttons: [
             { extend: 'csv',class: 'buttons-csv',className: 'btn-primary',charset: 'UTF-8',filename: 'Overdue Policies',bom: true
-            ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} },
+            ,
+            exportOptions: {
+                columns: function ( idx, data, node ) {
+                    var numColumns = table.columns().header().length;
+                    return (idx > 1 && idx < numColumns - 1) ? true : false; // Exclude the first and last columns from export
+                }
+            },
+            init : function(api,node,config){ $(node).hide();} },
             { extend: 'excel',class: 'buttons-excel', className: 'btn-primary',charset: 'UTF-8',filename: 'Overdue Policies',bom: true 
-            ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} },
+            ,
+            exportOptions: {
+                columns: function ( idx, data, node ) {
+                    var numColumns = table.columns().header().length;
+                    return (idx > 1 && idx < numColumns - 1) ? true : false; // Exclude the first and last columns from export
+                }
+            },
+            init : function(api,node,config){ $(node).hide();} },
             { extend: 'pdf',class: 'buttons-pdf',className: 'btn-primary',charset: 'UTF-8',filename: 'Overdue Policies',bom: true 
-            ,exportOptions: {columns: ':not(:last-child)'},orientation: 'landscape',init : function(api,node,config){ $(node).hide();},
+            ,
+            exportOptions: {
+                columns: function ( idx, data, node ) {
+                    var numColumns = table.columns().header().length;
+                    return (idx > 1 && idx < numColumns - 1) ? true : false; // Exclude the first and last columns from export
+                }
+            },
+            orientation: 'landscape',init : function(api,node,config){ $(node).hide();},
 			customize: function(doc) {
+                doc.content[1].table.widths = [
+                    '3%',
+                    '10%',
+                    '10%',
+                    '15%',
+                    '15%',
+                    '5%',
+                    '5%',
+                    '5%',
+                    '5%',
+                    '7%',
+                    '7%',
+                    '5%',
+                    '10%'
+                ];
+
 				// Loop through all rows and cells to align text to the right
 				doc.content.forEach(function(item) {
 					if (item.table) {
@@ -507,7 +580,49 @@ if(strlen($_SESSION['alogin'])==""){
 				});
 			}},
             { extend: 'print',class: 'buttons-print',className: 'btn-primary',charset: 'UTF-8',bom: true 
-            ,exportOptions: {columns: ':not(:last-child)'},init : function(api,node,config){ $(node).hide();} }
+            ,
+            exportOptions: {
+                columns: function ( idx, data, node ) {
+                    var numColumns = table.columns().header().length;
+                    return (idx > 1 && idx < numColumns - 1) ? true : false; // Exclude the first and last columns from export
+                }
+            },
+            customize: function (win) {
+                var css = `
+                    @page { size: landscape; }
+                    table { width: 100%; table-layout: fixed; }
+                    th, td { word-wrap: break-word; white-space: normal; }
+                    th:nth-child(1), td:nth-child(1) { width: 3%; }
+                    th:nth-child(2), td:nth-child(2) { width: 10%; }
+                    th:nth-child(3), td:nth-child(3) { width: 10%; }
+                    th:nth-child(4), td:nth-child(4) { width: 15%; }
+                    th:nth-child(5), td:nth-child(5) { width: 15%; }
+                    th:nth-child(6), td:nth-child(6) { width: 5%; }
+                    th:nth-child(7), td:nth-child(7) { width: 5%; }
+                    th:nth-child(8), td:nth-child(8) { width: 5%; }
+                    th:nth-child(9), td:nth-child(9) { width: 5%; }
+                    th:nth-child(10), td:nth-child(10) { width: 7%; }
+                    th:nth-child(11), td:nth-child(11) { width: 7%; }
+                    th:nth-child(12), td:nth-child(12) { width: 5%; }
+                    th:nth-child(13), td:nth-child(13) { width: 10%; }
+                `,
+                head = win.document.head || win.document.getElementsByTagName('head')[0],
+                style = win.document.createElement('style');
+
+                style.type = 'text/css';
+                style.media = 'print';
+                if (style.styleSheet) {
+                  style.styleSheet.cssText = css;
+                } else {
+                  style.appendChild(win.document.createTextNode(css));
+                }
+
+                head.appendChild(style);
+
+                $(win.document.body).css('font-size', '10pt');
+                $(win.document.body).find('table').addClass('compact').css('font-size', 'inherit');
+            },
+            init : function(api,node,config){ $(node).hide();} }
             ]
     });
 

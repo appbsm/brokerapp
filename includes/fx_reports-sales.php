@@ -14,7 +14,7 @@ function get_customers_sales_start($conn) {
 ,info.premium_rate,info.status as in_status
 ,con.first_name as first_name_con,con.last_name as last_name_con,con.position
 ,info.paid_date AS paid_date_insurance
-,info.convertion_value 
+,info.convertion_value,info.remark as remark_info
 ,cc.currency_value,cc.currency_value_convert
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list ) AS id_currency_list_v
 ,(SELECT currency from currency_list WHERE id =cc.id_currency_list_convert ) AS id_currency_list_convert_v
@@ -25,6 +25,16 @@ function get_customers_sales_start($conn) {
 ,pcat.categorie,psup.subcategorie,cu.* FROM customer cu
 LEFT JOIN rela_customer_to_insurance  recu ON cu.id = recu.id_customer
  JOIN insurance_info info ON info.id = recu.id_insurance_info
+
+INNER JOIN (
+     SELECT 
+         policy_no, MAX(cdate) AS max_cdate
+     FROM 
+         insurance_info 
+     GROUP BY 
+         policy_no
+ ) latest ON  info.cdate = latest.max_cdate AND info.policy_no = latest.policy_no
+
 LEFT JOIN contact con ON con.id =
 
  ( SELECT con_t.id  FROM rela_customer_to_contact rec 
@@ -91,7 +101,7 @@ function get_customers_sales_search($conn,$post_data) {
 ",info.premium_rate,info.status as in_status".
 ",con.first_name as first_name_con,con.last_name as last_name_con,con.position".
 ",info.paid_date AS paid_date_insurance".
-",info.convertion_value".
+",info.convertion_value,info.remark as remark_info".
 ",cc.currency_value,cc.currency_value_convert".
 ",(SELECT currency from currency_list WHERE id =cc.id_currency_list ) AS id_currency_list_v".
 ",(SELECT currency from currency_list WHERE id =cc.id_currency_list_convert ) AS id_currency_list_convert_v".
@@ -102,6 +112,14 @@ function get_customers_sales_search($conn,$post_data) {
 ",pcat.categorie,psup.subcategorie,cu.* FROM customer cu".
 " LEFT JOIN rela_customer_to_insurance  recu ON cu.id = recu.id_customer".
 " JOIN insurance_info info ON info.id = recu.id_insurance_info".
+" INNER JOIN (
+     SELECT 
+         policy_no, MAX(cdate) AS max_cdate
+     FROM 
+         insurance_info 
+     GROUP BY 
+         policy_no
+ ) latest ON  info.cdate = latest.max_cdate AND info.policy_no = latest.policy_no ".
 " LEFT JOIN contact con ON con.id = ".
 ' ( SELECT con_t.id  FROM rela_customer_to_contact rec '.
 ' JOIN contact con_t ON con_t.id = rec.id_contact AND con_t.default_contact = 1'.
@@ -118,6 +136,43 @@ function get_customers_sales_search($conn,$post_data) {
 " (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id_currency_list = ip.id_currency_list ".
 " AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1') ".
 " where info.policy_no != '' " ;
+
+// $sql ="SELECT CASE WHEN cu.customer_type = 'Personal'
+//           THEN CONCAT(cu.first_name,' ',cu.last_name)
+//           ELSE cu.company_name
+//           END as full_name ,info.policy_no ".
+// ",FORMAT(info.start_date, 'dd-MM-yyyy') AS in_start_date,FORMAT(info.end_date, 'dd-MM-yyyy') AS in_end_date".
+// ",info.premium_rate,info.status as in_status".
+// ",con.first_name as first_name_con,con.last_name as last_name_con,con.position".
+// ",info.paid_date AS paid_date_insurance".
+// ",info.convertion_value".
+// ",cc.currency_value,cc.currency_value_convert".
+// ",(SELECT currency from currency_list WHERE id =cc.id_currency_list ) AS id_currency_list_v".
+// ",(SELECT currency from currency_list WHERE id =cc.id_currency_list_convert ) AS id_currency_list_convert_v".
+// ",cl.currency,cc.id_currency_list,cc.id_currency_list_convert".
+// ",ip.insurance_company,ip.insurance_id".
+// ",con_p.first_name AS first_name_p,con_p.last_name AS last_name_p".
+// ",con_p.email AS email_p,con_p.mobile AS mobile_p,con_p.remark AS remark_p,con_p.department AS department_p".
+// ",pcat.categorie,psup.subcategorie,cu.* FROM insurance_info info  ".
+// " LEFT JOIN rela_customer_to_insurance recu ON info.id = recu.id_insurance_info ".
+// " LEFT JOIN customer cu ON cu.id = recu.id_customer ".
+// " LEFT JOIN contact con ON con.id = ".
+// ' ( SELECT con_t.id  FROM rela_customer_to_contact rec '.
+// ' JOIN contact con_t ON con_t.id = rec.id_contact AND con_t.default_contact = 1'.
+// ' WHERE rec.id_customer = cu.id) '.
+// " LEFT JOIN product_categories pcat ON pcat.id = info.product_category".
+// " LEFT JOIN product_subcategories psup ON psup.id = info.sub_categories".
+// " LEFT JOIN insurance_partner ip ON ip.id = info.insurance_company_id".
+// " LEFT JOIN contact con_p ON con_p.id =".
+// " ( SELECT con_t.id  FROM rela_partner_to_contact rec ".
+// " JOIN contact con_t ON con_t.id = rec.id_contact AND con_t.default_contact = 1".
+// " WHERE rec.id_insurance_partner = ip.id)".
+// " LEFT JOIN currency_list cl ON cl.id = ip.id_currency_list".
+// " LEFT JOIN currency_convertion cc ON  cc.id = ".
+// " (SELECT TOP 1 c_c.id FROM currency_convertion c_c WHERE  c_c.id_currency_list = ip.id_currency_list ".
+// " AND  info.start_date >= c_c.start_date and info.start_date <= c_c.stop_date and c_c.status='1') ".
+// " where info.policy_no != '' " ;
+
 
 //  INNER JOIN (
 //     SELECT 

@@ -665,8 +665,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             { extend: 'excel',class: 'buttons-excel', className: 'btn-primary',charset: 'UTF-8',filename: 'Report: Sales By Product',footer: true,bom: true 
             ,init : function(api,node,config){ $(node).hide();} },
             { extend: 'pdf',class: 'buttons-pdf',className: 'btn-primary',charset: 'UTF-8',filename: 'Report: Sales By Product',footer: true,bom: true 
-            ,orientation: 'landscape',init : function(api,node,config){ $(node).hide();},
+            ,orientation: 'landscape',             
+            init : function(api,node,config){ $(node).hide();},
 			customize: function(doc) {
+                 doc.content[1].table.widths = [
+                    '5%',
+                    '10%',
+                    '10%',
+                    '10%',
+                    '7%',
+                    '5%',
+                    '8%',
+                    '7%',
+                    '5%',
+                    '6%',
+                    '8%',
+                    '9%', 
+                    '10%'
+                ];
+
 				// Loop through all rows and cells to align text to the right
 				doc.content.forEach(function(item) {
 					if (item.table) {
@@ -682,8 +699,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					}
 				});
 			}			},
-            { extend: 'print',class: 'buttons-print',className: 'btn-primary',charset: 'UTF-8',footer: true,bom: true 
-            ,init : function(api,node,config){ $(node).hide();} }
+            { extend: 'print',class: 'buttons-print',className: 'btn-primary',charset: 'UTF-8',footer: true,bom: true,
+                customize: function (win) {
+                        var css = `
+                            @page { size: landscape; }
+                            table { width: 100%; table-layout: fixed; }
+                            th, td { word-wrap: break-word; white-space: normal; }
+                            th:nth-child(1), td:nth-child(1) { width: 5%; }
+                            th:nth-child(2), td:nth-child(2) { width: 10%; }
+                            th:nth-child(3), td:nth-child(3) { width: 10%; }
+                            th:nth-child(4), td:nth-child(4) { width: 10%; }
+                            th:nth-child(5), td:nth-child(5) { width: 7%; }
+                            th:nth-child(6), td:nth-child(6) { width: 5%; }
+                            th:nth-child(7), td:nth-child(7) { width: 8%; }
+                            th:nth-child(8), td:nth-child(8) { width: 7%; }
+                            th:nth-child(9), td:nth-child(9) { width: 8%; }
+                            th:nth-child(10), td:nth-child(10) { width: 6%; }
+                            th:nth-child(11), td:nth-child(11) { width: 8%; }
+                            th:nth-child(12), td:nth-child(12) { width: 9%; }
+                            th:nth-child(13), td:nth-child(13) { width: 10%; }
+                        `,
+                        head = win.document.head || win.document.getElementsByTagName('head')[0],
+                        style = win.document.createElement('style');
+
+                        style.type = 'text/css';
+                        style.media = 'print';
+                        if (style.styleSheet) {
+                          style.styleSheet.cssText = css;
+                        } else {
+                          style.appendChild(win.document.createTextNode(css));
+                        }
+
+                        head.appendChild(style);
+
+                        $(win.document.body).css('font-size', '10pt');
+                        $(win.document.body).find('table').addClass('compact').css('font-size', 'inherit');
+                    },
+            init : function(api,node,config){ $(node).hide();} }
             ]
     });
 

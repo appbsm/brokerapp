@@ -889,7 +889,7 @@ function validateForm() {
         ?>
 
         <?php if($start_insurance!="true"){  ?>
-            <div class="col text-right">
+           <!--  <div class="col text-right">
                 <button id="<?php echo $int_insu; ?>"  type="button" class="btn btn_remove_con" name="remove" style="background-color: #0275d8;color: #F9FAFA;"  >X</button>
             </div>&nbsp;&nbsp;
 
@@ -899,7 +899,7 @@ function validateForm() {
                     $('#insurance-section_' + button_id + '').remove();
                     $('#' + button_id + '').remove();
                 });
-            </script>
+            </script> -->
         <? }else{ $start_insurance="false"; } ?>
 
 
